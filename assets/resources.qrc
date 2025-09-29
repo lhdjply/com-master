@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>icons/terminal.png</file>
+        <file>icons/transceiver.png</file>
+        <file>icons/window.png</file>
+    </qresource>
+</RCC>

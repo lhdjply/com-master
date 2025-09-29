@@ -11,10 +11,13 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(CMAKE_AUTORCC ON)
+
 find_package(Qt6 REQUIRED COMPONENTS Widgets SerialPort LinguistTools)
 
-# set(CMAKE_AUTOMOC ON)
-# set(CMAKE_AUTORCC ON)
+set (LY_QRC_FILES
+    assets/resources.qrc
+)
 
 qt6_standard_project_setup(
     I18N_TRANSLATED_LANGUAGES en zh_CN
@@ -36,6 +39,7 @@ include_directories(myresource/inc)
 qt_add_executable(${PROJECT_TARGET}
     MANUAL_FINALIZATION
     ${PROJECT_SOURCES}
+    ${LY_QRC_FILES}
 )
 
 # 使用变量添加翻译
@@ -62,6 +66,17 @@ install(TARGETS ${PROJECT_TARGET}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
+
+if (WIN32)
+
+elseif (APPLE)
+
+elseif (UNIX)
+install(FILES ${CMAKE_SOURCE_DIR}/ly-serial-tool.desktop
+        DESTINATION share/applications
+)
+endif()
+
 
 # 使用变量完成配置
 qt_finalize_executable(${PROJECT_TARGET})

@@ -63,6 +63,7 @@ void PageMainWindow::addNewTab()
   int tabIndex = tabWidget->addTab(newTab, tr("Window"));
   tabWidget->setTabToolTip(tabIndex, tr("Window"));
   tabWidget->setCurrentIndex(tabIndex); // 切换到新标签
+  tabWidget->setTabIcon(tabIndex, QIcon(":/icons/window.png")); // 设置标签图标
 
   // 当标签页数量大于1时显示关闭按钮，否则隐藏
   tabWidget->setTabsClosable(tabWidget->count() > 1);
@@ -104,15 +105,18 @@ void PageMainWindow::opentoolpage(const QString &buttonName)
 
   tabWidget->removeTab(tabIndex);
 
+  QIcon tabIcon;
   if(buttonName.compare(tr("Terminal")) == 0)
   {
     PageTerminal *newTab = new PageTerminal();
-    tabWidget->insertTab(tabIndex, newTab, buttonName);
+    tabIcon = QIcon(":/icons/terminal.png"); // 终端图标路径
+    tabWidget->insertTab(tabIndex, newTab, tabIcon, buttonName);
   }
   else
   {
     PageTransceiver *newTab = new PageTransceiver();
-    tabWidget->insertTab(tabIndex, newTab, buttonName);
+    tabIcon = QIcon(":/icons/transceiver.png"); // 收发器图标路径
+    tabWidget->insertTab(tabIndex, newTab, tabIcon, buttonName);
   }
   tabWidget->setTabToolTip(tabIndex, buttonName);
   tabWidget->setCurrentIndex(tabIndex); // 切换到新标签

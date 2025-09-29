@@ -14,8 +14,8 @@ class PageTabContent : public QWidget
     void buttonClicked(const QString &buttonName);
 
   private:
-    QPushButton * transceiverButton;
-    QPushButton * terminalButton;
+    QToolButton * transceiverButton;
+    QToolButton * terminalButton;
 
     void setupUi();
 };

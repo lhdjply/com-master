@@ -18,12 +18,22 @@ void PageTabContent::setupUi()
   QHBoxLayout *buttonLayout = new QHBoxLayout();
 
   // 创建收发器按钮
-  transceiverButton = new QPushButton(tr("Transceiver"));
-  transceiverButton->setFixedSize(150, 150);
+  transceiverButton = new QToolButton();
+  transceiverButton->setIcon(QIcon(":/icons/transceiver.png")); // 设置图标
+  transceiverButton->setIconSize(QSize(150, 150)); // 设置图标大小
+  transceiverButton->setText(tr("Transceiver"));
+  transceiverButton->setToolButtonStyle(Qt::ToolButtonTextUnderIcon); // 字在图标下面
 
   // 创建终端按钮
-  terminalButton = new QPushButton(tr("Terminal"));
-  terminalButton->setFixedSize(150, 150);
+  terminalButton = new QToolButton();
+  terminalButton->setIcon(QIcon(":/icons/terminal.png")); // 设置图标
+  terminalButton->setIconSize(QSize(150, 150)); // 设置图标大小
+  terminalButton->setText(tr("Terminal"));
+  terminalButton->setToolButtonStyle(Qt::ToolButtonTextUnderIcon); // 字在图标下面
+
+  QString transparentStyle = "QToolButton { background: transparent; border: none; }";
+  transceiverButton->setStyleSheet(transparentStyle);
+  terminalButton->setStyleSheet(transparentStyle);
 
   // 添加按钮到布局
   buttonLayout->addWidget(transceiverButton);

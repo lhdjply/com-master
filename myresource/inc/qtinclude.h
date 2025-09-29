@@ -8,6 +8,7 @@
 #include <QMainWindow>
 #include <QMenuBar>
 #include <QPushButton>
+#include <QToolButton>
 #include <QSerialPort>
 #include <QSerialPortInfo>
 #include <QStyleFactory>

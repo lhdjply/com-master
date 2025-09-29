@@ -6,6 +6,7 @@ int main(int argc, char * argv[])
 
   // Fusion style
   app.setStyle(QStyleFactory::create("Fusion"));
+  app.setWindowIcon(QIcon(":/icons/transceiver.png")); 
 
   // Translation setup
   QTranslator translator;
