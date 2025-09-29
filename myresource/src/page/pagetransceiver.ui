@@ -272,35 +272,67 @@
          <item>
           <layout class="QVBoxLayout" name="verticalLayout_2">
            <item>
-            <widget class="QTextEdit" name="textEdit"/>
+            <widget class="QTextEdit" name="receiveedit"/>
            </item>
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout">
              <item>
-              <widget class="QCheckBox" name="checkBox">
+              <widget class="QCheckBox" name="receivehexcheckbox">
                <property name="text">
                 <string>Hexadecimal</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QCheckBox" name="checkBox_2">
+              <widget class="QCheckBox" name="displaysendcheckbox">
                <property name="text">
                 <string>Display send</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QCheckBox" name="checkBox_3">
+              <widget class="QCheckBox" name="displaytimecheckbox">
                <property name="text">
                 <string>Display time</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QCheckBox" name="checkBox_4">
+              <widget class="QCheckBox" name="linebreakcheckbox">
                <property name="text">
                 <string>Frame line break</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_7">
+             <item>
+              <widget class="QLabel" name="receive_frames">
+               <property name="text">
+                <string>Received frames</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="receive_bytes">
+               <property name="text">
+                <string> Received bytes</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="clearcount">
+               <property name="text">
+                <string>Clear count</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="clearreceive">
+               <property name="text">
+                <string>Clear Receive</string>
                </property>
               </widget>
              </item>
@@ -315,7 +347,7 @@
     </item>
     <item>
      <widget class="QGroupBox" name="groupBox">
-      <layout class="QHBoxLayout" name="horizontalLayout_9" stretch="1,0">
+      <layout class="QHBoxLayout" name="horizontalLayout_9" stretch="0,0">
        <property name="spacing">
         <number>0</number>
        </property>
@@ -332,10 +364,10 @@
         <number>1</number>
        </property>
        <item>
-        <widget class="QTextEdit" name="textEdit_2"/>
+        <widget class="QTextEdit" name="sendedit"/>
        </item>
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_3" stretch="0,0,0,0,1">
+        <layout class="QVBoxLayout" name="verticalLayout_3" stretch="0,0,0,0,0">
          <property name="spacing">
           <number>0</number>
          </property>
@@ -346,42 +378,73 @@
           <number>0</number>
          </property>
          <item>
-          <widget class="QCheckBox" name="checkBox_5">
+          <widget class="QCheckBox" name="sendhexcheckbox">
            <property name="text">
             <string>Hexadecimal</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QCheckBox" name="checkBox_6">
+          <widget class="QCheckBox" name="autosendcheckbox">
            <property name="text">
             <string>Auto send</string>
            </property>
           </widget>
          </item>
          <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_8">
-           <item>
-            <widget class="QLabel" name="label_6">
-             <property name="text">
-              <string>Send duty</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLineEdit" name="lineEdit"/>
-           </item>
-          </layout>
+          <widget class="QFrame" name="frame_3">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>298</width>
+             <height>50</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true"/>
+           </property>
+           <layout class="QHBoxLayout" name="horizontalLayout_8" stretch="0,0,0">
+            <property name="spacing">
+             <number>10</number>
+            </property>
+            <property name="sizeConstraint">
+             <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
+            </property>
+            <item>
+             <widget class="QLabel" name="label_6">
+              <property name="text">
+               <string>Send duty</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="senddutyedit">
+              <property name="text">
+               <string>1000</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_7">
+              <property name="text">
+               <string>ms</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_3">
+          <widget class="QPushButton" name="verifybutton">
            <property name="text">
             <string>Verification</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_2">
+          <widget class="QPushButton" name="sendbutton">
            <property name="text">
             <string>Send</string>
            </property>

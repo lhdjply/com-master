@@ -2,6 +2,8 @@
 #define __QTINCLUDE_H
 
 #include <QApplication>
+#include <QDateTime>
+#include <QDialog>
 #include <QGridLayout>
 #include <QMainWindow>
 #include <QMenuBar>

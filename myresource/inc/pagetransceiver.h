@@ -20,10 +20,18 @@ class PageTransceiver : public QMainWindow
 
   private slots:
     void on_openbutton_clicked();
+    void on_sendbutton_clicked();
+    void on_verifybutton_clicked();
+    void on_clearcount_clicked();
+    void on_clearreceive_clicked();
+    void on_senddutyedit_textChanged(const QString &arg1);
 
   private:
+    QTimer * AutosendTimer;
     Ui::PageTransceiver * ui;
     uint32_t last_serial_num;
+    uint32_t receive_frame_count;
+    uint32_t receive_byte_count;
     bool isSerial_Open;
     QString Serial_Name;
     uint32_t Current_BaudRate;
@@ -32,5 +40,9 @@ class PageTransceiver : public QMainWindow
     uint8_t Current_StopBits;
     QSerialPort serialPort;
     void handleTimeout();
+    void autosend();
+    void sendData();
+    void receiveData();
+    void verifysend(int selectedIndex);
 };
 #endif

@@ -5,5 +5,6 @@
 #include "pagetabcontent.h"
 #include "pageterminal.h"
 #include "pagetransceiver.h"
+#include "pageverifiydialog.h"
 
 #endif

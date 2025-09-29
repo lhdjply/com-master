@@ -197,12 +197,13 @@
     </message>
     <message>
         <location filename="../page/pageterminal.ui" line="247"/>
-        <location filename="../page/pageterminal.cpp" line="43"/>
+        <location filename="../page/pageterminal.cpp" line="82"/>
+        <location filename="../page/pageterminal.cpp" line="159"/>
         <source>Open</source>
         <translation type="unfinished">打开</translation>
     </message>
     <message>
-        <location filename="../page/pageterminal.cpp" line="51"/>
+        <location filename="../page/pageterminal.cpp" line="91"/>
         <source>Close</source>
         <translation type="unfinished">关闭</translation>
     </message>
@@ -366,13 +367,14 @@
     </message>
     <message>
         <location filename="../page/pagetransceiver.ui" line="249"/>
-        <location filename="../page/pagetransceiver.cpp" line="43"/>
+        <location filename="../page/pagetransceiver.cpp" line="91"/>
+        <location filename="../page/pagetransceiver.cpp" line="217"/>
         <source>Open</source>
         <translation type="unfinished">打开</translation>
     </message>
     <message>
         <location filename="../page/pagetransceiver.ui" line="282"/>
-        <location filename="../page/pagetransceiver.ui" line="351"/>
+        <location filename="../page/pagetransceiver.ui" line="383"/>
         <source>Hexadecimal</source>
         <translation type="unfinished">16进制</translation>
     </message>
@@ -392,29 +394,116 @@
         <translation type="unfinished">帧换行</translation>
     </message>
     <message>
-        <location filename="../page/pagetransceiver.ui" line="358"/>
+        <location filename="../page/pagetransceiver.ui" line="314"/>
+        <location filename="../page/pagetransceiver.cpp" line="10"/>
+        <location filename="../page/pagetransceiver.cpp" line="335"/>
+        <source>Received frames</source>
+        <translation type="unfinished">接收帧数</translation>
+    </message>
+    <message>
+        <location filename="../page/pagetransceiver.ui" line="321"/>
+        <location filename="../page/pagetransceiver.cpp" line="11"/>
+        <location filename="../page/pagetransceiver.cpp" line="336"/>
+        <source> Received bytes</source>
+        <translation type="unfinished">接收字节数</translation>
+    </message>
+    <message>
+        <location filename="../page/pagetransceiver.ui" line="328"/>
+        <source>Clear count</source>
+        <translation type="unfinished">清空计数</translation>
+    </message>
+    <message>
+        <location filename="../page/pagetransceiver.ui" line="335"/>
+        <source>Clear Receive</source>
+        <translation type="unfinished">清空接收区</translation>
+    </message>
+    <message>
+        <location filename="../page/pagetransceiver.ui" line="390"/>
         <source>Auto send</source>
         <translation type="unfinished">自动发送</translation>
     </message>
     <message>
-        <location filename="../page/pagetransceiver.ui" line="367"/>
+        <location filename="../page/pagetransceiver.ui" line="418"/>
         <source>Send duty</source>
         <translation type="unfinished">发送周期</translation>
     </message>
     <message>
-        <location filename="../page/pagetransceiver.ui" line="379"/>
+        <location filename="../page/pagetransceiver.ui" line="425"/>
+        <source>1000</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../page/pagetransceiver.ui" line="432"/>
+        <source>ms</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../page/pagetransceiver.ui" line="442"/>
         <source>Verification</source>
         <translation type="unfinished">校验</translation>
     </message>
     <message>
-        <location filename="../page/pagetransceiver.ui" line="386"/>
+        <location filename="../page/pagetransceiver.ui" line="449"/>
         <source>Send</source>
         <translation type="unfinished">发送</translation>
     </message>
     <message>
-        <location filename="../page/pagetransceiver.cpp" line="51"/>
+        <location filename="../page/pagetransceiver.cpp" line="101"/>
         <source>Close</source>
         <translation type="unfinished">关闭</translation>
+    </message>
+</context>
+<context>
+    <name>PageVerifiyDialog</name>
+    <message>
+        <location filename="../page/pageverifiydialog.ui" line="14"/>
+        <source>Calculate the check digit</source>
+        <translation type="unfinished">计算校验码</translation>
+    </message>
+    <message>
+        <location filename="../page/pageverifiydialog.ui" line="48"/>
+        <source>CRC16/MODBUS, low byte first</source>
+        <translation type="unfinished">CRC16/MODBUS, 低字节在前</translation>
+    </message>
+    <message>
+        <location filename="../page/pageverifiydialog.ui" line="58"/>
+        <source>CRC16/MODBUS, high byte first</source>
+        <translation type="unfinished">CRC16/MODBUS, 高字节在前</translation>
+    </message>
+    <message>
+        <location filename="../page/pageverifiydialog.ui" line="65"/>
+        <source>CRC8</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../page/pageverifiydialog.ui" line="72"/>
+        <source>Total sum</source>
+        <translation type="unfinished">总加和</translation>
+    </message>
+    <message>
+        <location filename="../page/pageverifiydialog.ui" line="79"/>
+        <source>Sum XOR</source>
+        <translation type="unfinished">加和异或</translation>
+    </message>
+    <message>
+        <location filename="../page/pageverifiydialog.ui" line="86"/>
+        <source>CRC32, low byte first</source>
+        <translation type="unfinished">CRC32, 低字节在前</translation>
+    </message>
+    <message>
+        <location filename="../page/pageverifiydialog.ui" line="93"/>
+        <source>CRC32, high byte first</source>
+        <translation type="unfinished">CRC32, 高字节在前</translation>
+    </message>
+    <message>
+        <location filename="../page/pageverifiydialog.cpp" line="10"/>
+        <source>OK</source>
+        <translation type="unfinished">确定</translation>
+    </message>
+    <message>
+        <location filename="../page/pageverifiydialog.cpp" line="11"/>
+        <source>Cancel</source>
+        <translation type="unfinished">取消</translation>
     </message>
 </context>
 </TS>

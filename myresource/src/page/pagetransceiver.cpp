@@ -7,12 +7,21 @@ PageTransceiver::PageTransceiver(QWidget *parent)
 {
   ui->setupUi(this);
 
+  receive_frame_count = 0;
+  receive_byte_count = 0;
+  ui->receive_frames->setText(tr("Received frames") + ": " + QString::number(receive_frame_count));
+  ui->receive_bytes->setText(tr(" Received bytes") + ": " + QString::number(receive_byte_count));
+
   last_serial_num = 0;
   isSerial_Open = false;
 
   QTimer *timer = new QTimer(this);
   connect(timer, &QTimer::timeout, this, &PageTransceiver::handleTimeout);
   timer->start(1000);
+
+  AutosendTimer = new QTimer(this);
+  connect(AutosendTimer, &QTimer::timeout, this, &PageTransceiver::autosend);
+  AutosendTimer->start(1000);
 }
 
 PageTransceiver::~PageTransceiver()
@@ -82,6 +91,7 @@ void PageTransceiver::on_openbutton_clicked()
     ui->openbutton->setText(tr("Open"));
     serialPort.close();
     qDebug() << "串口已关闭";
+    disconnect(&serialPort, &QSerialPort::readyRead, this, &PageTransceiver::receiveData);
   }
   else
   {
@@ -90,12 +100,68 @@ void PageTransceiver::on_openbutton_clicked()
       isSerial_Open = true;
       ui->openbutton->setText(tr("Close"));
       qDebug() << "串口已打开";
+      // 连接信号槽，接收数据
+      connect(&serialPort, &QSerialPort::readyRead, this, &PageTransceiver::receiveData);
     }
     else
     {
       qDebug() << "串口无法打开, 错误原因:" << serialPort.errorString();
     }
   }
+}
+
+void PageTransceiver::on_sendbutton_clicked()
+{
+  sendData();
+}
+
+void PageTransceiver::on_verifybutton_clicked()
+{
+  if(ui->sendhexcheckbox->isChecked())
+  {
+    PageVerifiyDialog pageVerifiyDialog;
+    connect(&pageVerifiyDialog, &PageVerifiyDialog::selectedIndexChanged, this, &PageTransceiver::verifysend);
+
+    // 设置对话框为模态
+    pageVerifiyDialog.setModal(true);
+
+    // 计算对话框在父窗口中间的位置
+    QPoint parentCenter = this->window()->geometry().center();
+    QSize dialogSize = pageVerifiyDialog.size();
+
+    // 如果对话框还没有显示过，size()可能返回无效值，所以先调整大小
+    pageVerifiyDialog.adjustSize();
+    dialogSize = pageVerifiyDialog.size();
+
+    // 计算位置并移动对话框
+    QPoint dialogPos = parentCenter - QPoint(dialogSize.width() / 2, dialogSize.height() / 2);
+    pageVerifiyDialog.move(dialogPos);
+
+    pageVerifiyDialog.exec();
+  }
+}
+
+void PageTransceiver::on_clearcount_clicked()
+{
+  receive_frame_count = 0;
+  receive_byte_count = 0;
+  ui->receive_frames->setText(tr("Received frames") + ": " + QString::number(receive_frame_count));
+  ui->receive_bytes->setText(tr(" Received bytes") + ": " + QString::number(receive_byte_count));
+}
+
+void PageTransceiver::on_clearreceive_clicked()
+{
+  ui->receiveedit->clear();
+}
+
+void PageTransceiver::on_senddutyedit_textChanged(const QString &arg1)
+{
+  int interval = arg1.toInt();
+  if(interval < 10)
+  {
+    interval = 10;
+  }
+  AutosendTimer->setInterval(interval);
 }
 
 void PageTransceiver::handleTimeout()
@@ -161,5 +227,348 @@ void PageTransceiver::handleTimeout()
         qDebug() << "串口被拔除，已自动关闭";
       }
     }
+  }
+}
+
+void PageTransceiver::autosend()
+{
+  if(ui->autosendcheckbox->isChecked())
+  {
+    sendData();
+  }
+}
+
+void PageTransceiver::sendData()
+{
+  QByteArray byteArray;
+  if(!isSerial_Open)
+  {
+    qDebug() << "请先打开串口";
+    return;
+  }
+  QString dataToSend = ui->sendedit->toPlainText();
+  if(dataToSend.isEmpty())
+  {
+    qDebug() << "发送内容为空";
+    return;
+  }
+  if(ui->sendhexcheckbox->isChecked())
+  {
+    // 十六进制发送
+    QString hexInput = dataToSend.trimmed();
+    // 如果没有空格且长度大于2，自动每两个字符插入一个空格
+    if(!hexInput.contains(' ') && hexInput.length() > 2)
+    {
+      QString spacedHex;
+      for(int i = 0; i < hexInput.length(); i += 2)
+      {
+        if(i + 2 <= hexInput.length())
+          spacedHex += hexInput.mid(i, 2) + " ";
+        else
+          spacedHex += hexInput.mid(i); // 处理最后一个字符（如果是奇数长度）
+      }
+      hexInput = spacedHex.trimmed();
+    }
+    QStringList hexValues = hexInput.split(' ', Qt::SkipEmptyParts);
+    bool ok;
+    for(const QString &hex : hexValues)
+    {
+      int byte = hex.toInt(&ok, 16);
+      if(ok && byte >= 0 && byte <= 255)
+      {
+        byteArray.append(static_cast<char>(byte));
+      }
+      else
+      {
+        qDebug() << "无效的十六进制数:" << hex;
+        return;
+      }
+    }
+  }
+  else
+  {
+    byteArray = dataToSend.toUtf8();
+  }
+  qint64 bytesWritten = serialPort.write(byteArray);
+  if(bytesWritten == -1)
+  {
+    qDebug() << "写入数据失败, 错误原因:" << serialPort.errorString();
+  }
+  else if(bytesWritten != byteArray.size())
+  {
+    qDebug() << "未能写入所有数据, 已写入字节数:" << bytesWritten;
+  }
+  else
+  {
+    if(ui->displaysendcheckbox->isChecked())
+    {
+      ui->receiveedit->moveCursor(QTextCursor::End);  // 移动光标至末尾
+      if(ui->receivehexcheckbox->isChecked())
+      {
+        // 十六进制显示
+        QString hexString;
+        for(char byte : byteArray)
+        {
+          hexString += QString("%1 ").arg(static_cast<unsigned char>(byte), 2, 16, QChar('0')).toUpper();
+        }
+        dataToSend = hexString.trimmed(); // 去除末尾空格
+      }
+      dataToSend = dataToSend + "  ";
+      if(ui->linebreakcheckbox->isChecked())
+      {
+        dataToSend = dataToSend + "\n"; // 插入换行符
+      }
+      dataToSend = "[发送]" + dataToSend;
+      if(ui->displaytimecheckbox->isChecked())
+      {
+        QString currentTime = QDateTime::currentDateTime().toString("[yyyy-MM-dd HH:mm:ss]");
+        dataToSend = currentTime + dataToSend;  // 插入当前时间
+      }
+      //插入绿色字体
+      ui->receiveedit->setTextColor(QColor(0, 128, 0)); // 设置为绿色
+      ui->receiveedit->insertPlainText(dataToSend);  // 插入文本
+    }
+    qDebug() << "数据已成功写入, 字节数:" << bytesWritten;
+  }
+}
+
+void PageTransceiver::receiveData()
+{
+  QByteArray data = serialPort.readAll();
+  if(data.isEmpty())
+    return;
+  qDebug() << "数据已成功接收, 字节数:" << data.size();
+  receive_frame_count++;
+  receive_byte_count += data.size();
+  ui->receive_frames->setText(tr("Received frames") + ": " + QString::number(receive_frame_count));
+  ui->receive_bytes->setText(tr(" Received bytes") + ": " + QString::number(receive_byte_count));
+
+  ui->receiveedit->moveCursor(QTextCursor::End);  // 移动光标至末尾
+  QString dataToDisplay;
+  if(ui->receivehexcheckbox->isChecked())
+  {
+    // 十六进制显示
+    QString hexString;
+    for(char byte : data)
+    {
+      hexString += QString("%1 ").arg(static_cast<unsigned char>(byte), 2, 16, QChar('0')).toUpper();
+    }
+    dataToDisplay = hexString.trimmed(); // 去除末尾空格
+  }
+  else
+  {
+    dataToDisplay = QString::fromUtf8(data);
+  }
+  dataToDisplay = dataToDisplay + "  ";
+  if(ui->linebreakcheckbox->isChecked())
+  {
+    dataToDisplay = dataToDisplay + "\n"; // 插入换行符
+  }
+  dataToDisplay = "[接收]" + dataToDisplay;
+  if(ui->displaytimecheckbox->isChecked())
+  {
+    QString currentTime = QDateTime::currentDateTime().toString("[yyyy-MM-dd HH:mm:ss]");
+    dataToDisplay = currentTime + dataToDisplay;  // 插入当前时间
+  }
+  //插入蓝色字体
+  ui->receiveedit->setTextColor(QColor(0, 0, 255)); // 设置为蓝色
+  ui->receiveedit->insertPlainText(dataToDisplay);  // 插入文本
+}
+
+void PageTransceiver::verifysend(int selectedIndex)
+{
+  PageVerifiyDialog::VERIFIY_TYPE type = (PageVerifiyDialog::VERIFIY_TYPE)selectedIndex;
+  QString dataToSend = ui->sendedit->toPlainText();
+  if(dataToSend.isEmpty())
+  {
+    qDebug() << "发送内容为空";
+    return;
+  }
+  if(!ui->sendhexcheckbox->isChecked())
+  {
+    qDebug() << "字符无法校验";
+    return;
+  }
+
+  QByteArray byteArray;
+  // 十六进制解析
+  QString hexInput = dataToSend.trimmed();
+  if(!hexInput.contains(' ') && hexInput.length() > 2)
+  {
+    QString spacedHex;
+    for(int i = 0; i < hexInput.length(); i += 2)
+    {
+      if(i + 2 <= hexInput.length())
+        spacedHex += hexInput.mid(i, 2) + " ";
+      else
+        spacedHex += hexInput.mid(i);
+    }
+    hexInput = spacedHex.trimmed();
+  }
+  QStringList hexValues = hexInput.split(' ', Qt::SkipEmptyParts);
+  bool ok;
+  for(const QString &hex : hexValues)
+  {
+    int byte = hex.toInt(&ok, 16);
+    if(ok && byte >= 0 && byte <= 255)
+    {
+      byteArray.append(static_cast<char>(byte));
+    }
+    else
+    {
+      qDebug() << "无效的十六进制数:" << hex;
+      return;
+    }
+  }
+
+  switch(type)
+  {
+    case PageVerifiyDialog::CRC16_LOW:
+      {
+        // CRC16-IBM (Modbus)算法
+        quint16 crc = 0xFFFF;
+        for(auto b : byteArray)
+        {
+          crc ^= static_cast<quint8>(b);
+          for(int i = 0; i < 8; ++i)
+          {
+            if(crc & 0x0001)
+              crc = (crc >> 1) ^ 0xA001;
+            else
+              crc >>= 1;
+          }
+        }
+        // 低字节在前
+        QString crcStr = QString("%1 %2")
+                         .arg(crc & 0xFF, 2, 16, QChar('0'))
+                         .arg((crc >> 8) & 0xFF, 2, 16, QChar('0')).toUpper();
+        ui->sendedit->setPlainText(dataToSend + " " + crcStr);
+        qDebug() << "CRC16_LOW 校验码:" << crcStr;
+        break;
+      }
+    case PageVerifiyDialog::CRC16_HIGH:
+      {
+        // CRC16-IBM (Modbus)算法
+        quint16 crc = 0xFFFF;
+        for(auto b : byteArray)
+        {
+          crc ^= static_cast<quint8>(b);
+          for(int i = 0; i < 8; ++i)
+          {
+            if(crc & 0x0001)
+              crc = (crc >> 1) ^ 0xA001;
+            else
+              crc >>= 1;
+          }
+        }
+        // 高字节在前
+        QString crcStr = QString("%1 %2")
+                         .arg((crc >> 8) & 0xFF, 2, 16, QChar('0'))
+                         .arg(crc & 0xFF, 2, 16, QChar('0')).toUpper();
+        ui->sendedit->setPlainText(dataToSend + " " + crcStr);
+        qDebug() << "CRC16_HIGH 校验码:" << crcStr;
+        break;
+      }
+    case PageVerifiyDialog::CRC8:
+      {
+        // CRC8算法 (多项式: 0x07)
+        quint8 crc = 0x00;
+        for(auto b : byteArray)
+        {
+          crc ^= static_cast<quint8>(b);
+          for(int i = 0; i < 8; ++i)
+          {
+            if(crc & 0x80)
+              crc = (crc << 1) ^ 0x07;
+            else
+              crc <<= 1;
+          }
+        }
+        QString crcStr = QString("%1").arg(crc, 2, 16, QChar('0')).toUpper();
+        ui->sendedit->setPlainText(dataToSend + " " + crcStr);
+        qDebug() << "CRC8 校验码:" << crcStr;
+        break;
+      }
+    case PageVerifiyDialog::TOTAL_SUM:
+      {
+        // 累加和
+        quint8 sum = 0;
+        for(auto b : byteArray)
+        {
+          sum += static_cast<quint8>(b);
+        }
+        sum &= 0xFF;
+        QString sumStr = QString("%1").arg(sum, 2, 16, QChar('0')).toUpper();
+        ui->sendedit->setPlainText(dataToSend + " " + sumStr);
+        qDebug() << "TOTAL_SUM 校验码:" << sumStr;
+        break;
+      }
+    case PageVerifiyDialog::SUM_XOR:
+      {
+        // 异或和
+        quint8 xorSum = 0;
+        for(auto b : byteArray)
+        {
+          xorSum ^= static_cast<quint8>(b);
+        }
+        QString xorStr = QString("%1").arg(xorSum, 2, 16, QChar('0')).toUpper();
+        ui->sendedit->setPlainText(dataToSend + " " + xorStr);
+        qDebug() << "SUM_XOR 校验码:" << xorStr;
+        break;
+      }
+    case PageVerifiyDialog::CRC32_LOW:
+      {
+        // CRC32算法 (多项式: 0xEDB88320)
+        quint32 crc = 0xFFFFFFFF;
+        for(auto b : byteArray)
+        {
+          crc ^= static_cast<quint8>(b);
+          for(int i = 0; i < 8; ++i)
+          {
+            if(crc & 0x00000001)
+              crc = (crc >> 1) ^ 0xEDB88320;
+            else
+              crc >>= 1;
+          }
+        }
+        crc ^= 0xFFFFFFFF;
+        // 低字节在前 (小端序)
+        QString crcStr = QString("%1 %2 %3 %4")
+                         .arg((crc >> 0) & 0xFF, 2, 16, QChar('0'))
+                         .arg((crc >> 8) & 0xFF, 2, 16, QChar('0'))
+                         .arg((crc >> 16) & 0xFF, 2, 16, QChar('0'))
+                         .arg((crc >> 24) & 0xFF, 2, 16, QChar('0')).toUpper();
+        ui->sendedit->setPlainText(dataToSend + " " + crcStr);
+        qDebug() << "CRC32_LOW 校验码:" << crcStr;
+        break;
+      }
+    case PageVerifiyDialog::CRC32_HIGH:
+      {
+        // CRC32算法 (多项式: 0x04C11DB7)
+        quint32 crc = 0xFFFFFFFF;
+        for(auto b : byteArray)
+        {
+          crc ^= (static_cast<quint8>(b) << 24);
+          for(int i = 0; i < 8; ++i)
+          {
+            if(crc & 0x80000000)
+              crc = (crc << 1) ^ 0x04C11DB7;
+            else
+              crc <<= 1;
+          }
+        }
+        // 高字节在前 (大端序)
+        QString crcStr = QString("%1 %2 %3 %4")
+                         .arg((crc >> 24) & 0xFF, 2, 16, QChar('0'))
+                         .arg((crc >> 16) & 0xFF, 2, 16, QChar('0'))
+                         .arg((crc >> 8) & 0xFF, 2, 16, QChar('0'))
+                         .arg((crc >> 0) & 0xFF, 2, 16, QChar('0')).toUpper();
+        ui->sendedit->setPlainText(dataToSend + " " + crcStr);
+        qDebug() << "CRC32_HIGH 校验码:" << crcStr;
+        break;
+      }
+    default:
+      qDebug() << "未知的校验类型:" << type;
+      break;
   }
 }
