@@ -24,6 +24,7 @@ class PageTransceiver : public QMainWindow
     void on_verifybutton_clicked();
     void on_clearcount_clicked();
     void on_clearreceive_clicked();
+    void on_clearsend_clicked();
     void on_senddutyedit_textChanged(const QString &arg1);
 
   private:
@@ -32,6 +33,8 @@ class PageTransceiver : public QMainWindow
     uint32_t last_serial_num;
     uint32_t receive_frame_count;
     uint32_t receive_byte_count;
+    uint32_t send_frame_count;
+    uint32_t send_byte_count;
     bool isSerial_Open;
     QString Serial_Name;
     uint32_t Current_BaudRate;

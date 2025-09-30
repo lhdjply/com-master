@@ -9,8 +9,12 @@ PageTransceiver::PageTransceiver(QWidget *parent)
 
   receive_frame_count = 0;
   receive_byte_count = 0;
-  ui->receive_frames->setText(tr("Received frames") + ": " + QString::number(receive_frame_count));
-  ui->receive_bytes->setText(tr(" Received bytes") + ": " + QString::number(receive_byte_count));
+  send_frame_count = 0;
+  send_byte_count = 0;
+  ui->receive_frames_count->setText(QString::number(receive_frame_count));
+  ui->receive_bytes_count->setText(QString::number(receive_byte_count));
+  ui->send_frames_count->setText(QString::number(send_frame_count));
+  ui->send_bytes_count->setText(QString::number(send_byte_count));
 
   last_serial_num = 0;
   isSerial_Open = false;
@@ -145,13 +149,22 @@ void PageTransceiver::on_clearcount_clicked()
 {
   receive_frame_count = 0;
   receive_byte_count = 0;
-  ui->receive_frames->setText(tr("Received frames") + ": " + QString::number(receive_frame_count));
-  ui->receive_bytes->setText(tr(" Received bytes") + ": " + QString::number(receive_byte_count));
+  send_frame_count = 0;
+  send_byte_count = 0;
+  ui->receive_frames_count->setText(QString::number(receive_frame_count));
+  ui->receive_bytes_count->setText(QString::number(receive_byte_count));
+  ui->send_frames_count->setText(QString::number(send_frame_count));
+  ui->send_bytes_count->setText(QString::number(send_byte_count));
 }
 
 void PageTransceiver::on_clearreceive_clicked()
 {
   ui->receiveedit->clear();
+}
+
+void PageTransceiver::on_clearsend_clicked()
+{
+  ui->sendedit->clear();
 }
 
 void PageTransceiver::on_senddutyedit_textChanged(const QString &arg1)
@@ -329,6 +342,10 @@ void PageTransceiver::sendData()
       ui->receiveedit->insertPlainText(dataToSend);  // 插入文本
     }
     qDebug() << "数据已成功写入, 字节数:" << bytesWritten;
+    send_frame_count++;
+    send_byte_count = send_byte_count + bytesWritten;
+    ui->send_frames_count->setText(QString::number(send_frame_count));
+    ui->send_bytes_count->setText(QString::number(send_byte_count));
   }
 }
 
@@ -340,8 +357,8 @@ void PageTransceiver::receiveData()
   qDebug() << "数据已成功接收, 字节数:" << data.size();
   receive_frame_count++;
   receive_byte_count += data.size();
-  ui->receive_frames->setText(tr("Received frames") + ": " + QString::number(receive_frame_count));
-  ui->receive_bytes->setText(tr(" Received bytes") + ": " + QString::number(receive_byte_count));
+  ui->receive_frames_count->setText(QString::number(receive_frame_count));
+  ui->receive_bytes_count->setText(QString::number(receive_byte_count));
 
   ui->receiveedit->moveCursor(QTextCursor::End);  // 移动光标至末尾
   QString dataToDisplay;

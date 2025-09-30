@@ -10,8 +10,8 @@ void PageMainWindow::setupUi()
 {
   // 窗口属性
   this->setWindowTitle(tr("ly Serial Tool"));
-  this->resize(800, 600);
-  this->setMinimumSize(800, 600);
+  this->resize(1100, 700);
+  this->setMinimumSize(1100, 700);
   this->setLayoutDirection(Qt::LeftToRight);
 
   // 创建中心部件和主布局

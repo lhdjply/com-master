@@ -6,49 +6,168 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>920</width>
-    <height>600</height>
+    <width>1123</width>
+    <height>700</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Serial Port Transceiver</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QMainWindow {
+    background-color: #f5f7fa;
+    color: #333333;
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+QGroupBox {
+    font-weight: bold;
+    border: 1px solid #c0c6d0;
+    border-radius: 6px;
+    margin-top: 12px;
+    padding-top: 12px;
+    background-color: white;
+}
+QGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top center;
+    padding: 0 8px;
+    background-color: white;
+    color: #2c3e50;
+}
+QPushButton {
+    background-color: #3498db;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    padding: 8px 16px;
+    font-weight: bold;
+    min-height: 20px;
+}
+QPushButton:hover {
+    background-color: #2980b9;
+}
+QPushButton:pressed {
+    background-color: #21618c;
+}
+QPushButton:disabled {
+    background-color: #bdc3c7;
+    color: #7f8c8d;
+}
+QComboBox {
+    border: 1px solid #c0c6d0;
+    border-radius: 4px;
+    padding: 6px 12px;
+    background-color: white;
+    selection-background-color: #3498db;
+    selection-color: white;
+    min-width: 120px;
+    color: black;
+}
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 20px;
+    border-left: 1px solid #c0c6d0;
+}
+QComboBox::down-arrow {
+    image: none;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 4px solid #7f8c8d;
+    width: 0;
+    height: 0;
+}
+QTextEdit {
+    border: 1px solid #c0c6d0;
+    border-radius: 4px;
+    padding: 8px;
+    background-color: white;
+    font-family: 'Consolas', 'Monaco', monospace;
+}
+QCheckBox {
+    spacing: 6px;
+}
+QCheckBox::indicator {
+    width: 16px;
+    height: 16px;
+}
+QCheckBox::indicator:unchecked {
+    border: 1px solid #c0c6d0;
+    border-radius: 2px;
+    background-color: white;
+}
+QCheckBox::indicator:checked {
+    border: 1px solid #3498db;
+    border-radius: 2px;
+    background-color: #3498db;
+}
+QLabel {
+    color: #2c3e50;
+    font-weight: 500;
+}
+QLineEdit {
+    border: 1px solid #c0c6d0;
+    border-radius: 4px;
+    padding: 6px 8px;
+    background-color: white;
+}
+QLineEdit:focus {
+    border-color: #3498db;
+}</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout_4" stretch="0,0">
+   <layout class="QHBoxLayout" name="horizontalLayout_10" stretch="0,0">
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="0,1">
-      <item>
-       <widget class="QGroupBox" name="groupBox">
-        <property name="minimumSize">
-         <size>
-          <width>260</width>
-          <height>360</height>
-         </size>
-        </property>
-        <property name="title">
-         <string/>
-        </property>
-        <widget class="QWidget" name="layoutWidget">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>10</y>
-           <width>241</width>
-           <height>361</height>
-          </rect>
+     <widget class="QFrame" name="frame">
+      <property name="minimumSize">
+       <size>
+        <width>280</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>280</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_7">
+       <property name="spacing">
+        <number>15</number>
+       </property>
+       <item>
+        <widget class="QGroupBox" name="groupBox">
+         <property name="title">
+          <string>Serial Port Settings</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout">
+          <property name="spacing">
+           <number>12</number>
+          </property>
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_1">
             <item>
              <widget class="QLabel" name="label">
+              <property name="minimumSize">
+               <size>
+                <width>80</width>
+                <height>0</height>
+               </size>
+              </property>
               <property name="text">
                <string>Port</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QComboBox" name="portdroplist"/>
+             <widget class="QComboBox" name="portdroplist">
+              <property name="minimumSize">
+               <size>
+                <width>146</width>
+                <height>0</height>
+               </size>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>
@@ -56,6 +175,12 @@
            <layout class="QHBoxLayout" name="horizontalLayout_2">
             <item>
              <widget class="QLabel" name="label_2">
+              <property name="minimumSize">
+               <size>
+                <width>80</width>
+                <height>0</height>
+               </size>
+              </property>
               <property name="text">
                <string>Baudrate</string>
               </property>
@@ -63,6 +188,12 @@
             </item>
             <item>
              <widget class="QComboBox" name="baudratedroplist">
+              <property name="minimumSize">
+               <size>
+                <width>146</width>
+                <height>0</height>
+               </size>
+              </property>
               <property name="currentIndex">
                <number>2</number>
               </property>
@@ -139,6 +270,12 @@
            <layout class="QHBoxLayout" name="horizontalLayout_3">
             <item>
              <widget class="QLabel" name="label_3">
+              <property name="minimumSize">
+               <size>
+                <width>80</width>
+                <height>0</height>
+               </size>
+              </property>
               <property name="text">
                <string>Data bits</string>
               </property>
@@ -146,6 +283,12 @@
             </item>
             <item>
              <widget class="QComboBox" name="databitsdroplist">
+              <property name="minimumSize">
+               <size>
+                <width>146</width>
+                <height>0</height>
+               </size>
+              </property>
               <property name="currentIndex">
                <number>3</number>
               </property>
@@ -177,6 +320,12 @@
            <layout class="QHBoxLayout" name="horizontalLayout_4">
             <item>
              <widget class="QLabel" name="label_4">
+              <property name="minimumSize">
+               <size>
+                <width>80</width>
+                <height>0</height>
+               </size>
+              </property>
               <property name="text">
                <string>Parity</string>
               </property>
@@ -184,6 +333,12 @@
             </item>
             <item>
              <widget class="QComboBox" name="paritydroplist">
+              <property name="minimumSize">
+               <size>
+                <width>146</width>
+                <height>0</height>
+               </size>
+              </property>
               <item>
                <property name="text">
                 <string>None</string>
@@ -217,6 +372,12 @@
            <layout class="QHBoxLayout" name="horizontalLayout_5">
             <item>
              <widget class="QLabel" name="label_5">
+              <property name="minimumSize">
+               <size>
+                <width>80</width>
+                <height>0</height>
+               </size>
+              </property>
               <property name="text">
                <string>Stop bits</string>
               </property>
@@ -224,6 +385,12 @@
             </item>
             <item>
              <widget class="QComboBox" name="stopbitsdroplist">
+              <property name="minimumSize">
+               <size>
+                <width>146</width>
+                <height>0</height>
+               </size>
+              </property>
               <item>
                <property name="text">
                 <string>1</string>
@@ -245,6 +412,18 @@
           </item>
           <item>
            <widget class="QPushButton" name="openbutton">
+            <property name="styleSheet">
+             <string notr="true">QPushButton {
+    background-color: #27ae60;
+    padding: 10px;
+}
+QPushButton:hover {
+    background-color: #219653;
+}
+QPushButton:pressed {
+    background-color: #1e874b;
+}</string>
+            </property>
             <property name="text">
              <string>Open</string>
             </property>
@@ -252,91 +431,318 @@
           </item>
          </layout>
         </widget>
-       </widget>
-      </item>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="verticalGroupBox">
+         <property name="title">
+          <string>Statistics</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_4">
+          <property name="spacing">
+           <number>10</number>
+          </property>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_11">
+            <item>
+             <widget class="QLabel" name="receive_frames">
+              <property name="text">
+               <string>Received frames</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="receive_frames_count">
+              <property name="styleSheet">
+               <string notr="true">font-weight: bold; color: #e74c3c;</string>
+              </property>
+              <property name="text">
+               <string>0</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_12">
+            <item>
+             <widget class="QLabel" name="receive_bytes">
+              <property name="text">
+               <string>Received bytes</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="receive_bytes_count">
+              <property name="styleSheet">
+               <string notr="true">font-weight: bold; color: #e74c3c;</string>
+              </property>
+              <property name="text">
+               <string>0</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_13">
+            <item>
+             <widget class="QLabel" name="send_frames">
+              <property name="text">
+               <string>Send frames</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="send_frames_count">
+              <property name="styleSheet">
+               <string notr="true">font-weight: bold; color: #3498db;</string>
+              </property>
+              <property name="text">
+               <string>0</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_14">
+            <item>
+             <widget class="QLabel" name="send_bytes">
+              <property name="text">
+               <string>Send bytes</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="send_bytes_count">
+              <property name="styleSheet">
+               <string notr="true">font-weight: bold; color: #3498db;</string>
+              </property>
+              <property name="text">
+               <string>0</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QPushButton" name="clearcount">
+            <property name="text">
+             <string>Clear count</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout_3">
+      <property name="spacing">
+       <number>15</number>
+      </property>
       <item>
-       <widget class="QGroupBox" name="groupBox_2">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
+       <widget class="QGroupBox" name="receivegroup">
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>360</height>
+          <height>320</height>
          </size>
         </property>
         <property name="title">
-         <string/>
+         <string>Received Data</string>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_5">
+         <property name="spacing">
+          <number>10</number>
+         </property>
          <item>
-          <layout class="QVBoxLayout" name="verticalLayout_2">
+          <widget class="QTextEdit" name="receiveedit">
+           <property name="styleSheet">
+            <string notr="true">font-family: 'Consolas', 'Monaco', monospace; font-size: 12px;</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout">
+           <property name="spacing">
+            <number>15</number>
+           </property>
            <item>
-            <widget class="QTextEdit" name="receiveedit"/>
+            <widget class="QCheckBox" name="receivehexcheckbox">
+             <property name="text">
+              <string>Hex</string>
+             </property>
+            </widget>
            </item>
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout">
-             <item>
-              <widget class="QCheckBox" name="receivehexcheckbox">
-               <property name="text">
-                <string>Hexadecimal</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QCheckBox" name="displaysendcheckbox">
-               <property name="text">
-                <string>Display send</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QCheckBox" name="displaytimecheckbox">
-               <property name="text">
-                <string>Display time</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QCheckBox" name="linebreakcheckbox">
-               <property name="text">
-                <string>Frame line break</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
+            <widget class="QCheckBox" name="displaysendcheckbox">
+             <property name="text">
+              <string>Display send</string>
+             </property>
+            </widget>
            </item>
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_7">
-             <item>
-              <widget class="QLabel" name="receive_frames">
-               <property name="text">
-                <string>Received frames</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLabel" name="receive_bytes">
-               <property name="text">
-                <string> Received bytes</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="clearcount">
-               <property name="text">
-                <string>Clear count</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="clearreceive">
-               <property name="text">
-                <string>Clear Receive</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
+            <widget class="QCheckBox" name="displaytimecheckbox">
+             <property name="text">
+              <string>Display time</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="linebreakcheckbox">
+             <property name="text">
+              <string>Frame line break</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="clearreceive">
+             <property name="text">
+              <string>Clear Receive</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="sendgroup">
+        <property name="title">
+         <string>Send Data</string>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_6">
+         <property name="spacing">
+          <number>10</number>
+         </property>
+         <item>
+          <widget class="QTextEdit" name="sendedit">
+           <property name="styleSheet">
+            <string notr="true">font-family: 'Consolas', 'Monaco', monospace; font-size: 12px;</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_9">
+           <property name="spacing">
+            <number>10</number>
+           </property>
+           <item>
+            <widget class="QPushButton" name="sendbutton">
+             <property name="minimumSize">
+              <size>
+               <width>130</width>
+               <height>36</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true"/>
+             </property>
+             <property name="text">
+              <string>Send</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="verifybutton">
+             <property name="minimumSize">
+              <size>
+               <width>130</width>
+               <height>36</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>Verification</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="clearsend">
+             <property name="minimumSize">
+              <size>
+               <width>130</width>
+               <height>36</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>Clear Send</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="sendhexcheckbox">
+             <property name="text">
+              <string>Hex</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="autosendcheckbox">
+             <property name="text">
+              <string>Auto send</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QFrame" name="frame_3">
+             <property name="maximumSize">
+              <size>
+               <width>200</width>
+               <height>50</height>
+              </size>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_8">
+              <property name="spacing">
+               <number>5</number>
+              </property>
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
+              <item>
+               <widget class="QLabel" name="label_6">
+                <property name="text">
+                 <string>Send duty</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="senddutyedit">
+                <property name="maximumSize">
+                 <size>
+                  <width>60</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>1000</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignmentFlag::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="label_7">
+                <property name="text">
+                 <string>ms</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
            </item>
           </layout>
          </item>
@@ -344,116 +750,6 @@
        </widget>
       </item>
      </layout>
-    </item>
-    <item>
-     <widget class="QGroupBox" name="groupBox">
-      <layout class="QHBoxLayout" name="horizontalLayout_9" stretch="0,0">
-       <property name="spacing">
-        <number>0</number>
-       </property>
-       <property name="leftMargin">
-        <number>5</number>
-       </property>
-       <property name="topMargin">
-        <number>1</number>
-       </property>
-       <property name="rightMargin">
-        <number>5</number>
-       </property>
-       <property name="bottomMargin">
-        <number>1</number>
-       </property>
-       <item>
-        <widget class="QTextEdit" name="sendedit"/>
-       </item>
-       <item>
-        <layout class="QVBoxLayout" name="verticalLayout_3" stretch="0,0,0,0,0">
-         <property name="spacing">
-          <number>0</number>
-         </property>
-         <property name="leftMargin">
-          <number>5</number>
-         </property>
-         <property name="rightMargin">
-          <number>0</number>
-         </property>
-         <item>
-          <widget class="QCheckBox" name="sendhexcheckbox">
-           <property name="text">
-            <string>Hexadecimal</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="autosendcheckbox">
-           <property name="text">
-            <string>Auto send</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QFrame" name="frame_3">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>298</width>
-             <height>50</height>
-            </size>
-           </property>
-           <property name="styleSheet">
-            <string notr="true"/>
-           </property>
-           <layout class="QHBoxLayout" name="horizontalLayout_8" stretch="0,0,0">
-            <property name="spacing">
-             <number>10</number>
-            </property>
-            <property name="sizeConstraint">
-             <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
-            </property>
-            <item>
-             <widget class="QLabel" name="label_6">
-              <property name="text">
-               <string>Send duty</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="senddutyedit">
-              <property name="text">
-               <string>1000</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_7">
-              <property name="text">
-               <string>ms</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="verifybutton">
-           <property name="text">
-            <string>Verification</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="sendbutton">
-           <property name="text">
-            <string>Send</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-      </layout>
-     </widget>
     </item>
    </layout>
   </widget>
