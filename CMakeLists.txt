@@ -72,9 +72,28 @@ if (WIN32)
 elseif (APPLE)
 
 elseif (UNIX)
-install(FILES ${CMAKE_SOURCE_DIR}/ly-serial-tool.desktop
-        DESTINATION share/applications
-)
+
+set(ICON16 assets/icons/hicolor/16x16/apps/${PROJECT_TARGET}.png )
+set(ICON22 assets/icons/hicolor/22x22/apps/${PROJECT_TARGET}.png )
+set(ICON32 assets/icons/hicolor/32x32/apps/${PROJECT_TARGET}.png )
+set(ICON48 assets/icons/hicolor/48x48/apps/${PROJECT_TARGET}.png )
+set(ICON64 assets/icons/hicolor/64x64/apps/${PROJECT_TARGET}.png )
+set(ICON128 assets/icons/hicolor/128x128/apps/${PROJECT_TARGET}.png )
+set(ICON256 assets/icons/hicolor/256x256/apps/${PROJECT_TARGET}.png )
+set(ICON512 assets/icons/hicolor/512x512/apps/${PROJECT_TARGET}.png )
+set(ICONsc assets/icons/hicolor/scalable/apps/${PROJECT_TARGET}.svg )
+
+install( FILES ${ICON16} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/16x16/apps)
+install( FILES ${ICON22} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/22x22/apps)
+install( FILES ${ICON32} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/32x32/apps)
+install( FILES ${ICON48} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/48x48/apps)
+install( FILES ${ICON64} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/64x64/apps)
+install( FILES ${ICON128} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/128x128/apps)
+install( FILES ${ICON256} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/256x256/apps)
+install( FILES ${ICON512} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/512x512/apps)
+install( FILES ${ICONsc} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/scalable/apps)
+
+install(FILES ${CMAKE_SOURCE_DIR}/assets/desktop/ly-serial-tool.desktop DESTINATION share/applications)
 endif()
 
 

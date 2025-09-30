@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=ly serial tool
+Comment=ly serial tool
+Exec=ly-serial-tool
+Icon=ly-serial-tool
+Terminal=false
+Type=Application
+Categories=Education;Electronics
+StartupNotify=false
