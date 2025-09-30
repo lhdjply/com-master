@@ -1,0 +1,328 @@
+name: Build
+
+on:
+  push:
+    branches: [ '*' ]
+    tags: [ '*' ]
+  pull_request:
+    branches: [ '*' ]
+  workflow_dispatch:
+  
+env:
+  APP_NAME: "ly serial tool"
+  BUILD_TYPE: Release
+  QT_VERSION: 6.9.2
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.read_version.outputs.version }}
+      short_hash: ${{ steps.read_version.outputs.short_hash }}
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Read version from file
+      id: read_version
+      run: |
+        if [ "${{ github.ref_type }}" == "tag" ]; then
+          VERSION=${{ github.ref_name }}
+          SHORT_HASH=""
+        else 
+          MAJOR_MINOR=$(cut -d. -f1-2 VERSION)
+          VERSION="${MAJOR_MINOR}.99"
+          # Get the short hash of the current commit
+          COMMIT_HASH=$(echo ${{ github.sha }} | cut -c1-7)
+          SHORT_HASH="-$COMMIT_HASH"
+        fi
+        
+        echo "VERSION=$VERSION" >> $GITHUB_ENV
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+        
+        echo "SHORT_HASH=$SHORT_HASH" >> $GITHUB_ENV
+        echo "short_hash=$SHORT_HASH" >> $GITHUB_OUTPUT
+        
+    - name: Print version and hash
+      run: |
+        echo "ly serial tool version is ${{ env.VERSION }}"
+        echo "ly serial tool short hash is ${{ env.SHORT_HASH }}"
+      
+  build-linux-appimage-qt6:
+    runs-on: ubuntu-latest
+    needs: setup
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Set version environment variable
+      run: |
+        echo "VERSION=${{ needs.setup.outputs.version }}" >> $GITHUB_ENV
+        echo "SHORT_HASH=${{ needs.setup.outputs.short_hash }}" >> $GITHUB_ENV
+
+    - name: Print version and hash
+      run: |
+        echo "ly serial tool version is ${{ env.VERSION }}"
+        echo "ly serial tool short hash is ${{ env.SHORT_HASH }}"
+
+    - name: Install Dependencies
+      run: |
+          sudo apt-get update
+          sudo apt-get install -y libglx-dev libgl1-mesa-dev flex bison gperf dos2unix flex bison gperf dos2unix cups libcups2-dev
+          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-12 100 --slave /usr/bin/g++ g++ /usr/bin/g++-12
+
+    - name: 'Install Qt6'
+      uses: jurplel/install-qt-action@v4
+      with:
+        version: ${{env.QT_VERSION}}
+        host: 'linux'
+        target: 'desktop'
+        cache: true
+        arch: 'linux_gcc_64'
+        install-deps: 'true'
+        modules: 'qtserialport'
+
+
+    - name: '⚙️ Install CMake'
+      uses: lukka/get-cmake@latest
+
+    - name: 'Configure CMake'
+      run: |
+          cmake -B ${{github.workspace}}/build -G 'Ninja' \
+                -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
+                -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/AppDir/usr \
+                -DCI_VERSION="${{env.VERSION}}"
+
+    - name: 'Build'
+      # Build your program with the given configuration
+      run: |
+          cmake --build ${{github.workspace}}/build -j`nproc` --config ${{env.BUILD_TYPE}}
+          cmake --build ${{github.workspace}}/build --target install
+
+      
+    - name: 'Install linuxdeploy'
+      run: |
+          wget -q --tries=3 --wait=5 \
+                https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
+          wget -q --tries=3 --wait=5 \
+                https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage
+          sudo apt-get install fuse libfuse2
+          chmod +x linuxdeploy-x86_64.AppImage
+          chmod +x linuxdeploy-plugin-qt-x86_64.AppImage
+    
+    - name: 'Create AppImage'
+      run: |
+          ./linuxdeploy-x86_64.AppImage --appdir ${{github.workspace}}/AppDir \
+                                        --desktop-file=${{github.workspace}}/AppDir/usr/share/applications/ly-serial-tool.desktop \
+                                        # --icon-file=${{github.workspace}}/AppDir/usr/share/icons/hicolor/256x256/apps/qucs-s.png \
+                                        --plugin=qt --output appimage
+          rm linuxdeploy-x86_64.AppImage
+          rm linuxdeploy-plugin-qt-x86_64.AppImage
+          mv *.AppImage ${{ env.APP_NAME }}-${{env.VERSION}}${{env.SHORT_HASH}}-linux-x86_64.AppImage
+
+    - name: 'Upload artifact: AppImage'
+      uses: actions/upload-artifact@v4
+      with:
+          name: ${{ env.APP_NAME }}-${{env.VERSION}}${{env.SHORT_HASH}}-linux-x86_64
+          path: ${{ env.APP_NAME }}-${{env.VERSION}}${{env.SHORT_HASH}}-linux-x86_64.AppImage
+      
+  build-windows:
+    runs-on: ${{ matrix.config.os }}
+    continue-on-error: true
+    needs: setup # Bu 'setup' işinin var olduğunu ve 'version' ile 'short_hash' çıktılarını sağladığını varsayıyoruz.
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - os: windows-latest
+            msystem: ucrt64
+            platform_tag: win64                 
+          - os: windows-11-arm
+            msystem: clangarm64
+            platform_tag: win-arm64
+    defaults:
+      run:
+        shell: msys2 {0}
+    steps:  
+    - name: Disable autocrlf in Git
+      shell: pwsh
+      run: |
+        git config --global core.autocrlf false
+        git config --global core.eol lf
+
+    - name: Set version environment variable
+      shell: pwsh
+      run: |
+        echo "VERSION=${{ needs.setup.outputs.version }}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+        echo "SHORT_HASH=${{ needs.setup.outputs.short_hash }}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+    - name: Print version and hash
+      shell: pwsh
+      run: |
+        echo "ly serial tool version is ${{ env.VERSION }}"
+        echo "ly serial tool short hash is ${{ env.SHORT_HASH }}"
+
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Set up MSYS2 environment
+      uses: msys2/setup-msys2@v2
+      with:
+        msystem: ${{ matrix.config.msystem }}
+        cache: true
+        update: true
+        install: bison flex dos2unix curl zip p7zip
+        pacboy: cmake:p gcc:p qt6-base:p qt6-tools:p qt6-svg:p make:p ninja:p python:p gperf:p github-cli:p qt6-serialport:p
+
+    - name: Build project with CMake
+      run: |
+        cmake.exe -B build/ -G 'Ninja' \
+                  -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
+                  -DCMAKE_INSTALL_PREFIX=build/ly-serial-tool  \
+                  -DCI_VERSION="${{env.VERSION}}"
+        cmake.exe --build build/ --parallel --config ${{env.BUILD_TYPE}}
+
+    - name: Make install
+      run: |
+        cmake --build build/ --target install
+        strip build/ly-serial-tool/bin/*.exe 
+
+    - name: Deploy Qt6 dependencies
+      run: |
+        deploy_tool="windeployqt-qt6.exe"
+        bin_dir="build/ly-serial-tool/bin"
+        options="--svg --no-translations --no-system-d3d-compiler --no-network"
+        
+        executables=(
+          "ly-serial-tool.exe"
+        )
+
+        for exe in "${executables[@]}"; do
+          $deploy_tool "$bin_dir/$exe" $options
+        done
+          
+    - name: Copy non-Qt DLLs to bin directory
+      run: |
+        shopt -s extglob
+        FILES=$(ldd build/ly-serial-tool/bin/ly-serial-tool.exe | awk '($3 ~ /\/${{ matrix.config.msystem }}\/bin\//) {print $3}')
+        for file in $FILES; do
+          if [[ $(basename "$file") != Qt6* ]]; then
+            cp -r "$file" build/ly-serial-tool/bin
+          fi
+        done
+            
+    - name: Create zip archive for release
+      run: |
+        mkdir -p build/ly-serial-tool/misc
+        cp -rf contrib/InnoSetup/misc build/ly-serial-tool/
+        cd build/ly-serial-tool
+        zip -r ../../${{ env.APP_NAME }}-${{ env.VERSION }}${{ env.SHORT_HASH }}-${{ matrix.config.platform_tag }}.zip ./bin ./share ./lib ./misc
+        cd ../..
+
+    - name: Compile .ISS to .EXE Installer
+      shell: pwsh
+      run: |
+        ISCC.exe /Qp /O"${{github.workspace}}" /DAPPNAME=${{ env.APP_NAME }} /DRELEASE="${{ env.VERSION }}${{ env.SHORT_HASH }}-${{ matrix.config.platform_tag }}" "${{github.workspace}}\contrib\InnoSetup\qucs.iss"
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ env.APP_NAME }}-${{ env.VERSION }}${{ env.SHORT_HASH }}-${{ matrix.config.platform_tag }}
+        path: ${{ env.APP_NAME }}-${{ env.VERSION }}${{ env.SHORT_HASH }}-${{ matrix.config.platform_tag }}.zip
+
+    - name: Upload exe artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ env.APP_NAME }}-${{ env.VERSION }}${{ env.SHORT_HASH }}-${{ matrix.config.platform_tag }}-setup
+        path: ${{ env.APP_NAME }}-${{ env.VERSION }}${{ env.SHORT_HASH }}-${{ matrix.config.platform_tag }}-setup.exe
+
+  create-release:
+    runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request'
+    needs: [setup, build-linux-appimage-qt6, build-windows]
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set version environment variable
+      run: |
+        echo "VERSION=${{ needs.setup.outputs.version }}" >> $GITHUB_ENV
+        echo "SHORT_HASH=${{ needs.setup.outputs.short_hash }}" >> $GITHUB_ENV
+
+    - name: Print version and hash
+      run: |
+        echo "ly serial tool version is ${{ env.VERSION }}"
+        echo "ly serial tool short hash is ${{ env.SHORT_HASH }}"
+
+    - name: Download build artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: ~/artifacts
+        merge-multiple: true
+
+    - name: Calculate SHA-256 checksums
+      run: |
+        cd ~/artifacts
+        > hashes.sha256
+        for file in $(find . -type f \( -name "*-setup.exe" -o -name "*-win-arm64.zip" -o -name "*-win-arm64-setup.exe" -o -name "*-win64.zip" -o -name "*.AppImage" \)); do
+          filename=$(basename "$file")
+          sha256sum "$file" | awk -v fname="$filename" '{print $1 " *" fname}' >> hashes.sha256
+        done
+        cd ..
+        tree ~/artifacts
+
+    - name: Setup Release Information
+      run: |
+        if [ "${{github.ref_type}}" == "tag" ]; then
+          echo "PRERELEASE=" >> $GITHUB_ENV
+          echo "RELEASE_NAME=ly-serial-tool ${{ github.ref_name }}" >> $GITHUB_ENV
+          echo "TAG_NAME=${{ github.ref_name }}" >> $GITHUB_ENV
+          echo "RELEASE_NOTES=--generate-notes" >> $GITHUB_ENV
+        else
+          echo "PRERELEASE=-p" >> $GITHUB_ENV
+          echo "RELEASE_NAME=Continuous Build" >> $GITHUB_ENV
+          echo "TAG_NAME=continuous_build" >> $GITHUB_ENV
+          echo "RELEASE_NOTES=--notes \"Automated release for commit ${{ github.sha }}\"" >> $GITHUB_ENV
+        fi
+          
+    - name: Create GitHub Release
+      continue-on-error: false
+      run: |
+        # Find existing artifact files
+        hash_files=$(find ~/artifacts -name "*.sha256" -print0 | xargs -0 echo)
+        exe_files=$(find ~/artifacts -name "*win*setup*.exe" -print0 | xargs -0 echo)
+        zip_files=$(find ~/artifacts -name "*win*.zip"  -print0 | xargs -0 echo)
+        appimage_files=$(find ~/artifacts -name "*.AppImage" -print0 | xargs -0 echo)
+
+        # Check existing release and delete if it's exist
+        if gh release view ${{ env.TAG_NAME }} --repo $GITHUB_REPOSITORY &> /dev/null; then
+          if [ "${{ env.TAG_NAME }}" == "continuous_build" ]; then
+            gh release delete ${{ env.TAG_NAME }} --repo $GITHUB_REPOSITORY --cleanup-tag  --yes
+          else
+            gh release delete ${{ env.TAG_NAME }} --repo $GITHUB_REPOSITORY
+          fi
+          echo "${{ env.TAG_NAME }} deleted!"
+        fi
+        
+        if [ -n "$exe_files" ] && [ -n "$zip_files" ] && [ -n "$appimage_files" ]; then
+          gh release create ${{ env.TAG_NAME }} \
+                            $exe_files \
+                            $zip_files \
+                            $appimage_files \
+                            $hash_files \
+                            ${{ env.PRERELEASE }} \
+                            --repo $GITHUB_REPOSITORY \
+                            --title "${{ env.RELEASE_NAME }}" \
+                            ${{ env.RELEASE_NOTES }}
+
+            echo "${{ env.TAG_NAME }} release created!"
+        else
+          echo "No artifacts to upload."
+          exit 1
+        fi
+        
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
