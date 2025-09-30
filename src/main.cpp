@@ -6,7 +6,11 @@ int main(int argc, char * argv[])
 
   // Fusion style
   app.setStyle(QStyleFactory::create("Fusion"));
+#ifdef Q_OS_WIN
+  app.setWindowIcon(QIcon(":/icons/windows/ly-serial-tool.ico"));
+#else
   app.setWindowIcon(QIcon(":/icons/hicolor/scalable/apps/ly-serial-tool.svg"));
+#endif
 
   // Translation setup
   QTranslator translator;
