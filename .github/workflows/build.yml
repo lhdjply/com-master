@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
   
 env:
-  APP_NAME: "ly serial tool"
+  APP_NAME: "ly-serial-tool"
   BUILD_TYPE: Release
   QT_VERSION: 6.9.2
 
@@ -45,8 +45,8 @@ jobs:
         
     - name: Print version and hash
       run: |
-        echo "ly serial tool version is ${{ env.VERSION }}"
-        echo "ly serial tool short hash is ${{ env.SHORT_HASH }}"
+        echo "ly-serial-tool version is ${{ env.VERSION }}"
+        echo "ly-serial-tool short hash is ${{ env.SHORT_HASH }}"
       
   build-linux-appimage-qt6:
     runs-on: ubuntu-latest
@@ -63,8 +63,8 @@ jobs:
 
     - name: Print version and hash
       run: |
-        echo "ly serial tool version is ${{ env.VERSION }}"
-        echo "ly serial tool short hash is ${{ env.SHORT_HASH }}"
+        echo "ly-serial-tool version is ${{ env.VERSION }}"
+        echo "ly-serial-tool short hash is ${{ env.SHORT_HASH }}"
 
     - name: Install Dependencies
       run: |
@@ -84,7 +84,7 @@ jobs:
         modules: 'qtserialport'
 
 
-    - name: '⚙️ Install CMake'
+    - name: 'Install CMake'
       uses: lukka/get-cmake@latest
 
     - name: 'Configure CMake'
@@ -115,7 +115,7 @@ jobs:
       run: |
           ./linuxdeploy-x86_64.AppImage --appdir ${{github.workspace}}/AppDir \
                                         --desktop-file=${{github.workspace}}/AppDir/usr/share/applications/ly-serial-tool.desktop \
-                                        # --icon-file=${{github.workspace}}/AppDir/usr/share/icons/hicolor/256x256/apps/qucs-s.png \
+                                        --icon-file=${{github.workspace}}/AppDir/usr/share/icons/hicolor/256x256/apps/ly-serial-tool.png \
                                         --plugin=qt --output appimage
           rm linuxdeploy-x86_64.AppImage
           rm linuxdeploy-plugin-qt-x86_64.AppImage
@@ -160,8 +160,8 @@ jobs:
     - name: Print version and hash
       shell: pwsh
       run: |
-        echo "ly serial tool version is ${{ env.VERSION }}"
-        echo "ly serial tool short hash is ${{ env.SHORT_HASH }}"
+        echo "ly-serial-tool version is ${{ env.VERSION }}"
+        echo "ly-serial-tool short hash is ${{ env.SHORT_HASH }}"
 
     - name: Checkout repository
       uses: actions/checkout@v4
@@ -216,28 +216,16 @@ jobs:
             
     - name: Create zip archive for release
       run: |
-        mkdir -p build/ly-serial-tool/misc
-        cp -rf contrib/InnoSetup/misc build/ly-serial-tool/
+        mkdir -p build/ly-serial-tool
         cd build/ly-serial-tool
-        zip -r ../../${{ env.APP_NAME }}-${{ env.VERSION }}${{ env.SHORT_HASH }}-${{ matrix.config.platform_tag }}.zip ./bin ./share ./lib ./misc
+        zip -r ../../${{ env.APP_NAME }}-${{ env.VERSION }}${{ env.SHORT_HASH }}-${{ matrix.config.platform_tag }}.zip ./bin ./share ./lib
         cd ../..
-
-    - name: Compile .ISS to .EXE Installer
-      shell: pwsh
-      run: |
-        ISCC.exe /Qp /O"${{github.workspace}}" /DAPPNAME=${{ env.APP_NAME }} /DRELEASE="${{ env.VERSION }}${{ env.SHORT_HASH }}-${{ matrix.config.platform_tag }}" "${{github.workspace}}\contrib\InnoSetup\qucs.iss"
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       with:
         name: ${{ env.APP_NAME }}-${{ env.VERSION }}${{ env.SHORT_HASH }}-${{ matrix.config.platform_tag }}
         path: ${{ env.APP_NAME }}-${{ env.VERSION }}${{ env.SHORT_HASH }}-${{ matrix.config.platform_tag }}.zip
-
-    - name: Upload exe artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: ${{ env.APP_NAME }}-${{ env.VERSION }}${{ env.SHORT_HASH }}-${{ matrix.config.platform_tag }}-setup
-        path: ${{ env.APP_NAME }}-${{ env.VERSION }}${{ env.SHORT_HASH }}-${{ matrix.config.platform_tag }}-setup.exe
 
   create-release:
     runs-on: ubuntu-latest
@@ -254,8 +242,8 @@ jobs:
 
     - name: Print version and hash
       run: |
-        echo "ly serial tool version is ${{ env.VERSION }}"
-        echo "ly serial tool short hash is ${{ env.SHORT_HASH }}"
+        echo "ly-serial-tool version is ${{ env.VERSION }}"
+        echo "ly-serial-tool short hash is ${{ env.SHORT_HASH }}"
 
     - name: Download build artifacts
       uses: actions/download-artifact@v4
@@ -292,8 +280,6 @@ jobs:
       continue-on-error: false
       run: |
         # Find existing artifact files
-        hash_files=$(find ~/artifacts -name "*.sha256" -print0 | xargs -0 echo)
-        exe_files=$(find ~/artifacts -name "*win*setup*.exe" -print0 | xargs -0 echo)
         zip_files=$(find ~/artifacts -name "*win*.zip"  -print0 | xargs -0 echo)
         appimage_files=$(find ~/artifacts -name "*.AppImage" -print0 | xargs -0 echo)
 
@@ -307,12 +293,10 @@ jobs:
           echo "${{ env.TAG_NAME }} deleted!"
         fi
         
-        if [ -n "$exe_files" ] && [ -n "$zip_files" ] && [ -n "$appimage_files" ]; then
+        if [ -n "$zip_files" ] && [ -n "$appimage_files" ]; then
           gh release create ${{ env.TAG_NAME }} \
-                            $exe_files \
                             $zip_files \
                             $appimage_files \
-                            $hash_files \
                             ${{ env.PRERELEASE }} \
                             --repo $GITHUB_REPOSITORY \
                             --title "${{ env.RELEASE_NAME }}" \
