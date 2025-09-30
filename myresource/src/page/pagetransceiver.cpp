@@ -93,6 +93,18 @@ void PageTransceiver::on_openbutton_clicked()
   {
     isSerial_Open = false;
     ui->openbutton->setText(tr("Open"));
+    ui->openbutton->setStyleSheet(
+      "QPushButton {"
+      "  background-color: #27ae60;"
+      "  padding: 10px;"
+      "}"
+      "QPushButton:hover {"
+      "  background-color: #219653;"
+      "}"
+      "QPushButton:pressed {"
+      "  background-color: #1e874b;"
+      "}"
+    );
     serialPort.close();
     qDebug() << "串口已关闭";
     disconnect(&serialPort, &QSerialPort::readyRead, this, &PageTransceiver::receiveData);
@@ -103,6 +115,18 @@ void PageTransceiver::on_openbutton_clicked()
     {
       isSerial_Open = true;
       ui->openbutton->setText(tr("Close"));
+      ui->openbutton->setStyleSheet(
+        "QPushButton {"
+        "  background-color: #e74c3c;"
+        "  padding: 10px;"
+        "}"
+        "QPushButton:hover {"
+        "  background-color: #c0392b;"
+        "}"
+        "QPushButton:pressed {"
+        "  background-color: #a93226;"
+        "}"
+      );
       qDebug() << "串口已打开";
       // 连接信号槽，接收数据
       connect(&serialPort, &QSerialPort::readyRead, this, &PageTransceiver::receiveData);
@@ -236,6 +260,19 @@ void PageTransceiver::handleTimeout()
       {
         isSerial_Open = false;
         ui->openbutton->setText(tr("Open"));
+        ui->openbutton->setText(tr("Open"));
+        ui->openbutton->setStyleSheet(
+          "QPushButton {"
+          "  background-color: #27ae60;"
+          "  padding: 10px;"
+          "}"
+          "QPushButton:hover {"
+          "  background-color: #219653;"
+          "}"
+          "QPushButton:pressed {"
+          "  background-color: #1e874b;"
+          "}"
+        );
         serialPort.close();
         qDebug() << "串口被拔除，已自动关闭";
       }

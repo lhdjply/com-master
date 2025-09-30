@@ -373,7 +373,8 @@
     <message>
         <location filename="../page/pagetransceiver.ui" line="428"/>
         <location filename="../page/pagetransceiver.cpp" line="95"/>
-        <location filename="../page/pagetransceiver.cpp" line="238"/>
+        <location filename="../page/pagetransceiver.cpp" line="262"/>
+        <location filename="../page/pagetransceiver.cpp" line="263"/>
         <source>Open</source>
         <translation type="unfinished"></translation>
     </message>
@@ -487,7 +488,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagetransceiver.cpp" line="105"/>
+        <location filename="../page/pagetransceiver.cpp" line="117"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
@@ -495,43 +496,43 @@
 <context>
     <name>PageVerifiyDialog</name>
     <message>
-        <location filename="../page/pageverifiydialog.ui" line="14"/>
-        <source>Calculate the check digit</source>
+        <location filename="../page/pageverifiydialog.ui" line="26"/>
+        <source>计算校验位</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageverifiydialog.ui" line="48"/>
-        <source>CRC16/MODBUS, low byte first</source>
+        <location filename="../page/pageverifiydialog.ui" line="119"/>
+        <source>CRC16/MODBUS, 低字节在前</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageverifiydialog.ui" line="58"/>
-        <source>CRC16/MODBUS, high byte first</source>
+        <location filename="../page/pageverifiydialog.ui" line="129"/>
+        <source>CRC16/MODBUS, 高字节在前</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageverifiydialog.ui" line="65"/>
+        <location filename="../page/pageverifiydialog.ui" line="136"/>
         <source>CRC8</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageverifiydialog.ui" line="72"/>
-        <source>Total sum</source>
+        <location filename="../page/pageverifiydialog.ui" line="143"/>
+        <source>累加和</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageverifiydialog.ui" line="79"/>
-        <source>Sum XOR</source>
+        <location filename="../page/pageverifiydialog.ui" line="150"/>
+        <source>异或和</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageverifiydialog.ui" line="86"/>
-        <source>CRC32, low byte first</source>
+        <location filename="../page/pageverifiydialog.ui" line="157"/>
+        <source>CRC32, 低字节在前</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageverifiydialog.ui" line="93"/>
-        <source>CRC32, high byte first</source>
+        <location filename="../page/pageverifiydialog.ui" line="164"/>
+        <source>CRC32, 高字节在前</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
