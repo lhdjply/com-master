@@ -6,96 +6,182 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>480</width>
+    <height>420</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string>Calculate the check digit</string>
+  <property name="minimumSize">
+   <size>
+    <width>480</width>
+    <height>420</height>
+   </size>
   </property>
-  <widget class="QDialogButtonBox" name="selectbuttonbox">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>260</y>
-     <width>351</width>
-     <height>32</height>
-    </rect>
-   </property>
-   <property name="layoutDirection">
-    <enum>Qt::LayoutDirection::LeftToRight</enum>
-   </property>
-   <property name="orientation">
-    <enum>Qt::Orientation::Horizontal</enum>
-   </property>
-   <property name="standardButtons">
-    <set>QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok</set>
-   </property>
-  </widget>
-  <widget class="QGroupBox" name="groupBox">
-   <property name="geometry">
-    <rect>
-     <x>43</x>
-     <y>7</y>
-     <width>311</width>
-     <height>249</height>
-    </rect>
-   </property>
-   <layout class="QVBoxLayout" name="verticalLayout">
-    <item>
-     <widget class="QRadioButton" name="radioButton_1">
-      <property name="text">
-       <string>CRC16/MODBUS, low byte first</string>
-      </property>
-      <property name="checked">
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QRadioButton" name="radioButton_2">
-      <property name="text">
-       <string>CRC16/MODBUS, high byte first</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QRadioButton" name="radioButton_3">
-      <property name="text">
-       <string>CRC8</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QRadioButton" name="radioButton_4">
-      <property name="text">
-       <string>Total sum</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QRadioButton" name="radioButton_5">
-      <property name="text">
-       <string>Sum XOR</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QRadioButton" name="radioButton_6">
-      <property name="text">
-       <string>CRC32, low byte first</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QRadioButton" name="radioButton_7">
-      <property name="text">
-       <string>CRC32, high byte first</string>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
+  <property name="maximumSize">
+   <size>
+    <width>600</width>
+    <height>500</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>计算校验位</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">/* 主窗口样式 */
+QDialog {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #f6f9fc, stop: 1 #eef2f7);
+    font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+}
+
+/* 按钮盒样式 */
+QDialogButtonBox {
+    background: transparent;
+}
+
+QDialogButtonBox QPushButton {
+    background-color: #3498db;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    padding: 8px 16px;
+    font-weight: 500;
+    min-width: 80px;
+}
+
+QDialogButtonBox QPushButton:hover {
+    background-color: #2980b9;
+}
+
+QDialogButtonBox QPushButton:pressed {
+    background-color: #21618c;
+}
+
+QDialogButtonBox QPushButton:focus {
+    outline: none;
+    border: 2px solid #8ba3f0;
+}
+
+/* 取消按钮样式 */
+QDialogButtonBox QPushButton[text=&quot;Cancel&quot;] {
+    background-color: #6c757d;
+}
+
+QDialogButtonBox QPushButton[text=&quot;Cancel&quot;]:hover {
+    background-color: #5a6268;
+}
+
+/* 组框样式 */
+QGroupBox {
+    background-color: white;
+    border: 1px solid #d1d9e6;
+    border-radius: 10px;
+    margin-top: 10px;
+    padding-top: 10px;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top center;
+    padding: 0 8px;
+    background-color: white;
+    color: #4a6ee0;
+    font-weight: 600;
+}
+
+QRadioButton {
+    spacing: 6px;
+}
+QRadioButton::indicator {
+    width: 16px;
+    height: 16px;
+}
+QRadioButton::indicator:unchecked {
+    border: 1px solid #c0c6d0;
+    border-radius: 2px;
+    background-color: white;
+}
+QRadioButton::indicator:checked {
+    border: 1px solid #3498db;
+    border-radius: 2px;
+    background-color: #3498db;
+}
+</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <item>
+    <widget class="QGroupBox" name="groupBox">
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QRadioButton" name="radioButton_1">
+        <property name="text">
+         <string>CRC16/MODBUS, 低字节在前</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="radioButton_2">
+        <property name="text">
+         <string>CRC16/MODBUS, 高字节在前</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="radioButton_3">
+        <property name="text">
+         <string>CRC8</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="radioButton_4">
+        <property name="text">
+         <string>累加和</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="radioButton_5">
+        <property name="text">
+         <string>异或和</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="radioButton_6">
+        <property name="text">
+         <string>CRC32, 低字节在前</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="radioButton_7">
+        <property name="text">
+         <string>CRC32, 高字节在前</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="selectbuttonbox">
+     <property name="orientation">
+      <enum>Qt::Orientation::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok</set>
+     </property>
+     <property name="centerButtons">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections>
@@ -106,12 +192,12 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
+     <x>20</x>
+     <y>20</y>
     </hint>
     <hint type="destinationlabel">
-     <x>157</x>
-     <y>274</y>
+     <x>20</x>
+     <y>20</y>
     </hint>
    </hints>
   </connection>
@@ -122,12 +208,12 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
+     <x>20</x>
+     <y>20</y>
     </hint>
     <hint type="destinationlabel">
-     <x>286</x>
-     <y>274</y>
+     <x>20</x>
+     <y>20</y>
     </hint>
    </hints>
   </connection>
