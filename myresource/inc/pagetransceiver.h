@@ -42,10 +42,16 @@ class PageTransceiver : public QMainWindow
     uint8_t Current_Parity;
     uint8_t Current_StopBits;
     QSerialPort serialPort;
+    QByteArray frameBuffer;  // Buffer to accumulate received data
+    QTimer * frameProcessingTimer;  // Timer to periodically process incomplete frames
+    QByteArray getFrameDelimiter(); // Get the current frame delimiter based on settings
     void handleTimeout();
     void autosend();
     void sendData();
     void receiveData();
+    void processFrameBuffer();
+    void processCompleteFrame(const QByteArray &frame);
+    void onFrameProcessingTimeout(); // Timer timeout handler
     void verifysend(int selectedIndex);
 };
 #endif

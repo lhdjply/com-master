@@ -18,6 +18,12 @@ PageTransceiver::PageTransceiver(QWidget *parent)
 
   last_serial_num = 0;
   isSerial_Open = false;
+  frameBuffer.clear(); // Initialize frame buffer
+
+  // Initialize frame processing timer
+  frameProcessingTimer = new QTimer(this);
+  frameProcessingTimer->setSingleShot(true); // Single shot timer
+  connect(frameProcessingTimer, &QTimer::timeout, this, &PageTransceiver::onFrameProcessingTimeout);
 
   QTimer *timer = new QTimer(this);
   connect(timer, &QTimer::timeout, this, &PageTransceiver::handleTimeout);
@@ -184,6 +190,8 @@ void PageTransceiver::on_clearcount_clicked()
 void PageTransceiver::on_clearreceive_clicked()
 {
   ui->receiveedit->clear();
+  frameBuffer.clear(); // Also clear the frame buffer
+  frameProcessingTimer->stop(); // Stop the timer too
 }
 
 void PageTransceiver::on_clearsend_clicked()
@@ -386,14 +394,89 @@ void PageTransceiver::sendData()
   }
 }
 
+// Helper method to get the current frame delimiter based on settings
+QByteArray PageTransceiver::getFrameDelimiter()
+{
+    // For now, return commonly used delimiters
+    // In a more advanced implementation, this could be configurable from UI
+    return QByteArray(); // Return empty to use default logic
+}
+
 void PageTransceiver::receiveData()
 {
   QByteArray data = serialPort.readAll();
   if(data.isEmpty())
     return;
-  qDebug() << "数据已成功接收, 字节数:" << data.size();
+  
+  int oldSize = frameBuffer.size();
+  // Add received data to the frame buffer
+  frameBuffer.append(data);
+  
+  // Process complete frames in the buffer based on delimiter
+  bool hasProcessedFrame = true;
+  while (hasProcessedFrame) {
+    hasProcessedFrame = false;
+    int frameEnd = -1;
+    
+    // Look for common frame delimiters in order of preference
+    // First check for CRLF (carriage return + line feed)
+    frameEnd = frameBuffer.indexOf("\r\n");
+    if (frameEnd == -1) {
+      // Then check for just LF (line feed)
+      frameEnd = frameBuffer.indexOf('\n');
+    }
+    if (frameEnd == -1) {
+      // Then check for just CR (carriage return)
+      frameEnd = frameBuffer.indexOf('\r');
+    }
+    
+    // If we found a delimiter
+    if (frameEnd != -1) {
+      // Handle CRLF case specifically
+      int delimiterLength = 1;
+      if (frameEnd + 1 < frameBuffer.size() && frameBuffer.at(frameEnd + 1) == '\n') {
+        delimiterLength = 2; // CRLF case
+      }
+      
+      // Extract the complete frame (including the delimiter)
+      QByteArray completeFrame = frameBuffer.left(frameEnd + delimiterLength);
+      // Remove the processed frame from the buffer
+      frameBuffer = frameBuffer.mid(frameEnd + delimiterLength);
+      
+      // Process the complete frame
+      processCompleteFrame(completeFrame);
+      hasProcessedFrame = true; // Continue processing if more delimiters exist
+    }
+  }
+  
+  // If we still have data in the buffer after processing delimiters,
+  // start or restart the timer to process it after a delay
+  if (!frameBuffer.isEmpty()) {
+    // Restart the timer to process remaining data if no delimiter appears soon
+    frameProcessingTimer->stop();
+    frameProcessingTimer->start(100); // Process after 100ms if no more data comes
+  } else {
+    // If buffer is empty, stop the timer
+    frameProcessingTimer->stop();
+  }
+  
+  // Optional: Handle case where buffer becomes too large (possible missing frame delimiter)
+  if (frameBuffer.size() > 10240) { // 10KB threshold
+    // Process whatever we have as a frame if it gets too large
+    processCompleteFrame(frameBuffer);
+    frameBuffer.clear();
+    frameProcessingTimer->stop(); // Stop timer since buffer is now empty
+  }
+}
+
+void PageTransceiver::processCompleteFrame(const QByteArray &frame)
+{
+  if(frame.isEmpty())
+    return;
+    
+  qDebug() << "完整帧已接收, 字节数:" << frame.size();
   receive_frame_count++;
-  receive_byte_count += data.size();
+  receive_byte_count += frame.size();
   ui->receive_frames_count->setText(QString::number(receive_frame_count));
   ui->receive_bytes_count->setText(QString::number(receive_byte_count));
 
@@ -403,7 +486,7 @@ void PageTransceiver::receiveData()
   {
     // 十六进制显示
     QString hexString;
-    for(char byte : data)
+    for(char byte : frame)
     {
       hexString += QString("%1 ").arg(static_cast<unsigned char>(byte), 2, 16, QChar('0')).toUpper();
     }
@@ -411,7 +494,7 @@ void PageTransceiver::receiveData()
   }
   else
   {
-    dataToDisplay = QString::fromUtf8(data);
+    dataToDisplay = QString::fromUtf8(frame);
   }
   dataToDisplay = dataToDisplay + "  ";
   if(ui->linebreakcheckbox->isChecked())
@@ -427,6 +510,24 @@ void PageTransceiver::receiveData()
   //插入蓝色字体
   ui->receiveedit->setTextColor(QColor(0, 0, 255)); // 设置为蓝色
   ui->receiveedit->insertPlainText(dataToDisplay);  // 插入文本
+}
+
+void PageTransceiver::onFrameProcessingTimeout()
+{
+  // Process the remaining data in the buffer as a frame
+  if (!frameBuffer.isEmpty()) {
+    processCompleteFrame(frameBuffer);
+    frameBuffer.clear();
+  }
+}
+
+void PageTransceiver::processFrameBuffer()
+{
+  // Process all data in the buffer as a single frame
+  if (!frameBuffer.isEmpty()) {
+    processCompleteFrame(frameBuffer);
+    frameBuffer.clear();
+  }
 }
 
 void PageTransceiver::verifysend(int selectedIndex)
