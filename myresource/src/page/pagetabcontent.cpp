@@ -19,16 +19,16 @@ void PageTabContent::setupUi()
 
   // 创建收发器按钮
   transceiverButton = new QToolButton();
-  transceiverButton->setIcon(QIcon(":/icons/transceiver.png")); // 设置图标
+  transceiverButton->setIcon(QIcon(":/icons/serial_transceiver.png")); // 设置图标
   transceiverButton->setIconSize(QSize(150, 150)); // 设置图标大小
-  transceiverButton->setText(tr("Transceiver"));
+  transceiverButton->setText(tr("Serial Transceiver"));
   transceiverButton->setToolButtonStyle(Qt::ToolButtonTextUnderIcon); // 字在图标下面
 
   // 创建终端按钮
   terminalButton = new QToolButton();
-  terminalButton->setIcon(QIcon(":/icons/terminal.png")); // 设置图标
+  terminalButton->setIcon(QIcon(":/icons/serial_terminal.png")); // 设置图标
   terminalButton->setIconSize(QSize(150, 150)); // 设置图标大小
-  terminalButton->setText(tr("Terminal"));
+  terminalButton->setText(tr("Serial Terminal"));
   terminalButton->setToolButtonStyle(Qt::ToolButtonTextUnderIcon); // 字在图标下面
 
   QString transparentStyle = "QToolButton { background: transparent; border: none; }";

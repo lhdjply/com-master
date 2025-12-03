@@ -1,15 +1,15 @@
-#ifndef PAGETERMINAL_H
-#define PAGETERMINAL_H
+#ifndef PAGESERIALTERMINAL_H
+#define PAGESERIALTERMINAL_H
 
 #include "qtinclude.h"
 
-class PageTerminal : public QMainWindow
+class PageSerialTerminal : public QMainWindow
 {
     Q_OBJECT
 
   public:
-    PageTerminal(QWidget *parent = nullptr);
-    ~PageTerminal();
+    PageSerialTerminal(QWidget *parent = nullptr);
+    ~PageSerialTerminal();
 
   private slots:
     void on_openbutton_clicked();

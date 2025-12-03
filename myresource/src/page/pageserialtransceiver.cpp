@@ -47,7 +47,7 @@ void CustomTextEdit::contextMenuEvent(QContextMenuEvent *event)
   delete menu;
 }
 
-PageTransceiver::PageTransceiver(QWidget *parent)
+PageSerialTransceiver::PageSerialTransceiver(QWidget *parent)
   : QMainWindow(parent)
 {
   setupUi();
@@ -69,25 +69,25 @@ PageTransceiver::PageTransceiver(QWidget *parent)
   // Initialize frame processing timer
   frameProcessingTimer = new QTimer(this);
   frameProcessingTimer->setSingleShot(true); // Single shot timer
-  connect(frameProcessingTimer, &QTimer::timeout, this, &PageTransceiver::onFrameProcessingTimeout);
+  connect(frameProcessingTimer, &QTimer::timeout, this, &PageSerialTransceiver::onFrameProcessingTimeout);
 
   QTimer *timer = new QTimer(this);
-  connect(timer, &QTimer::timeout, this, &PageTransceiver::handleTimeout);
+  connect(timer, &QTimer::timeout, this, &PageSerialTransceiver::handleTimeout);
   timer->start(1000);
 
   AutosendTimer = new QTimer(this);
-  connect(AutosendTimer, &QTimer::timeout, this, &PageTransceiver::autosend);
+  connect(AutosendTimer, &QTimer::timeout, this, &PageSerialTransceiver::autosend);
   AutosendTimer->start(1000);
 }
 
-PageTransceiver::~PageTransceiver()
+PageSerialTransceiver::~PageSerialTransceiver()
 {
 }
 
-void PageTransceiver::setupUi()
+void PageSerialTransceiver::setupUi()
 {
   if(this->objectName().isEmpty())
-    this->setObjectName(QString::fromUtf8("PageTransceiver"));
+    this->setObjectName(QString::fromUtf8("PageSerialTransceiver"));
   this->resize(1123, 700);
 
   QString styleSheet = QString::fromUtf8(
@@ -301,11 +301,11 @@ void PageTransceiver::setupUi()
   paritydroplist = new QComboBox(groupBox);
   paritydroplist->setObjectName(QString::fromUtf8("paritydroplist"));
   paritydroplist->setMinimumSize(QSize(146, 0));
-  paritydroplist->addItem(QCoreApplication::translate("PageTransceiver", "None", nullptr));
-  paritydroplist->addItem(QCoreApplication::translate("PageTransceiver", "Odd", nullptr));
-  paritydroplist->addItem(QCoreApplication::translate("PageTransceiver", "Even", nullptr));
-  paritydroplist->addItem(QCoreApplication::translate("PageTransceiver", "Mark", nullptr));
-  paritydroplist->addItem(QCoreApplication::translate("PageTransceiver", "Space", nullptr));
+  paritydroplist->addItem(QCoreApplication::translate("PageSerialTransceiver", "None", nullptr));
+  paritydroplist->addItem(QCoreApplication::translate("PageSerialTransceiver", "Odd", nullptr));
+  paritydroplist->addItem(QCoreApplication::translate("PageSerialTransceiver", "Even", nullptr));
+  paritydroplist->addItem(QCoreApplication::translate("PageSerialTransceiver", "Mark", nullptr));
+  paritydroplist->addItem(QCoreApplication::translate("PageSerialTransceiver", "Space", nullptr));
 
   horizontalLayout_4->addWidget(paritydroplist);
 
@@ -571,39 +571,38 @@ void PageTransceiver::setupUi()
   QMetaObject::connectSlotsByName(this);
 }
 
-void PageTransceiver::retranslateUi()
+void PageSerialTransceiver::retranslateUi()
 {
-  this->setWindowTitle(QCoreApplication::translate("PageTransceiver", "Serial Port Transceiver", nullptr));
-  groupBox->setTitle(QCoreApplication::translate("PageTransceiver", "Serial Port Settings", nullptr));
-  label->setText(QCoreApplication::translate("PageTransceiver", "Port", nullptr));
-  label_2->setText(QCoreApplication::translate("PageTransceiver", "Baudrate", nullptr));
-  label_3->setText(QCoreApplication::translate("PageTransceiver", "Data bits", nullptr));
-  label_4->setText(QCoreApplication::translate("PageTransceiver", "Parity", nullptr));
-  label_5->setText(QCoreApplication::translate("PageTransceiver", "Stop bits", nullptr));
-  openbutton->setText(QCoreApplication::translate("PageTransceiver", "Open", nullptr));
-  verticalGroupBox->setTitle(QCoreApplication::translate("PageTransceiver", "Statistics", nullptr));
-  receive_frames->setText(QCoreApplication::translate("PageTransceiver", "Received frames", nullptr));
-  receive_bytes->setText(QCoreApplication::translate("PageTransceiver", "Received bytes", nullptr));
-  send_frames->setText(QCoreApplication::translate("PageTransceiver", "Send frames", nullptr));
-  send_bytes->setText(QCoreApplication::translate("PageTransceiver", "Send bytes", nullptr));
-  clearcount->setText(QCoreApplication::translate("PageTransceiver", "Clear count", nullptr));
-  receivegroup->setTitle(QCoreApplication::translate("PageTransceiver", "Received Data", nullptr));
-  receivehexcheckbox->setText(QCoreApplication::translate("PageTransceiver", "Hex", nullptr));
-  displaysendcheckbox->setText(QCoreApplication::translate("PageTransceiver", "Display send", nullptr));
-  displaytimecheckbox->setText(QCoreApplication::translate("PageTransceiver", "Display time", nullptr));
-  linebreakcheckbox->setText(QCoreApplication::translate("PageTransceiver", "Frame line break", nullptr));
-  clearreceive->setText(QCoreApplication::translate("PageTransceiver", "Clear Receive", nullptr));
-  sendgroup->setTitle(QCoreApplication::translate("PageTransceiver", "Send Data", nullptr));
-  sendbutton->setText(QCoreApplication::translate("PageTransceiver", "Send", nullptr));
-  verifybutton->setText(QCoreApplication::translate("PageTransceiver", "Verification", nullptr));
-  clearsend->setText(QCoreApplication::translate("PageTransceiver", "Clear Send", nullptr));
-  sendhexcheckbox->setText(QCoreApplication::translate("PageTransceiver", "Hex", nullptr));
-  autosendcheckbox->setText(QCoreApplication::translate("PageTransceiver", "Auto send", nullptr));
-  label_6->setText(QCoreApplication::translate("PageTransceiver", "Send duty", nullptr));
-  label_7->setText(QCoreApplication::translate("PageTransceiver", "ms", nullptr));
+  groupBox->setTitle(QCoreApplication::translate("PageSerialTransceiver", "Serial Port Settings", nullptr));
+  label->setText(QCoreApplication::translate("PageSerialTransceiver", "Port", nullptr));
+  label_2->setText(QCoreApplication::translate("PageSerialTransceiver", "Baudrate", nullptr));
+  label_3->setText(QCoreApplication::translate("PageSerialTransceiver", "Data bits", nullptr));
+  label_4->setText(QCoreApplication::translate("PageSerialTransceiver", "Parity", nullptr));
+  label_5->setText(QCoreApplication::translate("PageSerialTransceiver", "Stop bits", nullptr));
+  openbutton->setText(QCoreApplication::translate("PageSerialTransceiver", "Open", nullptr));
+  verticalGroupBox->setTitle(QCoreApplication::translate("PageSerialTransceiver", "Statistics", nullptr));
+  receive_frames->setText(QCoreApplication::translate("PageSerialTransceiver", "Received frames", nullptr));
+  receive_bytes->setText(QCoreApplication::translate("PageSerialTransceiver", "Received bytes", nullptr));
+  send_frames->setText(QCoreApplication::translate("PageSerialTransceiver", "Send frames", nullptr));
+  send_bytes->setText(QCoreApplication::translate("PageSerialTransceiver", "Send bytes", nullptr));
+  clearcount->setText(QCoreApplication::translate("PageSerialTransceiver", "Clear count", nullptr));
+  receivegroup->setTitle(QCoreApplication::translate("PageSerialTransceiver", "Received Data", nullptr));
+  receivehexcheckbox->setText(QCoreApplication::translate("PageSerialTransceiver", "Hex", nullptr));
+  displaysendcheckbox->setText(QCoreApplication::translate("PageSerialTransceiver", "Display send", nullptr));
+  displaytimecheckbox->setText(QCoreApplication::translate("PageSerialTransceiver", "Display time", nullptr));
+  linebreakcheckbox->setText(QCoreApplication::translate("PageSerialTransceiver", "Frame line break", nullptr));
+  clearreceive->setText(QCoreApplication::translate("PageSerialTransceiver", "Clear Receive", nullptr));
+  sendgroup->setTitle(QCoreApplication::translate("PageSerialTransceiver", "Send Data", nullptr));
+  sendbutton->setText(QCoreApplication::translate("PageSerialTransceiver", "Send", nullptr));
+  verifybutton->setText(QCoreApplication::translate("PageSerialTransceiver", "Verification", nullptr));
+  clearsend->setText(QCoreApplication::translate("PageSerialTransceiver", "Clear Send", nullptr));
+  sendhexcheckbox->setText(QCoreApplication::translate("PageSerialTransceiver", "Hex", nullptr));
+  autosendcheckbox->setText(QCoreApplication::translate("PageSerialTransceiver", "Auto send", nullptr));
+  label_6->setText(QCoreApplication::translate("PageSerialTransceiver", "Send duty", nullptr));
+  label_7->setText(QCoreApplication::translate("PageSerialTransceiver", "ms", nullptr));
 }
 
-void PageTransceiver::on_openbutton_clicked()
+void PageSerialTransceiver::on_openbutton_clicked()
 {
   const auto serialPortInfos = QSerialPortInfo::availablePorts();
 
@@ -677,7 +676,7 @@ void PageTransceiver::on_openbutton_clicked()
     );
     serialPort.close();
     qDebug() << "串口已关闭";
-    disconnect(&serialPort, &QSerialPort::readyRead, this, &PageTransceiver::receiveData);
+    disconnect(&serialPort, &QSerialPort::readyRead, this, &PageSerialTransceiver::receiveData);
   }
   else
   {
@@ -699,7 +698,7 @@ void PageTransceiver::on_openbutton_clicked()
       );
       qDebug() << "串口已打开";
       // 连接信号槽，接收数据
-      connect(&serialPort, &QSerialPort::readyRead, this, &PageTransceiver::receiveData);
+      connect(&serialPort, &QSerialPort::readyRead, this, &PageSerialTransceiver::receiveData);
     }
     else
     {
@@ -708,17 +707,17 @@ void PageTransceiver::on_openbutton_clicked()
   }
 }
 
-void PageTransceiver::on_sendbutton_clicked()
+void PageSerialTransceiver::on_sendbutton_clicked()
 {
   sendData();
 }
 
-void PageTransceiver::on_verifybutton_clicked()
+void PageSerialTransceiver::on_verifybutton_clicked()
 {
   if(sendhexcheckbox->isChecked())
   {
     PageVerifiyDialog pageVerifiyDialog;
-    connect(&pageVerifiyDialog, &PageVerifiyDialog::selectedIndexChanged, this, &PageTransceiver::verifysend);
+    connect(&pageVerifiyDialog, &PageVerifiyDialog::selectedIndexChanged, this, &PageSerialTransceiver::verifysend);
 
     // 设置对话框为模态
     pageVerifiyDialog.setModal(true);
@@ -739,7 +738,7 @@ void PageTransceiver::on_verifybutton_clicked()
   }
 }
 
-void PageTransceiver::on_clearcount_clicked()
+void PageSerialTransceiver::on_clearcount_clicked()
 {
   receive_frame_count = 0;
   receive_byte_count = 0;
@@ -751,19 +750,19 @@ void PageTransceiver::on_clearcount_clicked()
   send_bytes_count->setText(QString::number(send_byte_count));
 }
 
-void PageTransceiver::on_clearreceive_clicked()
+void PageSerialTransceiver::on_clearreceive_clicked()
 {
   receiveedit->clear();
   frameBuffer.clear(); // Also clear the frame buffer
   frameProcessingTimer->stop(); // Stop the timer too
 }
 
-void PageTransceiver::on_clearsend_clicked()
+void PageSerialTransceiver::on_clearsend_clicked()
 {
   sendedit->clear();
 }
 
-void PageTransceiver::on_senddutyedit_textChanged(const QString &arg1)
+void PageSerialTransceiver::on_senddutyedit_textChanged(const QString &arg1)
 {
   int interval = arg1.toInt();
   if(interval < 10)
@@ -773,7 +772,7 @@ void PageTransceiver::on_senddutyedit_textChanged(const QString &arg1)
   AutosendTimer->setInterval(interval);
 }
 
-void PageTransceiver::handleTimeout()
+void PageSerialTransceiver::handleTimeout()
 {
   const auto serialPortInfos = QSerialPortInfo::availablePorts();
   if(last_serial_num != serialPortInfos.size())
@@ -852,7 +851,7 @@ void PageTransceiver::handleTimeout()
   }
 }
 
-void PageTransceiver::autosend()
+void PageSerialTransceiver::autosend()
 {
   if(autosendcheckbox->isChecked())
   {
@@ -860,7 +859,7 @@ void PageTransceiver::autosend()
   }
 }
 
-void PageTransceiver::sendData()
+void PageSerialTransceiver::sendData()
 {
   QByteArray byteArray;
   if(!isSerial_Open)
@@ -959,14 +958,14 @@ void PageTransceiver::sendData()
 }
 
 // Helper method to get the current frame delimiter based on settings
-QByteArray PageTransceiver::getFrameDelimiter()
+QByteArray PageSerialTransceiver::getFrameDelimiter()
 {
   // For now, return commonly used delimiters
   // In a more advanced implementation, this could be configurable from UI
   return QByteArray(); // Return empty to use default logic
 }
 
-void PageTransceiver::receiveData()
+void PageSerialTransceiver::receiveData()
 {
   QByteArray data = serialPort.readAll();
   if(data.isEmpty())
@@ -1042,7 +1041,7 @@ void PageTransceiver::receiveData()
   }
 }
 
-void PageTransceiver::processCompleteFrame(const QByteArray &frame)
+void PageSerialTransceiver::processCompleteFrame(const QByteArray &frame)
 {
   if(frame.isEmpty())
     return;
@@ -1085,7 +1084,7 @@ void PageTransceiver::processCompleteFrame(const QByteArray &frame)
   receiveedit->insertPlainText(dataToDisplay);  // 插入文本
 }
 
-void PageTransceiver::onFrameProcessingTimeout()
+void PageSerialTransceiver::onFrameProcessingTimeout()
 {
   // Process the remaining data in the buffer as a frame
   if(!frameBuffer.isEmpty())
@@ -1095,7 +1094,7 @@ void PageTransceiver::onFrameProcessingTimeout()
   }
 }
 
-void PageTransceiver::processFrameBuffer()
+void PageSerialTransceiver::processFrameBuffer()
 {
   // Process all data in the buffer as a single frame
   if(!frameBuffer.isEmpty())
@@ -1105,7 +1104,7 @@ void PageTransceiver::processFrameBuffer()
   }
 }
 
-void PageTransceiver::verifysend(int selectedIndex)
+void PageSerialTransceiver::verifysend(int selectedIndex)
 {
   PageVerifiyDialog::VERIFIY_TYPE type = (PageVerifiyDialog::VERIFIY_TYPE)selectedIndex;
   QString dataToSend = sendedit->toPlainText();

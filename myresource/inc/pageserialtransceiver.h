@@ -1,5 +1,5 @@
-#ifndef PAGETRANSCEIVER_H
-#define PAGETRANSCEIVER_H
+#ifndef PAGESERIALTRANSCEIVER_H
+#define PAGESERIALTRANSCEIVER_H
 
 #include "qtinclude.h"
 
@@ -14,13 +14,13 @@ class CustomTextEdit : public QTextEdit
     void contextMenuEvent(QContextMenuEvent *event) override;
 };
 
-class PageTransceiver : public QMainWindow
+class PageSerialTransceiver : public QMainWindow
 {
     Q_OBJECT
 
   public:
-    PageTransceiver(QWidget *parent = nullptr);
-    ~PageTransceiver();
+    PageSerialTransceiver(QWidget *parent = nullptr);
+    ~PageSerialTransceiver();
 
   private slots:
     void on_openbutton_clicked();

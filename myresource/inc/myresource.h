@@ -3,8 +3,8 @@
 
 #include "pagemain.h"
 #include "pagetabcontent.h"
-#include "pageterminal.h"
-#include "pagetransceiver.h"
+#include "pageserialterminal.h"
+#include "pageserialtransceiver.h"
 #include "pageverifiydialog.h"
 
 #endif

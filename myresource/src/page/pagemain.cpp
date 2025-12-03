@@ -106,16 +106,16 @@ void PageMainWindow::opentoolpage(const QString &buttonName)
   tabWidget->removeTab(tabIndex);
 
   QIcon tabIcon;
-  if(buttonName.compare(tr("Terminal")) == 0)
+  if(buttonName.compare(tr("Serial Terminal")) == 0)
   {
-    PageTerminal *newTab = new PageTerminal();
-    tabIcon = QIcon(":/icons/terminal.png"); // 终端图标路径
+    PageSerialTerminal *newTab = new PageSerialTerminal();
+    tabIcon = QIcon(":/icons/serial_terminal.png"); // 终端图标路径
     tabWidget->insertTab(tabIndex, newTab, tabIcon, buttonName);
   }
   else
   {
-    PageTransceiver *newTab = new PageTransceiver();
-    tabIcon = QIcon(":/icons/transceiver.png"); // 收发器图标路径
+    PageSerialTransceiver *newTab = new PageSerialTransceiver();
+    tabIcon = QIcon(":/icons/serial_transceiver.png"); // 收发器图标路径
     tabWidget->insertTab(tabIndex, newTab, tabIcon, buttonName);
   }
   tabWidget->setTabToolTip(tabIndex, buttonName);

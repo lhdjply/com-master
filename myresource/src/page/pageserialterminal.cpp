@@ -1,6 +1,6 @@
 #include "myresource.h"
 
-PageTerminal::PageTerminal(QWidget *parent)
+PageSerialTerminal::PageSerialTerminal(QWidget *parent)
   : QMainWindow(parent)
 {
   setupUi();
@@ -10,7 +10,7 @@ PageTerminal::PageTerminal(QWidget *parent)
   isSerial_Open = false;
 
   QTimer *timer = new QTimer(this);
-  connect(timer, &QTimer::timeout, this, &PageTerminal::handleTimeout);
+  connect(timer, &QTimer::timeout, this, &PageSerialTerminal::handleTimeout);
   timer->start(1000);
 
   // 连接终端数据发送信号到串口
@@ -23,14 +23,14 @@ PageTerminal::PageTerminal(QWidget *parent)
   });
 }
 
-PageTerminal::~PageTerminal()
+PageSerialTerminal::~PageSerialTerminal()
 {
 }
 
-void PageTerminal::setupUi()
+void PageSerialTerminal::setupUi()
 {
   if(this->objectName().isEmpty())
-    this->setObjectName(QString::fromUtf8("PageTerminal"));
+    this->setObjectName(QString::fromUtf8("PageSerialTerminal"));
   this->resize(1123, 700);
 
   QString styleSheet = QString::fromUtf8(
@@ -229,11 +229,11 @@ void PageTerminal::setupUi()
 
   paritydroplist = new QComboBox(groupBox);
   paritydroplist->setObjectName(QString::fromUtf8("paritydroplist"));
-  paritydroplist->addItem(QCoreApplication::translate("PageTerminal", "None", nullptr));
-  paritydroplist->addItem(QCoreApplication::translate("PageTerminal", "Odd", nullptr));
-  paritydroplist->addItem(QCoreApplication::translate("PageTerminal", "Even", nullptr));
-  paritydroplist->addItem(QCoreApplication::translate("PageTerminal", "Mark", nullptr));
-  paritydroplist->addItem(QCoreApplication::translate("PageTerminal", "Space", nullptr));
+  paritydroplist->addItem(QCoreApplication::translate("PageSerialTerminal", "None", nullptr));
+  paritydroplist->addItem(QCoreApplication::translate("PageSerialTerminal", "Odd", nullptr));
+  paritydroplist->addItem(QCoreApplication::translate("PageSerialTerminal", "Even", nullptr));
+  paritydroplist->addItem(QCoreApplication::translate("PageSerialTerminal", "Mark", nullptr));
+  paritydroplist->addItem(QCoreApplication::translate("PageSerialTerminal", "Space", nullptr));
 
   horizontalLayout_4->addWidget(paritydroplist);
 
@@ -298,30 +298,29 @@ void PageTerminal::setupUi()
   QMetaObject::connectSlotsByName(this);
 
   // 连接信号和槽
-  connect(&serialPort, &QSerialPort::readyRead, this, &PageTerminal::readSerialData);
+  connect(&serialPort, &QSerialPort::readyRead, this, &PageSerialTerminal::readSerialData);
 
   // 连接终端的右键菜单信号
   // 通过 QTermWidget 的内部 TerminalDisplay 来获取右键菜单信号
   Konsole::TerminalDisplay* terminalDisplay = terminal->findChild<Konsole::TerminalDisplay *>();
   if(terminalDisplay)
   {
-    connect(terminalDisplay, &Konsole::TerminalDisplay::configureRequest, this, &PageTerminal::showTerminalContextMenu);
+    connect(terminalDisplay, &Konsole::TerminalDisplay::configureRequest, this, &PageSerialTerminal::showTerminalContextMenu);
   }
 }
 
-void PageTerminal::retranslateUi()
+void PageSerialTerminal::retranslateUi()
 {
-  this->setWindowTitle(QCoreApplication::translate("PageTerminal", "Serial Port Transceiver", nullptr));
   groupBox->setTitle(QString());
-  label->setText(QCoreApplication::translate("PageTerminal", "Port", nullptr));
-  label_2->setText(QCoreApplication::translate("PageTerminal", "Baudrate", nullptr));
-  label_3->setText(QCoreApplication::translate("PageTerminal", "Data bits", nullptr));
-  label_4->setText(QCoreApplication::translate("PageTerminal", "Parity", nullptr));
-  label_5->setText(QCoreApplication::translate("PageTerminal", "Stop bits", nullptr));
-  openbutton->setText(QCoreApplication::translate("PageTerminal", "Open", nullptr));
+  label->setText(QCoreApplication::translate("PageSerialTerminal", "Port", nullptr));
+  label_2->setText(QCoreApplication::translate("PageSerialTerminal", "Baudrate", nullptr));
+  label_3->setText(QCoreApplication::translate("PageSerialTerminal", "Data bits", nullptr));
+  label_4->setText(QCoreApplication::translate("PageSerialTerminal", "Parity", nullptr));
+  label_5->setText(QCoreApplication::translate("PageSerialTerminal", "Stop bits", nullptr));
+  openbutton->setText(QCoreApplication::translate("PageSerialTerminal", "Open", nullptr));
 }
 
-void PageTerminal::on_openbutton_clicked()
+void PageSerialTerminal::on_openbutton_clicked()
 {
   const auto serialPortInfos = QSerialPortInfo::availablePorts();
 
@@ -400,7 +399,7 @@ void PageTerminal::on_openbutton_clicked()
   }
 }
 
-void PageTerminal::handleTimeout()
+void PageSerialTerminal::handleTimeout()
 {
   const auto serialPortInfos = QSerialPortInfo::availablePorts();
   if(last_serial_num != serialPortInfos.size())
@@ -466,7 +465,7 @@ void PageTerminal::handleTimeout()
   }
 }
 
-void PageTerminal::readSerialData()
+void PageSerialTerminal::readSerialData()
 {
   if(isSerial_Open && serialPort.isOpen())
   {
@@ -479,7 +478,7 @@ void PageTerminal::readSerialData()
   }
 }
 
-void PageTerminal::setupContextMenu()
+void PageSerialTerminal::setupContextMenu()
 {
   contextMenu = new QMenu(this);
 
@@ -508,7 +507,7 @@ void PageTerminal::setupContextMenu()
   connect(clearAction, &QAction::triggered, terminal, &QTermWidget::clear);
 }
 
-void PageTerminal::showTerminalContextMenu(const QPoint& pos)
+void PageSerialTerminal::showTerminalContextMenu(const QPoint& pos)
 {
   // 获取全局坐标
   QPoint globalPos = terminal->mapToGlobal(pos);
