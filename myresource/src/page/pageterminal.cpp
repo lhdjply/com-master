@@ -292,10 +292,21 @@ void PageTerminal::setupUi()
 
   horizontalLayout->addWidget(terminal);
 
+  // 初始化右键菜单
+  setupContextMenu();
+
   QMetaObject::connectSlotsByName(this);
 
   // 连接信号和槽
   connect(&serialPort, &QSerialPort::readyRead, this, &PageTerminal::readSerialData);
+
+  // 连接终端的右键菜单信号
+  // 通过 QTermWidget 的内部 TerminalDisplay 来获取右键菜单信号
+  Konsole::TerminalDisplay* terminalDisplay = terminal->findChild<Konsole::TerminalDisplay *>();
+  if(terminalDisplay)
+  {
+    connect(terminalDisplay, &Konsole::TerminalDisplay::configureRequest, this, &PageTerminal::showTerminalContextMenu);
+  }
 }
 
 void PageTerminal::retranslateUi()
@@ -466,4 +477,42 @@ void PageTerminal::readSerialData()
       terminal->displayData(data);
     }
   }
+}
+
+void PageTerminal::setupContextMenu()
+{
+  contextMenu = new QMenu(this);
+
+  copyAction = new QAction(tr("复制"), this);
+  pasteAction = new QAction(tr("粘贴"), this);
+  clearAction = new QAction(tr("清空"), this);
+
+  // 设置图标
+  copyAction->setIcon(QIcon::fromTheme("edit-copy", style()->standardIcon(QStyle::SP_FileIcon)));
+  pasteAction->setIcon(QIcon::fromTheme("edit-paste", style()->standardIcon(QStyle::SP_FileIcon)));
+  clearAction->setIcon(QIcon::fromTheme("edit-clear", style()->standardIcon(QStyle::SP_TrashIcon)));
+
+  // 设置快捷键
+  copyAction->setShortcut(QKeySequence::Copy);
+  pasteAction->setShortcut(QKeySequence::Paste);
+
+  // 添加到菜单
+  contextMenu->addAction(copyAction);
+  contextMenu->addAction(pasteAction);
+  contextMenu->addSeparator();
+  contextMenu->addAction(clearAction);
+
+  // 连接信号
+  connect(copyAction, &QAction::triggered, terminal, &QTermWidget::copyClipboard);
+  connect(pasteAction, &QAction::triggered, terminal, &QTermWidget::pasteClipboard);
+  connect(clearAction, &QAction::triggered, terminal, &QTermWidget::clear);
+}
+
+void PageTerminal::showTerminalContextMenu(const QPoint& pos)
+{
+  // 获取全局坐标
+  QPoint globalPos = terminal->mapToGlobal(pos);
+
+  // 显示右键菜单
+  contextMenu->popup(globalPos);
 }

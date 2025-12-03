@@ -1,6 +1,7 @@
 #ifndef __QTINCLUDE_H
 #define __QTINCLUDE_H
 
+#include <QAction>
 #include <QApplication>
 #include <QCheckBox>
 #include <QComboBox>
@@ -17,6 +18,7 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QMainWindow>
+#include <QMenu>
 #include <QMenuBar>
 #include <QPushButton>
 #include <QRadioButton>
@@ -29,10 +31,13 @@
 #include <QTextCursor>
 #include <QTextBlock>
 #include <QTimer>
+#include <QToolBar>
 #include <QToolButton>
 #include <QTranslator>
+#include <QStyle>
 #include <QVBoxLayout>
 #include <QWidget>
 #include "qtermwidget.h"
+#include "TerminalDisplay.h"
 
 #endif

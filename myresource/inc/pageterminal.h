@@ -14,10 +14,12 @@ class PageTerminal : public QMainWindow
   private slots:
     void on_openbutton_clicked();
     void readSerialData();
+    void showTerminalContextMenu(const QPoint& pos);
 
   private:
     void setupUi();
     void retranslateUi();
+    void setupContextMenu();
 
     QWidget * centralwidget;
     QHBoxLayout * horizontalLayout;
@@ -50,5 +52,11 @@ class PageTerminal : public QMainWindow
     uint8_t Current_StopBits;
     QSerialPort serialPort;
     void handleTimeout();
+
+    // 右键菜单相关
+    QMenu * contextMenu;
+    QAction * copyAction;
+    QAction * pasteAction;
+    QAction * clearAction;
 };
 #endif

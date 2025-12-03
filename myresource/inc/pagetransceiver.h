@@ -7,10 +7,10 @@ class CustomTextEdit : public QTextEdit
 {
     Q_OBJECT
 
-public:
+  public:
     explicit CustomTextEdit(QWidget *parent = nullptr);
 
-protected:
+  protected:
     void contextMenuEvent(QContextMenuEvent *event) override;
 };
 
