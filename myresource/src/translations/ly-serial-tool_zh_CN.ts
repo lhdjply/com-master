@@ -336,72 +336,9 @@
 <context>
     <name>PageVerifiyDialog</name>
     <message>
-        <source>Calculate the check digit</source>
-        <translation type="obsolete">计算校验码</translation>
-    </message>
-    <message>
-        <source>CRC16/MODBUS, low byte first</source>
-        <translation type="obsolete">CRC16/MODBUS, 低字节在前</translation>
-    </message>
-    <message>
-        <source>CRC16/MODBUS, high byte first</source>
-        <translation type="obsolete">CRC16/MODBUS, 高字节在前</translation>
-    </message>
-    <message>
-        <location filename="../page/pageverifiydialog.cpp" line="173"/>
-        <source>计算校验位</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../page/pageverifiydialog.cpp" line="174"/>
-        <source>CRC16/MODBUS, 低字节在前</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../page/pageverifiydialog.cpp" line="175"/>
-        <source>CRC16/MODBUS, 高字节在前</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../page/pageverifiydialog.cpp" line="176"/>
         <source>CRC8</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../page/pageverifiydialog.cpp" line="177"/>
-        <source>累加和</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../page/pageverifiydialog.cpp" line="178"/>
-        <source>异或和</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../page/pageverifiydialog.cpp" line="179"/>
-        <source>CRC32, 低字节在前</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../page/pageverifiydialog.cpp" line="180"/>
-        <source>CRC32, 高字节在前</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Total sum</source>
-        <translation type="obsolete">总加和</translation>
-    </message>
-    <message>
-        <source>Sum XOR</source>
-        <translation type="obsolete">加和异或</translation>
-    </message>
-    <message>
-        <source>CRC32, low byte first</source>
-        <translation type="obsolete">CRC32, 低字节在前</translation>
-    </message>
-    <message>
-        <source>CRC32, high byte first</source>
-        <translation type="obsolete">CRC32, 高字节在前</translation>
     </message>
     <message>
         <location filename="../page/pageverifiydialog.cpp" line="9"/>
@@ -412,6 +349,41 @@
         <location filename="../page/pageverifiydialog.cpp" line="10"/>
         <source>Cancel</source>
         <translation type="unfinished">取消</translation>
+    </message>
+    <message>
+        <location filename="../page/pageverifiydialog.cpp" line="173"/>
+        <source>Calculate Checksum</source>
+        <translation type="unfinished">计算校验码</translation>
+    </message>
+    <message>
+        <location filename="../page/pageverifiydialog.cpp" line="174"/>
+        <source>CRC16/MODBUS, Little Endian</source>
+        <translation type="unfinished">CRC16/MODBUS, 低字节在前</translation>
+    </message>
+    <message>
+        <location filename="../page/pageverifiydialog.cpp" line="175"/>
+        <source>CRC16/MODBUS, Big Endian</source>
+        <translation type="unfinished">CRC16/MODBUS, 高字节在前</translation>
+    </message>
+    <message>
+        <location filename="../page/pageverifiydialog.cpp" line="177"/>
+        <source>Sum</source>
+        <translation type="unfinished">累加和</translation>
+    </message>
+    <message>
+        <location filename="../page/pageverifiydialog.cpp" line="178"/>
+        <source>XOR</source>
+        <translation type="unfinished">异或和</translation>
+    </message>
+    <message>
+        <location filename="../page/pageverifiydialog.cpp" line="179"/>
+        <source>CRC32, Little Endian</source>
+        <translation type="unfinished">CRC32, 低字节在前</translation>
+    </message>
+    <message>
+        <location filename="../page/pageverifiydialog.cpp" line="180"/>
+        <source>CRC32, Big Endian</source>
+        <translation type="unfinished">CRC32, 高字节在前</translation>
     </message>
 </context>
 </TS>

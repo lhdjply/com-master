@@ -170,14 +170,14 @@ void PageVerifiyDialog::setupUi()
 
 void PageVerifiyDialog::retranslateUi()
 {
-  this->setWindowTitle(QCoreApplication::translate("PageVerifiyDialog", "计算校验位", nullptr));
-  radioButton_1->setText(QCoreApplication::translate("PageVerifiyDialog", "CRC16/MODBUS, 低字节在前", nullptr));
-  radioButton_2->setText(QCoreApplication::translate("PageVerifiyDialog", "CRC16/MODBUS, 高字节在前", nullptr));
+  this->setWindowTitle(QCoreApplication::translate("PageVerifiyDialog", "Calculate Checksum", nullptr));
+  radioButton_1->setText(QCoreApplication::translate("PageVerifiyDialog", "CRC16/MODBUS, Little Endian", nullptr));
+  radioButton_2->setText(QCoreApplication::translate("PageVerifiyDialog", "CRC16/MODBUS, Big Endian", nullptr));
   radioButton_3->setText(QCoreApplication::translate("PageVerifiyDialog", "CRC8", nullptr));
-  radioButton_4->setText(QCoreApplication::translate("PageVerifiyDialog", "累加和", nullptr));
-  radioButton_5->setText(QCoreApplication::translate("PageVerifiyDialog", "异或和", nullptr));
-  radioButton_6->setText(QCoreApplication::translate("PageVerifiyDialog", "CRC32, 低字节在前", nullptr));
-  radioButton_7->setText(QCoreApplication::translate("PageVerifiyDialog", "CRC32, 高字节在前", nullptr));
+  radioButton_4->setText(QCoreApplication::translate("PageVerifiyDialog", "Sum", nullptr));
+  radioButton_5->setText(QCoreApplication::translate("PageVerifiyDialog", "XOR", nullptr));
+  radioButton_6->setText(QCoreApplication::translate("PageVerifiyDialog", "CRC32, Little Endian", nullptr));
+  radioButton_7->setText(QCoreApplication::translate("PageVerifiyDialog", "CRC32, Big Endian", nullptr));
 }
 
 void PageVerifiyDialog::on_selectbuttonbox_accepted()
