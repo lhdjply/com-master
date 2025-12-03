@@ -725,7 +725,8 @@ void Vt102Emulation::processToken(int token, wchar_t p, int q)
       _currentScreen->clearEntireLine();
       break;
     case TY_CSI_PS('J',   0) :
-      _currentScreen->clearToEndOfScreen();
+      reset();
+      clearHistory();
       break;
     case TY_CSI_PS('J',   1) :
       _currentScreen->clearToBeginOfScreen();
