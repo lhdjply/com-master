@@ -2,6 +2,44 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="en" sourcelanguage="en">
 <context>
+    <name>CustomTextEdit</name>
+    <message>
+        <location filename="../page/pagetransceiver.cpp" line="16"/>
+        <source>Undo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../page/pagetransceiver.cpp" line="18"/>
+        <source>Redo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../page/pagetransceiver.cpp" line="20"/>
+        <source>Cut</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../page/pagetransceiver.cpp" line="22"/>
+        <source>Copy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../page/pagetransceiver.cpp" line="24"/>
+        <source>Paste</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../page/pagetransceiver.cpp" line="26"/>
+        <source>Delete</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../page/pagetransceiver.cpp" line="28"/>
+        <source>Select All</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>PageMainWindow</name>
     <message>
         <location filename="../page/pagemain.cpp" line="12"/>
@@ -111,171 +149,171 @@
 <context>
     <name>PageTransceiver</name>
     <message>
-        <location filename="../page/pagetransceiver.cpp" line="529"/>
+        <location filename="../page/pagetransceiver.cpp" line="562"/>
         <source>Serial Port Transceiver</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagetransceiver.cpp" line="530"/>
+        <location filename="../page/pagetransceiver.cpp" line="563"/>
         <source>Serial Port Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagetransceiver.cpp" line="531"/>
+        <location filename="../page/pagetransceiver.cpp" line="564"/>
         <source>Port</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagetransceiver.cpp" line="532"/>
+        <location filename="../page/pagetransceiver.cpp" line="565"/>
         <source>Baudrate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagetransceiver.cpp" line="533"/>
+        <location filename="../page/pagetransceiver.cpp" line="566"/>
         <source>Data bits</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagetransceiver.cpp" line="534"/>
+        <location filename="../page/pagetransceiver.cpp" line="567"/>
         <source>Parity</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagetransceiver.cpp" line="257"/>
+        <location filename="../page/pagetransceiver.cpp" line="290"/>
         <source>None</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagetransceiver.cpp" line="258"/>
+        <location filename="../page/pagetransceiver.cpp" line="291"/>
         <source>Odd</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagetransceiver.cpp" line="259"/>
+        <location filename="../page/pagetransceiver.cpp" line="292"/>
         <source>Even</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagetransceiver.cpp" line="260"/>
+        <location filename="../page/pagetransceiver.cpp" line="293"/>
         <source>Mark</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagetransceiver.cpp" line="261"/>
+        <location filename="../page/pagetransceiver.cpp" line="294"/>
         <source>Space</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagetransceiver.cpp" line="535"/>
+        <location filename="../page/pagetransceiver.cpp" line="568"/>
         <source>Stop bits</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagetransceiver.cpp" line="536"/>
-        <location filename="../page/pagetransceiver.cpp" line="618"/>
-        <location filename="../page/pagetransceiver.cpp" line="787"/>
-        <location filename="../page/pagetransceiver.cpp" line="788"/>
+        <location filename="../page/pagetransceiver.cpp" line="569"/>
+        <location filename="../page/pagetransceiver.cpp" line="651"/>
+        <location filename="../page/pagetransceiver.cpp" line="820"/>
+        <location filename="../page/pagetransceiver.cpp" line="821"/>
         <source>Open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagetransceiver.cpp" line="537"/>
+        <location filename="../page/pagetransceiver.cpp" line="570"/>
         <source>Statistics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagetransceiver.cpp" line="538"/>
+        <location filename="../page/pagetransceiver.cpp" line="571"/>
         <source>Received frames</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagetransceiver.cpp" line="539"/>
+        <location filename="../page/pagetransceiver.cpp" line="572"/>
         <source>Received bytes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagetransceiver.cpp" line="540"/>
+        <location filename="../page/pagetransceiver.cpp" line="573"/>
         <source>Send frames</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagetransceiver.cpp" line="541"/>
+        <location filename="../page/pagetransceiver.cpp" line="574"/>
         <source>Send bytes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagetransceiver.cpp" line="542"/>
+        <location filename="../page/pagetransceiver.cpp" line="575"/>
         <source>Clear count</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagetransceiver.cpp" line="543"/>
+        <location filename="../page/pagetransceiver.cpp" line="576"/>
         <source>Received Data</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagetransceiver.cpp" line="544"/>
-        <location filename="../page/pagetransceiver.cpp" line="553"/>
+        <location filename="../page/pagetransceiver.cpp" line="577"/>
+        <location filename="../page/pagetransceiver.cpp" line="586"/>
         <source>Hex</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagetransceiver.cpp" line="545"/>
+        <location filename="../page/pagetransceiver.cpp" line="578"/>
         <source>Display send</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagetransceiver.cpp" line="546"/>
+        <location filename="../page/pagetransceiver.cpp" line="579"/>
         <source>Display time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagetransceiver.cpp" line="547"/>
+        <location filename="../page/pagetransceiver.cpp" line="580"/>
         <source>Frame line break</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagetransceiver.cpp" line="548"/>
+        <location filename="../page/pagetransceiver.cpp" line="581"/>
         <source>Clear Receive</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagetransceiver.cpp" line="549"/>
+        <location filename="../page/pagetransceiver.cpp" line="582"/>
         <source>Send Data</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagetransceiver.cpp" line="550"/>
+        <location filename="../page/pagetransceiver.cpp" line="583"/>
         <source>Send</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagetransceiver.cpp" line="551"/>
+        <location filename="../page/pagetransceiver.cpp" line="584"/>
         <source>Verification</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagetransceiver.cpp" line="552"/>
+        <location filename="../page/pagetransceiver.cpp" line="585"/>
         <source>Clear Send</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagetransceiver.cpp" line="554"/>
+        <location filename="../page/pagetransceiver.cpp" line="587"/>
         <source>Auto send</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagetransceiver.cpp" line="555"/>
+        <location filename="../page/pagetransceiver.cpp" line="588"/>
         <source>Send duty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagetransceiver.cpp" line="556"/>
+        <location filename="../page/pagetransceiver.cpp" line="589"/>
         <source>ms</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagetransceiver.cpp" line="640"/>
+        <location filename="../page/pagetransceiver.cpp" line="673"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>

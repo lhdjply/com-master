@@ -3,6 +3,17 @@
 
 #include "qtinclude.h"
 
+class CustomTextEdit : public QTextEdit
+{
+    Q_OBJECT
+
+public:
+    explicit CustomTextEdit(QWidget *parent = nullptr);
+
+protected:
+    void contextMenuEvent(QContextMenuEvent *event) override;
+};
+
 class PageTransceiver : public QMainWindow
 {
     Q_OBJECT
@@ -80,7 +91,7 @@ class PageTransceiver : public QMainWindow
     QVBoxLayout * verticalLayout_3;
     QGroupBox * receivegroup;
     QVBoxLayout * verticalLayout_5;
-    QTextEdit * receiveedit;
+    CustomTextEdit * receiveedit;
     QHBoxLayout * horizontalLayout;
     QCheckBox * receivehexcheckbox;
     QCheckBox * displaysendcheckbox;
@@ -89,7 +100,7 @@ class PageTransceiver : public QMainWindow
     QPushButton * clearreceive;
     QGroupBox * sendgroup;
     QVBoxLayout * verticalLayout_6;
-    QTextEdit * sendedit;
+    CustomTextEdit * sendedit;
     QHBoxLayout * horizontalLayout_9;
     QPushButton * sendbutton;
     QPushButton * verifybutton;

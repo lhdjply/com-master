@@ -1,5 +1,38 @@
 #include "myresource.h"
 
+CustomTextEdit::CustomTextEdit(QWidget *parent)
+  : QTextEdit(parent)
+{
+}
+
+void CustomTextEdit::contextMenuEvent(QContextMenuEvent *event)
+{
+    QMenu *menu = createStandardContextMenu();
+    
+    // 获取标准菜单项并重新设置中文文本
+    QList<QAction*> actions = menu->actions();
+    for (QAction *action : actions) {
+        if (action->text() == "&Undo") {
+            action->setText(tr("Undo"));
+        } else if (action->text() == "&Redo") {
+            action->setText(tr("Redo"));
+        } else if (action->text() == "Cu&t") {
+            action->setText(tr("Cut"));
+        } else if (action->text() == "&Copy") {
+            action->setText(tr("Copy"));
+        } else if (action->text() == "&Paste") {
+            action->setText(tr("Paste"));
+        } else if (action->text() == "Delete") {
+            action->setText(tr("Delete"));
+        } else if (action->text() == "Select All") {
+            action->setText(tr("Select All"));
+        }
+    }
+    
+    menu->exec(event->globalPos());
+    delete menu;
+}
+
 PageTransceiver::PageTransceiver(QWidget *parent)
   : QMainWindow(parent)
 {
@@ -401,7 +434,7 @@ void PageTransceiver::setupUi()
   verticalLayout_5->setObjectName(QString::fromUtf8("verticalLayout_5"));
   verticalLayout_5->setSpacing(10);
 
-  receiveedit = new QTextEdit(receivegroup);
+  receiveedit = new CustomTextEdit(receivegroup);
   receiveedit->setObjectName(QString::fromUtf8("receiveedit"));
   receiveedit->setStyleSheet(QString::fromUtf8("font-family: 'Consolas', 'Monaco', monospace; font-size: 12px;"));
 
@@ -448,7 +481,7 @@ void PageTransceiver::setupUi()
   verticalLayout_6->setObjectName(QString::fromUtf8("verticalLayout_6"));
   verticalLayout_6->setSpacing(10);
 
-  sendedit = new QTextEdit(sendgroup);
+  sendedit = new CustomTextEdit(sendgroup);
   sendedit->setObjectName(QString::fromUtf8("sendedit"));
   sendedit->setStyleSheet(QString::fromUtf8("font-family: 'Consolas', 'Monaco', monospace; font-size: 12px;"));
 
