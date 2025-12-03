@@ -37,10 +37,18 @@ file(GLOB_RECURSE PROJECT_SOURCES
     "myresource/*.h"
     "myresource/*.cpp"
     "src/*.cpp"
+    "third_party/qtermwidget/*.cpp"
 )
 
 include_directories(include)
 include_directories(myresource/inc)
+include_directories(third_party/qtermwidget)
+
+# 定义TRANSLATIONS_DIR宏、KB_LAYOUT_DIR宏和COLORSCHEMES_DIR宏
+add_definitions(-DKB_LAYOUT_DIR="${CMAKE_SOURCE_DIR}/third_party/qtermwidget/kb-layouts")
+add_definitions(-DCOLORSCHEMES_DIR="${CMAKE_SOURCE_DIR}/third_party/qtermwidget/color-schemes")
+add_definitions(-DKONSOLE_DSHELL=1)
+add_definitions(-DHAVE_POSIX_OPENPT=1)
 
 # 使用变量创建目标
 qt_add_executable(${PROJECT_TARGET}

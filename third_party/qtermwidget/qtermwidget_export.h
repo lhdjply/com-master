@@ -1,0 +1,14 @@
+#ifndef QTERMWIDGET_EXPORT_H
+#define QTERMWIDGET_EXPORT_H
+
+#include <QtCore/qglobal.h>
+
+#if defined(QTERMWIDGET_LIBRARY)
+  #define QTERMWIDGET_EXPORT Q_DECL_EXPORT
+#else
+  #define QTERMWIDGET_EXPORT Q_DECL_IMPORT
+#endif
+
+#define QTERMWIDGET_NO_EXPORT
+
+#endif // QTERMWIDGET_EXPORT_H

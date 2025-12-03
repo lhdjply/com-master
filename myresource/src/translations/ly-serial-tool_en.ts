@@ -41,69 +41,69 @@
 <context>
     <name>PageTerminal</name>
     <message>
-        <location filename="../page/pageterminal.cpp" line="280"/>
+        <location filename="../page/pageterminal.cpp" line="303"/>
         <source>Serial Port Transceiver</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageterminal.cpp" line="282"/>
+        <location filename="../page/pageterminal.cpp" line="305"/>
         <source>Port</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageterminal.cpp" line="283"/>
+        <location filename="../page/pageterminal.cpp" line="306"/>
         <source>Baudrate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageterminal.cpp" line="284"/>
+        <location filename="../page/pageterminal.cpp" line="307"/>
         <source>Data bits</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageterminal.cpp" line="285"/>
+        <location filename="../page/pageterminal.cpp" line="308"/>
         <source>Parity</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageterminal.cpp" line="221"/>
+        <location filename="../page/pageterminal.cpp" line="232"/>
         <source>None</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageterminal.cpp" line="222"/>
+        <location filename="../page/pageterminal.cpp" line="233"/>
         <source>Odd</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageterminal.cpp" line="223"/>
+        <location filename="../page/pageterminal.cpp" line="234"/>
         <source>Even</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageterminal.cpp" line="224"/>
+        <location filename="../page/pageterminal.cpp" line="235"/>
         <source>Mark</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageterminal.cpp" line="225"/>
+        <location filename="../page/pageterminal.cpp" line="236"/>
         <source>Space</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageterminal.cpp" line="286"/>
+        <location filename="../page/pageterminal.cpp" line="309"/>
         <source>Stop bits</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageterminal.cpp" line="287"/>
-        <location filename="../page/pageterminal.cpp" line="349"/>
-        <location filename="../page/pageterminal.cpp" line="426"/>
+        <location filename="../page/pageterminal.cpp" line="310"/>
+        <location filename="../page/pageterminal.cpp" line="372"/>
+        <location filename="../page/pageterminal.cpp" line="450"/>
         <source>Open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageterminal.cpp" line="358"/>
+        <location filename="../page/pageterminal.cpp" line="381"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
@@ -283,42 +283,42 @@
 <context>
     <name>PageVerifiyDialog</name>
     <message>
-        <location filename="../page/pageverifiydialog.cpp" line="169"/>
+        <location filename="../page/pageverifiydialog.cpp" line="173"/>
         <source>计算校验位</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageverifiydialog.cpp" line="170"/>
+        <location filename="../page/pageverifiydialog.cpp" line="174"/>
         <source>CRC16/MODBUS, 低字节在前</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageverifiydialog.cpp" line="171"/>
+        <location filename="../page/pageverifiydialog.cpp" line="175"/>
         <source>CRC16/MODBUS, 高字节在前</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageverifiydialog.cpp" line="172"/>
+        <location filename="../page/pageverifiydialog.cpp" line="176"/>
         <source>CRC8</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageverifiydialog.cpp" line="173"/>
+        <location filename="../page/pageverifiydialog.cpp" line="177"/>
         <source>累加和</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageverifiydialog.cpp" line="174"/>
+        <location filename="../page/pageverifiydialog.cpp" line="178"/>
         <source>异或和</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageverifiydialog.cpp" line="175"/>
+        <location filename="../page/pageverifiydialog.cpp" line="179"/>
         <source>CRC32, 低字节在前</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageverifiydialog.cpp" line="176"/>
+        <location filename="../page/pageverifiydialog.cpp" line="180"/>
         <source>CRC32, 高字节在前</source>
         <translation type="unfinished"></translation>
     </message>

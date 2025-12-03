@@ -7,11 +7,13 @@
 #include <QDateTime>
 #include <QDialog>
 #include <QDialogButtonBox>
+#include <QEvent>
 #include <QFrame>
 #include <QGridLayout>
 #include <QGroupBox>
 #include <QHBoxLayout>
 #include <QIcon>
+#include <QKeyEvent>
 #include <QLabel>
 #include <QLineEdit>
 #include <QMainWindow>
@@ -24,10 +26,13 @@
 #include <QStyleFactory>
 #include <QTabWidget>
 #include <QTextEdit>
+#include <QTextCursor>
+#include <QTextBlock>
 #include <QTimer>
 #include <QToolButton>
 #include <QTranslator>
 #include <QVBoxLayout>
 #include <QWidget>
+#include "qtermwidget.h"
 
 #endif
