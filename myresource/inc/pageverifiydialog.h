@@ -3,11 +3,6 @@
 
 #include "qtinclude.h"
 
-namespace Ui
-{
-class PageVerifiyDialog;
-}
-
 class PageVerifiyDialog : public QDialog
 {
     Q_OBJECT
@@ -35,7 +30,20 @@ class PageVerifiyDialog : public QDialog
     void on_selectbuttonbox_accepted();
 
   private:
-    Ui::PageVerifiyDialog * ui;
+    void setupUi();
+    void retranslateUi();
+
+    QVBoxLayout * verticalLayout_2;
+    QGroupBox * groupBox;
+    QVBoxLayout * verticalLayout;
+    QRadioButton * radioButton_1;
+    QRadioButton * radioButton_2;
+    QRadioButton * radioButton_3;
+    QRadioButton * radioButton_4;
+    QRadioButton * radioButton_5;
+    QRadioButton * radioButton_6;
+    QRadioButton * radioButton_7;
+    QDialogButtonBox * selectbuttonbox;
 };
 
 #endif // PAGEVERIFIYDIALOG_H

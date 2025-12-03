@@ -5,7 +5,7 @@ set(PROJECT_TARGET ly-serial-tool)
 
 project(${PROJECT_TARGET} VERSION 0.1 LANGUAGES CXX)
 
-set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTOUIC OFF)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
@@ -36,7 +36,6 @@ file(GLOB_RECURSE PROJECT_SOURCES
     "include/*.h"
     "myresource/*.h"
     "myresource/*.cpp"
-    "myresource/*.ui"
     "src/*.cpp"
 )
 

@@ -3,13 +3,6 @@
 
 #include "qtinclude.h"
 
-QT_BEGIN_NAMESPACE
-namespace Ui
-{
-class PageTransceiver;
-}
-QT_END_NAMESPACE
-
 class PageTransceiver : public QMainWindow
 {
     Q_OBJECT
@@ -28,8 +21,10 @@ class PageTransceiver : public QMainWindow
     void on_senddutyedit_textChanged(const QString &arg1);
 
   private:
+    void setupUi();
+    void retranslateUi();
+
     QTimer * AutosendTimer;
-    Ui::PageTransceiver * ui;
     uint32_t last_serial_num;
     uint32_t receive_frame_count;
     uint32_t receive_byte_count;
@@ -44,6 +39,69 @@ class PageTransceiver : public QMainWindow
     QSerialPort serialPort;
     QByteArray frameBuffer;  // Buffer to accumulate received data
     QTimer * frameProcessingTimer;  // Timer to periodically process incomplete frames
+
+    QWidget * centralwidget;
+    QHBoxLayout * horizontalLayout_10;
+    QFrame * frame;
+    QVBoxLayout * verticalLayout_7;
+    QGroupBox * groupBox;
+    QVBoxLayout * verticalLayout;
+    QHBoxLayout * horizontalLayout_1;
+    QHBoxLayout * horizontalLayout_2;
+    QHBoxLayout * horizontalLayout_3;
+    QHBoxLayout * horizontalLayout_4;
+    QHBoxLayout * horizontalLayout_5;
+    QLabel * label;
+    QLabel * label_2;
+    QLabel * label_3;
+    QLabel * label_4;
+    QLabel * label_5;
+    QComboBox * portdroplist;
+    QComboBox * baudratedroplist;
+    QComboBox * databitsdroplist;
+    QComboBox * paritydroplist;
+    QComboBox * stopbitsdroplist;
+    QPushButton * openbutton;
+    QGroupBox * verticalGroupBox;
+    QVBoxLayout * verticalLayout_4;
+    QHBoxLayout * horizontalLayout_11;
+    QHBoxLayout * horizontalLayout_12;
+    QHBoxLayout * horizontalLayout_13;
+    QHBoxLayout * horizontalLayout_14;
+    QLabel * receive_frames;
+    QLabel * receive_frames_count;
+    QLabel * receive_bytes;
+    QLabel * receive_bytes_count;
+    QLabel * send_frames;
+    QLabel * send_frames_count;
+    QLabel * send_bytes;
+    QLabel * send_bytes_count;
+    QPushButton * clearcount;
+    QVBoxLayout * verticalLayout_3;
+    QGroupBox * receivegroup;
+    QVBoxLayout * verticalLayout_5;
+    QTextEdit * receiveedit;
+    QHBoxLayout * horizontalLayout;
+    QCheckBox * receivehexcheckbox;
+    QCheckBox * displaysendcheckbox;
+    QCheckBox * displaytimecheckbox;
+    QCheckBox * linebreakcheckbox;
+    QPushButton * clearreceive;
+    QGroupBox * sendgroup;
+    QVBoxLayout * verticalLayout_6;
+    QTextEdit * sendedit;
+    QHBoxLayout * horizontalLayout_9;
+    QPushButton * sendbutton;
+    QPushButton * verifybutton;
+    QPushButton * clearsend;
+    QCheckBox * sendhexcheckbox;
+    QCheckBox * autosendcheckbox;
+    QFrame * frame_3;
+    QHBoxLayout * horizontalLayout_8;
+    QLabel * label_6;
+    QLineEdit * senddutyedit;
+    QLabel * label_7;
+
     QByteArray getFrameDelimiter(); // Get the current frame delimiter based on settings
     void handleTimeout();
     void autosend();

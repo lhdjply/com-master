@@ -3,13 +3,6 @@
 
 #include "qtinclude.h"
 
-QT_BEGIN_NAMESPACE
-namespace Ui
-{
-class PageTerminal;
-}
-QT_END_NAMESPACE
-
 class PageTerminal : public QMainWindow
 {
     Q_OBJECT
@@ -22,7 +15,31 @@ class PageTerminal : public QMainWindow
     void on_openbutton_clicked();
 
   private:
-    Ui::PageTerminal * ui;
+    void setupUi();
+    void retranslateUi();
+    
+    QWidget *centralwidget;
+    QHBoxLayout *horizontalLayout;
+    QGroupBox *groupBox;
+    QVBoxLayout *verticalLayout;
+    QHBoxLayout *horizontalLayout_1;
+    QHBoxLayout *horizontalLayout_2;
+    QHBoxLayout *horizontalLayout_3;
+    QHBoxLayout *horizontalLayout_4;
+    QHBoxLayout *horizontalLayout_5;
+    QLabel *label;
+    QLabel *label_2;
+    QLabel *label_3;
+    QLabel *label_4;
+    QLabel *label_5;
+    QComboBox *portdroplist;
+    QComboBox *baudratedroplist;
+    QComboBox *databitsdroplist;
+    QComboBox *paritydroplist;
+    QComboBox *stopbitsdroplist;
+    QPushButton *openbutton;
+    QTextEdit *textEdit;
+    
     uint32_t last_serial_num;
     bool isSerial_Open;
     QString Serial_Name;
