@@ -42,161 +42,161 @@
     <name>PageTerminal</name>
     <message>
         <location filename="../page/pageterminal.ui" line="14"/>
-        <source>MainWindow</source>
+        <source>Serial Port Transceiver</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageterminal.ui" line="44"/>
+        <location filename="../page/pageterminal.ui" line="146"/>
         <source>Port</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageterminal.ui" line="58"/>
+        <location filename="../page/pageterminal.ui" line="160"/>
         <source>Baudrate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageterminal.ui" line="69"/>
+        <location filename="../page/pageterminal.ui" line="171"/>
         <source>2400</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageterminal.ui" line="74"/>
+        <location filename="../page/pageterminal.ui" line="176"/>
         <source>4800</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageterminal.ui" line="79"/>
+        <location filename="../page/pageterminal.ui" line="181"/>
         <source>9600</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageterminal.ui" line="84"/>
+        <location filename="../page/pageterminal.ui" line="186"/>
         <source>19200</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageterminal.ui" line="89"/>
+        <location filename="../page/pageterminal.ui" line="191"/>
         <source>38400</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageterminal.ui" line="94"/>
+        <location filename="../page/pageterminal.ui" line="196"/>
         <source>57600</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageterminal.ui" line="99"/>
+        <location filename="../page/pageterminal.ui" line="201"/>
         <source>74880</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageterminal.ui" line="104"/>
+        <location filename="../page/pageterminal.ui" line="206"/>
         <source>115200</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageterminal.ui" line="109"/>
+        <location filename="../page/pageterminal.ui" line="211"/>
         <source>921600</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageterminal.ui" line="114"/>
+        <location filename="../page/pageterminal.ui" line="216"/>
         <source>1000000</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageterminal.ui" line="119"/>
+        <location filename="../page/pageterminal.ui" line="221"/>
         <source>1500000</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageterminal.ui" line="124"/>
+        <location filename="../page/pageterminal.ui" line="226"/>
         <source>2000000</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageterminal.ui" line="129"/>
+        <location filename="../page/pageterminal.ui" line="231"/>
         <source>4500000</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageterminal.ui" line="141"/>
+        <location filename="../page/pageterminal.ui" line="243"/>
         <source>Data bits</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageterminal.ui" line="152"/>
+        <location filename="../page/pageterminal.ui" line="254"/>
         <source>5</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageterminal.ui" line="157"/>
+        <location filename="../page/pageterminal.ui" line="259"/>
         <source>6</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageterminal.ui" line="162"/>
+        <location filename="../page/pageterminal.ui" line="264"/>
         <source>7</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageterminal.ui" line="167"/>
+        <location filename="../page/pageterminal.ui" line="269"/>
         <source>8</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageterminal.ui" line="179"/>
+        <location filename="../page/pageterminal.ui" line="281"/>
         <source>Parity</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageterminal.ui" line="187"/>
+        <location filename="../page/pageterminal.ui" line="289"/>
         <source>None</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageterminal.ui" line="192"/>
+        <location filename="../page/pageterminal.ui" line="294"/>
         <source>Odd</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageterminal.ui" line="197"/>
+        <location filename="../page/pageterminal.ui" line="299"/>
         <source>Even</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageterminal.ui" line="202"/>
+        <location filename="../page/pageterminal.ui" line="304"/>
         <source>Mark</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageterminal.ui" line="207"/>
+        <location filename="../page/pageterminal.ui" line="309"/>
         <source>Space</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageterminal.ui" line="219"/>
+        <location filename="../page/pageterminal.ui" line="321"/>
         <source>Stop bits</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageterminal.ui" line="227"/>
+        <location filename="../page/pageterminal.ui" line="329"/>
         <source>1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageterminal.ui" line="232"/>
+        <location filename="../page/pageterminal.ui" line="334"/>
         <source>1.5</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageterminal.ui" line="237"/>
+        <location filename="../page/pageterminal.ui" line="339"/>
         <source>2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageterminal.ui" line="247"/>
+        <location filename="../page/pageterminal.ui" line="361"/>
         <location filename="../page/pageterminal.cpp" line="82"/>
         <location filename="../page/pageterminal.cpp" line="159"/>
         <source>Open</source>
@@ -372,9 +372,9 @@
     </message>
     <message>
         <location filename="../page/pagetransceiver.ui" line="428"/>
-        <location filename="../page/pagetransceiver.cpp" line="95"/>
-        <location filename="../page/pagetransceiver.cpp" line="262"/>
-        <location filename="../page/pagetransceiver.cpp" line="263"/>
+        <location filename="../page/pagetransceiver.cpp" line="101"/>
+        <location filename="../page/pagetransceiver.cpp" line="270"/>
+        <location filename="../page/pagetransceiver.cpp" line="271"/>
         <source>Open</source>
         <translation type="unfinished"></translation>
     </message>
@@ -423,7 +423,7 @@
     </message>
     <message>
         <location filename="../page/pagetransceiver.ui" line="576"/>
-        <location filename="../page/pagetransceiver.ui" line="679"/>
+        <location filename="../page/pagetransceiver.ui" line="685"/>
         <source>Hex</source>
         <translation type="unfinished"></translation>
     </message>
@@ -448,47 +448,47 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagetransceiver.ui" line="616"/>
+        <location filename="../page/pagetransceiver.ui" line="622"/>
         <source>Send Data</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagetransceiver.ui" line="646"/>
+        <location filename="../page/pagetransceiver.ui" line="652"/>
         <source>Send</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagetransceiver.ui" line="659"/>
+        <location filename="../page/pagetransceiver.ui" line="665"/>
         <source>Verification</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagetransceiver.ui" line="672"/>
+        <location filename="../page/pagetransceiver.ui" line="678"/>
         <source>Clear Send</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagetransceiver.ui" line="686"/>
+        <location filename="../page/pagetransceiver.ui" line="692"/>
         <source>Auto send</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagetransceiver.ui" line="717"/>
+        <location filename="../page/pagetransceiver.ui" line="723"/>
         <source>Send duty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagetransceiver.ui" line="730"/>
+        <location filename="../page/pagetransceiver.ui" line="736"/>
         <source>1000</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagetransceiver.ui" line="740"/>
+        <location filename="../page/pagetransceiver.ui" line="746"/>
         <source>ms</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagetransceiver.cpp" line="117"/>
+        <location filename="../page/pagetransceiver.cpp" line="123"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>

@@ -1,3 +1,1 @@
-#!/bin/bash
-export QT_SELECT=qt6
-lupdate -recursive ./src/ ./myresource/ -ts ./myresource/src/translations/*.ts
+/usr/lib/qt6/bin/lupdate -recursive ./src/ ./myresource/ -ts ./myresource/src/translations/*.ts
