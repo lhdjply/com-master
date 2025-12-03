@@ -1,0 +1,26 @@
+Source: ly-serial-tool
+Section: electronics
+Priority: optional
+Maintainer: lhdjply <lhdjply@126.com>
+Build-Depends: debhelper-compat (= 13),
+               cmake, 
+               qt6-base-dev,
+               qt6-tools-dev,
+               qt6-svg-dev,
+               qt6-serialport-dev,
+Rules-Requires-Root: no
+Standards-Version: 4.6.0
+Homepage: https://github.com/lhdjply/ly-serial-tool/
+Vcs-Browser: https://github.com/lhdjply/ly-serial-tool
+Vcs-Git: https://github.com/lhdjply/ly-serial-tool.git
+
+Package: ly-serial-tool
+Section: electronics
+Priority: optional
+Architecture: any
+Depends: 
+ ${shlibs:Depends},
+ ${misc:Depends}
+Recommends: ngspice
+Description: Quite Universal Circuit Simulator with SPICE (Qucs-S)
+ allows to simulate electronic circuits with SPICE-compatible kernels
