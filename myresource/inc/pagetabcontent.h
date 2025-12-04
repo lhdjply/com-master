@@ -16,6 +16,7 @@ class PageTabContent : public QWidget
   private:
     QToolButton * transceiverButton;
     QToolButton * terminalButton;
+    QToolButton * iec61850Button;
 
     void setupUi();
 };

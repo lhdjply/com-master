@@ -3,13 +3,17 @@ cmake_minimum_required(VERSION 3.16)
 # 使用变量定义项目名/目标名
 set(PROJECT_TARGET ly-serial-tool)
 
-project(${PROJECT_TARGET} VERSION 0.1 LANGUAGES CXX)
+project(${PROJECT_TARGET} VERSION 0.1 LANGUAGES CXX C)
 
 set(CMAKE_AUTOUIC OFF)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# 添加编译器标志以禁用特定警告
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-stringop-overflow")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-stringop-overflow")
 
 # 添加RC语言支持
 if(WIN32)
@@ -35,14 +39,28 @@ endif()
 file(GLOB_RECURSE PROJECT_SOURCES
     "include/*.h"
     "myresource/*.h"
+    "third_party/libiec61850/*.h"
     "myresource/*.cpp"
     "src/*.cpp"
     "third_party/qtermwidget/*.cpp"
+    "third_party/libiec61850/*.c"
 )
 
 include_directories(include)
 include_directories(myresource/inc)
 include_directories(third_party/qtermwidget)
+include_directories(third_party/libiec61850/include)
+include_directories(third_party/libiec61850/source/src/common/inc)
+include_directories(third_party/libiec61850/source/src/goose)
+include_directories(third_party/libiec61850/source/src/sampled_values)
+include_directories(third_party/libiec61850/source/src/r_session)
+include_directories(third_party/libiec61850/source/src/hal/inc)
+include_directories(third_party/libiec61850/source/src/iec61850/inc)
+include_directories(third_party/libiec61850/source/src/iec61850/inc_private)
+include_directories(third_party/libiec61850/source/src/mms/inc)
+include_directories(third_party/libiec61850/source/src/mms/inc_private)
+include_directories(third_party/libiec61850/source/src/mms/iso_mms/asn1c)
+include_directories(third_party/libiec61850/source/src/logging)
 
 # 定义TRANSLATIONS_DIR宏、KB_LAYOUT_DIR宏和COLORSCHEMES_DIR宏
 add_definitions(-DKB_LAYOUT_DIR="${CMAKE_SOURCE_DIR}/third_party/qtermwidget/kb-layouts")

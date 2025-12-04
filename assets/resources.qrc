@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
+        <file>icons/iec61850_client.png</file>
         <file>icons/serial_terminal.png</file>
         <file>icons/serial_transceiver.png</file>
         <file>icons/window.png</file>

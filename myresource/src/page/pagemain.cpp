@@ -106,16 +106,24 @@ void PageMainWindow::opentoolpage(const QString &buttonName)
   tabWidget->removeTab(tabIndex);
 
   QIcon tabIcon;
-  if(buttonName.compare(tr("Serial Terminal")) == 0)
+
+  if(buttonName.compare(tr("Serial Transceiver")) == 0)
+  {
+    PageSerialTransceiver *newTab = new PageSerialTransceiver();
+    tabIcon = QIcon(":/icons/serial_transceiver.png"); // 收发器图标路径
+    tabWidget->insertTab(tabIndex, newTab, tabIcon, buttonName);
+  }
+  else if(buttonName.compare(tr("Serial Terminal")) == 0)
   {
     PageSerialTerminal *newTab = new PageSerialTerminal();
     tabIcon = QIcon(":/icons/serial_terminal.png"); // 终端图标路径
     tabWidget->insertTab(tabIndex, newTab, tabIcon, buttonName);
   }
-  else
+  else if(buttonName.compare(tr("IEC61850 Client")) == 0)
   {
-    PageSerialTransceiver *newTab = new PageSerialTransceiver();
-    tabIcon = QIcon(":/icons/serial_transceiver.png"); // 收发器图标路径
+    PageIEC61850Client *newTab = new PageIEC61850Client();
+    newTab->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    tabIcon = QIcon(":/icons/iec61850_client.png"); // 临时使用窗口图标
     tabWidget->insertTab(tabIndex, newTab, tabIcon, buttonName);
   }
   tabWidget->setTabToolTip(tabIndex, buttonName);

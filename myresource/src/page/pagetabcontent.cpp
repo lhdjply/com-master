@@ -31,14 +31,24 @@ void PageTabContent::setupUi()
   terminalButton->setText(tr("Serial Terminal"));
   terminalButton->setToolButtonStyle(Qt::ToolButtonTextUnderIcon); // 字在图标下面
 
+  // 创建IEC61850按钮
+  iec61850Button = new QToolButton();
+  iec61850Button->setIcon(QIcon(":/icons/iec61850_client.png")); // 设置图标
+  iec61850Button->setIconSize(QSize(150, 150)); // 设置图标大小
+  iec61850Button->setText(tr("IEC61850 Client"));
+  iec61850Button->setToolButtonStyle(Qt::ToolButtonTextUnderIcon); // 字在图标下面
+
   QString transparentStyle = "QToolButton { background: transparent; border: none; }";
   transceiverButton->setStyleSheet(transparentStyle);
   terminalButton->setStyleSheet(transparentStyle);
+  iec61850Button->setStyleSheet(transparentStyle);
 
   // 添加按钮到布局
   buttonLayout->addWidget(transceiverButton);
-  buttonLayout->addSpacing(100); // 按钮间距
+  buttonLayout->addSpacing(50); // 按钮间距
   buttonLayout->addWidget(terminalButton);
+  buttonLayout->addSpacing(50); // 按钮间距
+  buttonLayout->addWidget(iec61850Button);
   buttonLayout->setAlignment(Qt::AlignCenter);
 
   // 将按钮布局添加到主布局
@@ -59,5 +69,10 @@ void PageTabContent::setupUi()
   connect(terminalButton, &QPushButton::clicked, [this]()
   {
     emit buttonClicked(terminalButton->text());
+  });
+
+  connect(iec61850Button, &QPushButton::clicked, [this]()
+  {
+    emit buttonClicked(iec61850Button->text());
   });
 }

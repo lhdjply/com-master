@@ -40,6 +40,207 @@
     </message>
 </context>
 <context>
+    <name>PageConnectionDialog</name>
+    <message>
+        <location filename="../page/pageconnectiondialog.cpp" line="9"/>
+        <source>Connect to IEC61850 Device</source>
+        <translation type="unfinished">连接到IEC61850设备</translation>
+    </message>
+    <message>
+        <location filename="../page/pageconnectiondialog.cpp" line="23"/>
+        <source>Connection Settings</source>
+        <translation type="unfinished">连接设置</translation>
+    </message>
+    <message>
+        <location filename="../page/pageconnectiondialog.cpp" line="27"/>
+        <source>Hostname:</source>
+        <translation type="unfinished">主机名：</translation>
+    </message>
+    <message>
+        <location filename="../page/pageconnectiondialog.cpp" line="32"/>
+        <source>Port:</source>
+        <translation type="unfinished">端口：</translation>
+    </message>
+    <message>
+        <location filename="../page/pageconnectiondialog.cpp" line="38"/>
+        <source>Timeout:</source>
+        <translation type="unfinished">超时：</translation>
+    </message>
+    <message>
+        <location filename="../page/pageconnectiondialog.cpp" line="43"/>
+        <source>Authentication</source>
+        <translation type="unfinished">身份验证</translation>
+    </message>
+    <message>
+        <location filename="../page/pageconnectiondialog.cpp" line="46"/>
+        <source>Use Authentication</source>
+        <translation type="unfinished">使用身份验证</translation>
+    </message>
+    <message>
+        <location filename="../page/pageconnectiondialog.cpp" line="51"/>
+        <source>Username:</source>
+        <translation type="unfinished">用户名：</translation>
+    </message>
+    <message>
+        <location filename="../page/pageconnectiondialog.cpp" line="56"/>
+        <source>Password:</source>
+        <translation type="unfinished">密码：</translation>
+    </message>
+    <message>
+        <location filename="../page/pageconnectiondialog.cpp" line="61"/>
+        <source>Ready to connect</source>
+        <translation type="unfinished">准备连接</translation>
+    </message>
+    <message>
+        <location filename="../page/pageconnectiondialog.cpp" line="74"/>
+        <source>Connect</source>
+        <translation type="unfinished">连接</translation>
+    </message>
+    <message>
+        <location filename="../page/pageconnectiondialog.cpp" line="78"/>
+        <source>Cancel</source>
+        <translation type="unfinished">取消</translation>
+    </message>
+</context>
+<context>
+    <name>PageIEC61850Client</name>
+    <message>
+        <location filename="../page/pageiec61850client.cpp" line="28"/>
+        <source>IEC61850 Client</source>
+        <translation type="unfinished">IEC61850 客户端</translation>
+    </message>
+    <message>
+        <location filename="../page/pageiec61850client.cpp" line="198"/>
+        <source>Data Model</source>
+        <translation type="unfinished">数据模型</translation>
+    </message>
+    <message>
+        <location filename="../page/pageiec61850client.cpp" line="230"/>
+        <source>Connect</source>
+        <translation type="unfinished">连接</translation>
+    </message>
+    <message>
+        <location filename="../page/pageiec61850client.cpp" line="231"/>
+        <source>Connect to IEC61850 device</source>
+        <translation type="unfinished">连接到IEC61850设备</translation>
+    </message>
+    <message>
+        <location filename="../page/pageiec61850client.cpp" line="233"/>
+        <source>Disconnect</source>
+        <translation type="unfinished">断开连接</translation>
+    </message>
+    <message>
+        <location filename="../page/pageiec61850client.cpp" line="234"/>
+        <source>Disconnect from device</source>
+        <translation type="unfinished">从设备断开连接</translation>
+    </message>
+    <message>
+        <location filename="../page/pageiec61850client.cpp" line="237"/>
+        <location filename="../page/pageiec61850client.cpp" line="891"/>
+        <source>Refresh</source>
+        <translation type="unfinished">刷新</translation>
+    </message>
+    <message>
+        <location filename="../page/pageiec61850client.cpp" line="238"/>
+        <source>Refresh data model</source>
+        <translation type="unfinished">刷新数据模型</translation>
+    </message>
+    <message>
+        <location filename="../page/pageiec61850client.cpp" line="262"/>
+        <location filename="../page/pageiec61850client.cpp" line="1337"/>
+        <source>Disconnected</source>
+        <translation type="unfinished">已断开连接</translation>
+    </message>
+    <message>
+        <location filename="../page/pageiec61850client.cpp" line="863"/>
+        <location filename="../page/pageiec61850client.cpp" line="1011"/>
+        <source>IEC61850 Device</source>
+        <translation type="unfinished">IEC61850设备</translation>
+    </message>
+    <message>
+        <location filename="../page/pageiec61850client.cpp" line="879"/>
+        <location filename="../page/pageiec61850client.cpp" line="1170"/>
+        <source>Read Value</source>
+        <translation type="unfinished">读取值</translation>
+    </message>
+    <message>
+        <location filename="../page/pageiec61850client.cpp" line="881"/>
+        <location filename="../page/pageiec61850client.cpp" line="1163"/>
+        <source>Write Value</source>
+        <translation type="unfinished">写入值</translation>
+    </message>
+    <message>
+        <location filename="../page/pageiec61850client.cpp" line="883"/>
+        <source>Control Object</source>
+        <translation type="unfinished">控制对象</translation>
+    </message>
+    <message>
+        <location filename="../page/pageiec61850client.cpp" line="887"/>
+        <source>Create Data Set</source>
+        <translation type="unfinished">创建数据集</translation>
+    </message>
+    <message>
+        <location filename="../page/pageiec61850client.cpp" line="1131"/>
+        <source>Object Information</source>
+        <translation type="unfinished">对象信息</translation>
+    </message>
+    <message>
+        <location filename="../page/pageiec61850client.cpp" line="1138"/>
+        <source>Object Reference:</source>
+        <translation type="unfinished">对象引用：</translation>
+    </message>
+    <message>
+        <location filename="../page/pageiec61850client.cpp" line="1142"/>
+        <source>Data Type:</source>
+        <translation type="unfinished">数据类型：</translation>
+    </message>
+    <message>
+        <location filename="../page/pageiec61850client.cpp" line="1146"/>
+        <source>Current Value:</source>
+        <translation type="unfinished">当前值：</translation>
+    </message>
+    <message>
+        <location filename="../page/pageiec61850client.cpp" line="1151"/>
+        <source>Operations</source>
+        <translation type="unfinished">操作</translation>
+    </message>
+    <message>
+        <location filename="../page/pageiec61850client.cpp" line="1160"/>
+        <source>Enter value to write...</source>
+        <translation type="unfinished">输入要写入的值...</translation>
+    </message>
+    <message>
+        <location filename="../page/pageiec61850client.cpp" line="1179"/>
+        <source>Timestamp</source>
+        <translation type="unfinished">时间戳</translation>
+    </message>
+    <message>
+        <location filename="../page/pageiec61850client.cpp" line="1179"/>
+        <source>Value</source>
+        <translation type="unfinished">值</translation>
+    </message>
+    <message>
+        <location filename="../page/pageiec61850client.cpp" line="1179"/>
+        <source>Quality</source>
+        <translation type="unfinished">质量</translation>
+    </message>
+    <message>
+        <location filename="../page/pageiec61850client.cpp" line="1235"/>
+        <source>Good</source>
+        <translation type="unfinished">良好</translation>
+    </message>
+    <message>
+        <location filename="../page/pageiec61850client.cpp" line="1241"/>
+        <source>Read Error</source>
+        <translation type="unfinished">读取错误</translation>
+    </message>
+    <message>
+        <location filename="../page/pageiec61850client.cpp" line="1334"/>
+        <source>Connected</source>
+        <translation type="unfinished">已连接</translation>
+    </message>
+</context>
+<context>
     <name>PageMainWindow</name>
     <message>
         <location filename="../page/pagemain.cpp" line="12"/>
@@ -58,9 +259,19 @@
         <translation type="unfinished">窗口</translation>
     </message>
     <message>
-        <location filename="../page/pagemain.cpp" line="109"/>
+        <location filename="../page/pagemain.cpp" line="110"/>
+        <source>Serial Transceiver</source>
+        <translation type="unfinished">串口收发器</translation>
+    </message>
+    <message>
+        <location filename="../page/pagemain.cpp" line="116"/>
         <source>Serial Terminal</source>
         <translation type="unfinished">串口终端</translation>
+    </message>
+    <message>
+        <location filename="../page/pagemain.cpp" line="122"/>
+        <source>IEC61850 Client</source>
+        <translation type="unfinished">IEC61850 客户端</translation>
     </message>
 </context>
 <context>
@@ -321,6 +532,11 @@
         <location filename="../page/pagetabcontent.cpp" line="31"/>
         <source>Serial Terminal</source>
         <translation type="unfinished">串口终端</translation>
+    </message>
+    <message>
+        <location filename="../page/pagetabcontent.cpp" line="38"/>
+        <source>IEC61850 Client</source>
+        <translation type="unfinished">IEC61850 客户端</translation>
     </message>
 </context>
 <context>
