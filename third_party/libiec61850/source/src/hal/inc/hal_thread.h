@@ -35,13 +35,13 @@ extern "C" {
  */
 
 /** Opaque reference of a Thread instance */
-typedef struct sThread* Thread;
+typedef struct sThread * Thread;
 
 /** Qpaque reference of a Semaphore instance */
-typedef void* Semaphore;
+typedef void * Semaphore;
 
 /** Reference to a function that is called when starting the thread */
-typedef void* (*ThreadExecutionFunction) (void*);
+typedef void * (*ThreadExecutionFunction) (void *);
 
 /**
  * \brief Create a new Thread instance
@@ -53,7 +53,7 @@ typedef void* (*ThreadExecutionFunction) (void*);
  * \return the newly created Thread instance
  */
 PAL_API Thread
-Thread_create(ThreadExecutionFunction function, void* parameter, bool autodestroy);
+Thread_create(ThreadExecutionFunction function, void * parameter, bool autodestroy);
 
 /**
  * \brief Start a Thread.

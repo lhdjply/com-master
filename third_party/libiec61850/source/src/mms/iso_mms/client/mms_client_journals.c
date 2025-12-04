@@ -34,611 +34,619 @@
 #include "mms_value_internal.h"
 
 static bool
-parseJournalVariable(uint8_t* buffer, int bufPos, int maxLength, MmsJournalVariable journalVariable)
+parseJournalVariable(uint8_t * buffer, int bufPos, int maxLength, MmsJournalVariable journalVariable)
 {
-    int maxBufPos = bufPos + maxLength;
+  int maxBufPos = bufPos + maxLength;
 
-    while (bufPos < maxBufPos)
+  while(bufPos < maxBufPos)
+  {
+    uint8_t tag = buffer[bufPos++];
+
+    int length;
+
+    bufPos = BerDecoder_decodeLength(buffer, &length, bufPos, maxBufPos);
+
+    if(bufPos < 0)
     {
-        uint8_t tag = buffer[bufPos++];
+      if(DEBUG_MMS_CLIENT)
+        printf("MMS_CLIENT: parseReadJournalResponse: invalid length field\n");
 
-        int length;
-
-        bufPos = BerDecoder_decodeLength(buffer, &length, bufPos, maxBufPos);
-
-        if  (bufPos < 0)
-        {
-            if (DEBUG_MMS_CLIENT)
-                printf("MMS_CLIENT: parseReadJournalResponse: invalid length field\n");
-
-            return false;
-        }
-
-        switch (tag) {
-        case 0x80: /* variableTag */
-
-            if (journalVariable->tag == NULL)
-            {
-                journalVariable->tag = (char*) GLOBAL_MALLOC(length + 1);
-
-                if (journalVariable->tag)
-                {
-                    memcpy(journalVariable->tag, buffer + bufPos, length);
-                    journalVariable->tag[length] = 0;
-                }
-            }
-
-            break;
-
-        case 0xa1: /* valueSpec */
-
-            if (journalVariable->value == NULL)
-            {
-                journalVariable->value = MmsValue_decodeMmsData(buffer, bufPos, bufPos + length, NULL);
-            }
-
-            break;
-
-        case 0x00: /* indefinite length end tag -> ignore */
-            break;
-
-        default:
-            break;
-
-        }
-
-        bufPos += length;
+      return false;
     }
 
-    return true;
+    switch(tag)
+    {
+      case 0x80: /* variableTag */
+
+        if(journalVariable->tag == NULL)
+        {
+          journalVariable->tag = (char *) GLOBAL_MALLOC(length + 1);
+
+          if(journalVariable->tag)
+          {
+            memcpy(journalVariable->tag, buffer + bufPos, length);
+            journalVariable->tag[length] = 0;
+          }
+        }
+
+        break;
+
+      case 0xa1: /* valueSpec */
+
+        if(journalVariable->value == NULL)
+        {
+          journalVariable->value = MmsValue_decodeMmsData(buffer, bufPos, bufPos + length, NULL);
+        }
+
+        break;
+
+      case 0x00: /* indefinite length end tag -> ignore */
+        break;
+
+      default:
+        break;
+
+    }
+
+    bufPos += length;
+  }
+
+  return true;
 }
 
 static bool
-parseJournalVariables(uint8_t* buffer, int bufPos, int maxLength, MmsJournalEntry journalEntry)
+parseJournalVariables(uint8_t * buffer, int bufPos, int maxLength, MmsJournalEntry journalEntry)
 {
-    int maxBufPos = bufPos + maxLength;
+  int maxBufPos = bufPos + maxLength;
 
-    while (bufPos < maxBufPos)
+  while(bufPos < maxBufPos)
+  {
+    int length;
+    uint8_t tag = buffer[bufPos++];
+    bufPos = BerDecoder_decodeLength(buffer, &length, bufPos, maxBufPos);
+
+    if(bufPos < 0)
     {
-        int length;
-        uint8_t tag = buffer[bufPos++];
-        bufPos = BerDecoder_decodeLength(buffer, &length, bufPos, maxBufPos);
+      if(DEBUG_MMS_CLIENT)
+        printf("MMS_CLIENT: parseReadJournalResponse: invalid length field\n");
 
-        if (bufPos < 0)
-        {
-            if (DEBUG_MMS_CLIENT)
-                printf("MMS_CLIENT: parseReadJournalResponse: invalid length field\n");
-
-            return false;
-        }
-
-        switch (tag) {
-        case 0x30: /* journalVariable */
-
-            {
-                MmsJournalVariable journalVariable = (MmsJournalVariable)
-                    GLOBAL_CALLOC(1, sizeof(struct sMmsJournalVariable));
-
-                if (journalVariable)
-                {
-                    if (parseJournalVariable(buffer, bufPos, length, journalVariable))
-                    {
-                        LinkedList_add(journalEntry->journalVariables, (void*) journalVariable);
-                    }
-                    else
-                    {
-                        if (journalVariable->tag)
-                            GLOBAL_FREEMEM(journalVariable->tag);
-
-                        if (journalVariable->value)
-                            MmsValue_delete(journalVariable->value);
-
-                        GLOBAL_FREEMEM(journalVariable);
-
-                        return false;
-                    }
-                }
-                else
-                {
-                    if (DEBUG_MMS_CLIENT)
-                        printf("MMS_CLIENT: parseReadJournalResponse: out of memory\n");
-
-                    return false;
-                }
-            }
-
-            break;
-
-        case 0x00: /* indefinite length end tag -> ignore */
-            break;
-
-        default:
-            break;
-        }
-
-        bufPos += length;
+      return false;
     }
 
-    return true;
-}
-
-static bool
-parseData(uint8_t* buffer, int bufPos, int maxLength, MmsJournalEntry journalEntry)
-{
-    int maxBufPos = bufPos + maxLength;
-
-    while (bufPos < maxBufPos)
+    switch(tag)
     {
-        int length;
-        uint8_t tag = buffer[bufPos++];
-        bufPos = BerDecoder_decodeLength(buffer, &length, bufPos, maxBufPos);
+      case 0x30: /* journalVariable */
 
-        if (bufPos < 0)
         {
-            if (DEBUG_MMS_CLIENT)
-                printf("MMS_CLIENT: parseReadJournalResponse: invalid length field\n");
+          MmsJournalVariable journalVariable = (MmsJournalVariable)
+                                               GLOBAL_CALLOC(1, sizeof(struct sMmsJournalVariable));
 
-            return false;
-        }
-
-        switch (tag) {
-        case 0xa1: /* journalVariables */
-            if (journalEntry->journalVariables)
+          if(journalVariable)
+          {
+            if(parseJournalVariable(buffer, bufPos, length, journalVariable))
             {
-                if (DEBUG_MMS_CLIENT)
-                    printf("MMS_CLIENT: parseReadJournalResponse: duplicate journalVariables\n");
-
-                return false;
+              LinkedList_add(journalEntry->journalVariables, (void *) journalVariable);
             }
             else
             {
-                journalEntry->journalVariables = LinkedList_create();
+              if(journalVariable->tag)
+                GLOBAL_FREEMEM(journalVariable->tag);
 
-                if (journalEntry->journalVariables == NULL)
-                {
-                    if (DEBUG_MMS_CLIENT)
-                        printf("MMS_CLIENT: parseReadJournalResponse: out of memory\n");
+              if(journalVariable->value)
+                MmsValue_delete(journalVariable->value);
 
-                    return false;
-                }
-                else
-                {
-                    parseJournalVariables(buffer, bufPos, length, journalEntry);
-                }
+              GLOBAL_FREEMEM(journalVariable);
+
+              return false;
             }
-
-            break;
-
-        case 0x00: /* indefinite length end tag -> ignore */
-            break;
-
-        default:
-            break;
-        }
-
-        bufPos += length;
-    }
-
-    return true;
-}
-
-static bool
-parseEntryContent(uint8_t* buffer, int bufPos, int maxLength, MmsJournalEntry journalEntry)
-{
-    int maxBufPos = bufPos + maxLength;
-
-    while (bufPos < maxBufPos)
-    {
-        int length;
-        uint8_t tag = buffer[bufPos++];
-        bufPos = BerDecoder_decodeLength(buffer, &length, bufPos, maxBufPos);
-
-        if (bufPos < 0)
-        {
-            if (DEBUG_MMS_CLIENT)
-                printf("MMS_CLIENT: parseReadJournalResponse: invalid length field\n");
+          }
+          else
+          {
+            if(DEBUG_MMS_CLIENT)
+              printf("MMS_CLIENT: parseReadJournalResponse: out of memory\n");
 
             return false;
+          }
         }
 
-        switch (tag) {
-        case 0x80: /* occurenceTime */
+        break;
 
-            if (journalEntry->occurenceTime)
-            {
-                if (DEBUG_MMS_CLIENT)
-                    printf("MMS_CLIENT: parseReadJournalResponse: duplicate occurenceTime\n");
+      case 0x00: /* indefinite length end tag -> ignore */
+        break;
 
-                return false;
-            }
-            else
-            {
-                if (length == 6)
-                    journalEntry->occurenceTime = MmsValue_newBinaryTime(false);
-                else if (length == 4)
-                    journalEntry->occurenceTime = MmsValue_newBinaryTime(true);
-                else
-                    break;
-
-                memcpy(journalEntry->occurenceTime->value.binaryTime.buf, buffer + bufPos, length);
-            }
-
-           break;
-
-       case 0xa2: /* data */
-
-           parseData(buffer, bufPos, length, journalEntry);
-
-           break;
-
-       case 0x00: /* indefinite length end tag -> ignore */
-           break;
-
-       default:
-           if (DEBUG_MMS_CLIENT)
-               printf("MMS_CLIENT: parseReadJournalResponse: ignore unknown tag %02x\n", tag);
-           break;
-       }
-
-       bufPos += length;
+      default:
+        break;
     }
 
-    return true;
+    bufPos += length;
+  }
+
+  return true;
 }
 
 static bool
-parseJournalEntry(uint8_t* buffer, int bufPos, int maxLength, LinkedList journalEntries)
+parseData(uint8_t * buffer, int bufPos, int maxLength, MmsJournalEntry journalEntry)
 {
-    int maxBufPos = bufPos + maxLength;
+  int maxBufPos = bufPos + maxLength;
 
-    MmsJournalEntry journalEntry = (MmsJournalEntry) GLOBAL_CALLOC(1, sizeof(struct sMmsJournalEntry));
+  while(bufPos < maxBufPos)
+  {
+    int length;
+    uint8_t tag = buffer[bufPos++];
+    bufPos = BerDecoder_decodeLength(buffer, &length, bufPos, maxBufPos);
 
-    if (journalEntry == NULL)
+    if(bufPos < 0)
     {
-        if (DEBUG_MMS_CLIENT)
-            printf("MMS_CLIENT: parseReadJournalResponse: out of memory\n");
+      if(DEBUG_MMS_CLIENT)
+        printf("MMS_CLIENT: parseReadJournalResponse: invalid length field\n");
+
+      return false;
+    }
+
+    switch(tag)
+    {
+      case 0xa1: /* journalVariables */
+        if(journalEntry->journalVariables)
+        {
+          if(DEBUG_MMS_CLIENT)
+            printf("MMS_CLIENT: parseReadJournalResponse: duplicate journalVariables\n");
+
+          return false;
+        }
+        else
+        {
+          journalEntry->journalVariables = LinkedList_create();
+
+          if(journalEntry->journalVariables == NULL)
+          {
+            if(DEBUG_MMS_CLIENT)
+              printf("MMS_CLIENT: parseReadJournalResponse: out of memory\n");
+
+            return false;
+          }
+          else
+          {
+            parseJournalVariables(buffer, bufPos, length, journalEntry);
+          }
+        }
+
+        break;
+
+      case 0x00: /* indefinite length end tag -> ignore */
+        break;
+
+      default:
+        break;
+    }
+
+    bufPos += length;
+  }
+
+  return true;
+}
+
+static bool
+parseEntryContent(uint8_t * buffer, int bufPos, int maxLength, MmsJournalEntry journalEntry)
+{
+  int maxBufPos = bufPos + maxLength;
+
+  while(bufPos < maxBufPos)
+  {
+    int length;
+    uint8_t tag = buffer[bufPos++];
+    bufPos = BerDecoder_decodeLength(buffer, &length, bufPos, maxBufPos);
+
+    if(bufPos < 0)
+    {
+      if(DEBUG_MMS_CLIENT)
+        printf("MMS_CLIENT: parseReadJournalResponse: invalid length field\n");
+
+      return false;
+    }
+
+    switch(tag)
+    {
+      case 0x80: /* occurenceTime */
+
+        if(journalEntry->occurenceTime)
+        {
+          if(DEBUG_MMS_CLIENT)
+            printf("MMS_CLIENT: parseReadJournalResponse: duplicate occurenceTime\n");
+
+          return false;
+        }
+        else
+        {
+          if(length == 6)
+            journalEntry->occurenceTime = MmsValue_newBinaryTime(false);
+          else if(length == 4)
+            journalEntry->occurenceTime = MmsValue_newBinaryTime(true);
+          else
+            break;
+
+          memcpy(journalEntry->occurenceTime->value.binaryTime.buf, buffer + bufPos, length);
+        }
+
+        break;
+
+      case 0xa2: /* data */
+
+        parseData(buffer, bufPos, length, journalEntry);
+
+        break;
+
+      case 0x00: /* indefinite length end tag -> ignore */
+        break;
+
+      default:
+        if(DEBUG_MMS_CLIENT)
+          printf("MMS_CLIENT: parseReadJournalResponse: ignore unknown tag %02x\n", tag);
+        break;
+    }
+
+    bufPos += length;
+  }
+
+  return true;
+}
+
+static bool
+parseJournalEntry(uint8_t * buffer, int bufPos, int maxLength, LinkedList journalEntries)
+{
+  int maxBufPos = bufPos + maxLength;
+
+  MmsJournalEntry journalEntry = (MmsJournalEntry) GLOBAL_CALLOC(1, sizeof(struct sMmsJournalEntry));
+
+  if(journalEntry == NULL)
+  {
+    if(DEBUG_MMS_CLIENT)
+      printf("MMS_CLIENT: parseReadJournalResponse: out of memory\n");
+
+    return false;
+  }
+
+  while(bufPos < maxBufPos)
+  {
+    int length;
+    uint8_t tag = buffer[bufPos++];
+    bufPos = BerDecoder_decodeLength(buffer, &length, bufPos, maxBufPos);
+
+    if(bufPos < 0)
+    {
+      if(DEBUG_MMS_CLIENT)
+        printf("MMS_CLIENT: parseReadJournalResponse: invalid length field\n");
+
+      goto exit_error;
+    }
+
+    switch(tag)
+    {
+      case 0x80: /* entryID */
+        if(journalEntry->entryID)
+        {
+          if(DEBUG_MMS_CLIENT)
+            printf("MMS_CLIENT: parseReadJournalResponse: duplicate entryID\n");
+
+          goto exit_error;
+        }
+        else
+        {
+          journalEntry->entryID = MmsValue_newOctetString(length, length);
+
+          if(journalEntry->entryID)
+            MmsValue_setOctetString(journalEntry->entryID, buffer + bufPos, length);
+        }
+        break;
+
+      case 0xa1: /* originatingApplication */
+        /* ignore */
+        break;
+
+      case 0xa2: /* entryContent */
+        if(parseEntryContent(buffer, bufPos, length, journalEntry) == false)
+          goto exit_error;
+
+        break;
+
+      case 0x00: /* indefinite length end tag -> ignore */
+        break;
+
+      default:
+        if(DEBUG_MMS_CLIENT)
+          printf("MMS_CLIENT: parseReadJournalResponse: unknown tag %02x\n", tag);
+
+        goto exit_error;
+    }
+
+    bufPos += length;
+  }
+
+  LinkedList_add(journalEntries, (void *) journalEntry);
+
+  return true;
+
+exit_error:
+
+  MmsJournalEntry_destroy(journalEntry);
+
+  return false;
+}
+
+static bool
+parseListOfJournalEntries(uint8_t * buffer, int bufPos, int maxLength, LinkedList journalEntries)
+{
+  int maxBufPos = bufPos + maxLength;
+
+  while(bufPos < maxBufPos)
+  {
+    int length;
+    uint8_t tag = buffer[bufPos++];
+    bufPos = BerDecoder_decodeLength(buffer, &length, bufPos, maxBufPos);
+
+    if(bufPos < 0)
+    {
+      if(DEBUG_MMS_CLIENT)
+        printf("MMS_CLIENT: parseReadJournalResponse: invalid length field\n");
+
+      return false;
+    }
+
+    switch(tag)
+    {
+      case 0x30:
+        if(parseJournalEntry(buffer, bufPos, length, journalEntries) == false)
+          return false;
+        break;
+
+      case 0x00: /* indefinite length end tag -> ignore */
+        break;
+
+      default:
+        if(DEBUG_MMS_CLIENT)
+          printf("MMS_CLIENT: parseReadJournalResponse: unknown tag %02x\n", tag);
 
         return false;
     }
 
-    while (bufPos < maxBufPos)
-    {
-        int length;
-        uint8_t tag = buffer[bufPos++];
-        bufPos = BerDecoder_decodeLength(buffer, &length, bufPos, maxBufPos);
+    bufPos += length;
+  }
 
-        if (bufPos < 0)
-        {
-            if (DEBUG_MMS_CLIENT)
-                printf("MMS_CLIENT: parseReadJournalResponse: invalid length field\n");
-
-            goto exit_error;
-        }
-
-        switch (tag)
-        {
-        case 0x80: /* entryID */
-            if (journalEntry->entryID)
-            {
-                if (DEBUG_MMS_CLIENT)
-                    printf("MMS_CLIENT: parseReadJournalResponse: duplicate entryID\n");
-
-                goto exit_error;
-            }
-            else
-            {
-                journalEntry->entryID = MmsValue_newOctetString(length, length);
-
-                if (journalEntry->entryID)
-                    MmsValue_setOctetString(journalEntry->entryID, buffer + bufPos, length);
-            }
-            break;
-
-        case 0xa1: /* originatingApplication */
-            /* ignore */
-            break;
-
-        case 0xa2: /* entryContent */
-            if (parseEntryContent(buffer, bufPos, length, journalEntry) == false)
-                goto exit_error;
-
-            break;
-
-        case 0x00: /* indefinite length end tag -> ignore */
-            break;
-
-        default:
-            if (DEBUG_MMS_CLIENT)
-                printf("MMS_CLIENT: parseReadJournalResponse: unknown tag %02x\n", tag);
-
-            goto exit_error;
-        }
-
-        bufPos += length;
-    }
-
-    LinkedList_add(journalEntries, (void*) journalEntry);
-
-    return true;
-
-exit_error:
-
-    MmsJournalEntry_destroy(journalEntry);
-
-    return false;
-}
-
-static bool
-parseListOfJournalEntries(uint8_t* buffer, int bufPos, int maxLength, LinkedList journalEntries)
-{
-    int maxBufPos = bufPos + maxLength;
-
-    while (bufPos < maxBufPos)
-    {
-        int length;
-        uint8_t tag = buffer[bufPos++];
-        bufPos = BerDecoder_decodeLength(buffer, &length, bufPos, maxBufPos);
-
-        if (bufPos < 0)
-        {
-            if (DEBUG_MMS_CLIENT)
-                printf("MMS_CLIENT: parseReadJournalResponse: invalid length field\n");
-
-            return false;
-        }
-
-        switch (tag) {
-        case 0x30:
-            if (parseJournalEntry(buffer, bufPos, length, journalEntries) == false)
-                return false;
-            break;
-
-        case 0x00: /* indefinite length end tag -> ignore */
-            break;
-
-        default:
-            if (DEBUG_MMS_CLIENT)
-                printf("MMS_CLIENT: parseReadJournalResponse: unknown tag %02x\n", tag);
-
-            return false;
-        }
-
-        bufPos += length;
-    }
-
-    return true;
+  return true;
 }
 
 bool
 mmsClient_parseReadJournalResponse(ByteBuffer* response, int respBufPos, bool* moreFollows, LinkedList* result)
 {
-    uint8_t* buffer = ByteBuffer_getBuffer(response);
-    int maxBufPos = ByteBuffer_getSize(response);
-    int bufPos = respBufPos;
-    int length;
+  uint8_t * buffer = ByteBuffer_getBuffer(response);
+  int maxBufPos = ByteBuffer_getSize(response);
+  int bufPos = respBufPos;
+  int length;
 
-    uint8_t tag = buffer[bufPos++];
+  uint8_t tag = buffer[bufPos++];
 
-    if (tag != 0xbf)
-    {
-        if (DEBUG_MMS_CLIENT)
-            printf("MMS_CLIENT: mmsClient_parseReadJournalResponse: unknown tag %02x\n", tag);
-        return false;
-    }
+  if(tag != 0xbf)
+  {
+    if(DEBUG_MMS_CLIENT)
+      printf("MMS_CLIENT: mmsClient_parseReadJournalResponse: unknown tag %02x\n", tag);
+    return false;
+  }
 
+  tag = buffer[bufPos++];
+
+  if(moreFollows)
+    *moreFollows = false;
+
+  if(tag != 0x41)
+  {
+    if(DEBUG_MMS_CLIENT)
+      printf("MMS_CLIENT: mmsClient_parseReadJournalResponse: unknown tag %02x\n", tag);
+    return false;
+  }
+
+  bufPos = BerDecoder_decodeLength(buffer, &length, bufPos, maxBufPos);
+  if(bufPos < 0) return false;
+
+  int endPos = bufPos + length;
+
+  LinkedList journalEntries = NULL;
+
+  while(bufPos < endPos)
+  {
     tag = buffer[bufPos++];
-
-    if (moreFollows)
-        *moreFollows = false;
-
-    if (tag != 0x41)
-    {
-        if (DEBUG_MMS_CLIENT)
-            printf("MMS_CLIENT: mmsClient_parseReadJournalResponse: unknown tag %02x\n", tag);
-        return false;
-    }
-
     bufPos = BerDecoder_decodeLength(buffer, &length, bufPos, maxBufPos);
-    if (bufPos < 0) return false;
+    if(bufPos < 0) return false;
 
-    int endPos = bufPos + length;
-
-    LinkedList journalEntries = NULL;
-
-    while (bufPos < endPos)
+    switch(tag)
     {
-        tag = buffer[bufPos++];
-        bufPos = BerDecoder_decodeLength(buffer, &length, bufPos, maxBufPos);
-        if (bufPos < 0) return false;
+      case 0xa0: /* listOfJournalEntry */
 
-        switch (tag) {
-        case 0xa0: /* listOfJournalEntry */
+        if(journalEntries)
+        {
+          if(DEBUG_MMS_CLIENT)
+            printf("MMS_CLIENT: mmsClient_parseReadJournalResponse: duplicate listOfJournalEntry\n");
 
-            if (journalEntries)
+          LinkedList_destroyDeep(journalEntries, (LinkedListValueDeleteFunction) MmsJournalEntry_destroy);
+
+          return false;
+        }
+        else
+        {
+          journalEntries = LinkedList_create();
+
+          if(journalEntries)
+          {
+            if(!parseListOfJournalEntries(buffer, bufPos, length, journalEntries))
             {
-                if (DEBUG_MMS_CLIENT)
-                    printf("MMS_CLIENT: mmsClient_parseReadJournalResponse: duplicate listOfJournalEntry\n");
+              LinkedList_destroyDeep(journalEntries, (LinkedListValueDeleteFunction) MmsJournalEntry_destroy);
 
-                LinkedList_destroyDeep(journalEntries, (LinkedListValueDeleteFunction) MmsJournalEntry_destroy);
-
-                return false;
+              return false;
             }
-            else
-            {
-                journalEntries = LinkedList_create();
-
-                if (journalEntries)
-                {
-                    if (!parseListOfJournalEntries(buffer, bufPos, length, journalEntries))
-                    {
-                        LinkedList_destroyDeep(journalEntries, (LinkedListValueDeleteFunction) MmsJournalEntry_destroy);
-
-                        return false;
-                    }
-                }
-                else
-                {
-                    return false;
-                }
-            }
-
-            break;
-
-        case 0x81: /* moreFollows */
-            if (moreFollows)
-                *moreFollows = BerDecoder_decodeBoolean(buffer, bufPos);
-            break;
-
-        case 0x00: /* indefinite length end tag -> ignore */
-            break;
-
-        default:
-            if (DEBUG_MMS_CLIENT)
-                printf("MMS_CLIENT: mmsClient_parseReadJournalResponse: message contains unknown tag %02x!\n", tag);
-
-            LinkedList_destroyDeep(journalEntries, (LinkedListValueDeleteFunction) MmsJournalEntry_destroy);
-
+          }
+          else
+          {
             return false;
+          }
         }
 
-        bufPos += length;
+        break;
+
+      case 0x81: /* moreFollows */
+        if(moreFollows)
+          *moreFollows = BerDecoder_decodeBoolean(buffer, bufPos);
+        break;
+
+      case 0x00: /* indefinite length end tag -> ignore */
+        break;
+
+      default:
+        if(DEBUG_MMS_CLIENT)
+          printf("MMS_CLIENT: mmsClient_parseReadJournalResponse: message contains unknown tag %02x!\n", tag);
+
+        LinkedList_destroyDeep(journalEntries, (LinkedListValueDeleteFunction) MmsJournalEntry_destroy);
+
+        return false;
     }
 
-    *result = journalEntries;
+    bufPos += length;
+  }
 
-    return true;
+  *result = journalEntries;
+
+  return true;
 }
 
 void
-mmsClient_createReadJournalRequestWithTimeRange(uint32_t invokeId, ByteBuffer* request, const char* domainId, const char* itemId,
-        MmsValue* startingTime, MmsValue* endingTime)
+mmsClient_createReadJournalRequestWithTimeRange(uint32_t invokeId, ByteBuffer* request, const char * domainId,
+                                                const char * itemId,
+                                                MmsValue* startingTime, MmsValue* endingTime)
 {
-    /* calculate sizes */
-    uint32_t invokeIdSize = BerEncoder_UInt32determineEncodedSize(invokeId);
+  /* calculate sizes */
+  uint32_t invokeIdSize = BerEncoder_UInt32determineEncodedSize(invokeId);
 
-    uint32_t domainIdStringSize = strlen(domainId);
-    uint32_t domainIdSize = 1 + BerEncoder_determineLengthSize(domainIdStringSize) + domainIdStringSize;
+  uint32_t domainIdStringSize = strlen(domainId);
+  uint32_t domainIdSize = 1 + BerEncoder_determineLengthSize(domainIdStringSize) + domainIdStringSize;
 
-    uint32_t itemIdStringSize = strlen(itemId);
-    uint32_t itemIdSize = 1 + BerEncoder_determineLengthSize(itemIdStringSize) + itemIdStringSize;
+  uint32_t itemIdStringSize = strlen(itemId);
+  uint32_t itemIdSize = 1 + BerEncoder_determineLengthSize(itemIdStringSize) + itemIdStringSize;
 
-    uint32_t objectIdSize = domainIdSize + itemIdSize;
+  uint32_t objectIdSize = domainIdSize + itemIdSize;
 
-    uint32_t journalNameSize =  1 + BerEncoder_determineLengthSize(objectIdSize) + (objectIdSize);
+  uint32_t journalNameSize =  1 + BerEncoder_determineLengthSize(objectIdSize) + (objectIdSize);
 
-    uint32_t startingTimeSize = 2 + startingTime->value.binaryTime.size;
+  uint32_t startingTimeSize = 2 + startingTime->value.binaryTime.size;
 
-    uint32_t rangeStartSpecSize = 2 + startingTimeSize;
+  uint32_t rangeStartSpecSize = 2 + startingTimeSize;
 
-    uint32_t endingTimeSize = 2 + endingTime->value.binaryTime.size;
+  uint32_t endingTimeSize = 2 + endingTime->value.binaryTime.size;
 
-    uint32_t rangeEndSpecSize = 2 + endingTimeSize;
+  uint32_t rangeEndSpecSize = 2 + endingTimeSize;
 
-    uint32_t journalReadContentSize = journalNameSize + rangeStartSpecSize + rangeEndSpecSize;
+  uint32_t journalReadContentSize = journalNameSize + rangeStartSpecSize + rangeEndSpecSize;
 
-    uint32_t journalReadSize = 1 + BerEncoder_determineLengthSize(journalReadContentSize) + (journalReadContentSize);
+  uint32_t journalReadSize = 1 + BerEncoder_determineLengthSize(journalReadContentSize) + (journalReadContentSize);
 
-    uint32_t confirmedRequestPduSize = 1 + 2 + 2  + invokeIdSize + journalReadSize;
+  uint32_t confirmedRequestPduSize = 1 + 2 + 2  + invokeIdSize + journalReadSize;
 
-    /* encode to buffer */
-    int bufPos = 0;
-    uint8_t* buffer = request->buffer;
+  /* encode to buffer */
+  int bufPos = 0;
+  uint8_t * buffer = request->buffer;
 
-    bufPos = BerEncoder_encodeTL(0xa0, confirmedRequestPduSize, buffer, bufPos);
-    bufPos = BerEncoder_encodeTL(0x02, invokeIdSize, buffer, bufPos);
-    bufPos = BerEncoder_encodeUInt32(invokeId, buffer, bufPos);
+  bufPos = BerEncoder_encodeTL(0xa0, confirmedRequestPduSize, buffer, bufPos);
+  bufPos = BerEncoder_encodeTL(0x02, invokeIdSize, buffer, bufPos);
+  bufPos = BerEncoder_encodeUInt32(invokeId, buffer, bufPos);
 
-    /* encode read journal tag (context | structured ) [65 = 41h] */
-    buffer[bufPos++] = 0xbf;
-    buffer[bufPos++] = 0x41;
+  /* encode read journal tag (context | structured ) [65 = 41h] */
+  buffer[bufPos++] = 0xbf;
+  buffer[bufPos++] = 0x41;
 
-    bufPos = BerEncoder_encodeLength(journalReadSize, buffer, bufPos);
+  bufPos = BerEncoder_encodeLength(journalReadSize, buffer, bufPos);
 
-    /* encode journalName */
-    bufPos = BerEncoder_encodeTL(0xa0, journalNameSize, buffer, bufPos);
+  /* encode journalName */
+  bufPos = BerEncoder_encodeTL(0xa0, journalNameSize, buffer, bufPos);
 
-    bufPos = BerEncoder_encodeTL(0xa1, objectIdSize, buffer, bufPos);
+  bufPos = BerEncoder_encodeTL(0xa1, objectIdSize, buffer, bufPos);
 
-    bufPos = BerEncoder_encodeOctetString(0x1a, (uint8_t*) domainId, domainIdStringSize, buffer, bufPos);
-    bufPos = BerEncoder_encodeOctetString(0x1a, (uint8_t*) itemId, itemIdStringSize, buffer, bufPos);
+  bufPos = BerEncoder_encodeOctetString(0x1a, (uint8_t *) domainId, domainIdStringSize, buffer, bufPos);
+  bufPos = BerEncoder_encodeOctetString(0x1a, (uint8_t *) itemId, itemIdStringSize, buffer, bufPos);
 
-    /* encode rangeStartSpecification|startingTime */
-    bufPos = BerEncoder_encodeTL(0xa1, startingTimeSize, buffer, bufPos);
-    bufPos = BerEncoder_encodeOctetString(0x80, startingTime->value.binaryTime.buf,
-            startingTime->value.binaryTime.size, buffer, bufPos);
+  /* encode rangeStartSpecification|startingTime */
+  bufPos = BerEncoder_encodeTL(0xa1, startingTimeSize, buffer, bufPos);
+  bufPos = BerEncoder_encodeOctetString(0x80, startingTime->value.binaryTime.buf,
+                                        startingTime->value.binaryTime.size, buffer, bufPos);
 
-    /* encode rangeStopSpecification|endingTime */
-    bufPos = BerEncoder_encodeTL(0xa2, endingTimeSize, buffer, bufPos);
-    bufPos = BerEncoder_encodeOctetString(0x80, endingTime->value.binaryTime.buf,
-            endingTime->value.binaryTime.size, buffer, bufPos);
+  /* encode rangeStopSpecification|endingTime */
+  bufPos = BerEncoder_encodeTL(0xa2, endingTimeSize, buffer, bufPos);
+  bufPos = BerEncoder_encodeOctetString(0x80, endingTime->value.binaryTime.buf,
+                                        endingTime->value.binaryTime.size, buffer, bufPos);
 
-    request->size = bufPos;
+  request->size = bufPos;
 }
 
 void
-mmsClient_createReadJournalRequestStartAfter(uint32_t invokeId, ByteBuffer* request, const char* domainId, const char* itemId,
-        MmsValue* timeSpecification, MmsValue* entrySpecification)
+mmsClient_createReadJournalRequestStartAfter(uint32_t invokeId, ByteBuffer* request, const char * domainId,
+                                             const char * itemId,
+                                             MmsValue* timeSpecification, MmsValue* entrySpecification)
 {
-    /* calculate sizes */
-    uint32_t invokeIdSize = BerEncoder_UInt32determineEncodedSize(invokeId);
+  /* calculate sizes */
+  uint32_t invokeIdSize = BerEncoder_UInt32determineEncodedSize(invokeId);
 
-    uint32_t domainIdStringSize = strlen(domainId);
-    uint32_t domainIdSize = 1 + BerEncoder_determineLengthSize(domainIdStringSize) + domainIdStringSize;
+  uint32_t domainIdStringSize = strlen(domainId);
+  uint32_t domainIdSize = 1 + BerEncoder_determineLengthSize(domainIdStringSize) + domainIdStringSize;
 
-    uint32_t itemIdStringSize = strlen(itemId);
-    uint32_t itemIdSize = 1 + BerEncoder_determineLengthSize(itemIdStringSize) + itemIdStringSize;
+  uint32_t itemIdStringSize = strlen(itemId);
+  uint32_t itemIdSize = 1 + BerEncoder_determineLengthSize(itemIdStringSize) + itemIdStringSize;
 
-    uint32_t objectIdSize = domainIdSize + itemIdSize;
+  uint32_t objectIdSize = domainIdSize + itemIdSize;
 
-    uint32_t journalNameSize = 1 + BerEncoder_determineLengthSize(objectIdSize) + (objectIdSize);
+  uint32_t journalNameSize = 1 + BerEncoder_determineLengthSize(objectIdSize) + (objectIdSize);
 
-    uint32_t timeSpecificationSize = 2 + timeSpecification->value.binaryTime.size;
+  uint32_t timeSpecificationSize = 2 + timeSpecification->value.binaryTime.size;
 
-    uint32_t entrySpecificationSize = 2 + entrySpecification->value.octetString.size;
+  uint32_t entrySpecificationSize = 2 + entrySpecification->value.octetString.size;
 
-    uint32_t entryToStartAfterContentSize = timeSpecificationSize + entrySpecificationSize;
+  uint32_t entryToStartAfterContentSize = timeSpecificationSize + entrySpecificationSize;
 
-    uint32_t entryToStartAfterSize =  1 + BerEncoder_determineLengthSize(entryToStartAfterContentSize)
-            + entryToStartAfterContentSize;
+  uint32_t entryToStartAfterSize =  1 + BerEncoder_determineLengthSize(entryToStartAfterContentSize)
+                                    + entryToStartAfterContentSize;
 
-    uint32_t journalReadContentSize = journalNameSize + entryToStartAfterSize;
+  uint32_t journalReadContentSize = journalNameSize + entryToStartAfterSize;
 
-    uint32_t journalReadSize = 1 + BerEncoder_determineLengthSize(journalReadContentSize) + (journalReadContentSize);
+  uint32_t journalReadSize = 1 + BerEncoder_determineLengthSize(journalReadContentSize) + (journalReadContentSize);
 
-    uint32_t confirmedRequestPduSize = 1 + 2 + 2  + invokeIdSize + journalReadSize;
+  uint32_t confirmedRequestPduSize = 1 + 2 + 2  + invokeIdSize + journalReadSize;
 
-    /* encode to buffer */
-    int bufPos = 0;
-    uint8_t* buffer = request->buffer;
+  /* encode to buffer */
+  int bufPos = 0;
+  uint8_t * buffer = request->buffer;
 
-    bufPos = BerEncoder_encodeTL(0xa0, confirmedRequestPduSize, buffer, bufPos);
-    bufPos = BerEncoder_encodeTL(0x02, invokeIdSize, buffer, bufPos);
-    bufPos = BerEncoder_encodeUInt32(invokeId, buffer, bufPos);
+  bufPos = BerEncoder_encodeTL(0xa0, confirmedRequestPduSize, buffer, bufPos);
+  bufPos = BerEncoder_encodeTL(0x02, invokeIdSize, buffer, bufPos);
+  bufPos = BerEncoder_encodeUInt32(invokeId, buffer, bufPos);
 
-    /* encode read journal tag (context | structured ) [65 = 41h] */
-    buffer[bufPos++] = 0xbf;
-    buffer[bufPos++] = 0x41;
+  /* encode read journal tag (context | structured ) [65 = 41h] */
+  buffer[bufPos++] = 0xbf;
+  buffer[bufPos++] = 0x41;
 
-    bufPos = BerEncoder_encodeLength(journalReadSize, buffer, bufPos);
+  bufPos = BerEncoder_encodeLength(journalReadSize, buffer, bufPos);
 
-    /* encode journalName */
-    bufPos = BerEncoder_encodeTL(0xa0, journalNameSize, buffer, bufPos);
+  /* encode journalName */
+  bufPos = BerEncoder_encodeTL(0xa0, journalNameSize, buffer, bufPos);
 
-    bufPos = BerEncoder_encodeTL(0xa1, objectIdSize, buffer, bufPos);
+  bufPos = BerEncoder_encodeTL(0xa1, objectIdSize, buffer, bufPos);
 
-    bufPos = BerEncoder_encodeOctetString(0x1a, (uint8_t*) domainId, domainIdStringSize, buffer, bufPos);
-    bufPos = BerEncoder_encodeOctetString(0x1a, (uint8_t*) itemId, itemIdStringSize, buffer, bufPos);
+  bufPos = BerEncoder_encodeOctetString(0x1a, (uint8_t *) domainId, domainIdStringSize, buffer, bufPos);
+  bufPos = BerEncoder_encodeOctetString(0x1a, (uint8_t *) itemId, itemIdStringSize, buffer, bufPos);
 
-    /* encode entryToStartAfter */
-    bufPos = BerEncoder_encodeTL(0xa5, entryToStartAfterContentSize, buffer, bufPos);
+  /* encode entryToStartAfter */
+  bufPos = BerEncoder_encodeTL(0xa5, entryToStartAfterContentSize, buffer, bufPos);
 
-    /* encode entryToStartAfter|timeSpecification */
-    bufPos = BerEncoder_encodeOctetString(0x80, timeSpecification->value.binaryTime.buf,
-            timeSpecification->value.binaryTime.size, buffer, bufPos);
+  /* encode entryToStartAfter|timeSpecification */
+  bufPos = BerEncoder_encodeOctetString(0x80, timeSpecification->value.binaryTime.buf,
+                                        timeSpecification->value.binaryTime.size, buffer, bufPos);
 
-    /* encode entryToStartAfter|entrySpecification */
-    bufPos = BerEncoder_encodeOctetString(0x81, entrySpecification->value.octetString.buf,
-            entrySpecification->value.octetString.size, buffer, bufPos);
+  /* encode entryToStartAfter|entrySpecification */
+  bufPos = BerEncoder_encodeOctetString(0x81, entrySpecification->value.octetString.buf,
+                                        entrySpecification->value.octetString.size, buffer, bufPos);
 
-    request->size = bufPos;
+  request->size = bufPos;
 }

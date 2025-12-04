@@ -40,16 +40,16 @@ extern "C" {
 /**@{*/
 
 /** an opaque handle to the instance data of a ClientDataSet object */
-typedef struct sClientDataSet* ClientDataSet;
+typedef struct sClientDataSet * ClientDataSet;
 
 /** an opaque handle to the instance data of a ClientReport object */
-typedef struct sClientReport* ClientReport;
+typedef struct sClientReport * ClientReport;
 
 /** an opaque handle to the instance data of a ClientReportControlBlock object */
-typedef struct sClientReportControlBlock* ClientReportControlBlock;
+typedef struct sClientReportControlBlock * ClientReportControlBlock;
 
 /** an opaque handle to the instance data of a ClientGooseControlBlock object */
-typedef struct sClientGooseControlBlock* ClientGooseControlBlock;
+typedef struct sClientGooseControlBlock * ClientGooseControlBlock;
 
 /**
  * @defgroup IEC61850_CLIENT_GENERAL General client side connection handling functions and data types
@@ -58,118 +58,119 @@ typedef struct sClientGooseControlBlock* ClientGooseControlBlock;
  */
 
 /** An opaque handle to the instance data of the IedConnection object */
-typedef struct sIedConnection* IedConnection;
+typedef struct sIedConnection * IedConnection;
 
 /** Detailed description of the last application error of the client connection instance */
 typedef struct
 {
-    int ctlNum;
-    ControlLastApplError error;
-    ControlAddCause addCause;
+  int ctlNum;
+  ControlLastApplError error;
+  ControlAddCause addCause;
 } LastApplError;
 
 /** Connection state of the IedConnection instance - either closed(idle), connecting, connected, or closing) */
 typedef enum
 {
-    IED_STATE_CLOSED = 0,
-    IED_STATE_CONNECTING,
-    IED_STATE_CONNECTED,
-    IED_STATE_CLOSING
+  IED_STATE_CLOSED = 0,
+  IED_STATE_CONNECTING,
+  IED_STATE_CONNECTED,
+  IED_STATE_CLOSING
 } IedConnectionState;
 
 /** used to describe the error reason for most client side service functions */
-typedef enum {
-    /* general errors */
+typedef enum
+{
+  /* general errors */
 
-    /** No error occurred - service request has been successful */
-    IED_ERROR_OK = 0,
+  /** No error occurred - service request has been successful */
+  IED_ERROR_OK = 0,
 
-    /** The service request can not be executed because the client is not yet connected */
-    IED_ERROR_NOT_CONNECTED = 1,
+  /** The service request can not be executed because the client is not yet connected */
+  IED_ERROR_NOT_CONNECTED = 1,
 
-    /** Connect service not execute because the client is already connected */
-    IED_ERROR_ALREADY_CONNECTED = 2,
+  /** Connect service not execute because the client is already connected */
+  IED_ERROR_ALREADY_CONNECTED = 2,
 
-    /** The service request can not be executed caused by a loss of connection */
-    IED_ERROR_CONNECTION_LOST = 3,
+  /** The service request can not be executed caused by a loss of connection */
+  IED_ERROR_CONNECTION_LOST = 3,
 
-    /** The service or some given parameters are not supported by the client stack or by the server */
-    IED_ERROR_SERVICE_NOT_SUPPORTED = 4,
+  /** The service or some given parameters are not supported by the client stack or by the server */
+  IED_ERROR_SERVICE_NOT_SUPPORTED = 4,
 
-    /** Connection rejected by server */
-    IED_ERROR_CONNECTION_REJECTED = 5,
+  /** Connection rejected by server */
+  IED_ERROR_CONNECTION_REJECTED = 5,
 
-    /** Cannot send request because outstanding call limit is reached */
-    IED_ERROR_OUTSTANDING_CALL_LIMIT_REACHED = 6,
+  /** Cannot send request because outstanding call limit is reached */
+  IED_ERROR_OUTSTANDING_CALL_LIMIT_REACHED = 6,
 
-    /* client side errors */
+  /* client side errors */
 
-    /** API function has been called with an invalid argument */
-    IED_ERROR_USER_PROVIDED_INVALID_ARGUMENT = 10,
+  /** API function has been called with an invalid argument */
+  IED_ERROR_USER_PROVIDED_INVALID_ARGUMENT = 10,
 
-    IED_ERROR_ENABLE_REPORT_FAILED_DATASET_MISMATCH = 11,
+  IED_ERROR_ENABLE_REPORT_FAILED_DATASET_MISMATCH = 11,
 
-    /** The object provided object reference is invalid (there is a syntactical error). */
-    IED_ERROR_OBJECT_REFERENCE_INVALID = 12,
+  /** The object provided object reference is invalid (there is a syntactical error). */
+  IED_ERROR_OBJECT_REFERENCE_INVALID = 12,
 
-    /** Received object is of unexpected type */
-    IED_ERROR_UNEXPECTED_VALUE_RECEIVED = 13,
+  /** Received object is of unexpected type */
+  IED_ERROR_UNEXPECTED_VALUE_RECEIVED = 13,
 
-    /* service error - error reported by server */
+  /* service error - error reported by server */
 
-    /** The communication to the server failed with a timeout */
-    IED_ERROR_TIMEOUT = 20,
+  /** The communication to the server failed with a timeout */
+  IED_ERROR_TIMEOUT = 20,
 
-    /** The server rejected the access to the requested object/service due to access control */
-    IED_ERROR_ACCESS_DENIED = 21,
+  /** The server rejected the access to the requested object/service due to access control */
+  IED_ERROR_ACCESS_DENIED = 21,
 
-    /** The server reported that the requested object does not exist (returned by server) */
-    IED_ERROR_OBJECT_DOES_NOT_EXIST = 22,
+  /** The server reported that the requested object does not exist (returned by server) */
+  IED_ERROR_OBJECT_DOES_NOT_EXIST = 22,
 
-    /** The server reported that the requested object already exists */
-    IED_ERROR_OBJECT_EXISTS = 23,
+  /** The server reported that the requested object already exists */
+  IED_ERROR_OBJECT_EXISTS = 23,
 
-    /** The server does not support the requested access method (returned by server) */
-    IED_ERROR_OBJECT_ACCESS_UNSUPPORTED = 24,
+  /** The server does not support the requested access method (returned by server) */
+  IED_ERROR_OBJECT_ACCESS_UNSUPPORTED = 24,
 
-    /** The server expected an object of another type (returned by server) */
-    IED_ERROR_TYPE_INCONSISTENT = 25,
+  /** The server expected an object of another type (returned by server) */
+  IED_ERROR_TYPE_INCONSISTENT = 25,
 
-    /** The object or service is temporarily unavailable (returned by server) */
-    IED_ERROR_TEMPORARILY_UNAVAILABLE = 26,
+  /** The object or service is temporarily unavailable (returned by server) */
+  IED_ERROR_TEMPORARILY_UNAVAILABLE = 26,
 
-    /** The specified object is not defined in the server (returned by server) */
-    IED_ERROR_OBJECT_UNDEFINED = 27,
+  /** The specified object is not defined in the server (returned by server) */
+  IED_ERROR_OBJECT_UNDEFINED = 27,
 
-    /** The specified address is invalid (returned by server) */
-    IED_ERROR_INVALID_ADDRESS = 28,
+  /** The specified address is invalid (returned by server) */
+  IED_ERROR_INVALID_ADDRESS = 28,
 
-    /** Service failed due to a hardware fault (returned by server) */
-    IED_ERROR_HARDWARE_FAULT = 29,
+  /** Service failed due to a hardware fault (returned by server) */
+  IED_ERROR_HARDWARE_FAULT = 29,
 
-    /** The requested data type is not supported by the server (returned by server) */
-    IED_ERROR_TYPE_UNSUPPORTED = 30,
+  /** The requested data type is not supported by the server (returned by server) */
+  IED_ERROR_TYPE_UNSUPPORTED = 30,
 
-    /** The provided attributes are inconsistent (returned by server) */
-    IED_ERROR_OBJECT_ATTRIBUTE_INCONSISTENT = 31,
+  /** The provided attributes are inconsistent (returned by server) */
+  IED_ERROR_OBJECT_ATTRIBUTE_INCONSISTENT = 31,
 
-    /** The provided object value is invalid (returned by server) */
-    IED_ERROR_OBJECT_VALUE_INVALID = 32,
+  /** The provided object value is invalid (returned by server) */
+  IED_ERROR_OBJECT_VALUE_INVALID = 32,
 
-    /** The object is invalidated (returned by server) */
-    IED_ERROR_OBJECT_INVALIDATED = 33,
+  /** The object is invalidated (returned by server) */
+  IED_ERROR_OBJECT_INVALIDATED = 33,
 
-    /** Received an invalid response message from the server */
-    IED_ERROR_MALFORMED_MESSAGE = 34,
+  /** Received an invalid response message from the server */
+  IED_ERROR_MALFORMED_MESSAGE = 34,
 
-    /** Service was not executed because required resource is still in use */
-    IED_ERROR_OBJECT_CONSTRAINT_CONFLICT = 35,
+  /** Service was not executed because required resource is still in use */
+  IED_ERROR_OBJECT_CONSTRAINT_CONFLICT = 35,
 
-    /** Service not implemented */
-    IED_ERROR_SERVICE_NOT_IMPLEMENTED = 98,
+  /** Service not implemented */
+  IED_ERROR_SERVICE_NOT_IMPLEMENTED = 98,
 
-    /** unknown error */
-    IED_ERROR_UNKNOWN = 99
+  /** unknown error */
+  IED_ERROR_UNKNOWN = 99
 } IedClientError;
 
 /**
@@ -177,7 +178,7 @@ typedef enum {
  *
  * \return string constant representing the error
  */
-LIB61850_API const char*
+LIB61850_API const char *
 IedClientError_toString(IedClientError err);
 
 /**************************************************
@@ -252,7 +253,7 @@ IedConnection_destroy(IedConnection self);
 * \param localPort the local TCP port to use. When < 1 the OS will chose the TCP port to use.
 */
 LIB61850_API void
-IedConnection_setLocalAddress(IedConnection self, const char* localIpAddress, int localPort);
+IedConnection_setLocalAddress(IedConnection self, const char * localIpAddress, int localPort);
 
 /**
  * \brief set the connect timeout in ms
@@ -308,7 +309,8 @@ IedConnection_getRequestTimeout(IedConnection self);
  * \param subsecondPrecision set the subsecond precision (number of significant bits of the fractionOfSecond part of the time stamp)
  */
 LIB61850_API void
-IedConnection_setTimeQuality(IedConnection self, bool leapSecondKnown, bool clockFailure, bool clockNotSynchronized, int subsecondPrecision);
+IedConnection_setTimeQuality(IedConnection self, bool leapSecondKnown, bool clockFailure, bool clockNotSynchronized,
+                             int subsecondPrecision);
 
 /**
  * \brief Perform MMS message handling and house-keeping tasks (for non-thread mode only)
@@ -336,7 +338,7 @@ IedConnection_tick(IedConnection self);
  * \param err the result code. IED_ERROR_OK indicates success.
  */
 typedef void
-(*IedConnection_GenericServiceHandler) (uint32_t invokeId, void* parameter, IedClientError err);
+(*IedConnection_GenericServiceHandler) (uint32_t invokeId, void * parameter, IedClientError err);
 
 /**************************************************
  * Association service
@@ -353,7 +355,7 @@ typedef void
  * \param tcpPort the TCP port number of the server to connect to
  */
 LIB61850_API void
-IedConnection_connect(IedConnection self, IedClientError* error, const char* hostname, int tcpPort);
+IedConnection_connect(IedConnection self, IedClientError* error, const char * hostname, int tcpPort);
 
 /**
  * \brief Asynchronously connect to a server
@@ -369,7 +371,7 @@ IedConnection_connect(IedConnection self, IedClientError* error, const char* hos
  * \param tcpPort the TCP port number of the server to connect to
  */
 LIB61850_API void
-IedConnection_connectAsync(IedConnection self, IedClientError* error, const char* hostname, int tcpPort);
+IedConnection_connectAsync(IedConnection self, IedClientError* error, const char * hostname, int tcpPort);
 
 /**
  * \brief Abort the connection
@@ -473,7 +475,7 @@ IedConnection_getLastApplError(IedConnection self);
  * \param connection the connection object of the closed connection
  */
 typedef void
-(*IedConnectionClosedHandler) (void* parameter, IedConnection connection);
+(*IedConnectionClosedHandler) (void * parameter, IedConnection connection);
 
 /**
  * \brief Install a handler function that is called when the connection is lost/closed.
@@ -486,7 +488,7 @@ typedef void
  */
 LIB61850_API void
 IedConnection_installConnectionClosedHandler(IedConnection self, IedConnectionClosedHandler handler,
-        void* parameter);
+                                             void * parameter);
 
 /**
  * \brief Callback handler that is invoked whenever the connection state (\ref IedConnectionState) changes
@@ -496,7 +498,7 @@ IedConnection_installConnectionClosedHandler(IedConnection self, IedConnectionCl
  * \param newState the new state of the connection
  */
 typedef void
-(*IedConnection_StateChangedHandler) (void* parameter, IedConnection connection, IedConnectionState newState);
+(*IedConnection_StateChangedHandler) (void * parameter, IedConnection connection, IedConnectionState newState);
 
 /**
  * \brief Install a handler function that is called when the connection state changes
@@ -506,7 +508,8 @@ typedef void
  * \param parameter the user provided parameter that is handed over to the callback function
  */
 LIB61850_API void
-IedConnection_installStateChangedHandler(IedConnection self, IedConnection_StateChangedHandler handler, void* parameter);
+IedConnection_installStateChangedHandler(IedConnection self, IedConnection_StateChangedHandler handler,
+                                         void * parameter);
 
 /**
  * \brief get a handle to the underlying MmsConnection
@@ -552,7 +555,7 @@ IedConnection_getMmsConnection(IedConnection self);
 
 
 /** an opaque handle to the instance data of a ClientSVControlBlock object */
-typedef struct sClientSVControlBlock* ClientSVControlBlock;
+typedef struct sClientSVControlBlock * ClientSVControlBlock;
 
 /**
  * \brief Create a new ClientSVControlBlock instance
@@ -570,7 +573,7 @@ typedef struct sClientSVControlBlock* ClientSVControlBlock;
  * \return the new instance
  */
 LIB61850_API ClientSVControlBlock
-ClientSVControlBlock_create(IedConnection connection, const char* reference);
+ClientSVControlBlock_create(IedConnection connection, const char * reference);
 
 /**
  * \brief Free all resources related to the ClientSVControlBlock instance.
@@ -613,7 +616,7 @@ ClientSVControlBlock_setResv(ClientSVControlBlock self, bool value);
 LIB61850_API bool
 ClientSVControlBlock_getResv(ClientSVControlBlock self);
 
-LIB61850_API char*
+LIB61850_API char *
 ClientSVControlBlock_getMsvID(ClientSVControlBlock self);
 
 /**
@@ -627,7 +630,7 @@ ClientSVControlBlock_getMsvID(ClientSVControlBlock self);
  *
  * \return the data set reference as a NULL terminated string
  */
-LIB61850_API char*
+LIB61850_API char *
 ClientSVControlBlock_getDatSet(ClientSVControlBlock self);
 
 LIB61850_API uint32_t
@@ -721,7 +724,7 @@ ClientSVControlBlock_getNoASDU(ClientSVControlBlock self);
  **************************************************/
 
 LIB61850_API ClientGooseControlBlock
-ClientGooseControlBlock_create(const char* dataAttributeReference);
+ClientGooseControlBlock_create(const char * dataAttributeReference);
 
 LIB61850_API void
 ClientGooseControlBlock_destroy(ClientGooseControlBlock self);
@@ -732,17 +735,17 @@ ClientGooseControlBlock_getGoEna(ClientGooseControlBlock self);
 LIB61850_API void
 ClientGooseControlBlock_setGoEna(ClientGooseControlBlock self, bool goEna);
 
-LIB61850_API const char*
+LIB61850_API const char *
 ClientGooseControlBlock_getGoID(ClientGooseControlBlock self);
 
 LIB61850_API void
-ClientGooseControlBlock_setGoID(ClientGooseControlBlock self, const char* goID);
+ClientGooseControlBlock_setGoID(ClientGooseControlBlock self, const char * goID);
 
-LIB61850_API const char*
+LIB61850_API const char *
 ClientGooseControlBlock_getDatSet(ClientGooseControlBlock self);
 
 LIB61850_API void
-ClientGooseControlBlock_setDatSet(ClientGooseControlBlock self, const char* datSet);
+ClientGooseControlBlock_setDatSet(ClientGooseControlBlock self, const char * datSet);
 
 LIB61850_API uint32_t
 ClientGooseControlBlock_getConfRev(ClientGooseControlBlock self);
@@ -765,7 +768,7 @@ ClientGooseControlBlock_getDstAddress(ClientGooseControlBlock self);
 LIB61850_API void
 ClientGooseControlBlock_setDstAddress(ClientGooseControlBlock self, PhyComAddress value);
 
-LIB61850_API DEPRECATED MmsValue* /* MMS_OCTET_STRING */
+LIB61850_API DEPRECATED MmsValue * /* MMS_OCTET_STRING */
 ClientGooseControlBlock_getDstAddress_addr(ClientGooseControlBlock self);
 
 LIB61850_API DEPRECATED void
@@ -823,10 +826,12 @@ ClientGooseControlBlock_setDstAddress_appid(ClientGooseControlBlock self, uint16
  *         the updateRcb parameter.
  */
 LIB61850_API ClientGooseControlBlock
-IedConnection_getGoCBValues(IedConnection self, IedClientError* error, const char* goCBReference, ClientGooseControlBlock updateGoCB);
+IedConnection_getGoCBValues(IedConnection self, IedClientError* error, const char * goCBReference,
+                            ClientGooseControlBlock updateGoCB);
 
 typedef void
-(*IedConnection_GetGoCBValuesHandler) (uint32_t invokeId, void* parameter, IedClientError err, ClientGooseControlBlock goCB);
+(*IedConnection_GetGoCBValuesHandler) (uint32_t invokeId, void * parameter, IedClientError err,
+                                       ClientGooseControlBlock goCB);
 
 /**
  * \brief Read access to attributes of a GOOSE control block (GoCB) at the connected server (async version)
@@ -858,8 +863,9 @@ typedef void
  * \return the invoke ID of the request
  */
 LIB61850_API uint32_t
-IedConnection_getGoCBValuesAsync(IedConnection self, IedClientError* error, const char* goCBReference, ClientGooseControlBlock updateGoCB,
-    IedConnection_GetGoCBValuesHandler handler, void* parameter);
+IedConnection_getGoCBValuesAsync(IedConnection self, IedClientError* error, const char * goCBReference,
+                                 ClientGooseControlBlock updateGoCB,
+                                 IedConnection_GetGoCBValuesHandler handler, void * parameter);
 
 /**
  * \brief Write access to attributes of a GOOSE control block (GoCB) at the connected server
@@ -884,7 +890,7 @@ IedConnection_getGoCBValuesAsync(IedConnection self, IedClientError* error, cons
  */
 LIB61850_API void
 IedConnection_setGoCBValues(IedConnection self, IedClientError* error, ClientGooseControlBlock goCB,
-        uint32_t parametersMask, bool singleRequest);
+                            uint32_t parametersMask, bool singleRequest);
 
 /**
  * \brief Write access to attributes of a GOOSE control block (GoCB) at the connected server (async version)
@@ -913,7 +919,7 @@ IedConnection_setGoCBValues(IedConnection self, IedClientError* error, ClientGoo
  */
 LIB61850_API uint32_t
 IedConnection_setGoCBValuesAsync(IedConnection self, IedClientError* error, ClientGooseControlBlock goCB,
-    uint32_t parametersMask, bool singleRequest, IedConnection_GenericServiceHandler handler, void* parameter);
+                                 uint32_t parametersMask, bool singleRequest, IedConnection_GenericServiceHandler handler, void * parameter);
 
 /** @} */
 
@@ -938,11 +944,12 @@ IedConnection_setGoCBValuesAsync(IedConnection self, IedClientError* error, Clie
  *
  * \return the MmsValue instance of the received value or NULL if the request failed
  */
-LIB61850_API MmsValue*
-IedConnection_readObject(IedConnection self, IedClientError* error, const char* dataAttributeReference, FunctionalConstraint fc);
+LIB61850_API MmsValue *
+IedConnection_readObject(IedConnection self, IedClientError* error, const char * dataAttributeReference,
+                         FunctionalConstraint fc);
 
 typedef void
-(*IedConnection_ReadObjectHandler) (uint32_t invokeId, void* parameter, IedClientError err, MmsValue* value);
+(*IedConnection_ReadObjectHandler) (uint32_t invokeId, void * parameter, IedClientError err, MmsValue* value);
 
 /**
  * \brief read a functional constrained data attribute (FCDA) or functional constrained data (FCD) - async version
@@ -957,8 +964,8 @@ typedef void
  * \return the invoke ID of the request
  */
 LIB61850_API uint32_t
-IedConnection_readObjectAsync(IedConnection self, IedClientError* error, const char* objRef, FunctionalConstraint fc,
-        IedConnection_ReadObjectHandler handler, void* parameter);
+IedConnection_readObjectAsync(IedConnection self, IedClientError* error, const char * objRef, FunctionalConstraint fc,
+                              IedConnection_ReadObjectHandler handler, void * parameter);
 
 /**
  * \brief write a functional constrained data attribute (FCDA) or functional constrained data (FCD).
@@ -970,8 +977,9 @@ IedConnection_readObjectAsync(IedConnection self, IedClientError* error, const c
  * \param value the MmsValue to write (has to be of the correct type - MMS_STRUCTURE for FCD)
  */
 LIB61850_API void
-IedConnection_writeObject(IedConnection self, IedClientError* error, const char* dataAttributeReference, FunctionalConstraint fc,
-        MmsValue* value);
+IedConnection_writeObject(IedConnection self, IedClientError* error, const char * dataAttributeReference,
+                          FunctionalConstraint fc,
+                          MmsValue* value);
 
 /**
  * \brief write a functional constrained data attribute (FCDA) or functional constrained data (FCD) - async version
@@ -987,8 +995,8 @@ IedConnection_writeObject(IedConnection self, IedClientError* error, const char*
  * \return the invoke ID of the request
  */
 LIB61850_API uint32_t
-IedConnection_writeObjectAsync(IedConnection self, IedClientError* error, const char* objectReference,
-        FunctionalConstraint fc, MmsValue* value, IedConnection_GenericServiceHandler handler, void* parameter);
+IedConnection_writeObjectAsync(IedConnection self, IedClientError* error, const char * objectReference,
+                               FunctionalConstraint fc, MmsValue* value, IedConnection_GenericServiceHandler handler, void * parameter);
 
 /**
  * \brief read a functional constrained data attribute (FCDA) of type boolean
@@ -999,7 +1007,8 @@ IedConnection_writeObjectAsync(IedConnection self, IedClientError* error, const 
  * \param fc the functional constraint of the data attribute to read
  */
 LIB61850_API bool
-IedConnection_readBooleanValue(IedConnection self, IedClientError* error, const char* objectReference, FunctionalConstraint fc);
+IedConnection_readBooleanValue(IedConnection self, IedClientError* error, const char * objectReference,
+                               FunctionalConstraint fc);
 
 /**
  * \brief read a functional constrained data attribute (FCDA) of type float
@@ -1010,7 +1019,8 @@ IedConnection_readBooleanValue(IedConnection self, IedClientError* error, const 
  * \param fc the functional constraint of the data attribute to read
  */
 LIB61850_API float
-IedConnection_readFloatValue(IedConnection self, IedClientError* error, const char* objectReference, FunctionalConstraint fc);
+IedConnection_readFloatValue(IedConnection self, IedClientError* error, const char * objectReference,
+                             FunctionalConstraint fc);
 
 /**
  * \brief read a functional constrained data attribute (FCDA) of type VisibleString or MmsString
@@ -1024,8 +1034,9 @@ IedConnection_readFloatValue(IedConnection self, IedClientError* error, const ch
  *
  * \return a C string representation of the value. Has to be freed by the caller!
  */
-LIB61850_API char*
-IedConnection_readStringValue(IedConnection self, IedClientError* error, const char* objectReference, FunctionalConstraint fc);
+LIB61850_API char *
+IedConnection_readStringValue(IedConnection self, IedClientError* error, const char * objectReference,
+                              FunctionalConstraint fc);
 
 /**
  * \brief read a functional constrained data attribute (FCDA) of type Integer or Unsigned and return the result as int32_t
@@ -1038,7 +1049,8 @@ IedConnection_readStringValue(IedConnection self, IedClientError* error, const c
  * \return an int32_t value of the read data attributes
  */
 LIB61850_API int32_t
-IedConnection_readInt32Value(IedConnection self, IedClientError* error, const char* objectReference, FunctionalConstraint fc);
+IedConnection_readInt32Value(IedConnection self, IedClientError* error, const char * objectReference,
+                             FunctionalConstraint fc);
 
 /**
  * \brief read a functional constrained data attribute (FCDA) of type Integer or Unsigned and return the result as int64_t
@@ -1051,7 +1063,8 @@ IedConnection_readInt32Value(IedConnection self, IedClientError* error, const ch
  * \return an int64_t value of the read data attributes
  */
 LIB61850_API int64_t
-IedConnection_readInt64Value(IedConnection self, IedClientError* error, const char* objectReference, FunctionalConstraint fc);
+IedConnection_readInt64Value(IedConnection self, IedClientError* error, const char * objectReference,
+                             FunctionalConstraint fc);
 
 /**
  * \brief read a functional constrained data attribute (FCDA) of type Integer or Unsigned and return the result as uint32_t
@@ -1064,7 +1077,8 @@ IedConnection_readInt64Value(IedConnection self, IedClientError* error, const ch
  * \return an uint32_t value of the read data attributes
  */
 LIB61850_API uint32_t
-IedConnection_readUnsigned32Value(IedConnection self, IedClientError* error, const char* objectReference, FunctionalConstraint fc);
+IedConnection_readUnsigned32Value(IedConnection self, IedClientError* error, const char * objectReference,
+                                  FunctionalConstraint fc);
 
 /**
  * \brief read a functional constrained data attribute (FCDA) of type Timestamp (UTC Time)
@@ -1081,9 +1095,10 @@ IedConnection_readUnsigned32Value(IedConnection self, IedClientError* error, con
  *
  * \return the timestamp value
  */
-LIB61850_API Timestamp*
-IedConnection_readTimestampValue(IedConnection self, IedClientError* error, const char* objectReference, FunctionalConstraint fc,
-        Timestamp* timeStamp);
+LIB61850_API Timestamp *
+IedConnection_readTimestampValue(IedConnection self, IedClientError* error, const char * objectReference,
+                                 FunctionalConstraint fc,
+                                 Timestamp* timeStamp);
 
 /**
  * \brief read a functional constrained data attribute (FCDA) of type Quality
@@ -1096,7 +1111,8 @@ IedConnection_readTimestampValue(IedConnection self, IedClientError* error, cons
  * \return the timestamp value
  */
 LIB61850_API Quality
-IedConnection_readQualityValue(IedConnection self, IedClientError* error, const char* objectReference, FunctionalConstraint fc);
+IedConnection_readQualityValue(IedConnection self, IedClientError* error, const char * objectReference,
+                               FunctionalConstraint fc);
 
 /**
  * \brief write a functional constrained data attribute (FCDA) of type boolean
@@ -1108,8 +1124,8 @@ IedConnection_readQualityValue(IedConnection self, IedClientError* error, const 
  * \param value the boolean value to write
  */
 LIB61850_API void
-IedConnection_writeBooleanValue(IedConnection self, IedClientError* error, const char* objectReference,
-        FunctionalConstraint fc, bool value);
+IedConnection_writeBooleanValue(IedConnection self, IedClientError* error, const char * objectReference,
+                                FunctionalConstraint fc, bool value);
 
 /**
  * \brief write a functional constrained data attribute (FCDA) of type integer
@@ -1121,8 +1137,8 @@ IedConnection_writeBooleanValue(IedConnection self, IedClientError* error, const
  * \param value the int32_t value to write
  */
 LIB61850_API void
-IedConnection_writeInt32Value(IedConnection self, IedClientError* error, const char* objectReference,
-        FunctionalConstraint fc, int32_t value);
+IedConnection_writeInt32Value(IedConnection self, IedClientError* error, const char * objectReference,
+                              FunctionalConstraint fc, int32_t value);
 
 /**
  * \brief write a functional constrained data attribute (FCDA) of type unsigned (integer)
@@ -1134,8 +1150,8 @@ IedConnection_writeInt32Value(IedConnection self, IedClientError* error, const c
  * \param value the uint32_t value to write
  */
 LIB61850_API void
-IedConnection_writeUnsigned32Value(IedConnection self, IedClientError* error, const char* objectReference,
-        FunctionalConstraint fc, uint32_t value);
+IedConnection_writeUnsigned32Value(IedConnection self, IedClientError* error, const char * objectReference,
+                                   FunctionalConstraint fc, uint32_t value);
 
 /**
  * \brief write a functional constrained data attribute (FCDA) of type float
@@ -1147,16 +1163,16 @@ IedConnection_writeUnsigned32Value(IedConnection self, IedClientError* error, co
  * \param value the float value to write
  */
 LIB61850_API void
-IedConnection_writeFloatValue(IedConnection self, IedClientError* error, const char* objectReference,
-        FunctionalConstraint fc, float value);
+IedConnection_writeFloatValue(IedConnection self, IedClientError* error, const char * objectReference,
+                              FunctionalConstraint fc, float value);
 
 LIB61850_API void
-IedConnection_writeVisibleStringValue(IedConnection self, IedClientError* error, const char* objectReference,
-        FunctionalConstraint fc, char* value);
+IedConnection_writeVisibleStringValue(IedConnection self, IedClientError* error, const char * objectReference,
+                                      FunctionalConstraint fc, char * value);
 
 LIB61850_API void
-IedConnection_writeOctetString(IedConnection self, IedClientError* error, const char* objectReference,
-        FunctionalConstraint fc, uint8_t* value, int valueLength);
+IedConnection_writeOctetString(IedConnection self, IedClientError* error, const char * objectReference,
+                               FunctionalConstraint fc, uint8_t * value, int valueLength);
 
 /** @} */
 
@@ -1204,15 +1220,17 @@ IedConnection_writeOctetString(IedConnection self, IedClientError* error, const 
  *         the updateRcb parameter.
  */
 LIB61850_API ClientReportControlBlock
-IedConnection_getRCBValues(IedConnection self, IedClientError* error, const char* rcbReference,
-        ClientReportControlBlock updateRcb);
+IedConnection_getRCBValues(IedConnection self, IedClientError* error, const char * rcbReference,
+                           ClientReportControlBlock updateRcb);
 
 typedef void
-(*IedConnection_GetRCBValuesHandler) (uint32_t invokeId, void* parameter, IedClientError err, ClientReportControlBlock rcb);
+(*IedConnection_GetRCBValuesHandler) (uint32_t invokeId, void * parameter, IedClientError err,
+                                      ClientReportControlBlock rcb);
 
 LIB61850_API uint32_t
-IedConnection_getRCBValuesAsync(IedConnection self, IedClientError* error, const char* rcbReference, ClientReportControlBlock updateRcb,
-        IedConnection_GetRCBValuesHandler handler, void* parameter);
+IedConnection_getRCBValuesAsync(IedConnection self, IedClientError* error, const char * rcbReference,
+                                ClientReportControlBlock updateRcb,
+                                IedConnection_GetRCBValuesHandler handler, void * parameter);
 
 /** Describes the reason for the inclusion of the element in the report */
 typedef int ReasonForInclusion;
@@ -1311,11 +1329,11 @@ typedef int ReasonForInclusion;
  */
 LIB61850_API void
 IedConnection_setRCBValues(IedConnection self, IedClientError* error, ClientReportControlBlock rcb,
-        uint32_t parametersMask, bool singleRequest);
+                           uint32_t parametersMask, bool singleRequest);
 
 LIB61850_API uint32_t
 IedConnection_setRCBValuesAsync(IedConnection self, IedClientError* error, ClientReportControlBlock rcb,
-        uint32_t parametersMask, bool singleRequest, IedConnection_GenericServiceHandler handler, void* parameter);
+                                uint32_t parametersMask, bool singleRequest, IedConnection_GenericServiceHandler handler, void * parameter);
 
 /**
  * \brief Callback function for receiving reports
@@ -1323,7 +1341,7 @@ IedConnection_setRCBValuesAsync(IedConnection self, IedClientError* error, Clien
  * \param parameter a user provided parameter that is handed to the callback function
  * \param report a ClientReport instance that holds the informations contained in the received report
  */
-typedef void (*ReportCallbackFunction) (void* parameter, ClientReport report);
+typedef void (*ReportCallbackFunction) (void * parameter, ClientReport report);
 
 /**
  * \brief Install a report handler function for the specified report control block (RCB)
@@ -1347,8 +1365,9 @@ typedef void (*ReportCallbackFunction) (void* parameter, ClientReport report);
  * \param handlerParameter user provided parameter that will be passed to the callback function
  */
 LIB61850_API void
-IedConnection_installReportHandler(IedConnection self, const char* rcbReference, const char* rptId, ReportCallbackFunction handler,
-        void* handlerParameter);
+IedConnection_installReportHandler(IedConnection self, const char * rcbReference, const char * rptId,
+                                   ReportCallbackFunction handler,
+                                   void * handlerParameter);
 
 /**
  * \brief uninstall a report handler function for the specified report control block (RCB)
@@ -1359,7 +1378,7 @@ IedConnection_installReportHandler(IedConnection self, const char* rcbReference,
  * \param rcbReference object reference of the report control block
  */
 LIB61850_API void
-IedConnection_uninstallReportHandler(IedConnection self, const char* rcbReference);
+IedConnection_uninstallReportHandler(IedConnection self, const char * rcbReference);
 
 /**
  * \brief trigger a general interrogation (GI) report for the specified report control block (RCB)
@@ -1373,7 +1392,7 @@ IedConnection_uninstallReportHandler(IedConnection self, const char* rcbReferenc
  * \param rcbReference object reference of the report control block
  */
 LIB61850_API void
-IedConnection_triggerGIReport(IedConnection self, IedClientError* error, const char* rcbReference);
+IedConnection_triggerGIReport(IedConnection self, IedClientError* error, const char * rcbReference);
 
 /****************************************
  * Access to received reports
@@ -1387,7 +1406,7 @@ IedConnection_triggerGIReport(IedConnection self, IedClientError* error, const c
  * \param self the ClientReport instance
  * \return report data set name as 0 terminated string
  */
-LIB61850_API const char*
+LIB61850_API const char *
 ClientReport_getDataSetName(ClientReport self);
 
 /**
@@ -1400,7 +1419,7 @@ ClientReport_getDataSetName(ClientReport self);
  * \param self the ClientReport instance
  * \return an MmsValue array instance containing the data set values
  */
-LIB61850_API MmsValue*
+LIB61850_API MmsValue *
 ClientReport_getDataSetValues(ClientReport self);
 
 /**
@@ -1409,7 +1428,7 @@ ClientReport_getDataSetValues(ClientReport self);
  * \param self the ClientReport instance
  * \return report control block reference as string
  */
-LIB61850_API char*
+LIB61850_API char *
 ClientReport_getRcbReference(ClientReport self);
 
 /**
@@ -1418,7 +1437,7 @@ ClientReport_getRcbReference(ClientReport self);
  * \param self the ClientReport instance
  * \return report control block reference as string
  */
-LIB61850_API char*
+LIB61850_API char *
 ClientReport_getRptId(ClientReport self);
 
 /**
@@ -1441,7 +1460,7 @@ ClientReport_getReasonForInclusion(ClientReport self, int elementIndex);
  *
  * \return entryId or NULL
  */
-LIB61850_API MmsValue*
+LIB61850_API MmsValue *
 ClientReport_getEntryId(ClientReport self);
 
 /**
@@ -1561,7 +1580,7 @@ ClientReport_hasDataReference(ClientReport self);
  *
  * \param the data reference as string as provided by the report or NULL if the data reference is not available
  */
-LIB61850_API const char*
+LIB61850_API const char *
 ClientReport_getDataReference(ClientReport self, int elementIndex);
 
 
@@ -1621,7 +1640,7 @@ ClientReport_getMoreSeqmentsFollow(ClientReport self);
  *
  * \return the reason for inclusion as static human readable string
  */
-LIB61850_API char*
+LIB61850_API char *
 ReasonForInclusion_getValueAsString(ReasonForInclusion reasonCode);
 
 /**************************************************
@@ -1629,22 +1648,22 @@ ReasonForInclusion_getValueAsString(ReasonForInclusion reasonCode);
  **************************************************/
 
 LIB61850_API ClientReportControlBlock
-ClientReportControlBlock_create(const char* rcbReference);
+ClientReportControlBlock_create(const char * rcbReference);
 
 LIB61850_API void
 ClientReportControlBlock_destroy(ClientReportControlBlock self);
 
-LIB61850_API char*
+LIB61850_API char *
 ClientReportControlBlock_getObjectReference(ClientReportControlBlock self);
 
 LIB61850_API bool
 ClientReportControlBlock_isBuffered(ClientReportControlBlock self);
 
-LIB61850_API const char*
+LIB61850_API const char *
 ClientReportControlBlock_getRptId(ClientReportControlBlock self);
 
 LIB61850_API void
-ClientReportControlBlock_setRptId(ClientReportControlBlock self, const char* rptId);
+ClientReportControlBlock_setRptId(ClientReportControlBlock self, const char * rptId);
 
 LIB61850_API bool
 ClientReportControlBlock_getRptEna(ClientReportControlBlock self);
@@ -1658,7 +1677,7 @@ ClientReportControlBlock_getResv(ClientReportControlBlock self);
 LIB61850_API void
 ClientReportControlBlock_setResv(ClientReportControlBlock self, bool resv);
 
-LIB61850_API const char*
+LIB61850_API const char *
 ClientReportControlBlock_getDataSetReference(ClientReportControlBlock self);
 
 /**
@@ -1678,7 +1697,7 @@ ClientReportControlBlock_getDataSetReference(ClientReportControlBlock self);
  * \param dataSetReference the reference of the data set
  */
 LIB61850_API void
-ClientReportControlBlock_setDataSetReference(ClientReportControlBlock self, const char* dataSetReference);
+ClientReportControlBlock_setDataSetReference(ClientReportControlBlock self, const char * dataSetReference);
 
 LIB61850_API uint32_t
 ClientReportControlBlock_getConfRev(ClientReportControlBlock self);
@@ -1773,7 +1792,7 @@ ClientReportControlBlock_getResvTms(ClientReportControlBlock self);
 LIB61850_API void
 ClientReportControlBlock_setResvTms(ClientReportControlBlock self, int16_t resvTms);
 
-LIB61850_API MmsValue* /* <MMS_OCTET_STRING> */
+LIB61850_API MmsValue * /* <MMS_OCTET_STRING> */
 ClientReportControlBlock_getEntryId(ClientReportControlBlock self);
 
 LIB61850_API void
@@ -1782,7 +1801,7 @@ ClientReportControlBlock_setEntryId(ClientReportControlBlock self, MmsValue* ent
 LIB61850_API uint64_t
 ClientReportControlBlock_getEntryTime(ClientReportControlBlock self);
 
-LIB61850_API MmsValue* /* <MMS_OCTET_STRING> */
+LIB61850_API MmsValue * /* <MMS_OCTET_STRING> */
 ClientReportControlBlock_getOwner(ClientReportControlBlock self);
 
 
@@ -1816,10 +1835,11 @@ ClientReportControlBlock_getOwner(ClientReportControlBlock self);
  * \return data set instance with retrieved values of NULL if an error occurred.
  */
 LIB61850_API ClientDataSet
-IedConnection_readDataSetValues(IedConnection self, IedClientError* error, const char* dataSetReference, ClientDataSet dataSet);
+IedConnection_readDataSetValues(IedConnection self, IedClientError* error, const char * dataSetReference,
+                                ClientDataSet dataSet);
 
 typedef void
-(*IedConnection_ReadDataSetHandler) (uint32_t invokeId, void* parameter, IedClientError err, ClientDataSet dataSet);
+(*IedConnection_ReadDataSetHandler) (uint32_t invokeId, void * parameter, IedClientError err, ClientDataSet dataSet);
 
 /**
  * \brief get data set values from the server - async version
@@ -1841,8 +1861,9 @@ typedef void
  * \return the invoke ID of the request
  */
 LIB61850_API uint32_t
-IedConnection_readDataSetValuesAsync(IedConnection self, IedClientError* error, const char* dataSetReference, ClientDataSet dataSet,
-        IedConnection_ReadDataSetHandler handler, void* parameter);
+IedConnection_readDataSetValuesAsync(IedConnection self, IedClientError* error, const char * dataSetReference,
+                                     ClientDataSet dataSet,
+                                     IedConnection_ReadDataSetHandler handler, void * parameter);
 
 /**
  * \brief create a new data set at the connected server device
@@ -1862,7 +1883,8 @@ IedConnection_readDataSetValuesAsync(IedConnection self, IedClientError* error, 
  *
  */
 LIB61850_API void
-IedConnection_createDataSet(IedConnection self, IedClientError* error, const char* dataSetReference, LinkedList /* char* */ dataSetElements);
+IedConnection_createDataSet(IedConnection self, IedClientError* error, const char * dataSetReference,
+                            LinkedList /* char* */ dataSetElements);
 
 /**
  * \brief create a new data set at the connected server device
@@ -1886,8 +1908,9 @@ IedConnection_createDataSet(IedConnection self, IedClientError* error, const cha
  * \return the invoke ID of the request
  */
 LIB61850_API uint32_t
-IedConnection_createDataSetAsync(IedConnection self, IedClientError* error, const char* dataSetReference, LinkedList /* char* */ dataSetElements,
-        IedConnection_GenericServiceHandler handler, void* parameter);
+IedConnection_createDataSetAsync(IedConnection self, IedClientError* error, const char * dataSetReference,
+                                 LinkedList /* char* */ dataSetElements,
+                                 IedConnection_GenericServiceHandler handler, void * parameter);
 
 /**
  * \brief delete a deletable data set at the connected server device
@@ -1903,7 +1926,7 @@ IedConnection_createDataSetAsync(IedConnection self, IedClientError* error, cons
  * \return true if data set has been deleted, false otherwise
  */
 LIB61850_API bool
-IedConnection_deleteDataSet(IedConnection self, IedClientError* error, const char* dataSetReference);
+IedConnection_deleteDataSet(IedConnection self, IedClientError* error, const char * dataSetReference);
 
 /**
  * \brief delete a deletable data set at the connected server device - asynchronous version
@@ -1923,8 +1946,8 @@ IedConnection_deleteDataSet(IedConnection self, IedClientError* error, const cha
  * \return the invoke ID of the request
  */
 LIB61850_API uint32_t
-IedConnection_deleteDataSetAsync(IedConnection self, IedClientError* error, const char* dataSetReference,
-        IedConnection_GenericServiceHandler handler, void* parameter);
+IedConnection_deleteDataSetAsync(IedConnection self, IedClientError* error, const char * dataSetReference,
+                                 IedConnection_GenericServiceHandler handler, void * parameter);
 
 /**
  * \brief read the data set directory
@@ -1941,7 +1964,8 @@ IedConnection_deleteDataSetAsync(IedConnection self, IedClientError* error, cons
  * \return LinkedList containing the data set elements as char* strings.
  */
 LIB61850_API LinkedList /* <char*> */
-IedConnection_getDataSetDirectory(IedConnection self, IedClientError* error, const char* dataSetReference, bool* isDeletable);
+IedConnection_getDataSetDirectory(IedConnection self, IedClientError* error, const char * dataSetReference,
+                                  bool* isDeletable);
 
 /**
  * \brief GetDataSetDirectory response or timeout callback
@@ -1951,7 +1975,8 @@ IedConnection_getDataSetDirectory(IedConnection self, IedClientError* error, con
  * \param isDeletable this is an output parameter indicating that the requested data set is deletable by clients.
  */
 typedef void
-(*IedConnection_GetDataSetDirectoryHandler) (uint32_t invokeId, void* parameter, IedClientError err, LinkedList /* <char*> */ dataSetDirectory, bool isDeletable);
+(*IedConnection_GetDataSetDirectoryHandler) (uint32_t invokeId, void * parameter, IedClientError err,
+                                             LinkedList /* <char*> */ dataSetDirectory, bool isDeletable);
 
 /**
  * \brief read the data set directory - asynchronous version
@@ -1968,8 +1993,8 @@ typedef void
  * \return the invoke ID of the request
  */
 LIB61850_API uint32_t
-IedConnection_getDataSetDirectoryAsync(IedConnection self, IedClientError* error, const char* dataSetReference,
-        IedConnection_GetDataSetDirectoryHandler handler, void* parameter);
+IedConnection_getDataSetDirectoryAsync(IedConnection self, IedClientError* error, const char * dataSetReference,
+                                       IedConnection_GetDataSetDirectoryHandler handler, void * parameter);
 
 /**
  * \brief Write the data set values to the server
@@ -1987,8 +2012,8 @@ IedConnection_getDataSetDirectoryAsync(IedConnection self, IedClientError* error
  * \param[out] accessResults the access results for each data set member
  */
 LIB61850_API void
-IedConnection_writeDataSetValues(IedConnection self, IedClientError* error, const char* dataSetReference,
-        LinkedList/*<MmsValue*>*/ values, /* OUTPUT */LinkedList* /* <MmsValue*> */accessResults);
+IedConnection_writeDataSetValues(IedConnection self, IedClientError* error, const char * dataSetReference,
+                                 LinkedList/*<MmsValue*>*/ values, /* OUTPUT */LinkedList* /* <MmsValue*> */accessResults);
 
 /**
  * \brief Callback handler for asynchronous write data set values services (set data set)
@@ -1999,7 +2024,8 @@ IedConnection_writeDataSetValues(IedConnection self, IedClientError* error, cons
  * \param accessResults the list of access results for the data set entries.
  */
 typedef void
-(*IedConnection_WriteDataSetHandler) (uint32_t invokeId, void* parameter, IedClientError err, LinkedList /* <MmsValue*> */accessResults);
+(*IedConnection_WriteDataSetHandler) (uint32_t invokeId, void * parameter, IedClientError err,
+                                      LinkedList /* <MmsValue*> */accessResults);
 
 /**
  * \brief Write the data set values to the server - async version
@@ -2023,8 +2049,8 @@ typedef void
  * \return the invoke ID of the request
  */
 LIB61850_API uint32_t
-IedConnection_writeDataSetValuesAsync(IedConnection self, IedClientError* error, const char* dataSetReference,
-        LinkedList/*<MmsValue*>*/ values, IedConnection_WriteDataSetHandler handler, void* parameter);
+IedConnection_writeDataSetValuesAsync(IedConnection self, IedClientError* error, const char * dataSetReference,
+                                      LinkedList/*<MmsValue*>*/ values, IedConnection_WriteDataSetHandler handler, void * parameter);
 
 
 /********************************************************
@@ -2056,7 +2082,7 @@ ClientDataSet_destroy(ClientDataSet self);
  *
  * \return the locally stored data set values as MmsValue object of type MMS_ARRAY.
  */
-LIB61850_API MmsValue*
+LIB61850_API MmsValue *
 ClientDataSet_getValues(ClientDataSet self);
 
 /**
@@ -2066,7 +2092,7 @@ ClientDataSet_getValues(ClientDataSet self);
  *
  * \return the object reference of the data set.
  */
-LIB61850_API char*
+LIB61850_API char *
 ClientDataSet_getReference(ClientDataSet self);
 
 /**
@@ -2091,7 +2117,7 @@ ClientDataSet_getDataSetSize(ClientDataSet self);
  * @{
  */
 
-typedef struct sControlObjectClient* ControlObjectClient;
+typedef struct sControlObjectClient * ControlObjectClient;
 
 /**
  * \brief Create a new client control object
@@ -2110,7 +2136,7 @@ typedef struct sControlObjectClient* ControlObjectClient;
  * \return the newly created instance or NULL if the creation failed
  */
 LIB61850_API ControlObjectClient
-ControlObjectClient_create(const char* objectReference, IedConnection connection);
+ControlObjectClient_create(const char * objectReference, IedConnection connection);
 
 /**
  * \brief Create a new client control object - doesn't send requests to the server (doesn't block)
@@ -2125,7 +2151,8 @@ ControlObjectClient_create(const char* objectReference, IedConnection connection
  * \param controlObjectSpec specification of the controllable data objects - used to derive required information to handle the control object
  */
 LIB61850_API ControlObjectClient
-ControlObjectClient_createEx(const char* objectReference, IedConnection connection, ControlModel ctlModel, MmsVariableSpecification* controlObjectSpec);
+ControlObjectClient_createEx(const char * objectReference, IedConnection connection, ControlModel ctlModel,
+                             MmsVariableSpecification* controlObjectSpec);
 
 /**
  * \brief Destroy the client control object instance and release all related resources
@@ -2143,9 +2170,9 @@ ControlObjectClient_destroy(ControlObjectClient self);
  */
 typedef enum
 {
-    CONTROL_ACTION_TYPE_SELECT = 0, /** < callback was invoked because of a select command */
-    CONTROL_ACTION_TYPE_OPERATE = 1,  /** < callback was invoked because of an operate command */
-    CONTROL_ACTION_TYPE_CANCEL = 2 /** < callback was invoked because of a cancel command */
+  CONTROL_ACTION_TYPE_SELECT = 0, /** < callback was invoked because of a select command */
+  CONTROL_ACTION_TYPE_OPERATE = 1,  /** < callback was invoked because of an operate command */
+  CONTROL_ACTION_TYPE_CANCEL = 2 /** < callback was invoked because of a cancel command */
 } ControlActionType;
 
 /**
@@ -2165,7 +2192,8 @@ typedef enum
  *
  */
 typedef void
-(*ControlObjectClient_ControlActionHandler) (uint32_t invokeId, void* parameter, IedClientError err, ControlActionType type, bool success);
+(*ControlObjectClient_ControlActionHandler) (uint32_t invokeId, void * parameter, IedClientError err,
+                                             ControlActionType type, bool success);
 
 /**
  * \brief Get the object reference of the control data object
@@ -2174,7 +2202,7 @@ typedef void
  *
  * \return the object reference (string is valid only as long as the \ref ControlObjectClient instance exists).
  */
-LIB61850_API const char*
+LIB61850_API const char *
 ControlObjectClient_getObjectReference(ControlObjectClient self);
 
 /**
@@ -2302,7 +2330,7 @@ ControlObjectClient_cancel(ControlObjectClient self);
  */
 LIB61850_API uint32_t
 ControlObjectClient_operateAsync(ControlObjectClient self, IedClientError* err, MmsValue* ctlVal, uint64_t operTime,
-        ControlObjectClient_ControlActionHandler handler, void* parameter);
+                                 ControlObjectClient_ControlActionHandler handler, void * parameter);
 
 /**
  * \brief Send a select command to the server - async version
@@ -2318,7 +2346,8 @@ ControlObjectClient_operateAsync(ControlObjectClient self, IedClientError* err, 
  * \return the invoke ID of the request
  */
 LIB61850_API uint32_t
-ControlObjectClient_selectAsync(ControlObjectClient self, IedClientError* err, ControlObjectClient_ControlActionHandler handler, void* parameter);
+ControlObjectClient_selectAsync(ControlObjectClient self, IedClientError* err,
+                                ControlObjectClient_ControlActionHandler handler, void * parameter);
 
 /**
  * \brief Send a select-with-value command to the server - async version
@@ -2336,7 +2365,7 @@ ControlObjectClient_selectAsync(ControlObjectClient self, IedClientError* err, C
  */
 LIB61850_API uint32_t
 ControlObjectClient_selectWithValueAsync(ControlObjectClient self, IedClientError* err, MmsValue* ctlVal,
-        ControlObjectClient_ControlActionHandler handler, void* parameter);
+                                         ControlObjectClient_ControlActionHandler handler, void * parameter);
 
 /**
  * \brief Send a cancel command to the server - async version
@@ -2352,7 +2381,8 @@ ControlObjectClient_selectWithValueAsync(ControlObjectClient self, IedClientErro
  * \return the invoke ID of the request
  */
 LIB61850_API uint32_t
-ControlObjectClient_cancelAsync(ControlObjectClient self, IedClientError* err, ControlObjectClient_ControlActionHandler handler, void* parameter);
+ControlObjectClient_cancelAsync(ControlObjectClient self, IedClientError* err,
+                                ControlObjectClient_ControlActionHandler handler, void * parameter);
 
 /**
  * \brief Get the last received control application error
@@ -2387,7 +2417,7 @@ ControlObjectClient_setTestMode(ControlObjectClient self, bool value);
  * \param orCat originator category (see \ref ORIGINATOR_CATEGORIES)
  */
 LIB61850_API void
-ControlObjectClient_setOrigin(ControlObjectClient self, const char* orIdent, int orCat);
+ControlObjectClient_setOrigin(ControlObjectClient self, const char * orIdent, int orCat);
 
 /**
  * \brief Use a constant T parameter for all command (select, operate, cancel) of a single control sequence
@@ -2454,7 +2484,7 @@ ControlObjectClient_setSynchroCheck(ControlObjectClient self, bool value);
  * \param parameter the user parameter that is passed to the callback function
  * \param controlClient the ControlObjectClient instance
  */
-typedef void (*CommandTerminationHandler) (void* parameter, ControlObjectClient controlClient);
+typedef void (*CommandTerminationHandler) (void * parameter, ControlObjectClient controlClient);
 
 /**
  * \brief Set the command termination callback handler for this control object
@@ -2472,7 +2502,7 @@ typedef void (*CommandTerminationHandler) (void* parameter, ControlObjectClient 
  */
 LIB61850_API void
 ControlObjectClient_setCommandTerminationHandler(ControlObjectClient self, CommandTerminationHandler handler,
-        void* handlerParameter);
+                                                 void * handlerParameter);
 
 /** @} */
 
@@ -2550,7 +2580,7 @@ IedConnection_getServerDirectory(IedConnection self, IedClientError* error, bool
  * \return  LinkedList with string elements representing the logical node names
  */
 LIB61850_API LinkedList /*<char*>*/
-IedConnection_getLogicalDeviceDirectory(IedConnection self, IedClientError* error, const char* logicalDeviceName);
+IedConnection_getLogicalDeviceDirectory(IedConnection self, IedClientError* error, const char * logicalDeviceName);
 
 /**
  * \brief returns a list of all MMS variables that are children of the given logical node
@@ -2569,7 +2599,7 @@ IedConnection_getLogicalDeviceDirectory(IedConnection self, IedClientError* erro
  */
 LIB61850_API LinkedList /*<char*>*/
 IedConnection_getLogicalNodeVariables(IedConnection self, IedClientError* error,
-		const char* logicalNodeReference);
+                                      const char * logicalNodeReference);
 
 /**
  * \brief returns the directory of the given logical node (LN) containing elements of the specified ACSI class
@@ -2589,7 +2619,7 @@ IedConnection_getLogicalNodeVariables(IedConnection self, IedClientError* error,
  */
 LIB61850_API LinkedList /*<char*>*/
 IedConnection_getLogicalNodeDirectory(IedConnection self, IedClientError* error,
-		const char* logicalNodeReference, ACSIClass acsiClass);
+                                      const char * logicalNodeReference, ACSIClass acsiClass);
 
 /**
  * \brief returns the directory of the given data object (DO)
@@ -2607,7 +2637,7 @@ IedConnection_getLogicalNodeDirectory(IedConnection self, IedClientError* error,
  * \return list of all data attributes or sub data objects as C strings in a LinkedList
  */
 LIB61850_API LinkedList /*<char*>*/
-IedConnection_getDataDirectory(IedConnection self, IedClientError* error, const char* dataReference);
+IedConnection_getDataDirectory(IedConnection self, IedClientError* error, const char * dataReference);
 
 /**
  * \brief returns the directory of the given data object (DO)
@@ -2626,7 +2656,7 @@ IedConnection_getDataDirectory(IedConnection self, IedClientError* error, const 
  * \return list of all data attributes or sub data objects as C strings in a LinkedList
  */
 LIB61850_API LinkedList /*<char*>*/
-IedConnection_getDataDirectoryFC(IedConnection self, IedClientError* error, const char* dataReference);
+IedConnection_getDataDirectoryFC(IedConnection self, IedClientError* error, const char * dataReference);
 
 /**
  * \brief returns the directory of the given data object/data attribute with the given FC
@@ -2648,7 +2678,8 @@ IedConnection_getDataDirectoryFC(IedConnection self, IedClientError* error, cons
  * \return list of all data attributes or sub data objects as C strings in a LinkedList
  */
 LIB61850_API LinkedList
-IedConnection_getDataDirectoryByFC(IedConnection self, IedClientError* error, const char* dataReference, FunctionalConstraint fc);
+IedConnection_getDataDirectoryByFC(IedConnection self, IedClientError* error, const char * dataReference,
+                                   FunctionalConstraint fc);
 
 /**
  * \brief return the MMS variable type specification of the data attribute referenced by dataAttributeReference and function constraint fc.
@@ -2665,9 +2696,9 @@ IedConnection_getDataDirectoryByFC(IedConnection self, IedClientError* error, co
  *
  * \return MmsVariableSpecification of the data attribute.
  */
-LIB61850_API MmsVariableSpecification*
-IedConnection_getVariableSpecification(IedConnection self, IedClientError* error, const char* dataAttributeReference,
-        FunctionalConstraint fc);
+LIB61850_API MmsVariableSpecification *
+IedConnection_getVariableSpecification(IedConnection self, IedClientError* error, const char * dataAttributeReference,
+                                       FunctionalConstraint fc);
 
 /**
  * \brief Get all variables of the logical device
@@ -2682,7 +2713,7 @@ IedConnection_getVariableSpecification(IedConnection self, IedClientError* error
  * \return a \ref LinkedList with the MMS variable names as string. Has to be released by the caller
  */
 LIB61850_API LinkedList
-IedConnection_getLogicalDeviceVariables(IedConnection self, IedClientError* error, const char* ldName);
+IedConnection_getLogicalDeviceVariables(IedConnection self, IedClientError* error, const char * ldName);
 
 /**
  * \brief Get the data set names of the logical device
@@ -2697,14 +2728,15 @@ IedConnection_getLogicalDeviceVariables(IedConnection self, IedClientError* erro
  * \return a \ref LinkedList with data set names as string. Has to be released by the caller.
  */
 LIB61850_API LinkedList
-IedConnection_getLogicalDeviceDataSets(IedConnection self, IedClientError* error, const char* ldName);
+IedConnection_getLogicalDeviceDataSets(IedConnection self, IedClientError* error, const char * ldName);
 
 /*****************************************
  * Asynchronous model discovery functions
  *****************************************/
 
 typedef void
-(*IedConnection_GetNameListHandler) (uint32_t invokeId, void* parameter, IedClientError err, LinkedList nameList, bool moreFollows);
+(*IedConnection_GetNameListHandler) (uint32_t invokeId, void * parameter, IedClientError err, LinkedList nameList,
+                                     bool moreFollows);
 
 /**
  * \brief Get the server directory (logical devices name) - asynchronous version
@@ -2719,8 +2751,9 @@ typedef void
  * \return the invoke ID of the request
  */
 LIB61850_API uint32_t
-IedConnection_getServerDirectoryAsync(IedConnection self, IedClientError* error, const char* continueAfter, LinkedList result,
-        IedConnection_GetNameListHandler handler, void* parameter);
+IedConnection_getServerDirectoryAsync(IedConnection self, IedClientError* error, const char * continueAfter,
+                                      LinkedList result,
+                                      IedConnection_GetNameListHandler handler, void * parameter);
 
 /**
  * \brief Get the variables in the logical device - asynchronous version
@@ -2739,8 +2772,9 @@ IedConnection_getServerDirectoryAsync(IedConnection self, IedClientError* error,
  * \return the invoke ID of the request
  */
 LIB61850_API uint32_t
-IedConnection_getLogicalDeviceVariablesAsync(IedConnection self, IedClientError* error, const char* ldName, const char* continueAfter, LinkedList result,
-        IedConnection_GetNameListHandler handler, void* parameter);
+IedConnection_getLogicalDeviceVariablesAsync(IedConnection self, IedClientError* error, const char * ldName,
+                                             const char * continueAfter, LinkedList result,
+                                             IedConnection_GetNameListHandler handler, void * parameter);
 
 /**
  * \brief Get the data set names in the logical device - asynchronous version
@@ -2759,12 +2793,14 @@ IedConnection_getLogicalDeviceVariablesAsync(IedConnection self, IedClientError*
  * \return the invoke ID of the request
  */
 LIB61850_API uint32_t
-IedConnection_getLogicalDeviceDataSetsAsync(IedConnection self, IedClientError* error, const char* ldName, const char* continueAfter, LinkedList result,
-        IedConnection_GetNameListHandler handler, void* parameter);
+IedConnection_getLogicalDeviceDataSetsAsync(IedConnection self, IedClientError* error, const char * ldName,
+                                            const char * continueAfter, LinkedList result,
+                                            IedConnection_GetNameListHandler handler, void * parameter);
 
 
 typedef void
-(*IedConnection_GetVariableSpecificationHandler) (uint32_t invokeId, void* parameter, IedClientError err, MmsVariableSpecification* spec);
+(*IedConnection_GetVariableSpecificationHandler) (uint32_t invokeId, void * parameter, IedClientError err,
+                                                  MmsVariableSpecification* spec);
 
 /**
  * \brief Get the specification of a variable (data attribute or functional constraint data object) - asynchronous version
@@ -2778,8 +2814,9 @@ typedef void
  * \return the invoke ID of the request
  */
 LIB61850_API uint32_t
-IedConnection_getVariableSpecificationAsync(IedConnection self, IedClientError* error, const char* dataAttributeReference,
-        FunctionalConstraint fc, IedConnection_GetVariableSpecificationHandler handler, void* parameter);
+IedConnection_getVariableSpecificationAsync(IedConnection self, IedClientError* error,
+                                            const char * dataAttributeReference,
+                                            FunctionalConstraint fc, IedConnection_GetVariableSpecificationHandler handler, void * parameter);
 
 /** @} */
 
@@ -2807,8 +2844,8 @@ IedConnection_getVariableSpecificationAsync(IedConnection self, IedClientError* 
  * \return list of MmsJournalEntry objects matching the specification
  */
 LIB61850_API LinkedList /* <MmsJournalEntry> */
-IedConnection_queryLogByTime(IedConnection self, IedClientError* error, const char* logReference,
-        uint64_t startTime, uint64_t endTime, bool* moreFollows);
+IedConnection_queryLogByTime(IedConnection self, IedClientError* error, const char * logReference,
+                             uint64_t startTime, uint64_t endTime, bool* moreFollows);
 
 /**
  * \brief Implementation of the QueryLogAfter ACSI service
@@ -2828,20 +2865,21 @@ IedConnection_queryLogByTime(IedConnection self, IedClientError* error, const ch
  * \return list of MmsJournalEntry objects matching the specification
  */
 LIB61850_API LinkedList /* <MmsJournalEntry> */
-IedConnection_queryLogAfter(IedConnection self, IedClientError* error, const char* logReference,
-        MmsValue* entryID, uint64_t timeStamp, bool* moreFollows);
+IedConnection_queryLogAfter(IedConnection self, IedClientError* error, const char * logReference,
+                            MmsValue* entryID, uint64_t timeStamp, bool* moreFollows);
 
 
 typedef void
-(*IedConnection_QueryLogHandler) (uint32_t invokeId, void* parameter, IedClientError mmsError, LinkedList /* <MmsJournalEntry> */ journalEntries, bool moreFollows);
+(*IedConnection_QueryLogHandler) (uint32_t invokeId, void * parameter, IedClientError mmsError,
+                                  LinkedList /* <MmsJournalEntry> */ journalEntries, bool moreFollows);
 
 LIB61850_API uint32_t
-IedConnection_queryLogByTimeAsync(IedConnection self, IedClientError* error, const char* logReference,
-        uint64_t startTime, uint64_t endTime, IedConnection_QueryLogHandler handler, void* parameter);
+IedConnection_queryLogByTimeAsync(IedConnection self, IedClientError* error, const char * logReference,
+                                  uint64_t startTime, uint64_t endTime, IedConnection_QueryLogHandler handler, void * parameter);
 
 LIB61850_API uint32_t
-IedConnection_queryLogAfterAsync(IedConnection self, IedClientError* error, const char* logReference,
-        MmsValue* entryID, uint64_t timeStamp, IedConnection_QueryLogHandler handler, void* parameter);
+IedConnection_queryLogAfterAsync(IedConnection self, IedClientError* error, const char * logReference,
+                                 MmsValue* entryID, uint64_t timeStamp, IedConnection_QueryLogHandler handler, void * parameter);
 
 /** @} */
 
@@ -2851,13 +2889,13 @@ IedConnection_queryLogAfterAsync(IedConnection self, IedClientError* error, cons
  * @{
  */
 
-typedef struct sFileDirectoryEntry* FileDirectoryEntry;
+typedef struct sFileDirectoryEntry * FileDirectoryEntry;
 
 /**
  * @deprecated Will be removed from API
  */
 LIB61850_API FileDirectoryEntry
-FileDirectoryEntry_create(const char* fileName, uint32_t fileSize, uint64_t lastModified);
+FileDirectoryEntry_create(const char * fileName, uint32_t fileSize, uint64_t lastModified);
 
 /**
  * \brief Destroy a FileDirectoryEntry object (free all resources)
@@ -2876,7 +2914,7 @@ FileDirectoryEntry_destroy(FileDirectoryEntry self);
  *
  * \return name of the file as null terminated string
  */
-LIB61850_API const char*
+LIB61850_API const char *
 FileDirectoryEntry_getFileName(FileDirectoryEntry self);
 
 /**
@@ -2919,7 +2957,7 @@ FileDirectoryEntry_getLastModified(FileDirectoryEntry self);
  * \return the list of directory entries. The return type is a LinkedList with FileDirectoryEntry elements
  */
 LIB61850_API LinkedList /*<FileDirectoryEntry>*/
-IedConnection_getFileDirectory(IedConnection self, IedClientError* error, const char* directoryName);
+IedConnection_getFileDirectory(IedConnection self, IedClientError* error, const char * directoryName);
 
 
 /**
@@ -2950,8 +2988,9 @@ IedConnection_getFileDirectory(IedConnection self, IedClientError* error, const 
  * \return the list of directory entries. The return type is a LinkedList with FileDirectoryEntry elements
  */
 LIB61850_API LinkedList /*<FileDirectoryEntry>*/
-IedConnection_getFileDirectoryEx(IedConnection self, IedClientError* error, const char* directoryName, const char* continueAfter,
-        bool* moreFollows);
+IedConnection_getFileDirectoryEx(IedConnection self, IedClientError* error, const char * directoryName,
+                                 const char * continueAfter,
+                                 bool* moreFollows);
 
 /**
  * \brief Callback handler for the get file directory service
@@ -2978,8 +3017,9 @@ IedConnection_getFileDirectoryEx(IedConnection self, IedClientError* error, cons
  * \return return false when the request has to be stopped (no further callback invokations), true otherwise
  */
 typedef bool
-(*IedConnection_FileDirectoryEntryHandler) (uint32_t invokeId, void* parameter, IedClientError err, char* filename, uint32_t size, uint64_t lastModfified,
-        bool moreFollows);
+(*IedConnection_FileDirectoryEntryHandler) (uint32_t invokeId, void * parameter, IedClientError err, char * filename,
+                                            uint32_t size, uint64_t lastModfified,
+                                            bool moreFollows);
 
 /**
  * \brief Get file directory (single request) - asynchronous version
@@ -3000,8 +3040,9 @@ typedef bool
  * \return the invokeId of the first file directory request
  */
 LIB61850_API uint32_t
-IedConnection_getFileDirectoryAsyncEx(IedConnection self, IedClientError* error, const char* directoryName, const char* continueAfter,
-        IedConnection_FileDirectoryEntryHandler handler, void* parameter);
+IedConnection_getFileDirectoryAsyncEx(IedConnection self, IedClientError* error, const char * directoryName,
+                                      const char * continueAfter,
+                                      IedConnection_FileDirectoryEntryHandler handler, void * parameter);
 
 /**
  * \brief user provided handler to receive the data of the GetFile request
@@ -3018,7 +3059,7 @@ IedConnection_getFileDirectoryAsyncEx(IedConnection self, IedClientError* error,
  *         should be stopped. E.g. if the file cannot be stored client side due to missing resources.
  */
 typedef bool
-(*IedClientGetFileHandler) (void* parameter, uint8_t* buffer, uint32_t bytesRead);
+(*IedClientGetFileHandler) (void * parameter, uint8_t * buffer, uint32_t bytesRead);
 
 /**
  * \brief Implementation of the GetFile ACSI service
@@ -3032,8 +3073,8 @@ typedef bool
  * \return number of bytes received
  */
 LIB61850_API uint32_t
-IedConnection_getFile(IedConnection self, IedClientError* error, const char* fileName, IedClientGetFileHandler handler,
-        void* handlerParameter);
+IedConnection_getFile(IedConnection self, IedClientError* error, const char * fileName, IedClientGetFileHandler handler,
+                      void * handlerParameter);
 
 
 /**
@@ -3055,8 +3096,9 @@ IedConnection_getFile(IedConnection self, IedClientError* error, const char* fil
  * \return true, continue the file download when moreFollows is true, false, stop file download
  */
 typedef bool
-(*IedConnection_GetFileAsyncHandler) (uint32_t invokeId, void* parameter, IedClientError err, uint32_t originalInvokeId,
-        uint8_t* buffer, uint32_t bytesRead, bool moreFollows);
+(*IedConnection_GetFileAsyncHandler) (uint32_t invokeId, void * parameter, IedClientError err,
+                                      uint32_t originalInvokeId,
+                                      uint8_t * buffer, uint32_t bytesRead, bool moreFollows);
 
 
 /**
@@ -3076,8 +3118,9 @@ typedef bool
  * \return invokeId of the first sent request
  */
 LIB61850_API uint32_t
-IedConnection_getFileAsync(IedConnection self, IedClientError* error, const char* fileName, IedConnection_GetFileAsyncHandler handler,
-        void* parameter);
+IedConnection_getFileAsync(IedConnection self, IedClientError* error, const char * fileName,
+                           IedConnection_GetFileAsyncHandler handler,
+                           void * parameter);
 
 /**
  * \brief Set the virtual filestore basepath for the setFile service
@@ -3090,7 +3133,7 @@ IedConnection_getFileAsync(IedConnection self, IedClientError* error, const char
  * \param basepath the new virtual filestore basepath
  */
 LIB61850_API void
-IedConnection_setFilestoreBasepath(IedConnection, const char* basepath);
+IedConnection_setFilestoreBasepath(IedConnection, const char * basepath);
 
 /**
  * \brief Implementation of the SetFile ACSI service
@@ -3103,7 +3146,8 @@ IedConnection_setFilestoreBasepath(IedConnection, const char* basepath);
  * \param destinationFilename the filename of the remote (service side) file
  */
 LIB61850_API void
-IedConnection_setFile(IedConnection self, IedClientError* error, const char* sourceFilename, const char* destinationFilename);
+IedConnection_setFile(IedConnection self, IedClientError* error, const char * sourceFilename,
+                      const char * destinationFilename);
 
 /**
  * \brief Implementation of the SetFile ACSI service - asynchronous version
@@ -3118,8 +3162,9 @@ IedConnection_setFile(IedConnection self, IedClientError* error, const char* sou
  * \param parameter user provided callback parameter
  */
 LIB61850_API uint32_t
-IedConnection_setFileAsync(IedConnection self, IedClientError* error, const char* sourceFilename, const char* destinationFilename,
-        IedConnection_GenericServiceHandler handler, void* parameter);
+IedConnection_setFileAsync(IedConnection self, IedClientError* error, const char * sourceFilename,
+                           const char * destinationFilename,
+                           IedConnection_GenericServiceHandler handler, void * parameter);
 
 /**
  * \brief Implementation of the DeleteFile ACSI service
@@ -3131,7 +3176,7 @@ IedConnection_setFileAsync(IedConnection self, IedClientError* error, const char
  * \param fileName the name of the file to delete
  */
 LIB61850_API void
-IedConnection_deleteFile(IedConnection self, IedClientError* error, const char* fileName);
+IedConnection_deleteFile(IedConnection self, IedClientError* error, const char * fileName);
 
 /**
  * \brief Implementation of the DeleteFile ACSI service - asynchronous version
@@ -3145,8 +3190,8 @@ IedConnection_deleteFile(IedConnection self, IedClientError* error, const char* 
  * \param parameter user provided callback parameter
  */
 LIB61850_API uint32_t
-IedConnection_deleteFileAsync(IedConnection self, IedClientError* error, const char* fileName,
-        IedConnection_GenericServiceHandler handler, void* parameter);
+IedConnection_deleteFileAsync(IedConnection self, IedClientError* error, const char * fileName,
+                              IedConnection_GenericServiceHandler handler, void * parameter);
 
 
 /** @} */

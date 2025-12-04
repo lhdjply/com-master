@@ -49,10 +49,10 @@ extern "C" {
  *
  * \return the data model to be used by \ref IedServer
  */
-LIB61850_API IedModel*
-ConfigFileParser_createModelFromConfigFileEx(const char* filename);
+LIB61850_API IedModel *
+ConfigFileParser_createModelFromConfigFileEx(const char * filename);
 
-LIB61850_API IedModel*
+LIB61850_API IedModel *
 ConfigFileParser_createModelFromConfigFile(FileHandle fileHandle);
 
 /**@}*/

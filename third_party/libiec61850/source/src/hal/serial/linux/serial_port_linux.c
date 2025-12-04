@@ -22,242 +22,261 @@
 #include "hal_serial.h"
 #include "hal_time.h"
 
-struct sSerialPort {
-    char interfaceName[100];
-    int fd;
-    int baudRate;
-    uint8_t dataBits;
-    char parity;
-    uint8_t stopBits;
-    uint64_t lastSentTime;
-    int timeout;
-    SerialPortError lastError;
+struct sSerialPort
+{
+  char interfaceName[100];
+  int fd;
+  int baudRate;
+  uint8_t dataBits;
+  char parity;
+  uint8_t stopBits;
+  uint64_t lastSentTime;
+  int timeout;
+  SerialPortError lastError;
 };
 
 SerialPort
-SerialPort_create(const char* interfaceName, int baudRate, uint8_t dataBits, char parity, uint8_t stopBits)
+SerialPort_create(const char * interfaceName, int baudRate, uint8_t dataBits, char parity, uint8_t stopBits)
 {
-    SerialPort self = (SerialPort) GLOBAL_MALLOC(sizeof(struct sSerialPort));
+  SerialPort self = (SerialPort) GLOBAL_MALLOC(sizeof(struct sSerialPort));
 
-    if (self != NULL) {
-        self->fd = -1;
-        self->baudRate = baudRate;
-        self->dataBits = dataBits;
-        self->stopBits = stopBits;
-        self->parity = parity;
-        self->lastSentTime = 0;
-        self->timeout = 100; /* 100 ms */
-        strncpy(self->interfaceName, interfaceName, 99);
-        self->lastError = SERIAL_PORT_ERROR_NONE;
-    }
+  if(self != NULL)
+  {
+    self->fd = -1;
+    self->baudRate = baudRate;
+    self->dataBits = dataBits;
+    self->stopBits = stopBits;
+    self->parity = parity;
+    self->lastSentTime = 0;
+    self->timeout = 100; /* 100 ms */
+    strncpy(self->interfaceName, interfaceName, 99);
+    self->lastError = SERIAL_PORT_ERROR_NONE;
+  }
 
-    return self;
+  return self;
 }
 
 void
 SerialPort_destroy(SerialPort self)
 {
-    if (self != NULL) {
-        GLOBAL_FREEMEM(self);
-    }
+  if(self != NULL)
+  {
+    GLOBAL_FREEMEM(self);
+  }
 }
 
 bool
 SerialPort_open(SerialPort self)
 {
-    self->fd = open(self->interfaceName, O_RDWR | O_NOCTTY | O_NDELAY | O_EXCL);
+  self->fd = open(self->interfaceName, O_RDWR | O_NOCTTY | O_NDELAY | O_EXCL);
 
-    if (self->fd == -1) {
-        self->lastError = SERIAL_PORT_ERROR_OPEN_FAILED;
-        return false;
-    }
+  if(self->fd == -1)
+  {
+    self->lastError = SERIAL_PORT_ERROR_OPEN_FAILED;
+    return false;
+  }
 
-    struct termios tios;
-    speed_t baudrate;
+  struct termios tios;
+  speed_t baudrate;
 
-    tcgetattr(self->fd, &tios);
+  tcgetattr(self->fd, &tios);
 
-    switch (self->baudRate) {
+  switch(self->baudRate)
+  {
     case 110:
-        baudrate = B110;
-        break;
+      baudrate = B110;
+      break;
     case 300:
-        baudrate = B300;
-        break;
+      baudrate = B300;
+      break;
     case 600:
-        baudrate = B600;
-        break;
+      baudrate = B600;
+      break;
     case 1200:
-        baudrate = B1200;
-        break;
+      baudrate = B1200;
+      break;
     case 2400:
-        baudrate = B2400;
-        break;
+      baudrate = B2400;
+      break;
     case 4800:
-        baudrate = B4800;
-        break;
+      baudrate = B4800;
+      break;
     case 9600:
-        baudrate = B9600;
-        break;
+      baudrate = B9600;
+      break;
     case 19200:
-        baudrate = B19200;
-        break;
+      baudrate = B19200;
+      break;
     case 38400:
-        baudrate = B38400;
-        break;
+      baudrate = B38400;
+      break;
     case 57600:
-        baudrate = B57600;
-        break;
+      baudrate = B57600;
+      break;
     case 115200:
-        baudrate = B115200;
-        break;
+      baudrate = B115200;
+      break;
     default:
-        baudrate = B9600;
-        self->lastError = SERIAL_PORT_ERROR_INVALID_BAUDRATE;
-    }
+      baudrate = B9600;
+      self->lastError = SERIAL_PORT_ERROR_INVALID_BAUDRATE;
+  }
 
-    /* Set baud rate */
-    if ((cfsetispeed(&tios, baudrate) < 0) || (cfsetospeed(&tios, baudrate) < 0)) {
-        close(self->fd);
-        self->fd = -1;
-        self->lastError = SERIAL_PORT_ERROR_INVALID_BAUDRATE;
-        return false;
-    }
+  /* Set baud rate */
+  if((cfsetispeed(&tios, baudrate) < 0) || (cfsetospeed(&tios, baudrate) < 0))
+  {
+    close(self->fd);
+    self->fd = -1;
+    self->lastError = SERIAL_PORT_ERROR_INVALID_BAUDRATE;
+    return false;
+  }
 
-    tios.c_cflag |= (CREAD | CLOCAL);
+  tios.c_cflag |= (CREAD | CLOCAL);
 
-    /* Set data bits (5/6/7/8) */
-    tios.c_cflag &= ~CSIZE;
-    switch (self->dataBits) {
+  /* Set data bits (5/6/7/8) */
+  tios.c_cflag &= ~CSIZE;
+  switch(self->dataBits)
+  {
     case 5:
-        tios.c_cflag |= CS5;
-        break;
+      tios.c_cflag |= CS5;
+      break;
     case 6:
-        tios.c_cflag |= CS6;
-        break;
+      tios.c_cflag |= CS6;
+      break;
     case 7:
-        tios.c_cflag |= CS7;
-        break;
+      tios.c_cflag |= CS7;
+      break;
     case 8:
     default:
-        tios.c_cflag |= CS8;
-        break;
-    }
+      tios.c_cflag |= CS8;
+      break;
+  }
 
-    /* Set stop bits (1/2) */
-    if (self->stopBits == 1)
-        tios.c_cflag &=~ CSTOPB;
-    else /* 2 */
-        tios.c_cflag |= CSTOPB;
+  /* Set stop bits (1/2) */
+  if(self->stopBits == 1)
+    tios.c_cflag &= ~ CSTOPB;
+  else /* 2 */
+    tios.c_cflag |= CSTOPB;
 
-    if (self->parity == 'N') {
-        tios.c_cflag &=~ PARENB;
-    } else if (self->parity == 'E') {
-        tios.c_cflag |= PARENB;
-        tios.c_cflag &=~ PARODD;
-    } else { /* 'O' */
-        tios.c_cflag |= PARENB;
-        tios.c_cflag |= PARODD;
-    }
+  if(self->parity == 'N')
+  {
+    tios.c_cflag &= ~ PARENB;
+  }
+  else if(self->parity == 'E')
+  {
+    tios.c_cflag |= PARENB;
+    tios.c_cflag &= ~ PARODD;
+  }
+  else     /* 'O' */
+  {
+    tios.c_cflag |= PARENB;
+    tios.c_cflag |= PARODD;
+  }
 
-    tios.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG);
+  tios.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG);
 
-    if (self->parity == 'N') {
-        tios.c_iflag &= ~INPCK;
-    } else {
-        tios.c_iflag |= INPCK;
-    }
+  if(self->parity == 'N')
+  {
+    tios.c_iflag &= ~INPCK;
+  }
+  else
+  {
+    tios.c_iflag |= INPCK;
+  }
 
-    tios.c_iflag &= ~(IXON | IXOFF | IXANY | ICRNL);
-    tios.c_iflag |= IGNBRK; /* Set ignore break to allow 0xff characters */
-    tios.c_iflag |= IGNPAR;
-    tios.c_oflag &=~ OPOST;
+  tios.c_iflag &= ~(IXON | IXOFF | IXANY | ICRNL);
+  tios.c_iflag |= IGNBRK; /* Set ignore break to allow 0xff characters */
+  tios.c_iflag |= IGNPAR;
+  tios.c_oflag &= ~ OPOST;
 
-    tios.c_cc[VMIN] = 0;
-    tios.c_cc[VTIME] = 0;
+  tios.c_cc[VMIN] = 0;
+  tios.c_cc[VTIME] = 0;
 
-    if (tcsetattr(self->fd, TCSANOW, &tios) < 0) {
-        close(self->fd);
-        self->fd = -1;
-        self->lastError = SERIAL_PORT_ERROR_INVALID_ARGUMENT;
+  if(tcsetattr(self->fd, TCSANOW, &tios) < 0)
+  {
+    close(self->fd);
+    self->fd = -1;
+    self->lastError = SERIAL_PORT_ERROR_INVALID_ARGUMENT;
 
-        return false;
-    }
+    return false;
+  }
 
-    return true;
+  return true;
 }
 
 void
 SerialPort_close(SerialPort self)
 {
-    if (self->fd != -1) {
-        close(self->fd);
-        self->fd = 0;
-    }
+  if(self->fd != -1)
+  {
+    close(self->fd);
+    self->fd = 0;
+  }
 }
 
 int
 SerialPort_getBaudRate(SerialPort self)
 {
-    return self->baudRate;
+  return self->baudRate;
 }
 
 void
 SerialPort_discardInBuffer(SerialPort self)
 {
-    tcflush(self->fd, TCIOFLUSH);
+  tcflush(self->fd, TCIOFLUSH);
 }
 
 void
 SerialPort_setTimeout(SerialPort self, int timeout)
 {
-    self->timeout = timeout;
+  self->timeout = timeout;
 }
 
 SerialPortError
 SerialPort_getLastError(SerialPort self)
 {
-    return self->lastError;
+  return self->lastError;
 }
 
 int
 SerialPort_readByte(SerialPort self)
 {
-    uint8_t buf[1];
-    struct pollfd fds[1];
+  uint8_t buf[1];
+  struct pollfd fds[1];
 
-    self->lastError = SERIAL_PORT_ERROR_NONE;
+  self->lastError = SERIAL_PORT_ERROR_NONE;
 
-    fds[0].fd = self->fd;
-    fds[0].events = POLLIN;
+  fds[0].fd = self->fd;
+  fds[0].events = POLLIN;
 
-    int ret = poll(fds, 1, self->timeout);
+  int ret = poll(fds, 1, self->timeout);
 
-    if (ret == -1) {
-        self->lastError = SERIAL_PORT_ERROR_UNKNOWN;
-        return -1;
-    }
-    else if (ret == 0)
-        return -1;
-    else {
-        read(self->fd, (char*) buf, 1);
+  if(ret == -1)
+  {
+    self->lastError = SERIAL_PORT_ERROR_UNKNOWN;
+    return -1;
+  }
+  else if(ret == 0)
+    return -1;
+  else
+  {
+    read(self->fd, (char *) buf, 1);
 
-        return (int) buf[0];
-    }
+    return (int) buf[0];
+  }
 }
 
 int
-SerialPort_write(SerialPort self, uint8_t* buffer, int startPos, int bufSize)
+SerialPort_write(SerialPort self, uint8_t * buffer, int startPos, int bufSize)
 {
-    /* TODO assure minimum line idle time? */
+  /* TODO assure minimum line idle time? */
 
-    self->lastError = SERIAL_PORT_ERROR_NONE;
+  self->lastError = SERIAL_PORT_ERROR_NONE;
 
-    ssize_t result = write(self->fd, buffer + startPos, bufSize);
+  ssize_t result = write(self->fd, buffer + startPos, bufSize);
 
-    tcdrain(self->fd);
+  tcdrain(self->fd);
 
-    self->lastSentTime = Hal_getTimeInMs();
+  self->lastSentTime = Hal_getTimeInMs();
 
-    return result;
+  return result;
 }

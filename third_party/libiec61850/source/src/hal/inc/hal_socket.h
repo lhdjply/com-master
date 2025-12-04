@@ -41,22 +41,22 @@ extern "C" {
  */
 
 /** Opaque reference for a server socket instance */
-typedef struct sServerSocket* ServerSocket;
+typedef struct sServerSocket * ServerSocket;
 
-typedef struct sUdpSocket* UdpSocket;
+typedef struct sUdpSocket * UdpSocket;
 
 /** Opaque reference for a client or connection socket instance */
-typedef struct sSocket* Socket;
+typedef struct sSocket * Socket;
 
 /** Opaque reference for a set of server and socket handles */
-typedef struct sHandleSet* HandleSet;
+typedef struct sHandleSet * HandleSet;
 
 /** State of an asynchronous connect */
 typedef enum
 {
-    SOCKET_STATE_CONNECTING = 0,
-    SOCKET_STATE_FAILED = 1,
-    SOCKET_STATE_CONNECTED = 2
+  SOCKET_STATE_CONNECTING = 0,
+  SOCKET_STATE_FAILED = 1,
+  SOCKET_STATE_CONNECTED = 2
 } SocketState;
 
 
@@ -126,7 +126,7 @@ Handleset_destroy(HandleSet self);
  * \return the newly create TcpServerSocket instance
  */
 PAL_API ServerSocket
-TcpServerSocket_create(const char* address, int port);
+TcpServerSocket_create(const char * address, int port);
 
 /**
  * \brief Create an IPv4 UDP socket instance
@@ -153,7 +153,7 @@ UdpSocket_createIpV6(void);
  * \return true on success, false otherwise
  */
 PAL_API bool
-UdpSocket_addGroupMembership(UdpSocket self, const char* multicastAddress);
+UdpSocket_addGroupMembership(UdpSocket self, const char * multicastAddress);
 
 /**
  * \brief Sets the multicast TTL (number of hops) for this UDP socket
@@ -167,10 +167,10 @@ PAL_API bool
 UdpSocket_setMulticastTtl(UdpSocket self, int ttl);
 
 PAL_API bool
-UdpSocket_bind(UdpSocket self, const char* address, int port);
+UdpSocket_bind(UdpSocket self, const char * address, int port);
 
 PAL_API bool
-UdpSocket_sendTo(UdpSocket self, const char* address, int port, uint8_t* msg, int msgSize);
+UdpSocket_sendTo(UdpSocket self, const char * address, int port, uint8_t * msg, int msgSize);
 
 /**
  * \brief Receive data from UDP socket (store data and (optionally) the IP address of the sender
@@ -184,7 +184,7 @@ UdpSocket_sendTo(UdpSocket self, const char* address, int port, uint8_t* msg, in
  * \return number of received bytes or -1 in case of an error
  */
 PAL_API int
-UdpSocket_receiveFrom(UdpSocket self, char* address, int maxAddrSize, uint8_t* msg, int msgSize);
+UdpSocket_receiveFrom(UdpSocket self, char * address, int maxAddrSize, uint8_t * msg, int msgSize);
 
 
 PAL_API void
@@ -265,17 +265,17 @@ Socket_setConnectTimeout(Socket self, uint32_t timeoutInMs);
 
 /**
  * \brief bind a socket to a particular IP address and port (for TcpSocket)
- * 
+ *
  * NOTE: Don't use the socket when this functions returns false!
- * 
+ *
  * \param self the client socket instance
  * \param srcAddress the local IP address or hostname as C string
  * \param srcPort the local TCP port to use. When < 1 the OS will chose the TCP port to use.
- * 
+ *
  * \return true in case of success, false otherwise
- */ 
+ */
 PAL_API bool
-Socket_bind(Socket self, const char* srcAddress, int srcPort);
+Socket_bind(Socket self, const char * srcAddress, int srcPort);
 
 /**
  * \brief connect to a server
@@ -296,10 +296,10 @@ Socket_bind(Socket self, const char* srcAddress, int srcPort);
  * \return true if the connection was established successfully, false otherwise
  */
 PAL_API bool
-Socket_connect(Socket self, const char* address, int port);
+Socket_connect(Socket self, const char * address, int port);
 
 PAL_API bool
-Socket_connectAsync(Socket self, const char* address, int port);
+Socket_connectAsync(Socket self, const char * address, int port);
 
 PAL_API SocketState
 Socket_checkAsyncConnectState(Socket self);
@@ -321,7 +321,7 @@ Socket_checkAsyncConnectState(Socket self);
  * \return the number of bytes read or -1 if an error occurred
  */
 PAL_API int
-Socket_read(Socket self, uint8_t* buf, int size);
+Socket_read(Socket self, uint8_t * buf, int size);
 
 /**
  * \brief send a message through the socket
@@ -333,9 +333,9 @@ Socket_read(Socket self, uint8_t* buf, int size);
  * \return number of bytes transmitted of -1 in case of an error
  */
 PAL_API int
-Socket_write(Socket self, uint8_t* buf, int size);
+Socket_write(Socket self, uint8_t * buf, int size);
 
-PAL_API char*
+PAL_API char *
 Socket_getLocalAddress(Socket self);
 
 /**
@@ -349,7 +349,7 @@ Socket_getLocalAddress(Socket self);
  *
  * \return the IP address and port number as strings separated by the ':' character.
  */
-PAL_API char*
+PAL_API char *
 Socket_getPeerAddress(Socket self);
 
 /**
@@ -366,8 +366,8 @@ Socket_getPeerAddress(Socket self);
  * \return the IP address and port number as strings separated by the ':' character. If the
  *         address is an IPv6 address the IP part is encapsulated in square brackets.
  */
-PAL_API char*
-Socket_getPeerAddressStatic(Socket self, char* peerAddressString);
+PAL_API char *
+Socket_getPeerAddressStatic(Socket self, char * peerAddressString);
 
 /**
  * \brief destroy a socket (close the socket if a connection is established)

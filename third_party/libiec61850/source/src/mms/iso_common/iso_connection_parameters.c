@@ -34,194 +34,197 @@
 AcseAuthenticationParameter
 AcseAuthenticationParameter_create()
 {
-    AcseAuthenticationParameter self = (AcseAuthenticationParameter)
-        GLOBAL_CALLOC(1, sizeof(struct sAcseAuthenticationParameter));
+  AcseAuthenticationParameter self = (AcseAuthenticationParameter)
+                                     GLOBAL_CALLOC(1, sizeof(struct sAcseAuthenticationParameter));
 
-    return self;
+  return self;
 }
 
 void
 AcseAuthenticationParameter_destroy(AcseAuthenticationParameter self)
 {
-    if (self->mechanism == ACSE_AUTH_PASSWORD)
-        if (self->value.password.octetString != NULL)
-            GLOBAL_FREEMEM(self->value.password.octetString);
+  if(self->mechanism == ACSE_AUTH_PASSWORD)
+    if(self->value.password.octetString != NULL)
+      GLOBAL_FREEMEM(self->value.password.octetString);
 
-    GLOBAL_FREEMEM(self);
+  GLOBAL_FREEMEM(self);
 }
 
 void
-AcseAuthenticationParameter_setPassword(AcseAuthenticationParameter self, char* password)
+AcseAuthenticationParameter_setPassword(AcseAuthenticationParameter self, char * password)
 {
-    self->value.password.octetString = (uint8_t*) StringUtils_copyString(password);
-    self->value.password.passwordLength = strlen(password);
+  self->value.password.octetString = (uint8_t *) StringUtils_copyString(password);
+  self->value.password.passwordLength = strlen(password);
 }
 
 /* TODO
 ->One function returning as string and another as by array*/
-const char*
+const char *
 AcseAuthenticationParameter_getPassword(AcseAuthenticationParameter self)
 {
-    if (self == NULL)
-        return NULL;
+  if(self == NULL)
+    return NULL;
 
-    if (self->mechanism != ACSE_AUTH_PASSWORD)
-        return NULL;
+  if(self->mechanism != ACSE_AUTH_PASSWORD)
+    return NULL;
 
-    return (char*)self->value.password.octetString;
+  return (char *)self->value.password.octetString;
 }
 
 int
 AcseAuthenticationParameter_getPasswordLength(AcseAuthenticationParameter self)
 {
-    if (self == NULL)
-        return 0;
+  if(self == NULL)
+    return 0;
 
-    if (self->mechanism != ACSE_AUTH_PASSWORD)
-        return 0;
+  if(self->mechanism != ACSE_AUTH_PASSWORD)
+    return 0;
 
-    return self->value.password.passwordLength;
+  return self->value.password.passwordLength;
 }
 
 void
 AcseAuthenticationParameter_setAuthMechanism(AcseAuthenticationParameter self, AcseAuthenticationMechanism mechanism)
 {
-    self->mechanism = mechanism;
+  self->mechanism = mechanism;
 }
 
 AcseAuthenticationMechanism
 AcseAuthenticationParameter_getAuthMechanism(AcseAuthenticationParameter self)
 {
-    return self->mechanism;
+  return self->mechanism;
 }
 
 LIB61850_API int
 IsoApplicationReference_getAeQualifier(IsoApplicationReference self)
 {
-    return self.aeQualifier;
+  return self.aeQualifier;
 }
 
-LIB61850_API const ItuObjectIdentifier*
+LIB61850_API const ItuObjectIdentifier *
 IsoApplicationReference_getApTitle(const IsoApplicationReference* self)
 {
-    if (self == NULL)
-        return NULL;
+  if(self == NULL)
+    return NULL;
 
-    return &(self->apTitle);
+  return &(self->apTitle);
 }
 
 LIB61850_API int
 ItuObjectIdentifier_getArcCount(ItuObjectIdentifier* self)
 {
-    if (self == NULL)
-        return 0;
+  if(self == NULL)
+    return 0;
 
-    return self->arcCount;
+  return self->arcCount;
 }
 
-LIB61850_API const uint16_t*
+LIB61850_API const uint16_t *
 ItuObjectIdentifier_getArc(ItuObjectIdentifier* self)
 {
-    if (self == NULL)
-        return NULL;
+  if(self == NULL)
+    return NULL;
 
-    return self->arc;
+  return self->arc;
 }
 
 IsoConnectionParameters
 IsoConnectionParameters_create()
 {
-    IsoConnectionParameters self = (IsoConnectionParameters) GLOBAL_CALLOC(1, sizeof(struct sIsoConnectionParameters));
+  IsoConnectionParameters self = (IsoConnectionParameters) GLOBAL_CALLOC(1, sizeof(struct sIsoConnectionParameters));
 
-    return self;
+  return self;
 }
 
 void
 IsoConnectionParameters_destroy(IsoConnectionParameters self)
 {
-    if (self)
-    {
-        if (self->localIpAddress)
-            GLOBAL_FREEMEM((void*)(self->localIpAddress));
+  if(self)
+  {
+    if(self->localIpAddress)
+      GLOBAL_FREEMEM((void *)(self->localIpAddress));
 
-        GLOBAL_FREEMEM(self);
-    }
+    GLOBAL_FREEMEM(self);
+  }
 }
 
 void
 IsoConnectionParameters_setTlsConfiguration(IsoConnectionParameters self, TLSConfiguration tlsConfig)
 {
 #if (CONFIG_MMS_SUPPORT_TLS == 1)
-    self->tlsConfiguration = tlsConfig;
+  self->tlsConfiguration = tlsConfig;
 #else
-    (void)self;
-    (void)tlsConfig;
+  (void)self;
+  (void)tlsConfig;
 #endif
 }
 
 void
 IsoConnectionParameters_setAcseAuthenticationParameter(IsoConnectionParameters self,
-        AcseAuthenticationParameter acseAuthParameter)
+                                                       AcseAuthenticationParameter acseAuthParameter)
 {
-    self->acseAuthParameter = acseAuthParameter;
+  self->acseAuthParameter = acseAuthParameter;
 }
 
 void
-IsoConnectionParameters_setTcpParameters(IsoConnectionParameters self, const char* hostname, int tcpPort)
+IsoConnectionParameters_setTcpParameters(IsoConnectionParameters self, const char * hostname, int tcpPort)
 {
-    self->hostname = hostname;
-    self->tcpPort = tcpPort;
+  self->hostname = hostname;
+  self->tcpPort = tcpPort;
 }
 
 void
-IsoConnectionParameters_setLocalTcpParameters(IsoConnectionParameters self, const char* localIpAddress, int localTcpPort) 
+IsoConnectionParameters_setLocalTcpParameters(IsoConnectionParameters self, const char * localIpAddress,
+                                              int localTcpPort)
 {
-    if (self)
+  if(self)
+  {
+    if(localIpAddress)
     {
-        if (localIpAddress)
-        {
-            self->localIpAddress = strdup(localIpAddress);
-            self->localTcpPort = localTcpPort;
-        }
+      self->localIpAddress = strdup(localIpAddress);
+      self->localTcpPort = localTcpPort;
     }
+  }
 }
 
 void
-IsoConnectionParameters_setRemoteApTitle(IsoConnectionParameters self, const char* apTitle, int aeQualifier)
+IsoConnectionParameters_setRemoteApTitle(IsoConnectionParameters self, const char * apTitle, int aeQualifier)
 {
-    if (apTitle == NULL)
-        self->remoteApTitleLen = 0;
-    else
-    {
-        self->remoteApTitleLen = BerEncoder_encodeOIDToBuffer(apTitle, self->remoteApTitle, 10);
-        self->remoteAEQualifier = aeQualifier;
-    }
+  if(apTitle == NULL)
+    self->remoteApTitleLen = 0;
+  else
+  {
+    self->remoteApTitleLen = BerEncoder_encodeOIDToBuffer(apTitle, self->remoteApTitle, 10);
+    self->remoteAEQualifier = aeQualifier;
+  }
 }
 
 void
-IsoConnectionParameters_setRemoteAddresses(IsoConnectionParameters self, PSelector pSelector, SSelector sSelector, TSelector tSelector)
+IsoConnectionParameters_setRemoteAddresses(IsoConnectionParameters self, PSelector pSelector, SSelector sSelector,
+                                           TSelector tSelector)
 {
-    self->remotePSelector = pSelector;
-    self->remoteSSelector = sSelector;
-    self->remoteTSelector = tSelector;
+  self->remotePSelector = pSelector;
+  self->remoteSSelector = sSelector;
+  self->remoteTSelector = tSelector;
 }
 
 void
-IsoConnectionParameters_setLocalApTitle(IsoConnectionParameters self, const char* apTitle, int aeQualifier)
+IsoConnectionParameters_setLocalApTitle(IsoConnectionParameters self, const char * apTitle, int aeQualifier)
 {
-    if (apTitle == NULL)
-        self->localApTitleLen = 0;
-    else
-    {
-        self->localApTitleLen = BerEncoder_encodeOIDToBuffer(apTitle, self->localApTitle, 10);
-        self->localAEQualifier = aeQualifier;
-    }
+  if(apTitle == NULL)
+    self->localApTitleLen = 0;
+  else
+  {
+    self->localApTitleLen = BerEncoder_encodeOIDToBuffer(apTitle, self->localApTitle, 10);
+    self->localAEQualifier = aeQualifier;
+  }
 }
 
 void
-IsoConnectionParameters_setLocalAddresses(IsoConnectionParameters self, PSelector pSelector, SSelector sSelector, TSelector tSelector)
+IsoConnectionParameters_setLocalAddresses(IsoConnectionParameters self, PSelector pSelector, SSelector sSelector,
+                                          TSelector tSelector)
 {
-    self->localPSelector = pSelector;
-    self->localSSelector = sSelector;
-    self->localTSelector = tSelector;
+  self->localPSelector = pSelector;
+  self->localSSelector = sSelector;
+  self->localTSelector = tSelector;
 }

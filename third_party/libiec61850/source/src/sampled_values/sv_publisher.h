@@ -37,10 +37,10 @@ extern "C"
 
 typedef struct sCommParameters
 {
-    uint8_t vlanPriority;
-    uint16_t vlanId;
-    uint16_t appId;
-    uint8_t dstAddress[6];
+  uint8_t vlanPriority;
+  uint16_t vlanId;
+  uint16_t appId;
+  uint8_t dstAddress[6];
 } CommParameters;
 
 #endif
@@ -61,12 +61,12 @@ typedef struct sCommParameters
 /**
  * \brief An opaque type representing an IEC 61850-9-2 Sampled Values publisher.
  */
-typedef struct sSVPublisher* SVPublisher;
+typedef struct sSVPublisher * SVPublisher;
 
 /**
  * \brief An opaque type representing an IEC 61850-9-2 Sampled Values Application Service Data Unit (ASDU).
  */
-typedef struct sSVPublisher_ASDU* SVPublisher_ASDU;
+typedef struct sSVPublisher_ASDU * SVPublisher_ASDU;
 
 /**
  * \brief Create a new IEC61850-9-2 Sampled Values publisher.
@@ -80,7 +80,7 @@ typedef struct sSVPublisher_ASDU* SVPublisher_ASDU;
  * \return the new SV publisher instance.
  */
 LIB61850_API SVPublisher
-SVPublisher_create(CommParameters* parameters, const char* interfaceId);
+SVPublisher_create(CommParameters* parameters, const char * interfaceId);
 
 /**
  * \brief Create a new IEC61850-9-2 Sampled Values publisher.
@@ -93,7 +93,7 @@ SVPublisher_create(CommParameters* parameters, const char* interfaceId);
  * \return the new SV publisher instance.
  */
 LIB61850_API SVPublisher
-SVPublisher_createEx(CommParameters* parameters, const char* interfaceId, bool useVlanTag);
+SVPublisher_createEx(CommParameters* parameters, const char * interfaceId, bool useVlanTag);
 
 /**
  * \brief Create a new SVPublisher instance for R-SMV
@@ -116,7 +116,7 @@ SVPublisher_createRemote(RSession session, uint16_t appId);
  * \return the new ASDU instance.
  */
 LIB61850_API SVPublisher_ASDU
-SVPublisher_addASDU(SVPublisher self, const char* svID, const char* datset, uint32_t confRev);
+SVPublisher_addASDU(SVPublisher self, const char * svID, const char * datset, uint32_t confRev);
 
 /**
  * \brief Prepare the publisher for publishing.
@@ -434,7 +434,7 @@ SVPublisher_ASDU_setSmpSynch(SVPublisher_ASDU self, uint16_t smpSynch);
  * \param[in] gmIdentity the gmIdentity value (octet string/byte array of size 8 bytes)
  */
 LIB61850_API void
-SVPublisher_ASDU_setGmIdentity(SVPublisher_ASDU self, uint8_t* gmIdentity);
+SVPublisher_ASDU_setGmIdentity(SVPublisher_ASDU self, uint8_t * gmIdentity);
 
 /**@} @}*/
 
@@ -453,15 +453,15 @@ SVPublisher_ASDU_setGmIdentity(SVPublisher_ASDU self, uint8_t* gmIdentity);
  * @{
  */
 
-typedef struct sSVPublisher* SampledValuesPublisher;
+typedef struct sSVPublisher * SampledValuesPublisher;
 
-typedef struct sSV_ASDU* SV_ASDU;
+typedef struct sSV_ASDU * SV_ASDU;
 
 LIB61850_API DEPRECATED SVPublisher
-SampledValuesPublisher_create(CommParameters* parameters, const char* interfaceId);
+SampledValuesPublisher_create(CommParameters* parameters, const char * interfaceId);
 
 LIB61850_API DEPRECATED SVPublisher_ASDU
-SampledValuesPublisher_addASDU(SVPublisher self, char* svID, char* datset, uint32_t confRev);
+SampledValuesPublisher_addASDU(SVPublisher self, char * svID, char * datset, uint32_t confRev);
 
 LIB61850_API DEPRECATED void
 SampledValuesPublisher_setupComplete(SVPublisher self);

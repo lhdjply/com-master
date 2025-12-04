@@ -31,16 +31,17 @@ extern "C" {
 /**
  * \brief Opaque handle that represents an Ethernet "socket".
  */
-typedef struct sEthernetSocket* EthernetSocket;
+typedef struct sEthernetSocket * EthernetSocket;
 
 /** Opaque reference for a set of Ethernet socket handles */
-typedef struct sEthernetHandleSet* EthernetHandleSet;
+typedef struct sEthernetHandleSet * EthernetHandleSet;
 
-typedef enum {
-    ETHERNET_SOCKET_MODE_PROMISC, /**<< receive all Ethernet messages */
-    ETHERNET_SOCKET_MODE_ALL_MULTICAST, /**<< receive all multicast messages */
-    ETHERNET_SOCKET_MODE_MULTICAST, /**<< receive only specific multicast messages */
-    ETHERNET_SOCKET_MODE_HOST_ONLY /**<< receive only messages for the host */
+typedef enum
+{
+  ETHERNET_SOCKET_MODE_PROMISC, /**<< receive all Ethernet messages */
+  ETHERNET_SOCKET_MODE_ALL_MULTICAST, /**<< receive all multicast messages */
+  ETHERNET_SOCKET_MODE_MULTICAST, /**<< receive only specific multicast messages */
+  ETHERNET_SOCKET_MODE_HOST_ONLY /**<< receive only messages for the host */
 } EthernetSocketMode;
 
 /**
@@ -101,7 +102,7 @@ EthernetHandleSet_destroy(EthernetHandleSet self);
  * \param addr pointer to a buffer to store the MAC address
  */
 PAL_API void
-Ethernet_getInterfaceMACAddress(const char* interfaceId, uint8_t* addr);
+Ethernet_getInterfaceMACAddress(const char * interfaceId, uint8_t * addr);
 
 /**
  * \brief Create an Ethernet socket using the specified interface and
@@ -111,7 +112,7 @@ Ethernet_getInterfaceMACAddress(const char* interfaceId, uint8_t* addr);
  * \param destAddress byte array that contains the Ethernet destination MAC address for sending
  */
 PAL_API EthernetSocket
-Ethernet_createSocket(const char* interfaceId, uint8_t* destAddress);
+Ethernet_createSocket(const char * interfaceId, uint8_t * destAddress);
 
 /**
  * \brief destroy the ethernet socket
@@ -122,7 +123,7 @@ PAL_API void
 Ethernet_destroySocket(EthernetSocket ethSocket);
 
 PAL_API void
-Ethernet_sendPacket(EthernetSocket ethSocket, uint8_t* buffer, int packetSize);
+Ethernet_sendPacket(EthernetSocket ethSocket, uint8_t * buffer, int packetSize);
 
 /*
  * \brief set the receive mode of the Ethernet socket
@@ -145,7 +146,7 @@ Ethernet_setMode(EthernetSocket ethSocket, EthernetSocketMode mode);
  * \param multicastAddress the multicast Ethernet address (this has to be a byte buffer of at least 6 byte)
  */
 PAL_API void
-Ethernet_addMulticastAddress(EthernetSocket ethSocket, const uint8_t* multicastAddress);
+Ethernet_addMulticastAddress(EthernetSocket ethSocket, const uint8_t * multicastAddress);
 
 /*
  * \brief set a protocol filter for the specified etherType
@@ -169,7 +170,7 @@ Ethernet_setProtocolFilter(EthernetSocket ethSocket, uint16_t etherType);
  * \return size of message received in bytes
  */
 PAL_API int
-Ethernet_receivePacket(EthernetSocket ethSocket, uint8_t* buffer, int bufferSize);
+Ethernet_receivePacket(EthernetSocket ethSocket, uint8_t * buffer, int bufferSize);
 
 /**
  * \brief Indicates if runtime provides support for direct Ethernet access

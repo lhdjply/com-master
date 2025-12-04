@@ -30,15 +30,17 @@
 #include "libiec61850_common_api.h"
 
 LIB61850_INTERNAL bool
-RSessionCrypto_createHMAC(uint8_t* buffer, int bufSize, uint8_t* key, int keySize, uint8_t* hmac, int hmacMaxSize);
+RSessionCrypto_createHMAC(uint8_t * buffer, int bufSize, uint8_t * key, int keySize, uint8_t * hmac, int hmacMaxSize);
 
 LIB61850_INTERNAL bool
-RSessionCrypto_gcmEncryptAndTag(uint8_t* key, int keySize, uint8_t* iv, int ivSize, uint8_t* addData, int addDataSize, uint8_t* encryptData, int encryptDataSize, uint8_t* tag, int tagSize);
+RSessionCrypto_gcmEncryptAndTag(uint8_t * key, int keySize, uint8_t * iv, int ivSize, uint8_t * addData,
+                                int addDataSize, uint8_t * encryptData, int encryptDataSize, uint8_t * tag, int tagSize);
 
 LIB61850_INTERNAL bool
-RSessionCrypto_gcmAuthAndDecrypt(uint8_t* key, int keySize, uint8_t* iv, int ivSize, uint8_t* addData, int addDataSize, uint8_t* encryptData, int encryptDataSize, uint8_t* decryptedData, uint8_t* tag, int tagSize);
+RSessionCrypto_gcmAuthAndDecrypt(uint8_t * key, int keySize, uint8_t * iv, int ivSize, uint8_t * addData,
+                                 int addDataSize, uint8_t * encryptData, int encryptDataSize, uint8_t * decryptedData, uint8_t * tag, int tagSize);
 
 LIB61850_INTERNAL bool
-RSessionCrypto_createRandomData(uint8_t* data, int dataSize);
+RSessionCrypto_createRandomData(uint8_t * data, int dataSize);
 
 #endif /* SRC_R_SESSION_R_SESSION_CRYPTO_H_ */

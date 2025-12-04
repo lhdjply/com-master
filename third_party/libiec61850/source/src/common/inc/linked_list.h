@@ -41,15 +41,16 @@ extern "C" {
 /**@{*/
 
 
-struct sLinkedList {
-	void* data;
-	struct sLinkedList* next;
+struct sLinkedList
+{
+  void * data;
+  struct sLinkedList * next;
 };
 
 /**
  * \brief Reference to a linked list or to a linked list element.
  */
-typedef struct sLinkedList* LinkedList;
+typedef struct sLinkedList * LinkedList;
 
 /**
  * \brief Create a new LinkedList object
@@ -72,7 +73,7 @@ LIB61850_API void
 LinkedList_destroy(LinkedList self);
 
 
-typedef void (*LinkedListValueDeleteFunction) (void*);
+typedef void (*LinkedListValueDeleteFunction) (void *);
 
 /**
  * \brief Delete a LinkedList object
@@ -109,7 +110,7 @@ LinkedList_destroyStatic(LinkedList self);
  * \param data data to append to the LinkedList instance
  */
 LIB61850_API void
-LinkedList_add(LinkedList self, void* data);
+LinkedList_add(LinkedList self, void * data);
 
 /**
  * \brief Check if the specified data is contained in the list
@@ -120,7 +121,7 @@ LinkedList_add(LinkedList self, void* data);
  * \return true if data is part of the list, false otherwise
  */
 LIB61850_API bool
-LinkedList_contains(LinkedList self, void* data);
+LinkedList_contains(LinkedList self, void * data);
 
 /**
  * \brief Removed the specified element from the list
@@ -131,7 +132,7 @@ LinkedList_contains(LinkedList self, void* data);
  *  \return true if data has been removed from the list, false otherwise
  */
 LIB61850_API bool
-LinkedList_remove(LinkedList self, void* data);
+LinkedList_remove(LinkedList self, void * data);
 
 /**
  * \brief Get the list element specified by index (starting with 0).
@@ -164,7 +165,7 @@ LinkedList_getLastElement(LinkedList self);
  * \param listElement the LinkedList instance
  */
 LIB61850_API LinkedList
-LinkedList_insertAfter(LinkedList listElement, void* data);
+LinkedList_insertAfter(LinkedList listElement, void * data);
 
 /**
  * \brief Get the size of the list
@@ -176,7 +177,7 @@ LinkedList_insertAfter(LinkedList listElement, void* data);
 LIB61850_API int
 LinkedList_size(LinkedList self);
 
-LIB61850_API void*
+LIB61850_API void *
 LinkedList_getData(LinkedList self);
 
 LIB61850_API void

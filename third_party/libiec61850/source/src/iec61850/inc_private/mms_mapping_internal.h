@@ -105,250 +105,251 @@ typedef int IEC61850_ServiceError;
 #define IEC61850_SERVICE_ERROR_FAILED_DUE_TO_COMMUNICATION_CONSTRAINT 11
 #define IEC61850_SERVICE_ERROR_FAILED_DUE_TO_SERVER_CONSTRAINT 12
 
-typedef struct sServiceTrkInstance* ServiceTrkInstance;
+typedef struct sServiceTrkInstance * ServiceTrkInstance;
 
 struct sServiceTrkInstance
 {
-    DataObject* dobj;
-    DataAttribute* objRef;
-    DataAttribute* serviceType;
-    DataAttribute* errorCode;
-    DataAttribute* originatorID; /* optional */
-    DataAttribute* t;
+  DataObject * dobj;
+  DataAttribute * objRef;
+  DataAttribute * serviceType;
+  DataAttribute * errorCode;
+  DataAttribute * originatorID; /* optional */
+  DataAttribute * t;
 };
 
-typedef struct sBrcbTrkInstance* BrcbTrkInstance;
+typedef struct sBrcbTrkInstance * BrcbTrkInstance;
 
 struct sBrcbTrkInstance
 {
-    /* inherited from ServiceTrkInstance */
-    DataObject* dobj;
-    DataAttribute* objRef;
-    DataAttribute* serviceType;
-    DataAttribute* errorCode;
-    DataAttribute* originatorID; /* optional */
-    DataAttribute* t;
+  /* inherited from ServiceTrkInstance */
+  DataObject * dobj;
+  DataAttribute * objRef;
+  DataAttribute * serviceType;
+  DataAttribute * errorCode;
+  DataAttribute * originatorID; /* optional */
+  DataAttribute * t;
 
-    /* BrcbTrk specific attributes */
-    DataAttribute* rptID;
-    DataAttribute* rptEna;
-    DataAttribute* datSet;
-    DataAttribute* confRev;
-    DataAttribute* optFlds;
-    DataAttribute* bufTm;
-    DataAttribute* sqNum;
-    DataAttribute* trgOps;
-    DataAttribute* intgPd;
-    DataAttribute* gi;
-    DataAttribute* purgeBuf;
-    DataAttribute* entryID;
-    DataAttribute* timeOfEntry;
-    DataAttribute* resvTms;  /* optional */
+  /* BrcbTrk specific attributes */
+  DataAttribute * rptID;
+  DataAttribute * rptEna;
+  DataAttribute * datSet;
+  DataAttribute * confRev;
+  DataAttribute * optFlds;
+  DataAttribute * bufTm;
+  DataAttribute * sqNum;
+  DataAttribute * trgOps;
+  DataAttribute * intgPd;
+  DataAttribute * gi;
+  DataAttribute * purgeBuf;
+  DataAttribute * entryID;
+  DataAttribute * timeOfEntry;
+  DataAttribute * resvTms; /* optional */
 };
 
-typedef struct sUrcbTrkInstance* UrcbTrkInstance;
+typedef struct sUrcbTrkInstance * UrcbTrkInstance;
 
 struct sUrcbTrkInstance
 {
-    /* inherited from ServiceTrkInstance */
-    DataObject* dobj;
-    DataAttribute* objRef;
-    DataAttribute* serviceType;
-    DataAttribute* errorCode;
-    DataAttribute* originatorID; /* optional */
-    DataAttribute* t;
+  /* inherited from ServiceTrkInstance */
+  DataObject * dobj;
+  DataAttribute * objRef;
+  DataAttribute * serviceType;
+  DataAttribute * errorCode;
+  DataAttribute * originatorID; /* optional */
+  DataAttribute * t;
 
-    /* UrcbTrk specific attributes */
-    DataAttribute* rptID;
-    DataAttribute* rptEna;
-    DataAttribute* resv;
-    DataAttribute* datSet;
-    DataAttribute* confRev;
-    DataAttribute* optFlds;
-    DataAttribute* bufTm;
-    DataAttribute* sqNum;
-    DataAttribute* trgOps;
-    DataAttribute* intgPd;
-    DataAttribute* gi;
+  /* UrcbTrk specific attributes */
+  DataAttribute * rptID;
+  DataAttribute * rptEna;
+  DataAttribute * resv;
+  DataAttribute * datSet;
+  DataAttribute * confRev;
+  DataAttribute * optFlds;
+  DataAttribute * bufTm;
+  DataAttribute * sqNum;
+  DataAttribute * trgOps;
+  DataAttribute * intgPd;
+  DataAttribute * gi;
 };
 
-typedef struct sGocbTrkInstance* GocbTrkInstance;
+typedef struct sGocbTrkInstance * GocbTrkInstance;
 
 struct sGocbTrkInstance
 {
-    /* inherited from ServiceTrkInstance */
-    DataObject* dobj;
-    DataAttribute* objRef;
-    DataAttribute* serviceType;
-    DataAttribute* errorCode;
-    DataAttribute* originatorID; /* optional */
-    DataAttribute* t;
+  /* inherited from ServiceTrkInstance */
+  DataObject * dobj;
+  DataAttribute * objRef;
+  DataAttribute * serviceType;
+  DataAttribute * errorCode;
+  DataAttribute * originatorID; /* optional */
+  DataAttribute * t;
 
-    /* GocbTrk specific attributes */
-    DataAttribute* goEna;
-    DataAttribute* goID;
-    DataAttribute* datSet;
-    DataAttribute* confRev;
-    DataAttribute* ndsCom;
-    DataAttribute* dstAddress;
+  /* GocbTrk specific attributes */
+  DataAttribute * goEna;
+  DataAttribute * goID;
+  DataAttribute * datSet;
+  DataAttribute * confRev;
+  DataAttribute * ndsCom;
+  DataAttribute * dstAddress;
 };
 
-typedef struct sControlTrkInstance* ControlTrkInstance;
+typedef struct sControlTrkInstance * ControlTrkInstance;
 
 struct sControlTrkInstance
 {
-    /* inherited from ServiceTrkInstance */
-    DataObject* dobj;
-    DataAttribute* objRef;
-    DataAttribute* serviceType;
-    DataAttribute* errorCode;
-    DataAttribute* originatorID; /* optional */
-    DataAttribute* t;
+  /* inherited from ServiceTrkInstance */
+  DataObject * dobj;
+  DataAttribute * objRef;
+  DataAttribute * serviceType;
+  DataAttribute * errorCode;
+  DataAttribute * originatorID; /* optional */
+  DataAttribute * t;
 
-    /* CTS specific attributes */
-    DataAttribute* ctlVal;
-    DataAttribute* operTm; /* conditional */
-    DataAttribute* origin;
-    DataAttribute* ctlNum;
-    DataAttribute* T;
-    DataAttribute* Test;
-    DataAttribute* Check;
-    DataAttribute* respAddCause;
+  /* CTS specific attributes */
+  DataAttribute * ctlVal;
+  DataAttribute * operTm; /* conditional */
+  DataAttribute * origin;
+  DataAttribute * ctlNum;
+  DataAttribute * T;
+  DataAttribute * Test;
+  DataAttribute * Check;
+  DataAttribute * respAddCause;
 };
 
-typedef struct sSgcbTrkInstance* SgcbTrkInstance;
+typedef struct sSgcbTrkInstance * SgcbTrkInstance;
 
 struct sSgcbTrkInstance
 {
-    /* inherited from ServiceTrkInstance */
-    DataObject* dobj;
-    DataAttribute* objRef;
-    DataAttribute* serviceType;
-    DataAttribute* errorCode;
-    DataAttribute* originatorID; /* optional */
-    DataAttribute* t;
+  /* inherited from ServiceTrkInstance */
+  DataObject * dobj;
+  DataAttribute * objRef;
+  DataAttribute * serviceType;
+  DataAttribute * errorCode;
+  DataAttribute * originatorID; /* optional */
+  DataAttribute * t;
 
-    /* SgcbTrk specific attributes */
-    DataAttribute* numOfSG;
-    DataAttribute* actSG;
-    DataAttribute* editSG;
-    DataAttribute* cnfEdit;
-    DataAttribute* lActTm;
+  /* SgcbTrk specific attributes */
+  DataAttribute * numOfSG;
+  DataAttribute * actSG;
+  DataAttribute * editSG;
+  DataAttribute * cnfEdit;
+  DataAttribute * lActTm;
 };
 
-typedef struct sLocbTrkInstance* LocbTrkInstance;
+typedef struct sLocbTrkInstance * LocbTrkInstance;
 
 struct sLocbTrkInstance
 {
-    /* inherited from ServiceTrkInstance */
-    DataObject* dobj;
-    DataAttribute* objRef;
-    DataAttribute* serviceType;
-    DataAttribute* errorCode;
-    DataAttribute* originatorID; /* optional */
-    DataAttribute* t;
+  /* inherited from ServiceTrkInstance */
+  DataObject * dobj;
+  DataAttribute * objRef;
+  DataAttribute * serviceType;
+  DataAttribute * errorCode;
+  DataAttribute * originatorID; /* optional */
+  DataAttribute * t;
 
-    /* LocbTrk specific attributes */
-    DataAttribute* logEna;
-    DataAttribute* datSet;
-    DataAttribute* trgOps;
-    DataAttribute* intgPd;
-    DataAttribute* logRef;
+  /* LocbTrk specific attributes */
+  DataAttribute * logEna;
+  DataAttribute * datSet;
+  DataAttribute * trgOps;
+  DataAttribute * intgPd;
+  DataAttribute * logRef;
 };
 
 #endif /* (CONFIG_IEC61850_SERVICE_TRACKING == 1) */
 
-struct sMmsMapping {
-    IedModel* model;
-    MmsDevice* mmsDevice;
-    MmsServer mmsServer;
-    LinkedList reportControls;
+struct sMmsMapping
+{
+  IedModel * model;
+  MmsDevice * mmsDevice;
+  MmsServer mmsServer;
+  LinkedList reportControls;
 
 #if (CONFIG_IEC61850_LOG_SERVICE == 1)
-    LinkedList logControls;
-    LinkedList logInstances;
+  LinkedList logControls;
+  LinkedList logInstances;
 #endif
 
 #if (CONFIG_INCLUDE_GOOSE_SUPPORT == 1)
-    bool useIntegratedPublisher;
+  bool useIntegratedPublisher;
 
-    LinkedList gseControls;
-    char* gooseInterfaceId;
+  LinkedList gseControls;
+  char * gooseInterfaceId;
 
-    GoCBEventHandler goCbHandler;
-    void* goCbHandlerParameter;
+  GoCBEventHandler goCbHandler;
+  void * goCbHandlerParameter;
 #endif
 
 #if (CONFIG_IEC61850_SAMPLED_VALUES_SUPPORT == 1)
-    LinkedList svControls;
-    const char* svInterfaceId;
+  LinkedList svControls;
+  const char * svInterfaceId;
 #endif
 
-    LinkedList controlObjects;
-    uint64_t nextControlTimeout; /* next timeout in one of the control state machines */
+  LinkedList controlObjects;
+  uint64_t nextControlTimeout; /* next timeout in one of the control state machines */
 
-    LinkedList attributeAccessHandlers;
+  LinkedList attributeAccessHandlers;
 
 #if (CONFIG_IEC61850_SUPPORT_USER_READ_ACCESS_CONTROL == 1)
-    ReadAccessHandler readAccessHandler;
-    void* readAccessHandlerParameter;
+  ReadAccessHandler readAccessHandler;
+  void * readAccessHandlerParameter;
 #endif
 
 #if (CONFIG_IEC61850_SETTING_GROUPS == 1)
-    bool allowEditSg;
-    LinkedList settingGroups;
+  bool allowEditSg;
+  LinkedList settingGroups;
 #endif
 
 #if (CONFIG_MMS_THREADLESS_STACK != 1)
-    bool reportThreadRunning;
-    Thread reportWorkerThread;
+  bool reportThreadRunning;
+  Thread reportWorkerThread;
 #endif
 
 #if (CONFIG_IEC61850_SERVICE_TRACKING == 1)
-    BrcbTrkInstance brcbTrk;
-    UrcbTrkInstance urcbTrk;
-    GocbTrkInstance gocbTrk;
-    ControlTrkInstance spcTrk;
-    ControlTrkInstance dpcTrk;
-    ControlTrkInstance incTrk;
-    ControlTrkInstance encTrk1;
-    ControlTrkInstance apcFTrk;
-    ControlTrkInstance apcIntTrk;
-    ControlTrkInstance bscTrk;
-    ControlTrkInstance iscTrk;
-    ControlTrkInstance bacTrk;
-    SgcbTrkInstance sgcbTrk;
-    ServiceTrkInstance genTrk;
-    LocbTrkInstance locbTrk;
+  BrcbTrkInstance brcbTrk;
+  UrcbTrkInstance urcbTrk;
+  GocbTrkInstance gocbTrk;
+  ControlTrkInstance spcTrk;
+  ControlTrkInstance dpcTrk;
+  ControlTrkInstance incTrk;
+  ControlTrkInstance encTrk1;
+  ControlTrkInstance apcFTrk;
+  ControlTrkInstance apcIntTrk;
+  ControlTrkInstance bscTrk;
+  ControlTrkInstance iscTrk;
+  ControlTrkInstance bacTrk;
+  SgcbTrkInstance sgcbTrk;
+  ServiceTrkInstance genTrk;
+  LocbTrkInstance locbTrk;
 #endif /* (CONFIG_IEC61850_SERVICE_TRACKING == 1) */
 
-    /* flag indicates if data model is locked --> prevents reports to be sent */
+  /* flag indicates if data model is locked --> prevents reports to be sent */
 
-    bool isModelLocked;
+  bool isModelLocked;
 
 #if (CONFIG_MMS_THREADLESS_STACK != 1)
-    Semaphore isModelLockedMutex;
+  Semaphore isModelLockedMutex;
 #endif /* (CONFIG_MMS_THREADLESS_STACK != 1) */
 
-    IedServer iedServer;
+  IedServer iedServer;
 
-    IedConnectionIndicationHandler connectionIndicationHandler;
-    void* connectionIndicationHandlerParameter;
+  IedConnectionIndicationHandler connectionIndicationHandler;
+  void * connectionIndicationHandlerParameter;
 
-    IedServer_RCBEventHandler rcbEventHandler;
-    void* rcbEventHandlerParameter;
+  IedServer_RCBEventHandler rcbEventHandler;
+  void * rcbEventHandlerParameter;
 
-    IedServer_DataSetAccessHandler dataSetAccessHandler;
-    void* dataSetAccessHandlerParameter;
+  IedServer_DataSetAccessHandler dataSetAccessHandler;
+  void * dataSetAccessHandlerParameter;
 
-    IedServer_DirectoryAccessHandler directoryAccessHandler;
-    void* directoryAccessHandlerParameter;
+  IedServer_DirectoryAccessHandler directoryAccessHandler;
+  void * directoryAccessHandlerParameter;
 
-    IedServer_ListObjectsAccessHandler listObjectsAccessHandler;
-    void* listObjectsAccessHandlerParameter;
+  IedServer_ListObjectsAccessHandler listObjectsAccessHandler;
+  void * listObjectsAccessHandlerParameter;
 
-    IedServer_ControlBlockAccessHandler controlBlockAccessHandler;
-    void* controlBlockAccessHandlerParameter;
+  IedServer_ControlBlockAccessHandler controlBlockAccessHandler;
+  void * controlBlockAccessHandlerParameter;
 };
 
 #endif /* MMS_MAPPING_INTERNAL_H_ */

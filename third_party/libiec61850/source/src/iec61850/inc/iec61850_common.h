@@ -48,58 +48,61 @@ extern "C" {
 #define IEC_61850_EDITION_2_1 2
 
 /** PhyComAddress type contains Ethernet address and VLAN attributes */
-typedef struct {
-    uint8_t vlanPriority;
-    uint16_t vlanId;
-    uint16_t appId;
-    uint8_t dstAddress[6];
+typedef struct
+{
+  uint8_t vlanPriority;
+  uint16_t vlanId;
+  uint16_t appId;
+  uint8_t dstAddress[6];
 } PhyComAddress;
 
 /** IEC 61850 ACSI classes */
-typedef enum {
-    ACSI_CLASS_DATA_OBJECT,
-    ACSI_CLASS_DATA_SET,
-    ACSI_CLASS_BRCB,
-    ACSI_CLASS_URCB,
-    ACSI_CLASS_LCB,
-    ACSI_CLASS_LOG,
-    ACSI_CLASS_SGCB,
-    ACSI_CLASS_GoCB,
-    ACSI_CLASS_GsCB,
-    ACSI_CLASS_MSVCB,
-    ACSI_CLASS_USVCB
+typedef enum
+{
+  ACSI_CLASS_DATA_OBJECT,
+  ACSI_CLASS_DATA_SET,
+  ACSI_CLASS_BRCB,
+  ACSI_CLASS_URCB,
+  ACSI_CLASS_LCB,
+  ACSI_CLASS_LOG,
+  ACSI_CLASS_SGCB,
+  ACSI_CLASS_GoCB,
+  ACSI_CLASS_GsCB,
+  ACSI_CLASS_MSVCB,
+  ACSI_CLASS_USVCB
 } ACSIClass;
 
 /**
  * \brief Control model (represented by "ctlModel" attribute)
  */
-typedef enum {
-    /**
-     * No support for control functions. Control object only support status information.
-     */
-    CONTROL_MODEL_STATUS_ONLY = 0,
+typedef enum
+{
+  /**
+   * No support for control functions. Control object only support status information.
+   */
+  CONTROL_MODEL_STATUS_ONLY = 0,
 
-    /**
-     * Direct control with normal security: Supports Operate, TimeActivatedOperate (optional),
-     * and Cancel (optional).
-     */
-    CONTROL_MODEL_DIRECT_NORMAL = 1,
+  /**
+   * Direct control with normal security: Supports Operate, TimeActivatedOperate (optional),
+   * and Cancel (optional).
+   */
+  CONTROL_MODEL_DIRECT_NORMAL = 1,
 
-    /**
-     * Select before operate (SBO) with normal security: Supports Select, Operate, TimeActivatedOperate (optional),
-     * and Cancel (optional).
-     */
-    CONTROL_MODEL_SBO_NORMAL = 2,
+  /**
+   * Select before operate (SBO) with normal security: Supports Select, Operate, TimeActivatedOperate (optional),
+   * and Cancel (optional).
+   */
+  CONTROL_MODEL_SBO_NORMAL = 2,
 
-    /**
-     * Direct control with enhanced security (enhanced security includes the CommandTermination service)
-     */
-    CONTROL_MODEL_DIRECT_ENHANCED = 3,
+  /**
+   * Direct control with enhanced security (enhanced security includes the CommandTermination service)
+   */
+  CONTROL_MODEL_DIRECT_ENHANCED = 3,
 
-    /**
-     * Select before operate (SBO) with enhanced security (enhanced security includes the CommandTermination service)
-     */
-    CONTROL_MODEL_SBO_ENHANCED = 4
+  /**
+   * Select before operate (SBO) with enhanced security (enhanced security includes the CommandTermination service)
+   */
+  CONTROL_MODEL_SBO_ENHANCED = 4
 } ControlModel;
 
 /**
@@ -202,35 +205,36 @@ typedef enum {
  */
 
 /** AddCause - additional cause information for control model errors */
-typedef enum {
-    ADD_CAUSE_UNKNOWN = 0,
-    ADD_CAUSE_NOT_SUPPORTED = 1,
-    ADD_CAUSE_BLOCKED_BY_SWITCHING_HIERARCHY = 2,
-    ADD_CAUSE_SELECT_FAILED = 3,
-    ADD_CAUSE_INVALID_POSITION = 4,
-    ADD_CAUSE_POSITION_REACHED = 5,
-    ADD_CAUSE_PARAMETER_CHANGE_IN_EXECUTION = 6,
-    ADD_CAUSE_STEP_LIMIT = 7,
-    ADD_CAUSE_BLOCKED_BY_MODE = 8,
-    ADD_CAUSE_BLOCKED_BY_PROCESS = 9,
-    ADD_CAUSE_BLOCKED_BY_INTERLOCKING = 10,
-    ADD_CAUSE_BLOCKED_BY_SYNCHROCHECK = 11,
-    ADD_CAUSE_COMMAND_ALREADY_IN_EXECUTION = 12,
-    ADD_CAUSE_BLOCKED_BY_HEALTH = 13,
-    ADD_CAUSE_1_OF_N_CONTROL = 14,
-    ADD_CAUSE_ABORTION_BY_CANCEL = 15,
-    ADD_CAUSE_TIME_LIMIT_OVER = 16,
-    ADD_CAUSE_ABORTION_BY_TRIP = 17,
-    ADD_CAUSE_OBJECT_NOT_SELECTED = 18,
-    ADD_CAUSE_OBJECT_ALREADY_SELECTED = 19,
-    ADD_CAUSE_NO_ACCESS_AUTHORITY = 20,
-    ADD_CAUSE_ENDED_WITH_OVERSHOOT = 21,
-    ADD_CAUSE_ABORTION_DUE_TO_DEVIATION = 22,
-    ADD_CAUSE_ABORTION_BY_COMMUNICATION_LOSS = 23,
-    ADD_CAUSE_ABORTION_BY_COMMAND = 24,
-    ADD_CAUSE_NONE = 25,
-    ADD_CAUSE_INCONSISTENT_PARAMETERS = 26,
-    ADD_CAUSE_LOCKED_BY_OTHER_CLIENT = 27
+typedef enum
+{
+  ADD_CAUSE_UNKNOWN = 0,
+  ADD_CAUSE_NOT_SUPPORTED = 1,
+  ADD_CAUSE_BLOCKED_BY_SWITCHING_HIERARCHY = 2,
+  ADD_CAUSE_SELECT_FAILED = 3,
+  ADD_CAUSE_INVALID_POSITION = 4,
+  ADD_CAUSE_POSITION_REACHED = 5,
+  ADD_CAUSE_PARAMETER_CHANGE_IN_EXECUTION = 6,
+  ADD_CAUSE_STEP_LIMIT = 7,
+  ADD_CAUSE_BLOCKED_BY_MODE = 8,
+  ADD_CAUSE_BLOCKED_BY_PROCESS = 9,
+  ADD_CAUSE_BLOCKED_BY_INTERLOCKING = 10,
+  ADD_CAUSE_BLOCKED_BY_SYNCHROCHECK = 11,
+  ADD_CAUSE_COMMAND_ALREADY_IN_EXECUTION = 12,
+  ADD_CAUSE_BLOCKED_BY_HEALTH = 13,
+  ADD_CAUSE_1_OF_N_CONTROL = 14,
+  ADD_CAUSE_ABORTION_BY_CANCEL = 15,
+  ADD_CAUSE_TIME_LIMIT_OVER = 16,
+  ADD_CAUSE_ABORTION_BY_TRIP = 17,
+  ADD_CAUSE_OBJECT_NOT_SELECTED = 18,
+  ADD_CAUSE_OBJECT_ALREADY_SELECTED = 19,
+  ADD_CAUSE_NO_ACCESS_AUTHORITY = 20,
+  ADD_CAUSE_ENDED_WITH_OVERSHOOT = 21,
+  ADD_CAUSE_ABORTION_DUE_TO_DEVIATION = 22,
+  ADD_CAUSE_ABORTION_BY_COMMUNICATION_LOSS = 23,
+  ADD_CAUSE_ABORTION_BY_COMMAND = 24,
+  ADD_CAUSE_NONE = 25,
+  ADD_CAUSE_INCONSISTENT_PARAMETERS = 26,
+  ADD_CAUSE_LOCKED_BY_OTHER_CLIENT = 27
 } ControlAddCause;
 
 /** @} */
@@ -241,11 +245,12 @@ typedef enum {
  * @{
  */
 
-typedef enum {
-    CONTROL_ERROR_NO_ERROR = 0,
-    CONTROL_ERROR_UNKNOWN = 1,
-    CONTROL_ERROR_TIMEOUT_TEST = 2,
-    CONTROL_ERROR_OPERATOR_TEST = 3
+typedef enum
+{
+  CONTROL_ERROR_NO_ERROR = 0,
+  CONTROL_ERROR_UNKNOWN = 1,
+  CONTROL_ERROR_TIMEOUT_TEST = 2,
+  CONTROL_ERROR_OPERATOR_TEST = 3
 } ControlLastApplError;
 
 /** @} */
@@ -257,62 +262,63 @@ typedef enum {
  */
 
 /** FCs (Functional constraints) according to IEC 61850-7-2 */
-typedef enum eFunctionalConstraint {
-    /** Status information */
-    IEC61850_FC_ST = 0,
-    /** Measurands - analog values */
-    IEC61850_FC_MX = 1,
-    /** Setpoint */
-    IEC61850_FC_SP = 2,
-    /** Substitution */
-    IEC61850_FC_SV = 3,
-    /** Configuration */
-    IEC61850_FC_CF = 4,
-    /** Description */
-    IEC61850_FC_DC = 5,
-    /** Setting group */
-    IEC61850_FC_SG = 6,
-    /** Setting group editable */
-    IEC61850_FC_SE = 7,
-    /** Service response / Service tracking */
-    IEC61850_FC_SR = 8,
-    /** Operate received */
-    IEC61850_FC_OR = 9,
-    /** Blocking */
-    IEC61850_FC_BL = 10,
-    /** Extended definition */
-    IEC61850_FC_EX = 11,
-    /** Control */
-    IEC61850_FC_CO = 12,
-    /** Unicast SV */
-    IEC61850_FC_US = 13,
-    /** Multicast SV */
-    IEC61850_FC_MS = 14,
-    /** Unbuffered report */
-    IEC61850_FC_RP = 15,
-    /** Buffered report */
-    IEC61850_FC_BR = 16,
-    /** Log control blocks */
-    IEC61850_FC_LG = 17,
-    /** Goose control blocks */
-    IEC61850_FC_GO = 18,
+typedef enum eFunctionalConstraint
+{
+  /** Status information */
+  IEC61850_FC_ST = 0,
+  /** Measurands - analog values */
+  IEC61850_FC_MX = 1,
+  /** Setpoint */
+  IEC61850_FC_SP = 2,
+  /** Substitution */
+  IEC61850_FC_SV = 3,
+  /** Configuration */
+  IEC61850_FC_CF = 4,
+  /** Description */
+  IEC61850_FC_DC = 5,
+  /** Setting group */
+  IEC61850_FC_SG = 6,
+  /** Setting group editable */
+  IEC61850_FC_SE = 7,
+  /** Service response / Service tracking */
+  IEC61850_FC_SR = 8,
+  /** Operate received */
+  IEC61850_FC_OR = 9,
+  /** Blocking */
+  IEC61850_FC_BL = 10,
+  /** Extended definition */
+  IEC61850_FC_EX = 11,
+  /** Control */
+  IEC61850_FC_CO = 12,
+  /** Unicast SV */
+  IEC61850_FC_US = 13,
+  /** Multicast SV */
+  IEC61850_FC_MS = 14,
+  /** Unbuffered report */
+  IEC61850_FC_RP = 15,
+  /** Buffered report */
+  IEC61850_FC_BR = 16,
+  /** Log control blocks */
+  IEC61850_FC_LG = 17,
+  /** Goose control blocks */
+  IEC61850_FC_GO = 18,
 
-    /** All FCs - wildcard value */
-    IEC61850_FC_ALL = 99,
-    IEC61850_FC_NONE = -1
+  /** All FCs - wildcard value */
+  IEC61850_FC_ALL = 99,
+  IEC61850_FC_NONE = -1
 } FunctionalConstraint;
 
 /**extern "C" {
  * \brief convert a function constraint to a static string
  */
-LIB61850_API char*
+LIB61850_API char *
 FunctionalConstraint_toString(FunctionalConstraint fc);
 
 /**
  * \brief parse a string treated as a functional constraint representation
  */
 LIB61850_API FunctionalConstraint
-FunctionalConstraint_fromString(const char* fcString);
+FunctionalConstraint_fromString(const char * fcString);
 
 /** @} */
 
@@ -366,7 +372,7 @@ Quality_isFlagSet(Quality* self, int flag);
 LIB61850_API Quality
 Quality_fromMmsValue(const MmsValue* mmsValue);
 
-LIB61850_API MmsValue*
+LIB61850_API MmsValue *
 Quality_toMmsValue(Quality* self, MmsValue* mmsValue);
 
 /** @} */
@@ -377,11 +383,12 @@ Quality_toMmsValue(Quality* self, MmsValue* mmsValue);
  * @{
  */
 
-typedef enum {
-    DBPOS_INTERMEDIATE_STATE = 0,
-    DBPOS_OFF = 1,
-    DBPOS_ON = 2,
-    DBPOS_BAD_STATE = 3
+typedef enum
+{
+  DBPOS_INTERMEDIATE_STATE = 0,
+  DBPOS_OFF = 1,
+  DBPOS_ON = 2,
+  DBPOS_BAD_STATE = 3
 } Dbpos;
 
 
@@ -403,7 +410,7 @@ Dbpos_fromMmsValue(const MmsValue* mmsValue);
  *
  * \return the corresponding MmsValue instance
  */
-LIB61850_API MmsValue*
+LIB61850_API MmsValue *
 Dbpos_toMmsValue(MmsValue* mmsValue, Dbpos dbpos);
 
 /** @} */
@@ -414,15 +421,16 @@ Dbpos_toMmsValue(MmsValue* mmsValue, Dbpos dbpos);
  * @{
  */
 
-typedef union {
-    uint8_t val[8];
+typedef union
+{
+  uint8_t val[8];
 } Timestamp;
 
-LIB61850_API Timestamp*
+LIB61850_API Timestamp *
 Timestamp_create(void);
 
-LIB61850_API Timestamp*
-Timestamp_createFromByteArray(const uint8_t* byteArray);
+LIB61850_API Timestamp *
+Timestamp_createFromByteArray(const uint8_t * byteArray);
 
 LIB61850_API void
 Timestamp_destroy(Timestamp* self);
@@ -520,7 +528,7 @@ Timestamp_setByMmsUtcTime(Timestamp* self, const MmsValue* mmsValue);
  * \param self the Timestamp instance
  * \param mmsValue the mmsValue instance, if NULL a new instance will be created
  */
-LIB61850_API MmsValue*
+LIB61850_API MmsValue *
 Timestamp_toMmsValue(Timestamp* self, MmsValue* mmsValue);
 
 /**
@@ -531,7 +539,7 @@ Timestamp_toMmsValue(Timestamp* self, MmsValue* mmsValue);
  *
  * \return the updated Timestamp value or NULL in case of an error
  */
-LIB61850_API Timestamp*
+LIB61850_API Timestamp *
 Timestamp_fromMmsValue(Timestamp* self, MmsValue* mmsValue);
 
 /**
@@ -539,7 +547,7 @@ Timestamp_fromMmsValue(Timestamp* self, MmsValue* mmsValue);
  *
  * \return the version of the library (e.g. "1.2.2")
  */
-LIB61850_API char*
+LIB61850_API char *
 LibIEC61850_getVersionString(void);
 
 /** @} */

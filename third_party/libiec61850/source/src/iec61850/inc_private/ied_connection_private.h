@@ -25,90 +25,92 @@
 #define IED_CONNECTION_PRIVATE_H_
 
 #ifndef DEBUG_IED_CLIENT
-#define DEBUG_IED_CLIENT 0
+  #define DEBUG_IED_CLIENT 0
 #endif
 
 #include "iec61850_common_internal.h"
 
 #include "hal_thread.h"
 
-typedef struct sIedConnectionOutstandingCall* IedConnectionOutstandingCall;
+typedef struct sIedConnectionOutstandingCall * IedConnectionOutstandingCall;
 
 struct sIedConnectionOutstandingCall
 {
-    bool used;
-    uint32_t invokeId;
-    void* callback;
-    void* callbackParameter;
-    void* specificParameter; /* function/service specific parameter */
+  bool used;
+  uint32_t invokeId;
+  void * callback;
+  void * callbackParameter;
+  void * specificParameter; /* function/service specific parameter */
 
-    union
+  union
+  {
+    void * pointer;
+    struct
     {
-        void* pointer;
-        struct {
-            uint32_t originalInvokeId;
-        } getFileInfo;
-        struct {
-            bool cont;
-        } getFileDirectory;
-    } specificParameter2; /* function/service specific parameter */
+      uint32_t originalInvokeId;
+    } getFileInfo;
+    struct
+    {
+      bool cont;
+    } getFileDirectory;
+  } specificParameter2; /* function/service specific parameter */
 };
 
 struct sIedConnection
 {
-    MmsConnection connection;
-    IedConnectionState state;
-    LinkedList enabledReports;
-    LinkedList logicalDevices;
+  MmsConnection connection;
+  IedConnectionState state;
+  LinkedList enabledReports;
+  LinkedList logicalDevices;
 
-    Semaphore clientControlsLock;
-    LinkedList clientControls;
+  Semaphore clientControlsLock;
+  LinkedList clientControls;
 
-    LastApplError lastApplError;
+  LastApplError lastApplError;
 
-    Semaphore stateMutex;
-    Semaphore reportHandlerMutex;
+  Semaphore stateMutex;
+  Semaphore reportHandlerMutex;
 
-    Semaphore outstandingCallsLock;
-    IedConnectionOutstandingCall outstandingCalls;
-    int maxOutstandingCalled;
+  Semaphore outstandingCallsLock;
+  IedConnectionOutstandingCall outstandingCalls;
+  int maxOutstandingCalled;
 
-    IedConnectionClosedHandler connectionCloseHandler;
-    void* connectionClosedParameter;
+  IedConnectionClosedHandler connectionCloseHandler;
+  void * connectionClosedParameter;
 
-    IedConnection_StateChangedHandler connectionStateChangedHandler;
-    void* connectionStateChangedHandlerParameter;
+  IedConnection_StateChangedHandler connectionStateChangedHandler;
+  void * connectionStateChangedHandlerParameter;
 
-    uint32_t connectionTimeout;
+  uint32_t connectionTimeout;
 
-    uint8_t timeQuality;
+  uint8_t timeQuality;
 };
 
 struct sClientReportControlBlock
 {
-    char* objectReference;
-    bool isBuffered;
+  char * objectReference;
+  bool isBuffered;
 
-    MmsValue* rptId;
-    MmsValue* rptEna;
-    MmsValue* resv;
-    MmsValue* datSet;
-    MmsValue* confRev;
-    MmsValue* optFlds;
-    MmsValue* bufTm;
-    MmsValue* sqNum;
-    MmsValue* trgOps;
-    MmsValue* intgPd;
-    MmsValue* gi;
-    MmsValue* purgeBuf;
-    MmsValue* entryId;
-    MmsValue* timeOfEntry;
-    MmsValue* resvTms;
-    MmsValue* owner;
+  MmsValue * rptId;
+  MmsValue * rptEna;
+  MmsValue * resv;
+  MmsValue * datSet;
+  MmsValue * confRev;
+  MmsValue * optFlds;
+  MmsValue * bufTm;
+  MmsValue * sqNum;
+  MmsValue * trgOps;
+  MmsValue * intgPd;
+  MmsValue * gi;
+  MmsValue * purgeBuf;
+  MmsValue * entryId;
+  MmsValue * timeOfEntry;
+  MmsValue * resvTms;
+  MmsValue * owner;
 };
 
 LIB61850_INTERNAL bool
-iedConnection_doesControlObjectMatch(const char* objRef, const char* cntrlObj);
+iedConnection_doesControlObjectMatch(const char * objRef, const char * cntrlObj);
 
 LIB61850_INTERNAL void
 iedConnection_addControlClient(IedConnection self, ControlObjectClient control);

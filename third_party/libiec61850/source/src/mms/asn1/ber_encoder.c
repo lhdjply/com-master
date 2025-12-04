@@ -25,494 +25,494 @@
 #include "libiec61850_platform_includes.h"
 
 int
-BerEncoder_encodeLength(uint32_t length, uint8_t* buffer, int bufPos)
+BerEncoder_encodeLength(uint32_t length, uint8_t * buffer, int bufPos)
 {
-    if (length < 128)
-    {
-        buffer[bufPos++] = (uint8_t)length;
-    }
-    else if (length < 256)
-    {
-        buffer[bufPos++] = 0x81;
-        buffer[bufPos++] = (uint8_t)length;
-    }
-    else if (length < 65535)
-    {
-        buffer[bufPos++] = 0x82;
+  if(length < 128)
+  {
+    buffer[bufPos++] = (uint8_t)length;
+  }
+  else if(length < 256)
+  {
+    buffer[bufPos++] = 0x81;
+    buffer[bufPos++] = (uint8_t)length;
+  }
+  else if(length < 65535)
+  {
+    buffer[bufPos++] = 0x82;
 
-        buffer[bufPos++] = (uint8_t)(length / 256);
-        buffer[bufPos++] = (uint8_t)(length % 256);
-    }
-    else
-    {
-        buffer[bufPos++] = 0x83;
+    buffer[bufPos++] = (uint8_t)(length / 256);
+    buffer[bufPos++] = (uint8_t)(length % 256);
+  }
+  else
+  {
+    buffer[bufPos++] = 0x83;
 
-        buffer[bufPos++] = (uint8_t)(length / 0x10000);
-        buffer[bufPos++] = (uint8_t)((length & 0xffff) / 0x100);
-        buffer[bufPos++] = (uint8_t)(length % 256);
-    }
+    buffer[bufPos++] = (uint8_t)(length / 0x10000);
+    buffer[bufPos++] = (uint8_t)((length & 0xffff) / 0x100);
+    buffer[bufPos++] = (uint8_t)(length % 256);
+  }
 
-    return bufPos;
+  return bufPos;
 }
 
 int
-BerEncoder_encodeTL(uint8_t tag, uint32_t length, uint8_t* buffer, int bufPos)
+BerEncoder_encodeTL(uint8_t tag, uint32_t length, uint8_t * buffer, int bufPos)
 {
-    buffer[bufPos++] = tag;
-    bufPos = BerEncoder_encodeLength(length, buffer, bufPos);
+  buffer[bufPos++] = tag;
+  bufPos = BerEncoder_encodeLength(length, buffer, bufPos);
 
-    return bufPos;
+  return bufPos;
 }
 
 int
-BerEncoder_encodeBoolean(uint8_t tag, bool value, uint8_t* buffer, int bufPos)
+BerEncoder_encodeBoolean(uint8_t tag, bool value, uint8_t * buffer, int bufPos)
 {
-    buffer[bufPos++] = tag;
-    buffer[bufPos++] = 1;
+  buffer[bufPos++] = tag;
+  buffer[bufPos++] = 1;
 
-    if (value)
-        buffer[bufPos++] = 0x01;
-    else
-        buffer[bufPos++] = 0x00;
+  if(value)
+    buffer[bufPos++] = 0x01;
+  else
+    buffer[bufPos++] = 0x00;
 
-    return bufPos;
+  return bufPos;
 }
 
 int
-BerEncoder_encodeStringWithTag(uint8_t tag, const char* string, uint8_t* buffer, int bufPos)
+BerEncoder_encodeStringWithTag(uint8_t tag, const char * string, uint8_t * buffer, int bufPos)
 {
-    buffer[bufPos++] = tag;
+  buffer[bufPos++] = tag;
 
-    if (string != NULL)
-    {
-        int length = (int)strlen(string);
+  if(string != NULL)
+  {
+    int length = (int)strlen(string);
 
-        bufPos = BerEncoder_encodeLength((uint32_t)length, buffer, bufPos);
-
-        int i;
-        for (i = 0; i < length; i++)
-        {
-            buffer[bufPos++] = (uint8_t)string[i];
-        }
-    }
-    else
-        buffer[bufPos++] = 0;
-
-    return bufPos;
-}
-
-int
-BerEncoder_encodeAsn1PrimitiveValue(uint8_t tag, Asn1PrimitiveValue* value, uint8_t* buffer, int bufPos)
-{
-    buffer[bufPos++] = tag;
-
-    bufPos = BerEncoder_encodeLength(value->size, buffer, bufPos);
+    bufPos = BerEncoder_encodeLength((uint32_t)length, buffer, bufPos);
 
     int i;
-    for (i = 0; i < value->size; i++)
+    for(i = 0; i < length; i++)
     {
-        buffer[bufPos++] = value->octets[i];
+      buffer[bufPos++] = (uint8_t)string[i];
     }
+  }
+  else
+    buffer[bufPos++] = 0;
 
-    return bufPos;
+  return bufPos;
 }
 
 int
-BerEncoder_encodeOctetString(uint8_t tag, uint8_t* octetString, uint32_t octetStringSize, uint8_t* buffer, int bufPos)
+BerEncoder_encodeAsn1PrimitiveValue(uint8_t tag, Asn1PrimitiveValue* value, uint8_t * buffer, int bufPos)
 {
-    buffer[bufPos++] = tag;
+  buffer[bufPos++] = tag;
 
-    bufPos = BerEncoder_encodeLength(octetStringSize, buffer, bufPos);
+  bufPos = BerEncoder_encodeLength(value->size, buffer, bufPos);
 
-    uint32_t i;
-    for (i = 0; i < octetStringSize; i++)
-    {
-        buffer[bufPos++] = octetString[i];
-    }
+  int i;
+  for(i = 0; i < value->size; i++)
+  {
+    buffer[bufPos++] = value->octets[i];
+  }
 
-    return bufPos;
+  return bufPos;
 }
 
 int
-BerEncoder_encodeBitString(uint8_t tag, int bitStringSize, uint8_t* bitString, uint8_t* buffer, int bufPos)
+BerEncoder_encodeOctetString(uint8_t tag, uint8_t * octetString, uint32_t octetStringSize, uint8_t * buffer, int bufPos)
 {
-    buffer[bufPos++] = tag;
+  buffer[bufPos++] = tag;
 
-    int byteSize = bitStringSize / 8;
+  bufPos = BerEncoder_encodeLength(octetStringSize, buffer, bufPos);
 
-    if (bitStringSize % 8)
-        byteSize++;
+  uint32_t i;
+  for(i = 0; i < octetStringSize; i++)
+  {
+    buffer[bufPos++] = octetString[i];
+  }
 
-    int padding = (byteSize * 8) - bitStringSize;
+  return bufPos;
+}
 
-    bufPos = BerEncoder_encodeLength(byteSize + 1, buffer, bufPos);
+int
+BerEncoder_encodeBitString(uint8_t tag, int bitStringSize, uint8_t * bitString, uint8_t * buffer, int bufPos)
+{
+  buffer[bufPos++] = tag;
 
-    buffer[bufPos++] = padding;
+  int byteSize = bitStringSize / 8;
 
-    int i;
+  if(bitStringSize % 8)
+    byteSize++;
 
-    for (i = 0; i < byteSize; i++)
-    {
-        buffer[bufPos++] = bitString[i];
-    }
+  int padding = (byteSize * 8) - bitStringSize;
 
-    uint8_t paddingMask = 0;
+  bufPos = BerEncoder_encodeLength(byteSize + 1, buffer, bufPos);
 
-    for (i = 0; i < padding; i++)
-    {
-        paddingMask += (1 << i);
-    }
+  buffer[bufPos++] = padding;
 
-    paddingMask = ~paddingMask;
+  int i;
 
-    buffer[bufPos - 1] = buffer[bufPos - 1] & paddingMask;
+  for(i = 0; i < byteSize; i++)
+  {
+    buffer[bufPos++] = bitString[i];
+  }
 
-    return bufPos;
+  uint8_t paddingMask = 0;
+
+  for(i = 0; i < padding; i++)
+  {
+    paddingMask += (1 << i);
+  }
+
+  paddingMask = ~paddingMask;
+
+  buffer[bufPos - 1] = buffer[bufPos - 1] & paddingMask;
+
+  return bufPos;
 }
 
 int
 BerEncoder_determineEncodedBitStringSize(int bitStringSize)
 {
-    int size = 2; /* for tag and padding */
+  int size = 2; /* for tag and padding */
 
-    int byteSize = bitStringSize / 8;
+  int byteSize = bitStringSize / 8;
 
-    if (bitStringSize % 8)
-        byteSize++;
+  if(bitStringSize % 8)
+    byteSize++;
 
-    size += BerEncoder_determineLengthSize(byteSize);
+  size += BerEncoder_determineLengthSize(byteSize);
 
-    size += byteSize;
+  size += byteSize;
 
-    return size;
+  return size;
 }
 
 void
-BerEncoder_revertByteOrder(uint8_t* octets, const int size)
+BerEncoder_revertByteOrder(uint8_t * octets, const int size)
 {
-    int i;
+  int i;
 
-    for (i = 0; i < size / 2; i++)
-    {
-        uint8_t temp = octets[i];
-        octets[i] = octets[(size - 1) - i];
-        octets[(size - 1) - i] = temp;
-    }
+  for(i = 0; i < size / 2; i++)
+  {
+    uint8_t temp = octets[i];
+    octets[i] = octets[(size - 1) - i];
+    octets[(size - 1) - i] = temp;
+  }
 }
 
 int
-BerEncoder_compressInteger(uint8_t* integer, int originalSize)
+BerEncoder_compressInteger(uint8_t * integer, int originalSize)
 {
-    uint8_t* integerEnd = integer + originalSize - 1;
-    uint8_t* bytePosition;
+  uint8_t * integerEnd = integer + originalSize - 1;
+  uint8_t * bytePosition;
 
-    for (bytePosition = integer; bytePosition < integerEnd; bytePosition++)
+  for(bytePosition = integer; bytePosition < integerEnd; bytePosition++)
+  {
+
+    if(bytePosition[0] == 0x00)
     {
-
-        if (bytePosition[0] == 0x00)
-        {
-            if ((bytePosition[1] & 0x80) == 0)
-                continue;
-        }
-        else if (bytePosition[0] == 0xff)
-        {
-            if ((bytePosition[1] & 0x80) == 0x80)
-                continue;
-        }
-
-        break;
+      if((bytePosition[1] & 0x80) == 0)
+        continue;
+    }
+    else if(bytePosition[0] == 0xff)
+    {
+      if((bytePosition[1] & 0x80) == 0x80)
+        continue;
     }
 
-    int bytesToDelete = bytePosition - integer;
-    int newSize = originalSize;
+    break;
+  }
 
-    if (bytesToDelete)
+  int bytesToDelete = bytePosition - integer;
+  int newSize = originalSize;
+
+  if(bytesToDelete)
+  {
+    newSize -= bytesToDelete;
+    uint8_t * newEnd = integer + newSize;
+
+    uint8_t * newBytePosition;
+
+    for(newBytePosition = integer; newBytePosition < newEnd; newBytePosition++)
     {
-        newSize -= bytesToDelete;
-        uint8_t* newEnd = integer + newSize;
-
-        uint8_t* newBytePosition;
-
-        for (newBytePosition = integer; newBytePosition < newEnd; newBytePosition++)
-        {
-            *newBytePosition = *bytePosition;
-            bytePosition++;
-        }
+      *newBytePosition = *bytePosition;
+      bytePosition++;
     }
+  }
 
-    return newSize;
+  return newSize;
 }
 
 int
-BerEncoder_encodeUInt32(uint32_t value, uint8_t* buffer, int bufPos)
+BerEncoder_encodeUInt32(uint32_t value, uint8_t * buffer, int bufPos)
 {
-    uint8_t* valueArray = (uint8_t*)&value;
-    uint8_t valueBuffer[5];
+  uint8_t * valueArray = (uint8_t *)&value;
+  uint8_t valueBuffer[5];
 
-    valueBuffer[0] = 0;
+  valueBuffer[0] = 0;
 
-    int i;
-    for (i = 0; i < 4; i++)
-    {
-        valueBuffer[i + 1] = valueArray[i];
-    }
+  int i;
+  for(i = 0; i < 4; i++)
+  {
+    valueBuffer[i + 1] = valueArray[i];
+  }
 
 #if (ORDER_LITTLE_ENDIAN == 1)
-    BerEncoder_revertByteOrder(valueBuffer + 1, 4);
+  BerEncoder_revertByteOrder(valueBuffer + 1, 4);
 #endif
 
-    int size = BerEncoder_compressInteger(valueBuffer, 5);
+  int size = BerEncoder_compressInteger(valueBuffer, 5);
 
-    for (i = 0; i < size; i++)
-    {
-        buffer[bufPos++] = valueBuffer[i];
-    }
+  for(i = 0; i < size; i++)
+  {
+    buffer[bufPos++] = valueBuffer[i];
+  }
 
-    return bufPos;
+  return bufPos;
 }
 
 int
-BerEncoder_encodeInt32(int32_t value, uint8_t* buffer, int bufPos)
+BerEncoder_encodeInt32(int32_t value, uint8_t * buffer, int bufPos)
 {
-    uint8_t* valueArray = (uint8_t*)&value;
-    uint8_t valueBuffer[4];
+  uint8_t * valueArray = (uint8_t *)&value;
+  uint8_t valueBuffer[4];
 
-    int i;
+  int i;
 
 #if (ORDER_LITTLE_ENDIAN == 1)
-    for (i = 0; i < 4; i++)
-    {
-        valueBuffer[3 - i] = valueArray[i];
-    }
+  for(i = 0; i < 4; i++)
+  {
+    valueBuffer[3 - i] = valueArray[i];
+  }
 #else
-    for (i = 0; i < 4; i++)
-    {
-        valueBuffer[i] = valueArray[i];
-    }
+  for(i = 0; i < 4; i++)
+  {
+    valueBuffer[i] = valueArray[i];
+  }
 #endif
 
-    int size = BerEncoder_compressInteger(valueBuffer, 4);
+  int size = BerEncoder_compressInteger(valueBuffer, 4);
 
-    for (i = 0; i < size; i++)
-    {
-        buffer[bufPos++] = valueBuffer[i];
-    }
+  for(i = 0; i < size; i++)
+  {
+    buffer[bufPos++] = valueBuffer[i];
+  }
 
-    return bufPos;
+  return bufPos;
 }
 
 int
-BerEncoder_encodeUInt32WithTL(uint8_t tag, uint32_t value, uint8_t* buffer, int bufPos)
+BerEncoder_encodeUInt32WithTL(uint8_t tag, uint32_t value, uint8_t * buffer, int bufPos)
 {
-    uint8_t* valueArray = (uint8_t*)&value;
-    uint8_t valueBuffer[5];
+  uint8_t * valueArray = (uint8_t *)&value;
+  uint8_t valueBuffer[5];
 
-    valueBuffer[0] = 0;
+  valueBuffer[0] = 0;
 
-    int i;
-    for (i = 0; i < 4; i++)
-    {
-        valueBuffer[i + 1] = valueArray[i];
-    }
+  int i;
+  for(i = 0; i < 4; i++)
+  {
+    valueBuffer[i + 1] = valueArray[i];
+  }
 
 #if (ORDER_LITTLE_ENDIAN == 1)
-    BerEncoder_revertByteOrder(valueBuffer + 1, 4);
+  BerEncoder_revertByteOrder(valueBuffer + 1, 4);
 #endif
 
-    int size = BerEncoder_compressInteger(valueBuffer, 5);
+  int size = BerEncoder_compressInteger(valueBuffer, 5);
 
-    buffer[bufPos++] = tag;
-    buffer[bufPos++] = (uint8_t)size;
+  buffer[bufPos++] = tag;
+  buffer[bufPos++] = (uint8_t)size;
 
-    for (i = 0; i < size; i++)
-    {
-        buffer[bufPos++] = valueBuffer[i];
-    }
+  for(i = 0; i < size; i++)
+  {
+    buffer[bufPos++] = valueBuffer[i];
+  }
 
-    return bufPos;
+  return bufPos;
 }
 
 int
-BerEncoder_encodeFloat(uint8_t* floatValue, uint8_t formatWidth, uint8_t exponentWidth, uint8_t* buffer, int bufPos)
+BerEncoder_encodeFloat(uint8_t * floatValue, uint8_t formatWidth, uint8_t exponentWidth, uint8_t * buffer, int bufPos)
 {
-    uint8_t* valueBuffer = buffer + bufPos;
+  uint8_t * valueBuffer = buffer + bufPos;
 
-    int byteSize = formatWidth / 8;
+  int byteSize = formatWidth / 8;
 
-    valueBuffer[0] = exponentWidth;
+  valueBuffer[0] = exponentWidth;
 
-    int i;
-    for (i = 0; i < byteSize; i++)
-    {
-        valueBuffer[i + 1] = floatValue[i];
-    }
+  int i;
+  for(i = 0; i < byteSize; i++)
+  {
+    valueBuffer[i + 1] = floatValue[i];
+  }
 
 #if (ORDER_LITTLE_ENDIAN == 1)
-    BerEncoder_revertByteOrder(valueBuffer + 1, byteSize);
+  BerEncoder_revertByteOrder(valueBuffer + 1, byteSize);
 #endif
 
-    bufPos = bufPos + 1 + byteSize;
+  bufPos = bufPos + 1 + byteSize;
 
-    return bufPos;
+  return bufPos;
 }
 
 int
 BerEncoder_UInt32determineEncodedSize(uint32_t value)
 {
-    uint8_t* valueArray = (uint8_t*)&value;
-    uint8_t valueBuffer[5];
+  uint8_t * valueArray = (uint8_t *)&value;
+  uint8_t valueBuffer[5];
 
-    valueBuffer[0] = 0;
+  valueBuffer[0] = 0;
 
-    int i;
-    for (i = 0; i < 4; i++)
-    {
-        valueBuffer[i + 1] = valueArray[i];
-    }
+  int i;
+  for(i = 0; i < 4; i++)
+  {
+    valueBuffer[i + 1] = valueArray[i];
+  }
 
 #if (ORDER_LITTLE_ENDIAN == 1)
-    BerEncoder_revertByteOrder(valueBuffer + 1, 4);
+  BerEncoder_revertByteOrder(valueBuffer + 1, 4);
 #endif
 
-    int size = BerEncoder_compressInteger(valueBuffer, 5);
+  int size = BerEncoder_compressInteger(valueBuffer, 5);
 
-    return size;
+  return size;
 }
 
 int
 BerEncoder_Int32determineEncodedSize(int32_t value)
 {
-    uint8_t* valueArray = (uint8_t*)&value;
-    uint8_t valueBuffer[5];
+  uint8_t * valueArray = (uint8_t *)&value;
+  uint8_t valueBuffer[5];
 
-    valueBuffer[0] = 0;
+  valueBuffer[0] = 0;
 
-    int i;
-    for (i = 0; i < 4; i++)
-    {
-        valueBuffer[i + 1] = valueArray[i];
-    }
+  int i;
+  for(i = 0; i < 4; i++)
+  {
+    valueBuffer[i + 1] = valueArray[i];
+  }
 
 #if (ORDER_LITTLE_ENDIAN == 1)
-    BerEncoder_revertByteOrder(valueBuffer + 1, 4);
+  BerEncoder_revertByteOrder(valueBuffer + 1, 4);
 #endif
 
-    int size = BerEncoder_compressInteger(valueBuffer, 5);
+  int size = BerEncoder_compressInteger(valueBuffer, 5);
 
-    return size;
+  return size;
 }
 
 int
 BerEncoder_determineLengthSize(uint32_t length)
 {
-    if (length < 128)
-        return 1;
-    if (length < 256)
-        return 2;
-    if (length < 65536)
-        return 3;
-    else
-        return 4;
+  if(length < 128)
+    return 1;
+  if(length < 256)
+    return 2;
+  if(length < 65536)
+    return 3;
+  else
+    return 4;
 }
 
 int
-BerEncoder_determineEncodedStringSize(const char* string)
+BerEncoder_determineEncodedStringSize(const char * string)
 {
-    if (string != NULL)
-    {
-        int size = 1;
+  if(string != NULL)
+  {
+    int size = 1;
 
-        int length = strlen(string);
+    int length = strlen(string);
 
-        size += BerEncoder_determineLengthSize(length);
+    size += BerEncoder_determineLengthSize(length);
 
-        size += length;
+    size += length;
 
-        return size;
-    }
-    else
-        return 2;
+    return size;
+  }
+  else
+    return 2;
 }
 
 int
-BerEncoder_encodeOIDToBuffer(const char* oidString, uint8_t* buffer, int maxBufLen)
+BerEncoder_encodeOIDToBuffer(const char * oidString, uint8_t * buffer, int maxBufLen)
 {
-    int encodedBytes = 0;
+  int encodedBytes = 0;
 
-    int x = atoi(oidString);
+  int x = atoi(oidString);
 
-    char sepChar = '.';
+  char sepChar = '.';
 
-    const char* separator = strchr(oidString, '.');
+  const char * separator = strchr(oidString, '.');
 
-    if (separator == NULL)
+  if(separator == NULL)
+  {
+    sepChar = ',';
+    separator = strchr(oidString, ',');
+  }
+
+  if(separator == NULL)
+  {
+    sepChar = ' ';
+    separator = strchr(oidString, ' ');
+  }
+
+  if(separator == NULL)
+    return 0;
+
+  int y = atoi(separator + 1);
+
+  int val = x * 40 + y;
+
+  if(encodedBytes < maxBufLen)
+    buffer[encodedBytes] = (uint8_t)val;
+  else
+    return 0;
+
+  encodedBytes++;
+
+  while(1)
+  {
+    separator = strchr(separator + 1, sepChar);
+
+    if(separator == NULL)
+      break;
+
+    val = atoi(separator + 1);
+
+    if(val == 0)
     {
-        sepChar = ',';
-        separator = strchr(oidString, ',');
+      buffer[encodedBytes++] = 0;
     }
-
-    if (separator == NULL)
-    {
-        sepChar = ' ';
-        separator = strchr(oidString, ' ');
-    }
-
-    if (separator == NULL)
-        return 0;
-
-    int y = atoi(separator + 1);
-
-    int val = x * 40 + y;
-
-    if (encodedBytes < maxBufLen)
-        buffer[encodedBytes] = (uint8_t)val;
     else
-        return 0;
-
-    encodedBytes++;
-
-    while (1)
     {
-        separator = strchr(separator + 1, sepChar);
+      int requiredBytes = 0;
+      int val2 = val;
 
-        if (separator == NULL)
-            break;
+      while(val2 > 0)
+      {
+        requiredBytes++;
+        val2 = val2 >> 7;
+      }
 
-        val = atoi(separator + 1);
+      while(requiredBytes > 0)
+      {
+        val2 = val >> (7 * (requiredBytes - 1));
 
-        if (val == 0)
-        {
-            buffer[encodedBytes++] = 0;
-        }
-        else
-        {
-            int requiredBytes = 0;
-            int val2 = val;
+        val2 = val2 & 0x7f;
 
-            while (val2 > 0)
-            {
-                requiredBytes++;
-                val2 = val2 >> 7;
-            }
+        if(requiredBytes > 1)
+          val2 += 128;
 
-            while (requiredBytes > 0)
-            {
-                val2 = val >> (7 * (requiredBytes - 1));
+        if(encodedBytes == maxBufLen)
+          return 0;
 
-                val2 = val2 & 0x7f;
+        buffer[encodedBytes++] = (uint8_t)val2;
 
-                if (requiredBytes > 1)
-                    val2 += 128;
-
-                if (encodedBytes == maxBufLen)
-                    return 0;
-
-                buffer[encodedBytes++] = (uint8_t)val2;
-
-                requiredBytes--;
-            }
-        }
+        requiredBytes--;
+      }
     }
+  }
 
-    return encodedBytes;
+  return encodedBytes;
 }

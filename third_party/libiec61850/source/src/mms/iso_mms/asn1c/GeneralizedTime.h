@@ -2,8 +2,8 @@
  * Copyright (c) 2003, 2004 Lev Walkin <vlm@lionet.info>. All rights reserved.
  * Redistribution and modifications are permitted subject to BSD license.
  */
-#ifndef	_GeneralizedTime_H_
-#define	_GeneralizedTime_H_
+#ifndef _GeneralizedTime_H_
+#define _GeneralizedTime_H_
 
 #include <OCTET_STRING.h>
 
@@ -24,7 +24,7 @@ LIB61850_INTERNAL xer_type_encoder_f GeneralizedTime_encode_xer;
  * Some handy helpers. *
  ***********************/
 
-struct tm;	/* <time.h> */
+struct tm;  /* <time.h> */
 
 /*
  * Convert a GeneralizedTime structure into time_t
@@ -34,12 +34,12 @@ struct tm;	/* <time.h> */
  * On error returns -1 and errno set to EINVAL
  */
 LIB61850_INTERNAL time_t asn_GT2time(const GeneralizedTime_t *, struct tm *_optional_tm4fill,
-	int as_gmt);
+                                     int as_gmt);
 
 /* A version of the above function also returning the fractions of seconds */
 LIB61850_INTERNAL time_t asn_GT2time_frac(const GeneralizedTime_t *,
-	int *frac_value, int *frac_digits,	/* (value / (10 ^ digits)) */
-	struct tm *_optional_tm4fill, int as_gmt);
+                                          int * frac_value, int * frac_digits, /* (value / (10 ^ digits)) */
+                                          struct tm *_optional_tm4fill, int as_gmt);
 
 /*
  * Another version returning fractions with defined precision
@@ -47,8 +47,8 @@ LIB61850_INTERNAL time_t asn_GT2time_frac(const GeneralizedTime_t *,
  * with frac_digits=3 (msec) would yield frac_value = 100.
  */
 LIB61850_INTERNAL time_t asn_GT2time_prec(const GeneralizedTime_t *,
-	int *frac_value, int frac_digits,
-	struct tm *_optional_tm4fill, int as_gmt);
+                                          int * frac_value, int frac_digits,
+                                          struct tm *_optional_tm4fill, int as_gmt);
 
 /*
  * Convert a struct tm into GeneralizedTime.
@@ -57,13 +57,13 @@ LIB61850_INTERNAL time_t asn_GT2time_prec(const GeneralizedTime_t *,
  * into a GMT time zone (encoding ends with a "Z").
  * On error, this function returns 0 and sets errno.
  */
-LIB61850_INTERNAL GeneralizedTime_t *asn_time2GT(GeneralizedTime_t *_optional_gt,
-	const struct tm *, int force_gmt);
-LIB61850_INTERNAL GeneralizedTime_t *asn_time2GT_frac(GeneralizedTime_t *_optional_gt,
-	const struct tm *, int frac_value, int frac_digits, int force_gmt);
+LIB61850_INTERNAL GeneralizedTime_t * asn_time2GT(GeneralizedTime_t * _optional_gt,
+                                                  const struct tm *, int force_gmt);
+LIB61850_INTERNAL GeneralizedTime_t * asn_time2GT_frac(GeneralizedTime_t * _optional_gt,
+                                                       const struct tm *, int frac_value, int frac_digits, int force_gmt);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif	/* _GeneralizedTime_H_ */
+#endif  /* _GeneralizedTime_H_ */

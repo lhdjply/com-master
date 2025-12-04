@@ -31,13 +31,14 @@ extern "C" {
 
 #include "libiec61850_common_api.h"
 
-typedef struct ATTRIBUTE_PACKED {
-	uint8_t size;
-	uint8_t maxSize;
-	uint8_t* octets;
+typedef struct ATTRIBUTE_PACKED
+{
+  uint8_t size;
+  uint8_t maxSize;
+  uint8_t * octets;
 } Asn1PrimitiveValue;
 
-LIB61850_INTERNAL Asn1PrimitiveValue*
+LIB61850_INTERNAL Asn1PrimitiveValue *
 Asn1PrimitiveValue_create(int size);
 
 LIB61850_INTERNAL int
@@ -46,7 +47,7 @@ Asn1PrimitiveValue_getSize(Asn1PrimitiveValue* self);
 LIB61850_INTERNAL int
 Asn1PrimitiveValue_getMaxSize(Asn1PrimitiveValue* self);
 
-LIB61850_INTERNAL Asn1PrimitiveValue*
+LIB61850_INTERNAL Asn1PrimitiveValue *
 Asn1PrimitiveValue_clone(Asn1PrimitiveValue* self);
 
 LIB61850_INTERNAL bool

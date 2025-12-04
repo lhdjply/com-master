@@ -33,7 +33,7 @@
 #include "r_session_internal.h"
 
 #ifndef DEBUG_SV_PUBLISHER
-#define DEBUG_SV_PUBLISHER 1
+  #define DEBUG_SV_PUBLISHER 1
 #endif
 
 #define CONFIG_SV_DEFAULT_DST_ADDRESS CONFIG_GOOSE_DEFAULT_DST_ADDRESS
@@ -46,803 +46,803 @@
 
 struct sSVPublisher_ASDU
 {
-    const char* svID;
-    const char* datset;
-    int dataSize;
+  const char * svID;
+  const char * datset;
+  int dataSize;
 
-    /* flags to indicate presence of optional fields */
-    bool hasRefrTm;
-    bool hasSmpRate;
-    bool hasSmpMod;
-    bool hasGmIdentity;
+  /* flags to indicate presence of optional fields */
+  bool hasRefrTm;
+  bool hasSmpRate;
+  bool hasSmpMod;
+  bool hasGmIdentity;
 
-    uint8_t* _dataBuffer;
+  uint8_t * _dataBuffer;
 
-    uint8_t smpSynch;
-    uint16_t smpCnt;
-    uint16_t smpCntLimit;
-    uint32_t confRev;
+  uint8_t smpSynch;
+  uint16_t smpCnt;
+  uint16_t smpCntLimit;
+  uint32_t confRev;
 
-    uint8_t gmIdentity[8];
+  uint8_t gmIdentity[8];
 
-    Timestamp* refrTm;
-    uint8_t smpMod;
-    uint16_t smpRate;
+  Timestamp * refrTm;
+  uint8_t smpMod;
+  uint16_t smpRate;
 
-    uint8_t* smpCntBuf;
-    uint8_t* smpSynchBuf;
+  uint8_t * smpCntBuf;
+  uint8_t * smpSynchBuf;
 
-    SVPublisher_ASDU _next;
+  SVPublisher_ASDU _next;
 };
 
 struct sSVPublisher
 {
-    uint8_t* buffer;
+  uint8_t * buffer;
 
-    uint16_t appId;
-    bool simulation;
+  uint16_t appId;
+  bool simulation;
 
 #if (CONFIG_IEC61850_L2_SMV == 1)
-    /* only for Ethernet based SV */
-    EthernetSocket ethernetSocket;
+  /* only for Ethernet based SV */
+  EthernetSocket ethernetSocket;
 #endif /* (CONFIG_IEC61850_L2_SMV == 1) */
 
 #if (CONFIG_IEC61850_R_SMV == 1)
-    /* only for R-SV */
-    RSession remoteSession;
+  /* only for R-SV */
+  RSession remoteSession;
 #endif /* (CONFIG_IEC61850_R_SMV == 1) */
 
-    int lengthField; /* can probably be removed since packets have fixed size! */
-    int payloadStart;
+  int lengthField; /* can probably be removed since packets have fixed size! */
+  int payloadStart;
 
-    int payloadLength; /* length of payload buffer */
+  int payloadLength; /* length of payload buffer */
 
-    int asduCount; /* number of ASDUs in the APDU */
-    SVPublisher_ASDU asduList;
+  int asduCount; /* number of ASDUs in the APDU */
+  SVPublisher_ASDU asduList;
 };
 
 #if (CONFIG_IEC61850_L2_SMV == 1)
 static bool
-preparePacketBuffer(SVPublisher self, CommParameters* parameters, const char* interfaceId, bool useVlanTags)
+preparePacketBuffer(SVPublisher self, CommParameters* parameters, const char * interfaceId, bool useVlanTags)
 {
-    uint8_t defaultDstAddr[] = CONFIG_SV_DEFAULT_DST_ADDRESS;
+  uint8_t defaultDstAddr[] = CONFIG_SV_DEFAULT_DST_ADDRESS;
 
-    uint8_t* dstAddr;
-    uint8_t priority;
-    uint16_t vlanId;
-    uint16_t appId;
+  uint8_t * dstAddr;
+  uint8_t priority;
+  uint16_t vlanId;
+  uint16_t appId;
 
-    uint8_t srcAddr[6];
+  uint8_t srcAddr[6];
 
-    if (interfaceId != NULL)
-        Ethernet_getInterfaceMACAddress(interfaceId, srcAddr);
-    else
-        Ethernet_getInterfaceMACAddress(CONFIG_ETHERNET_INTERFACE_ID, srcAddr);
+  if(interfaceId != NULL)
+    Ethernet_getInterfaceMACAddress(interfaceId, srcAddr);
+  else
+    Ethernet_getInterfaceMACAddress(CONFIG_ETHERNET_INTERFACE_ID, srcAddr);
 
-    if (parameters == NULL)
+  if(parameters == NULL)
+  {
+    dstAddr = defaultDstAddr;
+    priority = CONFIG_SV_DEFAULT_PRIORITY;
+    vlanId = CONFIG_SV_DEFAULT_VLAN_ID;
+    appId = CONFIG_SV_DEFAULT_APPID;
+  }
+  else
+  {
+    dstAddr = parameters->dstAddress;
+    priority = parameters->vlanPriority;
+    vlanId = parameters->vlanId;
+    appId = parameters->appId;
+  }
+
+  if(interfaceId != NULL)
+    self->ethernetSocket = Ethernet_createSocket(interfaceId, dstAddr);
+  else
+    self->ethernetSocket = Ethernet_createSocket(CONFIG_ETHERNET_INTERFACE_ID, dstAddr);
+
+  if(self->ethernetSocket == NULL)
+  {
+    if(DEBUG_SV_PUBLISHER)
+      printf("SV_PUBLISHER: Failed to allocate Ethernet interface\n");
+
+    return false;
+  }
+
+  self->buffer = (uint8_t *)GLOBAL_MALLOC(SV_MAX_MESSAGE_SIZE);
+
+  if(self->buffer)
+  {
+    memcpy(self->buffer, dstAddr, 6);
+    memcpy(self->buffer + 6, srcAddr, 6);
+
+    int bufPos = 12;
+
+    if(useVlanTags)
     {
-        dstAddr = defaultDstAddr;
-        priority = CONFIG_SV_DEFAULT_PRIORITY;
-        vlanId = CONFIG_SV_DEFAULT_VLAN_ID;
-        appId = CONFIG_SV_DEFAULT_APPID;
-    }
-    else
-    {
-        dstAddr = parameters->dstAddress;
-        priority = parameters->vlanPriority;
-        vlanId = parameters->vlanId;
-        appId = parameters->appId;
-    }
+      /* Priority tag - IEEE 802.1Q */
+      self->buffer[bufPos++] = 0x81;
+      self->buffer[bufPos++] = 0x00;
 
-    if (interfaceId != NULL)
-        self->ethernetSocket = Ethernet_createSocket(interfaceId, dstAddr);
-    else
-        self->ethernetSocket = Ethernet_createSocket(CONFIG_ETHERNET_INTERFACE_ID, dstAddr);
+      uint8_t tci1 = priority << 5;
+      tci1 += vlanId / 256;
 
-    if (self->ethernetSocket == NULL)
-    {
-        if (DEBUG_SV_PUBLISHER)
-            printf("SV_PUBLISHER: Failed to allocate Ethernet interface\n");
+      uint8_t tci2 = vlanId % 256;
 
-        return false;
-    }
-
-    self->buffer = (uint8_t*)GLOBAL_MALLOC(SV_MAX_MESSAGE_SIZE);
-
-    if (self->buffer)
-    {
-        memcpy(self->buffer, dstAddr, 6);
-        memcpy(self->buffer + 6, srcAddr, 6);
-
-        int bufPos = 12;
-
-        if (useVlanTags)
-        {
-            /* Priority tag - IEEE 802.1Q */
-            self->buffer[bufPos++] = 0x81;
-            self->buffer[bufPos++] = 0x00;
-
-            uint8_t tci1 = priority << 5;
-            tci1 += vlanId / 256;
-
-            uint8_t tci2 = vlanId % 256;
-
-            self->buffer[bufPos++] = tci1; /* Priority + VLAN-ID */
-            self->buffer[bufPos++] = tci2; /* VLAN-ID */
-        }
-
-        /* EtherType Sampled Values */
-        self->buffer[bufPos++] = 0x88;
-        self->buffer[bufPos++] = 0xBa;
-
-        /* APPID */
-        self->buffer[bufPos++] = appId / 256;
-        self->buffer[bufPos++] = appId % 256;
-
-        self->lengthField = bufPos;
-
-        /* Length */
-        self->buffer[bufPos++] = 0x00;
-        self->buffer[bufPos++] = 0x08;
-
-        /* Reserved1 */
-        self->buffer[bufPos++] = 0x00;
-        self->buffer[bufPos++] = 0x00;
-
-        /* Reserved2 */
-        self->buffer[bufPos++] = 0x00;
-        self->buffer[bufPos++] = 0x00;
-
-        self->payloadStart = bufPos;
-    }
-    else
-    {
-        return false;
+      self->buffer[bufPos++] = tci1; /* Priority + VLAN-ID */
+      self->buffer[bufPos++] = tci2; /* VLAN-ID */
     }
 
-    return true;
+    /* EtherType Sampled Values */
+    self->buffer[bufPos++] = 0x88;
+    self->buffer[bufPos++] = 0xBa;
+
+    /* APPID */
+    self->buffer[bufPos++] = appId / 256;
+    self->buffer[bufPos++] = appId % 256;
+
+    self->lengthField = bufPos;
+
+    /* Length */
+    self->buffer[bufPos++] = 0x00;
+    self->buffer[bufPos++] = 0x08;
+
+    /* Reserved1 */
+    self->buffer[bufPos++] = 0x00;
+    self->buffer[bufPos++] = 0x00;
+
+    /* Reserved2 */
+    self->buffer[bufPos++] = 0x00;
+    self->buffer[bufPos++] = 0x00;
+
+    self->payloadStart = bufPos;
+  }
+  else
+  {
+    return false;
+  }
+
+  return true;
 }
 #endif /* (CONFIG_IEC61850_L2_SMV == 1) */
 
 static int
-encodeUInt16FixedSize(uint16_t value, uint8_t* buffer, int bufPos)
+encodeUInt16FixedSize(uint16_t value, uint8_t * buffer, int bufPos)
 {
-    uint8_t* valueArray = (uint8_t*)&value;
+  uint8_t * valueArray = (uint8_t *)&value;
 
 #if (ORDER_LITTLE_ENDIAN == 1)
-    buffer[bufPos++] = valueArray[1];
-    buffer[bufPos++] = valueArray[0];
+  buffer[bufPos++] = valueArray[1];
+  buffer[bufPos++] = valueArray[0];
 #else
-    buffer[bufPos++] = valueArray[0];
-    buffer[bufPos++] = valueArray[1];
+  buffer[bufPos++] = valueArray[0];
+  buffer[bufPos++] = valueArray[1];
 #endif
 
-    return bufPos;
+  return bufPos;
 }
 
 static int
-encodeUInt32FixedSize(uint32_t value, uint8_t* buffer, int bufPos)
+encodeUInt32FixedSize(uint32_t value, uint8_t * buffer, int bufPos)
 {
-    uint8_t* valueArray = (uint8_t*)&value;
+  uint8_t * valueArray = (uint8_t *)&value;
 
 #if (ORDER_LITTLE_ENDIAN == 1)
-    buffer[bufPos++] = valueArray[3];
-    buffer[bufPos++] = valueArray[2];
-    buffer[bufPos++] = valueArray[1];
-    buffer[bufPos++] = valueArray[0];
+  buffer[bufPos++] = valueArray[3];
+  buffer[bufPos++] = valueArray[2];
+  buffer[bufPos++] = valueArray[1];
+  buffer[bufPos++] = valueArray[0];
 #else
-    buffer[bufPos++] = valueArray[0];
-    buffer[bufPos++] = valueArray[1];
-    buffer[bufPos++] = valueArray[2];
-    buffer[bufPos++] = valueArray[3];
+  buffer[bufPos++] = valueArray[0];
+  buffer[bufPos++] = valueArray[1];
+  buffer[bufPos++] = valueArray[2];
+  buffer[bufPos++] = valueArray[3];
 #endif
 
-    return bufPos;
+  return bufPos;
 }
 
 static int
-encodeInt32FixedSize(int32_t value, uint8_t* buffer, int bufPos)
+encodeInt32FixedSize(int32_t value, uint8_t * buffer, int bufPos)
 {
-    uint8_t* valueArray = (uint8_t*)&value;
+  uint8_t * valueArray = (uint8_t *)&value;
 
 #if (ORDER_LITTLE_ENDIAN == 1)
-    buffer[bufPos++] = valueArray[3];
-    buffer[bufPos++] = valueArray[2];
-    buffer[bufPos++] = valueArray[1];
-    buffer[bufPos++] = valueArray[0];
+  buffer[bufPos++] = valueArray[3];
+  buffer[bufPos++] = valueArray[2];
+  buffer[bufPos++] = valueArray[1];
+  buffer[bufPos++] = valueArray[0];
 #else
-    buffer[bufPos++] = valueArray[0];
-    buffer[bufPos++] = valueArray[1];
-    buffer[bufPos++] = valueArray[2];
-    buffer[bufPos++] = valueArray[3];
+  buffer[bufPos++] = valueArray[0];
+  buffer[bufPos++] = valueArray[1];
+  buffer[bufPos++] = valueArray[2];
+  buffer[bufPos++] = valueArray[3];
 #endif
 
-    return bufPos;
+  return bufPos;
 }
 
 static int
-encodeInt64FixedSize(int64_t value, uint8_t* buffer, int bufPos)
+encodeInt64FixedSize(int64_t value, uint8_t * buffer, int bufPos)
 {
-    uint8_t* valueArray = (uint8_t*)&value;
+  uint8_t * valueArray = (uint8_t *)&value;
 
 #if (ORDER_LITTLE_ENDIAN == 1)
-    buffer[bufPos++] = valueArray[7];
-    buffer[bufPos++] = valueArray[6];
-    buffer[bufPos++] = valueArray[5];
-    buffer[bufPos++] = valueArray[4];
-    buffer[bufPos++] = valueArray[3];
-    buffer[bufPos++] = valueArray[2];
-    buffer[bufPos++] = valueArray[1];
-    buffer[bufPos++] = valueArray[0];
+  buffer[bufPos++] = valueArray[7];
+  buffer[bufPos++] = valueArray[6];
+  buffer[bufPos++] = valueArray[5];
+  buffer[bufPos++] = valueArray[4];
+  buffer[bufPos++] = valueArray[3];
+  buffer[bufPos++] = valueArray[2];
+  buffer[bufPos++] = valueArray[1];
+  buffer[bufPos++] = valueArray[0];
 #else
-    buffer[bufPos++] = valueArray[0];
-    buffer[bufPos++] = valueArray[1];
-    buffer[bufPos++] = valueArray[2];
-    buffer[bufPos++] = valueArray[3];
-    buffer[bufPos++] = valueArray[4];
-    buffer[bufPos++] = valueArray[5];
-    buffer[bufPos++] = valueArray[6];
-    buffer[bufPos++] = valueArray[7];
+  buffer[bufPos++] = valueArray[0];
+  buffer[bufPos++] = valueArray[1];
+  buffer[bufPos++] = valueArray[2];
+  buffer[bufPos++] = valueArray[3];
+  buffer[bufPos++] = valueArray[4];
+  buffer[bufPos++] = valueArray[5];
+  buffer[bufPos++] = valueArray[6];
+  buffer[bufPos++] = valueArray[7];
 #endif
 
-    return bufPos;
+  return bufPos;
 }
 
 #if (CONFIG_IEC61850_R_SMV == 1)
 SVPublisher
 SVPublisher_createRemote(RSession session, uint16_t appId)
 {
-    SVPublisher self = (SVPublisher)GLOBAL_CALLOC(1, sizeof(struct sSVPublisher));
+  SVPublisher self = (SVPublisher)GLOBAL_CALLOC(1, sizeof(struct sSVPublisher));
 
-    if (self)
-    {
-        self->asduList = NULL;
+  if(self)
+  {
+    self->asduList = NULL;
 
-        self->buffer = (uint8_t*)GLOBAL_MALLOC(SV_MAX_MESSAGE_SIZE);
+    self->buffer = (uint8_t *)GLOBAL_MALLOC(SV_MAX_MESSAGE_SIZE);
 
-        self->payloadStart = 0;
-        self->remoteSession = session;
-        self->lengthField = 0;
+    self->payloadStart = 0;
+    self->remoteSession = session;
+    self->lengthField = 0;
 
-        self->simulation = false;
-        self->appId = appId;
-    }
+    self->simulation = false;
+    self->appId = appId;
+  }
 
-    return self;
+  return self;
 }
 #endif /* (CONFIG_IEC61850_R_SMV == 1) */
 
 #if (CONFIG_IEC61850_L2_SMV == 1)
 SVPublisher
-SVPublisher_createEx(CommParameters* parameters, const char* interfaceId, bool useVlanTag)
+SVPublisher_createEx(CommParameters* parameters, const char * interfaceId, bool useVlanTag)
 {
-    SVPublisher self = (SVPublisher)GLOBAL_CALLOC(1, sizeof(struct sSVPublisher));
+  SVPublisher self = (SVPublisher)GLOBAL_CALLOC(1, sizeof(struct sSVPublisher));
 
-    if (self)
+  if(self)
+  {
+    self->asduList = NULL;
+    self->lengthField = 0;
+
+    if(preparePacketBuffer(self, parameters, interfaceId, useVlanTag) == false)
     {
-        self->asduList = NULL;
-        self->lengthField = 0;
-
-        if (preparePacketBuffer(self, parameters, interfaceId, useVlanTag) == false)
-        {
-            SVPublisher_destroy(self);
-            self = NULL;
-        }
+      SVPublisher_destroy(self);
+      self = NULL;
     }
+  }
 
-    return self;
+  return self;
 }
 
 SVPublisher
-SVPublisher_create(CommParameters* parameters, const char* interfaceId)
+SVPublisher_create(CommParameters* parameters, const char * interfaceId)
 {
-    return SVPublisher_createEx(parameters, interfaceId, true);
+  return SVPublisher_createEx(parameters, interfaceId, true);
 }
 #endif /* (CONFIG_IEC61850_R_SMV == 1) */
 
 SVPublisher_ASDU
-SVPublisher_addASDU(SVPublisher self, const char* svID, const char* datset, uint32_t confRev)
+SVPublisher_addASDU(SVPublisher self, const char * svID, const char * datset, uint32_t confRev)
 {
-    SVPublisher_ASDU newAsdu = (SVPublisher_ASDU)GLOBAL_CALLOC(1, sizeof(struct sSVPublisher_ASDU));
+  SVPublisher_ASDU newAsdu = (SVPublisher_ASDU)GLOBAL_CALLOC(1, sizeof(struct sSVPublisher_ASDU));
 
-    if (newAsdu)
+  if(newAsdu)
+  {
+    newAsdu->svID = svID;
+    newAsdu->datset = datset;
+    newAsdu->confRev = confRev;
+    newAsdu->smpCntLimit = UINT16_MAX;
+    newAsdu->_next = NULL;
+
+    /* append new ASDU to list */
+    if(self->asduList == NULL)
+      self->asduList = newAsdu;
+    else
     {
-        newAsdu->svID = svID;
-        newAsdu->datset = datset;
-        newAsdu->confRev = confRev;
-        newAsdu->smpCntLimit = UINT16_MAX;
-        newAsdu->_next = NULL;
+      SVPublisher_ASDU lastAsdu = self->asduList;
 
-        /* append new ASDU to list */
-        if (self->asduList == NULL)
-            self->asduList = newAsdu;
-        else
-        {
-            SVPublisher_ASDU lastAsdu = self->asduList;
+      while(lastAsdu->_next)
+        lastAsdu = lastAsdu->_next;
 
-            while (lastAsdu->_next)
-                lastAsdu = lastAsdu->_next;
-
-            lastAsdu->_next = newAsdu;
-        }
+      lastAsdu->_next = newAsdu;
     }
+  }
 
-    return newAsdu;
+  return newAsdu;
 }
 
 static int
 SVPublisher_ASDU_getEncodedSize(SVPublisher_ASDU self)
 {
-    int encodedSize = 0;
+  int encodedSize = 0;
 
-    /* svID */
-    int svIdLen = strlen(self->svID);
-    encodedSize += (1 + BerEncoder_determineLengthSize(svIdLen) + svIdLen);
+  /* svID */
+  int svIdLen = strlen(self->svID);
+  encodedSize += (1 + BerEncoder_determineLengthSize(svIdLen) + svIdLen);
 
-    /* datset */
-    if (self->datset)
-    {
-        int datSetLen = strlen(self->datset);
-        encodedSize += (1 + BerEncoder_determineLengthSize(datSetLen) + datSetLen);
-    }
+  /* datset */
+  if(self->datset)
+  {
+    int datSetLen = strlen(self->datset);
+    encodedSize += (1 + BerEncoder_determineLengthSize(datSetLen) + datSetLen);
+  }
 
-    /* smpCnt */
+  /* smpCnt */
+  encodedSize += 4;
+
+  /* confRef */
+  encodedSize += 6;
+
+  /* refrTm */
+  if(self->hasRefrTm)
+    encodedSize += 10;
+
+  /* smpSynch */
+  encodedSize += 3;
+
+  /* smpRate */
+  if(self->hasSmpRate)
     encodedSize += 4;
 
-    /* confRef */
-    encodedSize += 6;
+  /* sample */
+  encodedSize += (1 + BerEncoder_determineLengthSize(self->dataSize));
+  encodedSize += self->dataSize;
 
-    /* refrTm */
-    if (self->hasRefrTm)
-        encodedSize += 10;
+  /* smpMod */
+  if(self->hasSmpMod)
+    encodedSize += 4;
 
-    /* smpSynch */
-    encodedSize += 3;
+  /* gmIdentity */
+  if(self->hasGmIdentity)
+    encodedSize += 10;
 
-    /* smpRate */
-    if (self->hasSmpRate)
-        encodedSize += 4;
-
-    /* sample */
-    encodedSize += (1 + BerEncoder_determineLengthSize(self->dataSize));
-    encodedSize += self->dataSize;
-
-    /* smpMod */
-    if (self->hasSmpMod)
-        encodedSize += 4;
-
-    /* gmIdentity */
-    if (self->hasGmIdentity)
-        encodedSize += 10;
-
-    return encodedSize;
+  return encodedSize;
 }
 
 static int
-SVPublisher_ASDU_encodeToBuffer(SVPublisher_ASDU self, uint8_t* buffer, int bufPos)
+SVPublisher_ASDU_encodeToBuffer(SVPublisher_ASDU self, uint8_t * buffer, int bufPos)
 {
-    int encodedSize = SVPublisher_ASDU_getEncodedSize(self);
+  int encodedSize = SVPublisher_ASDU_getEncodedSize(self);
 
-    /* tag and length field */
-    bufPos = BerEncoder_encodeTL(0x30, encodedSize, buffer, bufPos);
+  /* tag and length field */
+  bufPos = BerEncoder_encodeTL(0x30, encodedSize, buffer, bufPos);
 
-    /* svID */
-    bufPos = BerEncoder_encodeStringWithTag(0x80, self->svID, buffer, bufPos);
+  /* svID */
+  bufPos = BerEncoder_encodeStringWithTag(0x80, self->svID, buffer, bufPos);
 
-    /* DatSet */
-    if (self->datset != NULL)
-        bufPos = BerEncoder_encodeStringWithTag(0x81, self->datset, buffer, bufPos);
+  /* DatSet */
+  if(self->datset != NULL)
+    bufPos = BerEncoder_encodeStringWithTag(0x81, self->datset, buffer, bufPos);
 
-    /* SmpCnt */
-    bufPos = BerEncoder_encodeTL(0x82, 2, buffer, bufPos);
-    self->smpCntBuf = buffer + bufPos;
-    bufPos = encodeUInt16FixedSize(self->smpCnt, buffer, bufPos);
+  /* SmpCnt */
+  bufPos = BerEncoder_encodeTL(0x82, 2, buffer, bufPos);
+  self->smpCntBuf = buffer + bufPos;
+  bufPos = encodeUInt16FixedSize(self->smpCnt, buffer, bufPos);
 
-    /* ConfRev */
-    bufPos = BerEncoder_encodeTL(0x83, 4, buffer, bufPos);
-    bufPos = encodeUInt32FixedSize(self->confRev, buffer, bufPos);
+  /* ConfRev */
+  bufPos = BerEncoder_encodeTL(0x83, 4, buffer, bufPos);
+  bufPos = encodeUInt32FixedSize(self->confRev, buffer, bufPos);
 
-    /* RefrTm */
-    if (self->hasRefrTm)
-    {
-        bufPos = BerEncoder_encodeTL(0x84, 8, buffer, bufPos);
-        self->refrTm = (Timestamp*)(buffer + bufPos);
-        bufPos += 8;
-    }
+  /* RefrTm */
+  if(self->hasRefrTm)
+  {
+    bufPos = BerEncoder_encodeTL(0x84, 8, buffer, bufPos);
+    self->refrTm = (Timestamp *)(buffer + bufPos);
+    bufPos += 8;
+  }
 
-    /* SmpSynch */
-    bufPos = BerEncoder_encodeTL(0x85, 1, buffer, bufPos);
-    self->smpSynchBuf = buffer + bufPos;
-    buffer[bufPos++] = self->smpSynch;
+  /* SmpSynch */
+  bufPos = BerEncoder_encodeTL(0x85, 1, buffer, bufPos);
+  self->smpSynchBuf = buffer + bufPos;
+  buffer[bufPos++] = self->smpSynch;
 
-    /* SmpRate */
-    if (self->hasSmpRate)
-    {
-        bufPos = BerEncoder_encodeTL(0x86, 2, buffer, bufPos);
-        bufPos = encodeUInt16FixedSize(self->smpRate, buffer, bufPos);
-    }
+  /* SmpRate */
+  if(self->hasSmpRate)
+  {
+    bufPos = BerEncoder_encodeTL(0x86, 2, buffer, bufPos);
+    bufPos = encodeUInt16FixedSize(self->smpRate, buffer, bufPos);
+  }
 
-    /* Sample */
-    bufPos = BerEncoder_encodeTL(0x87, self->dataSize, buffer, bufPos);
+  /* Sample */
+  bufPos = BerEncoder_encodeTL(0x87, self->dataSize, buffer, bufPos);
 
-    self->_dataBuffer = buffer + bufPos;
+  self->_dataBuffer = buffer + bufPos;
 
-    bufPos += self->dataSize; /* data has to be inserted by user before sending message */
+  bufPos += self->dataSize; /* data has to be inserted by user before sending message */
 
-    /* SmpMod */
-    if (self->hasSmpMod)
-    {
-        bufPos = BerEncoder_encodeTL(0x88, 2, buffer, bufPos);
-        bufPos = encodeUInt16FixedSize(self->smpMod, buffer, bufPos);
-    }
+  /* SmpMod */
+  if(self->hasSmpMod)
+  {
+    bufPos = BerEncoder_encodeTL(0x88, 2, buffer, bufPos);
+    bufPos = encodeUInt16FixedSize(self->smpMod, buffer, bufPos);
+  }
 
-    /* gmIdentity */
-    if (self->hasGmIdentity)
-    {
-        bufPos = BerEncoder_encodeOctetString(0x89, self->gmIdentity, 8, buffer, bufPos);
-    }
+  /* gmIdentity */
+  if(self->hasGmIdentity)
+  {
+    bufPos = BerEncoder_encodeOctetString(0x89, self->gmIdentity, 8, buffer, bufPos);
+  }
 
-    return bufPos;
+  return bufPos;
 }
 
 void
 SVPublisher_setupComplete(SVPublisher self)
 {
-    int numberOfAsdu = 0;
+  int numberOfAsdu = 0;
 
-    /* determine number of ASDUs and length of all ASDUs */
-    SVPublisher_ASDU nextAsdu = self->asduList;
-    int totalASDULength = 0;
+  /* determine number of ASDUs and length of all ASDUs */
+  SVPublisher_ASDU nextAsdu = self->asduList;
+  int totalASDULength = 0;
 
-    while (nextAsdu != NULL)
-    {
-        numberOfAsdu++;
-        int asduLength = SVPublisher_ASDU_getEncodedSize(nextAsdu);
+  while(nextAsdu != NULL)
+  {
+    numberOfAsdu++;
+    int asduLength = SVPublisher_ASDU_getEncodedSize(nextAsdu);
 
-        /* tag and length field */
-        asduLength += BerEncoder_determineLengthSize(asduLength);
-        asduLength++;
+    /* tag and length field */
+    asduLength += BerEncoder_determineLengthSize(asduLength);
+    asduLength++;
 
-        totalASDULength += asduLength;
+    totalASDULength += asduLength;
 
-        nextAsdu = nextAsdu->_next;
-    }
+    nextAsdu = nextAsdu->_next;
+  }
 
-    /* encode frame to buffer */
-    int sequenceSize = 1 + BerEncoder_determineLengthSize(totalASDULength) + totalASDULength;
+  /* encode frame to buffer */
+  int sequenceSize = 1 + BerEncoder_determineLengthSize(totalASDULength) + totalASDULength;
 
-    int innerSize = 2 + BerEncoder_UInt32determineEncodedSize(numberOfAsdu) + sequenceSize;
+  int innerSize = 2 + BerEncoder_UInt32determineEncodedSize(numberOfAsdu) + sequenceSize;
 
-    uint8_t* buffer = self->buffer + self->payloadStart;
+  uint8_t * buffer = self->buffer + self->payloadStart;
 
-    int bufPos = BerEncoder_encodeTL(0x60, innerSize, buffer, 0);
+  int bufPos = BerEncoder_encodeTL(0x60, innerSize, buffer, 0);
 
-    /* noASDU */
-    bufPos = BerEncoder_encodeUInt32WithTL(0x80, numberOfAsdu, buffer, bufPos);
+  /* noASDU */
+  bufPos = BerEncoder_encodeUInt32WithTL(0x80, numberOfAsdu, buffer, bufPos);
 
-    /* seqASDU */
-    bufPos = BerEncoder_encodeTL(0xa2, totalASDULength, buffer, bufPos);
+  /* seqASDU */
+  bufPos = BerEncoder_encodeTL(0xa2, totalASDULength, buffer, bufPos);
 
-    nextAsdu = self->asduList;
+  nextAsdu = self->asduList;
 
-    while (nextAsdu != NULL)
-    {
-        bufPos = SVPublisher_ASDU_encodeToBuffer(nextAsdu, buffer, bufPos);
+  while(nextAsdu != NULL)
+  {
+    bufPos = SVPublisher_ASDU_encodeToBuffer(nextAsdu, buffer, bufPos);
 
-        nextAsdu = nextAsdu->_next;
-    }
+    nextAsdu = nextAsdu->_next;
+  }
 
-    /* Update length field */
-    int payloadLength = bufPos;
+  /* Update length field */
+  int payloadLength = bufPos;
 
-    size_t msgLength = payloadLength + 8;
+  size_t msgLength = payloadLength + 8;
 
-    if (self->lengthField != 0)
-    {
-        int lengthIndex = self->lengthField;
+  if(self->lengthField != 0)
+  {
+    int lengthIndex = self->lengthField;
 
-        self->buffer[lengthIndex] = msgLength / 256;
-        self->buffer[lengthIndex + 1] = msgLength & 0xff;
-    }
+    self->buffer[lengthIndex] = msgLength / 256;
+    self->buffer[lengthIndex + 1] = msgLength & 0xff;
+  }
 
-    self->payloadLength = payloadLength;
+  self->payloadLength = payloadLength;
 }
 
 void
 SVPublisher_publish(SVPublisher self)
 {
 #if (CONFIG_IEC61850_L2_SMV == 1)
-    if (self->ethernetSocket)
-    {
-        if (DEBUG_SV_PUBLISHER)
-            printf("SV_PUBLISHER: send L2 SV message\n");
+  if(self->ethernetSocket)
+  {
+    if(DEBUG_SV_PUBLISHER)
+      printf("SV_PUBLISHER: send L2 SV message\n");
 
-        Ethernet_sendPacket(self->ethernetSocket, self->buffer, self->payloadStart + self->payloadLength);
-    }
+    Ethernet_sendPacket(self->ethernetSocket, self->buffer, self->payloadStart + self->payloadLength);
+  }
 #endif /* (CONFIG_IEC61850_L2_SMV == 1) */
 
 #if (CONFIG_IEC61850_R_SMV == 1)
-    if (self->remoteSession)
-    {
-        if (DEBUG_SV_PUBLISHER)
-            printf("SV_PUBLISHER: send R-SV message\n");
+  if(self->remoteSession)
+  {
+    if(DEBUG_SV_PUBLISHER)
+      printf("SV_PUBLISHER: send R-SV message\n");
 
-        RSession_sendMessage(self->remoteSession, RSESSION_SPDU_ID_SV, self->simulation, self->appId, self->buffer,
-                             self->payloadLength);
-    }
+    RSession_sendMessage(self->remoteSession, RSESSION_SPDU_ID_SV, self->simulation, self->appId, self->buffer,
+                         self->payloadLength);
+  }
 #endif /* (CONFIG_IEC61850_R_SMV == 1) */
 }
 
 void
 SVPublisher_destroy(SVPublisher self)
 {
-    if (self)
-    {
+  if(self)
+  {
 #if (CONFIG_IEC61850_L2_SMV == 1)
-        if (self->ethernetSocket)
-            Ethernet_destroySocket(self->ethernetSocket);
+    if(self->ethernetSocket)
+      Ethernet_destroySocket(self->ethernetSocket);
 #endif /* (CONFIG_IEC61850_L2_SMV == 1) */
 
-        if (self->buffer)
-            GLOBAL_FREEMEM(self->buffer);
+    if(self->buffer)
+      GLOBAL_FREEMEM(self->buffer);
 
-        SVPublisher_ASDU asdu = self->asduList;
+    SVPublisher_ASDU asdu = self->asduList;
 
-        while (asdu)
-        {
-            SVPublisher_ASDU nextAsdu = asdu->_next;
+    while(asdu)
+    {
+      SVPublisher_ASDU nextAsdu = asdu->_next;
 
-            GLOBAL_FREEMEM(asdu);
+      GLOBAL_FREEMEM(asdu);
 
-            asdu = nextAsdu;
-        }
-
-        GLOBAL_FREEMEM(self);
+      asdu = nextAsdu;
     }
+
+    GLOBAL_FREEMEM(self);
+  }
 }
 
 void
 SVPublisher_ASDU_resetBuffer(SVPublisher_ASDU self)
 {
-    self->dataSize = 0;
+  self->dataSize = 0;
 }
 
 int
 SVPublisher_ASDU_addINT8(SVPublisher_ASDU self)
 {
-    int index = self->dataSize;
+  int index = self->dataSize;
 
-    self->dataSize += 1;
+  self->dataSize += 1;
 
-    return index;
+  return index;
 }
 
 void
 SVPublisher_ASDU_setINT8(SVPublisher_ASDU self, int index, int8_t value)
 {
-    self->_dataBuffer[index] = value;
+  self->_dataBuffer[index] = value;
 }
 
 int
 SVPublisher_ASDU_addINT32(SVPublisher_ASDU self)
 {
-    int index = self->dataSize;
+  int index = self->dataSize;
 
-    self->dataSize += 4;
+  self->dataSize += 4;
 
-    return index;
+  return index;
 }
 
 void
 SVPublisher_ASDU_setINT32(SVPublisher_ASDU self, int index, int32_t value)
 {
-    encodeInt32FixedSize(value, self->_dataBuffer, index);
+  encodeInt32FixedSize(value, self->_dataBuffer, index);
 }
 
 int
 SVPublisher_ASDU_addINT64(SVPublisher_ASDU self)
 {
-    int index = self->dataSize;
+  int index = self->dataSize;
 
-    self->dataSize += 8;
+  self->dataSize += 8;
 
-    return index;
+  return index;
 }
 
 void
 SVPublisher_ASDU_setINT64(SVPublisher_ASDU self, int index, int64_t value)
 {
-    encodeInt64FixedSize(value, self->_dataBuffer, index);
+  encodeInt64FixedSize(value, self->_dataBuffer, index);
 }
 
 int
 SVPublisher_ASDU_addFLOAT(SVPublisher_ASDU self)
 {
-    int index = self->dataSize;
+  int index = self->dataSize;
 
-    self->dataSize += 4;
+  self->dataSize += 4;
 
-    return index;
+  return index;
 }
 
 void
 SVPublisher_ASDU_setFLOAT(SVPublisher_ASDU self, int index, float value)
 {
-    uint8_t* buf = (uint8_t*)&value;
+  uint8_t * buf = (uint8_t *)&value;
 
 #if (ORDER_LITTLE_ENDIAN == 1)
-    BerEncoder_revertByteOrder(buf, 4);
+  BerEncoder_revertByteOrder(buf, 4);
 #endif
 
-    int i;
+  int i;
 
-    uint8_t* buffer = self->_dataBuffer + index;
+  uint8_t * buffer = self->_dataBuffer + index;
 
-    for (i = 0; i < 4; i++)
-    {
-        buffer[i] = buf[i];
-    }
+  for(i = 0; i < 4; i++)
+  {
+    buffer[i] = buf[i];
+  }
 }
 
 int
 SVPublisher_ASDU_addFLOAT64(SVPublisher_ASDU self)
 {
-    int index = self->dataSize;
-    self->dataSize += 8;
-    return index;
+  int index = self->dataSize;
+  self->dataSize += 8;
+  return index;
 }
 
 void
 SVPublisher_ASDU_setFLOAT64(SVPublisher_ASDU self, int index, double value)
 {
-    uint8_t* buf = (uint8_t*)&value;
+  uint8_t * buf = (uint8_t *)&value;
 
 #if (ORDER_LITTLE_ENDIAN == 1)
-    BerEncoder_revertByteOrder(buf, 8);
+  BerEncoder_revertByteOrder(buf, 8);
 #endif
 
-    int i;
+  int i;
 
-    uint8_t* buffer = self->_dataBuffer + index;
+  uint8_t * buffer = self->_dataBuffer + index;
 
-    for (i = 0; i < 8; i++)
-    {
-        buffer[i] = buf[i];
-    }
+  for(i = 0; i < 8; i++)
+  {
+    buffer[i] = buf[i];
+  }
 }
 
 int
 SVPublisher_ASDU_addTimestamp(SVPublisher_ASDU self)
 {
-    int index = self->dataSize;
-    self->dataSize += 8;
-    return index;
+  int index = self->dataSize;
+  self->dataSize += 8;
+  return index;
 }
 
 void
 SVPublisher_ASDU_setTimestamp(SVPublisher_ASDU self, int index, Timestamp value)
 {
-    int i;
+  int i;
 
-    uint8_t* buffer = self->_dataBuffer + index;
+  uint8_t * buffer = self->_dataBuffer + index;
 
-    for (i = 0; i < 8; i++)
-    {
-        buffer[i] = value.val[i];
-    }
+  for(i = 0; i < 8; i++)
+  {
+    buffer[i] = value.val[i];
+  }
 }
 
 int
 SVPublisher_ASDU_addQuality(SVPublisher_ASDU self)
 {
-    int index = self->dataSize;
-    self->dataSize += 4;
-    return index;
+  int index = self->dataSize;
+  self->dataSize += 4;
+  return index;
 }
 
 void
 SVPublisher_ASDU_setQuality(SVPublisher_ASDU self, int index, Quality value)
 {
-    uint8_t* buffer = self->_dataBuffer + index;
-    buffer[0] = 0;
-    buffer[1] = 0;
-    buffer[2] = value / 0x100;
-    buffer[3] = value % 0x100;
+  uint8_t * buffer = self->_dataBuffer + index;
+  buffer[0] = 0;
+  buffer[1] = 0;
+  buffer[2] = value / 0x100;
+  buffer[3] = value % 0x100;
 }
 
 uint16_t
 SVPublisher_ASDU_getSmpCnt(SVPublisher_ASDU self)
 {
-    return self->smpCnt;
+  return self->smpCnt;
 }
 
 void
 SVPublisher_ASDU_setSmpCnt(SVPublisher_ASDU self, uint16_t value)
 {
-    self->smpCnt = value;
+  self->smpCnt = value;
 
-    if (self->smpCntBuf)
-        encodeUInt16FixedSize(self->smpCnt, self->smpCntBuf, 0);
+  if(self->smpCntBuf)
+    encodeUInt16FixedSize(self->smpCnt, self->smpCntBuf, 0);
 }
 
 void
 SVPublisher_ASDU_setSmpCntWrap(SVPublisher_ASDU self, uint16_t value)
 {
-    self->smpCntLimit = value;
+  self->smpCntLimit = value;
 }
 
 void
 SVPublisher_ASDU_increaseSmpCnt(SVPublisher_ASDU self)
 {
-    self->smpCnt = ((self->smpCnt + 1) % self->smpCntLimit);
+  self->smpCnt = ((self->smpCnt + 1) % self->smpCntLimit);
 
-    if (self->smpCntBuf)
-        encodeUInt16FixedSize(self->smpCnt, self->smpCntBuf, 0);
+  if(self->smpCntBuf)
+    encodeUInt16FixedSize(self->smpCnt, self->smpCntBuf, 0);
 }
 
 void
 SVPublisher_ASDU_enableRefrTm(SVPublisher_ASDU self)
 {
-    self->hasRefrTm = true;
+  self->hasRefrTm = true;
 }
 
 void
 SVPublisher_ASDU_setRefrTmNs(SVPublisher_ASDU self, nsSinceEpoch refrTmNs)
 {
-    self->hasRefrTm = true;
+  self->hasRefrTm = true;
 
-    if (self->refrTm)
-    {
-        Timestamp_setTimeInNanoseconds(self->refrTm, refrTmNs);
-        Timestamp_setSubsecondPrecision(self->refrTm, 20);
-    }
+  if(self->refrTm)
+  {
+    Timestamp_setTimeInNanoseconds(self->refrTm, refrTmNs);
+    Timestamp_setSubsecondPrecision(self->refrTm, 20);
+  }
 }
 
 void
 SVPublisher_ASDU_setRefrTm(SVPublisher_ASDU self, msSinceEpoch refrTm)
 {
-    self->hasRefrTm = true;
+  self->hasRefrTm = true;
 
-    if (self->refrTm)
-    {
-        Timestamp_setTimeInMilliseconds(self->refrTm, refrTm);
-        Timestamp_setSubsecondPrecision(self->refrTm, 10);
-    }
+  if(self->refrTm)
+  {
+    Timestamp_setTimeInMilliseconds(self->refrTm, refrTm);
+    Timestamp_setSubsecondPrecision(self->refrTm, 10);
+  }
 }
 
 void
 SVPublisher_ASDU_setRefrTmByTimestamp(SVPublisher_ASDU self, Timestamp* refrTm)
 {
-    self->hasRefrTm = true;
+  self->hasRefrTm = true;
 
-    if (self->refrTm)
-        memcpy(self->refrTm, refrTm, 8);
+  if(self->refrTm)
+    memcpy(self->refrTm, refrTm, 8);
 }
 
 void
 SVPublisher_ASDU_setSmpMod(SVPublisher_ASDU self, uint8_t smpMod)
 {
-    self->hasSmpMod = true;
-    self->smpMod = smpMod;
+  self->hasSmpMod = true;
+  self->smpMod = smpMod;
 }
 
 void
 SVPublisher_ASDU_setSmpRate(SVPublisher_ASDU self, uint16_t smpRate)
 {
-    self->hasSmpRate = true;
-    self->smpRate = smpRate;
+  self->hasSmpRate = true;
+  self->smpRate = smpRate;
 }
 
 void
 SVPublisher_ASDU_setSmpSynch(SVPublisher_ASDU self, uint16_t smpSynch)
 {
-    self->smpSynch = smpSynch;
-    *(self->smpSynchBuf) = self->smpSynch;
+  self->smpSynch = smpSynch;
+  *(self->smpSynchBuf) = self->smpSynch;
 }
 
 void
-SVPublisher_ASDU_setGmIdentity(SVPublisher_ASDU self, uint8_t* gmIdentity)
+SVPublisher_ASDU_setGmIdentity(SVPublisher_ASDU self, uint8_t * gmIdentity)
 {
-    self->hasGmIdentity = true;
-    memcpy(self->gmIdentity, gmIdentity, 8);
+  self->hasGmIdentity = true;
+  memcpy(self->gmIdentity, gmIdentity, 8);
 }

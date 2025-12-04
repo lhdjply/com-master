@@ -28,76 +28,76 @@
 
 void
 mmsServer_handleStatusRequest(
-        MmsServerConnection connection,
-        uint8_t* requestBuffer,
-        int bufPos,
-        uint32_t invokeId,
-        ByteBuffer* response)
+  MmsServerConnection connection,
+  uint8_t * requestBuffer,
+  int bufPos,
+  uint32_t invokeId,
+  ByteBuffer* response)
 {
-    /* check for extended derivation */
-    bool extendedDerivation = BerDecoder_decodeBoolean(requestBuffer, bufPos);
+  /* check for extended derivation */
+  bool extendedDerivation = BerDecoder_decodeBoolean(requestBuffer, bufPos);
 
-    if (DEBUG_MMS_SERVER)
-        printf("mms_status_service.c: statusRequest (extendedDerivation: %i)\n", extendedDerivation);
+  if(DEBUG_MMS_SERVER)
+    printf("mms_status_service.c: statusRequest (extendedDerivation: %i)\n", extendedDerivation);
 
-    bufPos = 0;
-    uint8_t* buffer = response->buffer;
+  bufPos = 0;
+  uint8_t * buffer = response->buffer;
 
-    uint32_t invokeIdLength = BerEncoder_UInt32determineEncodedSize(invokeId);
+  uint32_t invokeIdLength = BerEncoder_UInt32determineEncodedSize(invokeId);
 
-    MmsServer mmsServer = connection->server;
+  MmsServer mmsServer = connection->server;
 
-    /* Invoke user provided callback */
-    if (mmsServer->statusRequestListener != NULL)
-        mmsServer->statusRequestListener(mmsServer->statusRequestListenerParameter, mmsServer, connection, extendedDerivation);
+  /* Invoke user provided callback */
+  if(mmsServer->statusRequestListener != NULL)
+    mmsServer->statusRequestListener(mmsServer->statusRequestListenerParameter, mmsServer, connection, extendedDerivation);
 
-    uint32_t vmdPhysicalStatusLength = BerEncoder_UInt32determineEncodedSize((uint32_t) mmsServer->vmdPhysicalStatus);
-    uint32_t vmdLogicalStatusLength = BerEncoder_UInt32determineEncodedSize((uint32_t) mmsServer->vmdLogicalStatus);
+  uint32_t vmdPhysicalStatusLength = BerEncoder_UInt32determineEncodedSize((uint32_t) mmsServer->vmdPhysicalStatus);
+  uint32_t vmdLogicalStatusLength = BerEncoder_UInt32determineEncodedSize((uint32_t) mmsServer->vmdLogicalStatus);
 
-    uint32_t statusLength = 2 + vmdPhysicalStatusLength + 2 + vmdLogicalStatusLength;
+  uint32_t statusLength = 2 + vmdPhysicalStatusLength + 2 + vmdLogicalStatusLength;
 
-    uint32_t statusResponseLength = invokeIdLength + 2 + 1 + BerEncoder_determineLengthSize(statusLength) + statusLength;
+  uint32_t statusResponseLength = invokeIdLength + 2 + 1 + BerEncoder_determineLengthSize(statusLength) + statusLength;
 
-    /* Status response pdu */
-    bufPos = BerEncoder_encodeTL(0xa1, statusResponseLength, buffer, bufPos);
+  /* Status response pdu */
+  bufPos = BerEncoder_encodeTL(0xa1, statusResponseLength, buffer, bufPos);
 
-    /* invokeId */
-    bufPos = BerEncoder_encodeTL(0x02, invokeIdLength, buffer, bufPos);
-    bufPos = BerEncoder_encodeUInt32(invokeId, buffer, bufPos);
+  /* invokeId */
+  bufPos = BerEncoder_encodeTL(0x02, invokeIdLength, buffer, bufPos);
+  bufPos = BerEncoder_encodeUInt32(invokeId, buffer, bufPos);
 
-    bufPos = BerEncoder_encodeTL(0xa0, statusLength, buffer, bufPos);
-    bufPos = BerEncoder_encodeTL(0x80, vmdLogicalStatusLength, buffer, bufPos);
-    bufPos = BerEncoder_encodeUInt32((uint32_t) mmsServer->vmdLogicalStatus, buffer, bufPos);
-    bufPos = BerEncoder_encodeTL(0x81, vmdPhysicalStatusLength, buffer, bufPos);
-    bufPos = BerEncoder_encodeUInt32((uint32_t) mmsServer->vmdPhysicalStatus, buffer, bufPos);
+  bufPos = BerEncoder_encodeTL(0xa0, statusLength, buffer, bufPos);
+  bufPos = BerEncoder_encodeTL(0x80, vmdLogicalStatusLength, buffer, bufPos);
+  bufPos = BerEncoder_encodeUInt32((uint32_t) mmsServer->vmdLogicalStatus, buffer, bufPos);
+  bufPos = BerEncoder_encodeTL(0x81, vmdPhysicalStatusLength, buffer, bufPos);
+  bufPos = BerEncoder_encodeUInt32((uint32_t) mmsServer->vmdPhysicalStatus, buffer, bufPos);
 
-    response->size = bufPos;
+  response->size = bufPos;
 }
 
 void
 MmsServer_setVMDStatus(MmsServer self, int vmdLogicalStatus, int vmdPhysicalStatus)
 {
-    self->vmdLogicalStatus = vmdLogicalStatus;
-    self->vmdPhysicalStatus = vmdPhysicalStatus;
+  self->vmdLogicalStatus = vmdLogicalStatus;
+  self->vmdPhysicalStatus = vmdPhysicalStatus;
 }
 
 int
 MmsServer_getVMDLogicalStatus(MmsServer self)
 {
-    return self->vmdLogicalStatus;
+  return self->vmdLogicalStatus;
 }
 
 int
 MmsServer_getVMDPhysicalStatus(MmsServer self)
 {
-    return self->vmdPhysicalStatus;
+  return self->vmdPhysicalStatus;
 }
 
 void
-MmsServer_setStatusRequestListener(MmsServer self, MmsStatusRequestListener listener, void* parameter)
+MmsServer_setStatusRequestListener(MmsServer self, MmsStatusRequestListener listener, void * parameter)
 {
-    self->statusRequestListener = listener;
-    self->statusRequestListenerParameter = parameter;
+  self->statusRequestListener = listener;
+  self->statusRequestListenerParameter = parameter;
 }
 
 #endif /* MMS_STATUS_SERVICE == 1 */

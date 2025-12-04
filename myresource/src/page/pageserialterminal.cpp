@@ -305,7 +305,8 @@ void PageSerialTerminal::setupUi()
   Konsole::TerminalDisplay* terminalDisplay = terminal->findChild<Konsole::TerminalDisplay *>();
   if(terminalDisplay)
   {
-    connect(terminalDisplay, &Konsole::TerminalDisplay::configureRequest, this, &PageSerialTerminal::showTerminalContextMenu);
+    connect(terminalDisplay, &Konsole::TerminalDisplay::configureRequest, this,
+            &PageSerialTerminal::showTerminalContextMenu);
   }
 }
 

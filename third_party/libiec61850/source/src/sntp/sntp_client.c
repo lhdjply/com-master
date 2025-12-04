@@ -30,48 +30,48 @@
 #define SNTP_DEFAULT_PORT 123
 
 #ifndef SNTP_DEBUG
-#define SNTP_DEBUG 1
+  #define SNTP_DEBUG 1
 #endif
 
-typedef struct sSNTPClient* SNTPClient;
+typedef struct sSNTPClient * SNTPClient;
 
 /* new time types */
 
 typedef struct
 {
-    uint32_t coarse;
-    uint32_t fine;
+  uint32_t coarse;
+  uint32_t fine;
 } NtpTime;
 
 
 struct sSNTPClient
 {
-    UdpSocket socket;
-    HandleSet handleSet;
-    nsSinceEpoch lastReceivedMessage; /* time of last received synchronization message */
-    uint64_t nextMessageExpected;
-    bool outStandingRequest;
+  UdpSocket socket;
+  HandleSet handleSet;
+  nsSinceEpoch lastReceivedMessage; /* time of last received synchronization message */
+  uint64_t nextMessageExpected;
+  bool outStandingRequest;
 
-    uint64_t pollInterval; /* poll interval in ns */
+  uint64_t pollInterval; /* poll interval in ns */
 
-    nsSinceEpoch lastRequestTimestamp; /* timestamp used in the last request message */
+  nsSinceEpoch lastRequestTimestamp; /* timestamp used in the last request message */
 
-    SNTPClient_UserCallback userCallback;
-    void* userCallbackParameter;
+  SNTPClient_UserCallback userCallback;
+  void * userCallbackParameter;
 
-    Thread thread;
-    bool running;
+  Thread thread;
+  bool running;
 
-    bool clockSynced;
+  bool clockSynced;
 
-    char* serverAddr;
-    int serverPort;
+  char * serverAddr;
+  int serverPort;
 };
 
 msSinceEpoch
 nsTimeToMsTime(nsSinceEpoch nsTime)
 {
-    return nsTime / 1000000UL;
+  return nsTime / 1000000UL;
 }
 
 #define UNIX_EPOCH_OFFSET 2208988800  /* offset between NTP seconds and UNIX time */
@@ -79,428 +79,432 @@ nsTimeToMsTime(nsSinceEpoch nsTime)
 static nsSinceEpoch
 ntpTimeToNsTime(uint32_t coarse, uint32_t fine)
 {
-    if ((coarse == 0) && (fine == 0))
-        return 0;
+  if ((coarse == 0) && (fine == 0))
+    return 0;
 
-    uint64_t nsTime = (coarse - UNIX_EPOCH_OFFSET) * 1000000000UL;
+  uint64_t nsTime = (coarse - UNIX_EPOCH_OFFSET) * 1000000000UL;
 
-    uint64_t nsPart = fine * 1000000000UL;
-    nsPart = nsPart >> 32;
-    nsTime += nsPart;
+  uint64_t nsPart = fine * 1000000000UL;
+  nsPart = nsPart >> 32;
+  nsTime += nsPart;
 
-    return nsTime;
+  return nsTime;
 }
 
 static void
-nsTimeToNtpTime(nsSinceEpoch nsTime, uint32_t* coarse, uint32_t* fine)
+nsTimeToNtpTime(nsSinceEpoch nsTime, uint32_t * coarse, uint32_t * fine)
 {
-    uint32_t secondsPart = (uint32_t)((nsTime / 1000000000UL) + UNIX_EPOCH_OFFSET);
+  uint32_t secondsPart = (uint32_t)((nsTime / 1000000000UL) + UNIX_EPOCH_OFFSET);
 
-    *coarse = secondsPart;
+  *coarse = secondsPart;
 
-    uint64_t nsPart = nsTime % 1000000000UL;
-    nsPart = nsPart << 32;
-    nsPart = nsPart / 1000000000UL;
+  uint64_t nsPart = nsTime % 1000000000UL;
+  nsPart = nsPart << 32;
+  nsPart = nsPart / 1000000000UL;
 
-    *fine = (uint32_t) nsPart;
+  *fine = (uint32_t) nsPart;
 }
 
 static uint32_t
 nsTimeToSeconds(nsSinceEpoch nsTime)
 {
-    uint32_t secondsSinceEpoch = (uint32_t)(nsTime / 1000000000UL);
+  uint32_t secondsSinceEpoch = (uint32_t)(nsTime / 1000000000UL);
 
-    return secondsSinceEpoch;
+  return secondsSinceEpoch;
 }
 
 static uint32_t
 getUsPartFromNsTime(nsSinceEpoch nsTime)
 {
-    uint64_t nsPart = nsTime % 1000000000UL;
+  uint64_t nsPart = nsTime % 1000000000UL;
 
-    uint32_t msPart = (uint32_t)(nsPart / 1000UL);
+  uint32_t msPart = (uint32_t)(nsPart / 1000UL);
 
-    return msPart;
+  return msPart;
 }
 
 static int
-encodeUint32(uint8_t* buffer, int bufPos, uint32_t value)
+encodeUint32(uint8_t * buffer, int bufPos, uint32_t value)
 {
-    buffer[bufPos++] = (uint8_t) (value / 0x1000000);
-    buffer[bufPos++] = (uint8_t) ((value / 0x10000) % 0x100);
-    buffer[bufPos++] = (uint8_t) ((value / 0x100) % 0x100);
-    buffer[bufPos++] = (uint8_t) (value % 0x100);
+  buffer[bufPos++] = (uint8_t) (value / 0x1000000);
+  buffer[bufPos++] = (uint8_t) ((value / 0x10000) % 0x100);
+  buffer[bufPos++] = (uint8_t) ((value / 0x100) % 0x100);
+  buffer[bufPos++] = (uint8_t) (value % 0x100);
 
-    return bufPos;
+  return bufPos;
 }
 
 static int
-decodeUint32(uint8_t* buffer, int bufPos, uint32_t* value)
+decodeUint32(uint8_t * buffer, int bufPos, uint32_t * value)
 {
-    uint32_t val;
+  uint32_t val;
 
-    val  = buffer[bufPos++] * 0x1000000;
-    val += buffer[bufPos++] * 0x10000;
-    val += buffer[bufPos++] * 0x100;
-    val += buffer[bufPos++];
+  val  = buffer[bufPos++] * 0x1000000;
+  val += buffer[bufPos++] * 0x10000;
+  val += buffer[bufPos++] * 0x100;
+  val += buffer[bufPos++];
 
-    *value = val;
+  *value = val;
 
-    return bufPos;
+  return bufPos;
 }
 
 static void
-parseResponseMessage(SNTPClient self, uint8_t* buffer, int bufSize)
+parseResponseMessage(SNTPClient self, uint8_t * buffer, int bufSize)
 {
-    self->lastReceivedMessage = Hal_getTimeInNs();
+  self->lastReceivedMessage = Hal_getTimeInNs();
 
-    int bufPos = 0;
+  int bufPos = 0;
 
-    uint8_t header = buffer[bufPos++];
-    int8_t stratum = (int8_t) buffer[bufPos++];
-    int8_t poll = (int8_t) buffer[bufPos++];
-    int8_t precision = (int8_t) buffer[bufPos++];
+  uint8_t header = buffer[bufPos++];
+  int8_t stratum = (int8_t) buffer[bufPos++];
+  int8_t poll = (int8_t) buffer[bufPos++];
+  int8_t precision = (int8_t) buffer[bufPos++];
 
-    int li = (header & 0xc0)>> 6;
+  int li = (header & 0xc0) >> 6;
 
-    /* check for "clock-not-synchronized" */
-    if (li == 3)
-    {
-        /* ignore time message */
-        if (SNTP_DEBUG)
-            printf("WARNING: received clock-not-synchronized from server\n");
-
-        /* TODO call user callback? */
-
-        return;
-    }
-
-    int version = (header & 0x38) >> 3;
-
-    int mode = (header & 0x7);
-
-    /* TODO: expect mode 4 - server */
-
-    int timeoutInSeconds = 1 << poll;
-
+  /* check for "clock-not-synchronized" */
+  if (li == 3)
+  {
+    /* ignore time message */
     if (SNTP_DEBUG)
-        printf("SNTP: response - version: %i mode: %i (4 = server, 3 = client) timeout(in s): %i\n", version, mode, timeoutInSeconds);
+      printf("WARNING: received clock-not-synchronized from server\n");
 
-    /* root delay */
-    bufPos += 4;
+    /* TODO call user callback? */
 
-    /* root dispersion */
-    bufPos += 4;
+    return;
+  }
 
-    /* reference */
-    bufPos += 4;
+  int version = (header & 0x38) >> 3;
 
-    /* reference timestamp */
-    uint32_t coarse;
-    uint32_t fine;
+  int mode = (header & 0x7);
 
-    bufPos = decodeUint32(buffer, bufPos, &coarse);
-    bufPos = decodeUint32(buffer, bufPos, &fine);
+  /* TODO: expect mode 4 - server */
 
-    uint64_t refTime = ntpTimeToNsTime(coarse, fine);
+  int timeoutInSeconds = 1 << poll;
 
-    /* originate timestamp */
+  if (SNTP_DEBUG)
+    printf("SNTP: response - version: %i mode: %i (4 = server, 3 = client) timeout(in s): %i\n", version, mode,
+           timeoutInSeconds);
 
-    bufPos = decodeUint32(buffer, bufPos, &coarse);
-    bufPos = decodeUint32(buffer, bufPos, &fine);
+  /* root delay */
+  bufPos += 4;
 
-    uint64_t origTime = ntpTimeToNsTime(coarse, fine);
+  /* root dispersion */
+  bufPos += 4;
 
-    /* receive timestamp */
+  /* reference */
+  bufPos += 4;
 
-    bufPos = decodeUint32(buffer, bufPos, &coarse);
-    bufPos = decodeUint32(buffer, bufPos, &fine);
+  /* reference timestamp */
+  uint32_t coarse;
+  uint32_t fine;
 
-    uint64_t recvTime = ntpTimeToNsTime(coarse, fine);
+  bufPos = decodeUint32(buffer, bufPos, &coarse);
+  bufPos = decodeUint32(buffer, bufPos, &fine);
 
-    /* transmit timestamp */
+  uint64_t refTime = ntpTimeToNsTime(coarse, fine);
 
-    bufPos = decodeUint32(buffer, bufPos, &coarse);
-    bufPos = decodeUint32(buffer, bufPos, &fine);
+  /* originate timestamp */
 
-    uint64_t trnsTime = ntpTimeToNsTime(coarse, fine);
+  bufPos = decodeUint32(buffer, bufPos, &coarse);
+  bufPos = decodeUint32(buffer, bufPos, &fine);
 
-    /* set system time */
-    if (Hal_setTimeInNs(trnsTime) == false)
-    {
-        if (SNTP_DEBUG)
-            printf("SNTP: failed to set system clock!\n");
-    }
+  uint64_t origTime = ntpTimeToNsTime(coarse, fine);
 
-    self->clockSynced = true;
-    self->outStandingRequest = false;
+  /* receive timestamp */
 
-    if (self->userCallback)
-    {
-        self->userCallback(self->userCallbackParameter, true);
-    }
+  bufPos = decodeUint32(buffer, bufPos, &coarse);
+  bufPos = decodeUint32(buffer, bufPos, &fine);
 
+  uint64_t recvTime = ntpTimeToNsTime(coarse, fine);
+
+  /* transmit timestamp */
+
+  bufPos = decodeUint32(buffer, bufPos, &coarse);
+  bufPos = decodeUint32(buffer, bufPos, &fine);
+
+  uint64_t trnsTime = ntpTimeToNsTime(coarse, fine);
+
+  /* set system time */
+  if (Hal_setTimeInNs(trnsTime) == false)
+  {
     if (SNTP_DEBUG)
-    {
-        printf("SNTP:   reference time: %u.%.6u\n", nsTimeToSeconds(refTime), getUsPartFromNsTime(refTime));
-        printf("SNTP:   original time: %u.%.9u\n", nsTimeToSeconds(origTime), getUsPartFromNsTime(origTime));
-        printf("SNTP:   receive time: %u.%.6u\n", nsTimeToSeconds(recvTime), getUsPartFromNsTime(recvTime));
-        printf("SNTP:   transmit time: %u.%.6u\n", nsTimeToSeconds(trnsTime), getUsPartFromNsTime(trnsTime));
-    }
+      printf("SNTP: failed to set system clock!\n");
+  }
+
+  self->clockSynced = true;
+  self->outStandingRequest = false;
+
+  if (self->userCallback)
+  {
+    self->userCallback(self->userCallbackParameter, true);
+  }
+
+  if (SNTP_DEBUG)
+  {
+    printf("SNTP:   reference time: %u.%.6u\n", nsTimeToSeconds(refTime), getUsPartFromNsTime(refTime));
+    printf("SNTP:   original time: %u.%.9u\n", nsTimeToSeconds(origTime), getUsPartFromNsTime(origTime));
+    printf("SNTP:   receive time: %u.%.6u\n", nsTimeToSeconds(recvTime), getUsPartFromNsTime(recvTime));
+    printf("SNTP:   transmit time: %u.%.6u\n", nsTimeToSeconds(trnsTime), getUsPartFromNsTime(trnsTime));
+  }
 }
 
 static void
-sendRequestMessage(SNTPClient self, const char* serverAddr, int serverPort)
+sendRequestMessage(SNTPClient self, const char * serverAddr, int serverPort)
 {
-    uint8_t buffer[100];
+  uint8_t buffer[100];
 
-    memset(buffer, 0, sizeof(buffer));
+  memset(buffer, 0, sizeof(buffer));
 
-    uint8_t li = 0;
-    int8_t version = 3;
-    int8_t mode = 3; /* mode: client */
-    int8_t stratum = 0; /* stratum: not specified */
-    int8_t poll = 4;
-    int8_t precision = -6;
+  uint8_t li = 0;
+  int8_t version = 3;
+  int8_t mode = 3; /* mode: client */
+  int8_t stratum = 0; /* stratum: not specified */
+  int8_t poll = 4;
+  int8_t precision = -6;
 
-    int bufPos = 0;
+  int bufPos = 0;
 
-    buffer[bufPos++] = (li << 6) | (version << 3) | mode;
-    buffer[bufPos++] = stratum;
-    buffer[bufPos++] = poll;
-    buffer[bufPos++] = precision;
+  buffer[bufPos++] = (li << 6) | (version << 3) | mode;
+  buffer[bufPos++] = stratum;
+  buffer[bufPos++] = poll;
+  buffer[bufPos++] = precision;
 
-    /* root delay */
-    bufPos = encodeUint32(buffer, bufPos, 1 << 16);
+  /* root delay */
+  bufPos = encodeUint32(buffer, bufPos, 1 << 16);
 
-    /* root dispersion */
-    bufPos = encodeUint32(buffer, bufPos, 1 << 16);
+  /* root dispersion */
+  bufPos = encodeUint32(buffer, bufPos, 1 << 16);
 
-    /* reference */
-    bufPos += 4;
+  /* reference */
+  bufPos += 4;
 
-    /* skip reference timestamp */
-    bufPos += 8;
+  /* skip reference timestamp */
+  bufPos += 8;
 
-    /* skip originate timestamp */
-    bufPos += 8;
+  /* skip originate timestamp */
+  bufPos += 8;
 
-    /* skip receive timestamp */
-    bufPos += 8;
+  /* skip receive timestamp */
+  bufPos += 8;
 
-    uint32_t time_coarse;
-    uint32_t time_fine;
+  uint32_t time_coarse;
+  uint32_t time_fine;
 
-    nsSinceEpoch nsTime = Hal_getTimeInNs();
+  nsSinceEpoch nsTime = Hal_getTimeInNs();
 
-    nsTimeToNtpTime(nsTime, &time_coarse, &time_fine);
+  nsTimeToNtpTime(nsTime, &time_coarse, &time_fine);
 
-    /* transmit timestamp */
-    bufPos = encodeUint32(buffer, bufPos, time_coarse);
-    bufPos = encodeUint32(buffer, bufPos, time_fine);
+  /* transmit timestamp */
+  bufPos = encodeUint32(buffer, bufPos, time_coarse);
+  bufPos = encodeUint32(buffer, bufPos, time_fine);
 
-    UdpSocket_sendTo(self->socket, serverAddr ,serverPort, buffer, bufPos);
+  UdpSocket_sendTo(self->socket, serverAddr, serverPort, buffer, bufPos);
 
-    if (SNTP_DEBUG)
-        printf("SNTP: sent request to %s:%i\n", serverAddr, serverPort);
+  if (SNTP_DEBUG)
+    printf("SNTP: sent request to %s:%i\n", serverAddr, serverPort);
 
-    self->lastRequestTimestamp = nsTime;
-    self->outStandingRequest = true;
+  self->lastRequestTimestamp = nsTime;
+  self->outStandingRequest = true;
 }
 
 SNTPClient
 SNTPClient_create()
 {
-    SNTPClient self = (SNTPClient) GLOBAL_CALLOC(1, sizeof(struct sSNTPClient));
+  SNTPClient self = (SNTPClient) GLOBAL_CALLOC(1, sizeof(struct sSNTPClient));
 
-    if (self)
+  if (self)
+  {
+    self->socket = UdpSocket_create();
+
+    if (self->socket == NULL)
     {
-        self->socket = UdpSocket_create();
-
-        if (self->socket == NULL)
-        {
-            GLOBAL_FREEMEM(self);
-            self = NULL;
-        }
-        else
-        {
-            self->handleSet = Handleset_new();
-            Handleset_addSocket(self->handleSet, (Socket) self->socket);
-            self->pollInterval = 30000000000UL; /* 30 s */
-        }
+      GLOBAL_FREEMEM(self);
+      self = NULL;
     }
+    else
+    {
+      self->handleSet = Handleset_new();
+      Handleset_addSocket(self->handleSet, (Socket) self->socket);
+      self->pollInterval = 30000000000UL; /* 30 s */
+    }
+  }
 
-    return self;
+  return self;
 }
 
 HandleSet
 SNTPClient_getHandleSet(SNTPClient self)
 {
-    return self->handleSet;
+  return self->handleSet;
 }
 
 void
-SNTPClient_addServer(SNTPClient self, const char* serverAddr, int serverPort)
+SNTPClient_addServer(SNTPClient self, const char * serverAddr, int serverPort)
 {
-    if (self) {
-        self->serverAddr = StringUtils_copyString(serverAddr);
-        self->serverPort = serverPort;
-    }
+  if (self)
+  {
+    self->serverAddr = StringUtils_copyString(serverAddr);
+    self->serverPort = serverPort;
+  }
 }
 
 bool
 SNTPClient_isSynchronized(SNTPClient self)
 {
-    return self->clockSynced;
+  return self->clockSynced;
 }
 
 void
-SNTPClient_setUserCallback(SNTPClient self, SNTPClient_UserCallback callback, void* parameter)
+SNTPClient_setUserCallback(SNTPClient self, SNTPClient_UserCallback callback, void * parameter)
 {
-    if (self)
-    {
-        self->userCallback = callback;
-        self->userCallbackParameter = parameter;
-    }
+  if (self)
+  {
+    self->userCallback = callback;
+    self->userCallbackParameter = parameter;
+  }
 }
 
 void
 SNTPClient_setPollInterval(SNTPClient self, uint32_t intervalInSeconds)
 {
-    if (self)
-        self->pollInterval = intervalInSeconds * 1000000000UL;
+  if (self)
+    self->pollInterval = intervalInSeconds * 1000000000UL;
 }
 
 void
 SNTPClient_tick(SNTPClient self)
 {
-    nsSinceEpoch now = Hal_getTimeInNs();
+  nsSinceEpoch now = Hal_getTimeInNs();
 
-    if (self->lastReceivedMessage > now)
-        self->lastReceivedMessage = now;
+  if (self->lastReceivedMessage > now)
+    self->lastReceivedMessage = now;
 
-    if (self->lastRequestTimestamp > now)
-        self->lastRequestTimestamp = now;
+  if (self->lastRequestTimestamp > now)
+    self->lastRequestTimestamp = now;
 
-    if (self->lastRequestTimestamp > 0)
+  if (self->lastRequestTimestamp > 0)
+  {
+    /* check for timeout */
+    if ((now - self->lastReceivedMessage) > 300000000000UL)
     {
-        /* check for timeout */
-        if ((now - self->lastReceivedMessage) > 300000000000UL)
+      if (self->clockSynced)
+      {
+        self->clockSynced = false;
+        printf("SNTP: request timeout\n");
+
+        if (self->userCallback)
         {
-            if (self->clockSynced)
-            {
-                self->clockSynced = false;
-                printf("SNTP: request timeout\n");
-
-                if (self->userCallback)
-                {
-                    self->userCallback(self->userCallbackParameter, false);
-                }
-            }
+          self->userCallback(self->userCallbackParameter, false);
         }
+      }
     }
+  }
 
-    if (self->serverAddr)
+  if (self->serverAddr)
+  {
+    if ((now - self->lastRequestTimestamp) > self->pollInterval)
     {
-        if ((now - self->lastRequestTimestamp) > self->pollInterval)
-        {
-            sendRequestMessage(self, self->serverAddr, self->serverPort);
-        }
+      sendRequestMessage(self, self->serverAddr, self->serverPort);
     }
+  }
 }
 
 void
 SNTPClient_handleIncomingMessage(SNTPClient self)
 {
-    char ipAddress[200];
+  char ipAddress[200];
 
-    uint8_t buffer[200];
-    int rcvdBytes = UdpSocket_receiveFrom(self->socket, ipAddress, 200, buffer, sizeof(buffer));
+  uint8_t buffer[200];
+  int rcvdBytes = UdpSocket_receiveFrom(self->socket, ipAddress, 200, buffer, sizeof(buffer));
 
-    if (rcvdBytes > 0)
-    {
-        if (SNTP_DEBUG)
-            printf("SNTP: received response from %s\n", ipAddress);
+  if (rcvdBytes > 0)
+  {
+    if (SNTP_DEBUG)
+      printf("SNTP: received response from %s\n", ipAddress);
 
-        parseResponseMessage(self, buffer, rcvdBytes);
-    }
-    else if (rcvdBytes == -1)
-    {
-        printf("UDP socket error\n");
-    }
-    else
-    {
-        printf("No data!\n");
-    }
+    parseResponseMessage(self, buffer, rcvdBytes);
+  }
+  else if (rcvdBytes == -1)
+  {
+    printf("UDP socket error\n");
+  }
+  else
+  {
+    printf("No data!\n");
+  }
 }
 
-static void*
-handleThread(void* parameter)
+static void *
+handleThread(void * parameter)
 {
-    SNTPClient self = (SNTPClient) parameter;
+  SNTPClient self = (SNTPClient) parameter;
 
-    self->running = true;
+  self->running = true;
 
-    while (self->running) {
+  while (self->running)
+  {
 
-        SNTPClient_tick(self);
+    SNTPClient_tick(self);
 
-        if (Handleset_waitReady(self->handleSet, 1000) > 0) {
-            SNTPClient_handleIncomingMessage(self);
-        }
+    if (Handleset_waitReady(self->handleSet, 1000) > 0)
+    {
+      SNTPClient_handleIncomingMessage(self);
     }
+  }
 
-    return NULL;
+  return NULL;
 }
 
 void
 SNTPClient_start(SNTPClient self)
 {
-    if (self)
+  if (self)
+  {
+    int sntpPoirt = SNTP_DEFAULT_PORT;
+
+    if (UdpSocket_bind(self->socket, "0.0.0.0", SNTP_DEFAULT_PORT))
     {
-        int sntpPoirt = SNTP_DEFAULT_PORT;
+      printf("Start NTP thread\n");
 
-        if (UdpSocket_bind(self->socket, "0.0.0.0", SNTP_DEFAULT_PORT))
-        {
-            printf("Start NTP thread\n");
+      self->thread = Thread_create(handleThread, self, false);
 
-            self->thread = Thread_create(handleThread, self, false);
-
-            if (self->thread)
-                Thread_start(self->thread);
-        }
-        else
-        {
-            if (SNTP_DEBUG)
-                printf("SNTP: Failed to bind to port %i\n", sntpPoirt);
-        }
+      if (self->thread)
+        Thread_start(self->thread);
     }
+    else
+    {
+      if (SNTP_DEBUG)
+        printf("SNTP: Failed to bind to port %i\n", sntpPoirt);
+    }
+  }
 }
 
 void
 SNTPClient_stop(SNTPClient self)
 {
-    if (self->thread)
-    {
-        self->running = false;
-        Thread_destroy(self->thread);
-        self->thread = NULL;
-    }
+  if (self->thread)
+  {
+    self->running = false;
+    Thread_destroy(self->thread);
+    self->thread = NULL;
+  }
 }
 
 void
 SNTPClient_destroy(SNTPClient self)
 {
-    if (self)
-    {
-        SNTPClient_stop(self);
+  if (self)
+  {
+    SNTPClient_stop(self);
 
-        if (self->serverAddr)
-            GLOBAL_FREEMEM(self->serverAddr);
+    if (self->serverAddr)
+      GLOBAL_FREEMEM(self->serverAddr);
 
-        if (self->socket)
-            Socket_destroy((Socket) self->socket);
+    if (self->socket)
+      Socket_destroy((Socket) self->socket);
 
-        GLOBAL_FREEMEM(self);
-    }
+    GLOBAL_FREEMEM(self);
+  }
 }

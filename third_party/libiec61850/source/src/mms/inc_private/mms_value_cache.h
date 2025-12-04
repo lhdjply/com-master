@@ -27,19 +27,20 @@
 #include "mms_device_model.h"
 #include "mms_value.h"
 
-typedef struct sMmsValueCache* MmsValueCache;
+typedef struct sMmsValueCache * MmsValueCache;
 
 LIB61850_INTERNAL MmsValueCache
 MmsValueCache_create(MmsDomain* domain);
 
 LIB61850_INTERNAL void
-MmsValueCache_insertValue(MmsValueCache self, char* itemId, MmsValue* value);
+MmsValueCache_insertValue(MmsValueCache self, char * itemId, MmsValue* value);
 
-LIB61850_INTERNAL MmsValue*
-MmsValueCache_lookupValue(MmsValueCache self, const char* itemId, MmsVariableSpecification** outSpec);
+LIB61850_INTERNAL MmsValue *
+MmsValueCache_lookupValue(MmsValueCache self, const char * itemId, MmsVariableSpecification ** outSpec);
 
-LIB61850_INTERNAL MmsValue*
-MmsValueCache_lookupValueEx(MmsValueCache self, const char* itemId, int idx, const char* componentId, MmsVariableSpecification** outSpec);
+LIB61850_INTERNAL MmsValue *
+MmsValueCache_lookupValueEx(MmsValueCache self, const char * itemId, int idx, const char * componentId,
+                            MmsVariableSpecification ** outSpec);
 
 LIB61850_INTERNAL void
 MmsValueCache_destroy(MmsValueCache self);

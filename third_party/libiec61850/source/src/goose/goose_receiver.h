@@ -39,7 +39,7 @@ extern "C" {
  */
 /**@{*/
 
-typedef struct sGooseReceiver* GooseReceiver;
+typedef struct sGooseReceiver * GooseReceiver;
 
 /**
  * \brief Create a new receiver instance
@@ -63,7 +63,7 @@ GooseReceiver_create(void);
  * \return the new GooseReceiver instance
  */
 LIB61850_API GooseReceiver
-GooseReceiver_createEx(uint8_t* buffer);
+GooseReceiver_createEx(uint8_t * buffer);
 
 /**
  * \brief Create a new R-GOOSE receiver instance.
@@ -82,7 +82,7 @@ GooseReceiver_createRemote(RSession session);
  * \param interfaceId
  */
 LIB61850_API void
-GooseReceiver_setInterfaceId(GooseReceiver self, const char* interfaceId);
+GooseReceiver_setInterfaceId(GooseReceiver self, const char * interfaceId);
 
 /**
  * \brief return the interface ID used by the GOOSE receiver
@@ -91,7 +91,7 @@ GooseReceiver_setInterfaceId(GooseReceiver self, const char* interfaceId);
  *
  * \return the Ethernet interface ID string
  */
-LIB61850_API const char*
+LIB61850_API const char *
 GooseReceiver_getInterfaceId(GooseReceiver self);
 
 /**
@@ -188,7 +188,7 @@ GooseReceiver_tick(GooseReceiver self);
  * \param size size of the Ethernet message
  */
 LIB61850_API void
-GooseReceiver_handleMessage(GooseReceiver self, uint8_t* buffer, int size);
+GooseReceiver_handleMessage(GooseReceiver self, uint8_t * buffer, int size);
 
 /**@}*/
 

@@ -29,15 +29,15 @@
 #include "libiec61850_common_api.h"
 
 LIB61850_INTERNAL void
-Conversions_intToStringBuffer(int intValue, int numberOfDigits, uint8_t* buffer);
+Conversions_intToStringBuffer(int intValue, int numberOfDigits, uint8_t * buffer);
 
 LIB61850_INTERNAL void
-Conversions_msTimeToGeneralizedTime(uint64_t msTime, uint8_t* buffer);
+Conversions_msTimeToGeneralizedTime(uint64_t msTime, uint8_t * buffer);
 
 LIB61850_INTERNAL uint64_t
-Conversions_generalizedTimeToMsTime(const char* gtString);
+Conversions_generalizedTimeToMsTime(const char * gtString);
 
 LIB61850_INTERNAL void
-memcpyReverseByteOrder(uint8_t* dst, const uint8_t* src, int size);
+memcpyReverseByteOrder(uint8_t * dst, const uint8_t * src, int size);
 
 #endif /* CONVERSIONS_H_ */

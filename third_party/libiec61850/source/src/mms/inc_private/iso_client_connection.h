@@ -37,23 +37,24 @@ extern "C" {
 
 typedef enum
 {
-    ISO_IND_ASSOCIATION_SUCCESS,
-    ISO_IND_ASSOCIATION_FAILED,
-    ISO_IND_CLOSED,
-    ISO_IND_DATA,
-    ISO_IND_TICK
+  ISO_IND_ASSOCIATION_SUCCESS,
+  ISO_IND_ASSOCIATION_FAILED,
+  ISO_IND_CLOSED,
+  ISO_IND_DATA,
+  ISO_IND_TICK
 } IsoIndication;
 
 typedef bool
-(*IsoIndicationCallback)(IsoIndication indication, void* param, ByteBuffer* payload);
+(*IsoIndicationCallback)(IsoIndication indication, void * param, ByteBuffer* payload);
 
 /**
  * opaque data structure to represent an ISO client connection.
  */
-typedef struct sIsoClientConnection* IsoClientConnection;
+typedef struct sIsoClientConnection * IsoClientConnection;
 
 LIB61850_INTERNAL IsoClientConnection
-IsoClientConnection_create(IsoConnectionParameters parameters, IsoIndicationCallback callback, void* callbackParameter);
+IsoClientConnection_create(IsoConnectionParameters parameters, IsoIndicationCallback callback,
+                           void * callbackParameter);
 
 LIB61850_INTERNAL void
 IsoClientConnection_destroy(IsoClientConnection self);
@@ -96,7 +97,7 @@ IsoClientConnection_close(IsoClientConnection self);
  * This function should be called by the API client (usually the MmsConnection) to reserve(allocate)
  * the payload buffer. This is used to prevent concurrent access to the send buffer of the IsoClientConnection
  */
-LIB61850_INTERNAL ByteBuffer*
+LIB61850_INTERNAL ByteBuffer *
 IsoClientConnection_allocateTransmitBuffer(IsoClientConnection self);
 
 /**

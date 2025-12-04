@@ -31,49 +31,53 @@
 #include "iso_connection_parameters.h"
 #include "tls_socket.h"
 
-typedef struct {
-    TSelector tSelSrc;
-    TSelector tSelDst;
-    uint8_t tpduSize;
+typedef struct
+{
+  TSelector tSelSrc;
+  TSelector tSelDst;
+  uint8_t tpduSize;
 } CotpOptions;
 
-typedef struct {
-    int state;
-    int remoteRef;
-    int localRef;
-    int protocolClass;
+typedef struct
+{
+  int state;
+  int remoteRef;
+  int localRef;
+  int protocolClass;
 
-    HandleSet handleSet;
-    Socket socket;
+  HandleSet handleSet;
+  Socket socket;
 #if (CONFIG_MMS_SUPPORT_TLS == 1)
-    TLSSocket tlsSocket;
+  TLSSocket tlsSocket;
 #endif
 
-    CotpOptions options;
-    bool isLastDataUnit;
-    ByteBuffer* payload;
-    ByteBuffer* writeBuffer;  /* buffer to store TPKT packet to send */
-    ByteBuffer* readBuffer;   /* buffer to store received TPKT packet */
-    uint16_t packetSize;      /* size of the packet currently received */
+  CotpOptions options;
+  bool isLastDataUnit;
+  ByteBuffer * payload;
+  ByteBuffer * writeBuffer; /* buffer to store TPKT packet to send */
+  ByteBuffer * readBuffer;  /* buffer to store received TPKT packet */
+  uint16_t packetSize;      /* size of the packet currently received */
 
-    uint8_t* socketExtensionBuffer; /* buffer to store data when TCP socket is not accepting all data */
-    int socketExtensionBufferSize; /* maximum number of bytes to store in the extension buffer */
-    int socketExtensionBufferFill; /* number of bytes in the extension buffer (bytes to write) */
+  uint8_t * socketExtensionBuffer; /* buffer to store data when TCP socket is not accepting all data */
+  int socketExtensionBufferSize; /* maximum number of bytes to store in the extension buffer */
+  int socketExtensionBufferFill; /* number of bytes in the extension buffer (bytes to write) */
 } CotpConnection;
 
-typedef enum {
-    COTP_OK,
-    COTP_ERROR,
-    COTP_CONNECT_INDICATION,
-    COTP_DATA_INDICATION,
-    COTP_DISCONNECT_INDICATION,
-    COTP_MORE_FRAGMENTS_FOLLOW
+typedef enum
+{
+  COTP_OK,
+  COTP_ERROR,
+  COTP_CONNECT_INDICATION,
+  COTP_DATA_INDICATION,
+  COTP_DISCONNECT_INDICATION,
+  COTP_MORE_FRAGMENTS_FOLLOW
 } CotpIndication;
 
-typedef enum {
-    TPKT_PACKET_COMPLETE = 0,
-    TPKT_WAITING = 1,
-    TPKT_ERROR = 2
+typedef enum
+{
+  TPKT_PACKET_COMPLETE = 0,
+  TPKT_WAITING = 1,
+  TPKT_ERROR = 2
 } TpktState;
 
 LIB61850_INTERNAL int /* in byte */
@@ -84,8 +88,8 @@ CotpConnection_setTpduSize(CotpConnection* self, int tpduSize /* in byte */);
 
 LIB61850_INTERNAL void
 CotpConnection_init(CotpConnection* self, Socket socket,
-        ByteBuffer* payloadBuffer, ByteBuffer* readBuffer, ByteBuffer* writeBuffer,
-        uint8_t* socketExtensionBuffer, int socketExtensionBufferSize);
+                    ByteBuffer* payloadBuffer, ByteBuffer* readBuffer, ByteBuffer* writeBuffer,
+                    uint8_t * socketExtensionBuffer, int socketExtensionBufferSize);
 
 LIB61850_INTERNAL CotpIndication
 CotpConnection_parseIncomingMessage(CotpConnection* self);
@@ -105,7 +109,7 @@ CotpConnection_sendConnectionResponseMessage(CotpConnection* self);
 LIB61850_INTERNAL CotpIndication
 CotpConnection_sendDataMessage(CotpConnection* self, BufferChain payload);
 
-LIB61850_INTERNAL ByteBuffer*
+LIB61850_INTERNAL ByteBuffer *
 CotpConnection_getPayload(CotpConnection* self);
 
 LIB61850_INTERNAL int

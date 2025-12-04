@@ -29,11 +29,12 @@
 LIB61850_INTERNAL Socket
 RSession_getSocket(RSession self);
 
-typedef enum {
-    RSESSION_SPDU_ID_TUNNELED = 0xa0,
-    RSESSION_SPDU_ID_GOOSE = 0xa1,
-    RSESSION_SPDU_ID_SV = 0xa2,
-    RSESSION_SPDU_ID_MGMT = 0xa3
+typedef enum
+{
+  RSESSION_SPDU_ID_TUNNELED = 0xa0,
+  RSESSION_SPDU_ID_GOOSE = 0xa1,
+  RSESSION_SPDU_ID_SV = 0xa2,
+  RSESSION_SPDU_ID_MGMT = 0xa3
 } RSessionProtocol_SPDU_ID;
 
 /*
@@ -42,14 +43,15 @@ typedef enum {
  * \param spduId SPDU Identifier(SI) - 0xa0(tunneled), 0xa1(GOOSE), 0xa2(Sampled Values)
  */
 LIB61850_INTERNAL RSessionError
-RSession_sendMessage(RSession self, RSessionProtocol_SPDU_ID spduId, bool simulation, uint16_t appId, uint8_t* payload, int payloadSize);
+RSession_sendMessage(RSession self, RSessionProtocol_SPDU_ID spduId, bool simulation, uint16_t appId, uint8_t * payload,
+                     int payloadSize);
 
 //RSessionError
 //RSession_sendMultiplePayloadMessage(RSession self, RSessionPayloadElement elements);
 
-typedef void (*RSessionPayloadElementHandler) (void* parameter, uint16_t appId, uint8_t* payloadData, int payloadSize);
+typedef void (*RSessionPayloadElementHandler)(void * parameter, uint16_t appId, uint8_t * payloadData, int payloadSize);
 
 LIB61850_INTERNAL RSessionError
-RSession_receiveMessage(RSession self, RSessionPayloadElementHandler handler, void* parameter);
+RSession_receiveMessage(RSession self, RSessionPayloadElementHandler handler, void * parameter);
 
 #endif /* SRC_R_SESSION_R_SESSION_INTERNAL_H_ */

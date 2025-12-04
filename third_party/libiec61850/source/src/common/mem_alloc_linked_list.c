@@ -24,44 +24,45 @@
 #include "libiec61850_platform_includes.h"
 #include "mem_alloc_linked_list.h"
 
-struct sMemAllocLinkedList {
-    void* data;
-    struct sLinkedList* next;
-    MemoryAllocator* ma;
+struct sMemAllocLinkedList
+{
+  void * data;
+  struct sLinkedList * next;
+  MemoryAllocator * ma;
 };
 
 MemAllocLinkedList
 MemAllocLinkedList_create(MemoryAllocator* ma)
 {
-    MemAllocLinkedList self =
-            (MemAllocLinkedList) MemoryAllocator_allocate(ma, sizeof(struct sMemAllocLinkedList));
+  MemAllocLinkedList self =
+    (MemAllocLinkedList) MemoryAllocator_allocate(ma, sizeof(struct sMemAllocLinkedList));
 
-    if (self == NULL)
-        return NULL;
+  if(self == NULL)
+    return NULL;
 
-    self->ma = ma;
-    self->data = NULL;
-    self->next = NULL;
+  self->ma = ma;
+  self->data = NULL;
+  self->next = NULL;
 
-    return self;
+  return self;
 }
 
 LinkedList
-MemAllocLinkedList_add(MemAllocLinkedList self, void* data)
+MemAllocLinkedList_add(MemAllocLinkedList self, void * data)
 {
-    LinkedList newElement = (LinkedList)
-            MemoryAllocator_allocate(self->ma, sizeof(struct sLinkedList));
+  LinkedList newElement = (LinkedList)
+                          MemoryAllocator_allocate(self->ma, sizeof(struct sLinkedList));
 
-    if (newElement == NULL)
-        return NULL;
+  if(newElement == NULL)
+    return NULL;
 
-    newElement->data = data;
-    newElement->next = NULL;
+  newElement->data = data;
+  newElement->next = NULL;
 
-    LinkedList listEnd = LinkedList_getLastElement((LinkedList) self);
+  LinkedList listEnd = LinkedList_getLastElement((LinkedList) self);
 
-    listEnd->next = newElement;
+  listEnd->next = newElement;
 
-    return newElement;
+  return newElement;
 }
 

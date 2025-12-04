@@ -1,5 +1,5 @@
 /*
- * 	mms_domain.c
+ *  mms_domain.c
  *
  *  Copyright 2013, 2014 Michael Zillgith
  *
@@ -26,160 +26,175 @@
 #include "mms_server_internal.h"
 
 static void
-freeNamedVariables(MmsVariableSpecification** variables, int variablesCount)
+freeNamedVariables(MmsVariableSpecification ** variables, int variablesCount)
 {
-	int i;
-	for (i = 0; i < variablesCount; i++) {
-	    MmsVariableSpecification_destroy(variables[i]);
-	}
+  int i;
+  for(i = 0; i < variablesCount; i++)
+  {
+    MmsVariableSpecification_destroy(variables[i]);
+  }
 }
 
-MmsDomain*
-MmsDomain_create(char* domainName)
+MmsDomain *
+MmsDomain_create(char * domainName)
 {
-	MmsDomain* self = (MmsDomain*) GLOBAL_CALLOC(1, sizeof(MmsDomain));
+  MmsDomain* self = (MmsDomain *) GLOBAL_CALLOC(1, sizeof(MmsDomain));
 
-	if (self) {
-        self->domainName = StringUtils_copyString(domainName);
-        self->namedVariableLists = LinkedList_create();
-        self->journals = NULL;
-	}
+  if(self)
+  {
+    self->domainName = StringUtils_copyString(domainName);
+    self->namedVariableLists = LinkedList_create();
+    self->journals = NULL;
+  }
 
-	return self;
+  return self;
 }
 
 void
 MmsDomain_destroy(MmsDomain* self)
 {
-	GLOBAL_FREEMEM(self->domainName);
+  GLOBAL_FREEMEM(self->domainName);
 
-	if (self->namedVariables != NULL) {
-		freeNamedVariables(self->namedVariables,
-				self->namedVariablesCount);
+  if(self->namedVariables != NULL)
+  {
+    freeNamedVariables(self->namedVariables,
+                       self->namedVariablesCount);
 
-		GLOBAL_FREEMEM(self->namedVariables);
-	}
+    GLOBAL_FREEMEM(self->namedVariables);
+  }
 
-	if (self->journals != NULL) {
-	    LinkedList_destroyDeep(self->journals, (LinkedListValueDeleteFunction) MmsJournal_destroy);
-	}
+  if(self->journals != NULL)
+  {
+    LinkedList_destroyDeep(self->journals, (LinkedListValueDeleteFunction) MmsJournal_destroy);
+  }
 
-	LinkedList_destroyDeep(self->namedVariableLists, (LinkedListValueDeleteFunction) MmsNamedVariableList_destroy);
+  LinkedList_destroyDeep(self->namedVariableLists, (LinkedListValueDeleteFunction) MmsNamedVariableList_destroy);
 
-	GLOBAL_FREEMEM(self);
+  GLOBAL_FREEMEM(self);
 }
 
-char*
+char *
 MmsDomain_getName(MmsDomain* self)
 {
-	return self->domainName;
+  return self->domainName;
 }
 
 void
-MmsDomain_addJournal(MmsDomain* self, const char* name)
+MmsDomain_addJournal(MmsDomain* self, const char * name)
 {
-    if (self->journals == NULL)
-        self->journals = LinkedList_create();
+  if(self->journals == NULL)
+    self->journals = LinkedList_create();
 
-    MmsJournal journal = MmsJournal_create(name);
+  MmsJournal journal = MmsJournal_create(name);
 
-    LinkedList_add(self->journals, (void*) journal);
+  LinkedList_add(self->journals, (void *) journal);
 }
 
 MmsJournal
-MmsDomain_getJournal(MmsDomain* self, const char* name)
+MmsDomain_getJournal(MmsDomain* self, const char * name)
 {
-    if (self->journals != NULL) {
+  if(self->journals != NULL)
+  {
 
-        LinkedList journal = LinkedList_getNext(self->journals);
+    LinkedList journal = LinkedList_getNext(self->journals);
 
-        while (journal != NULL) {
+    while(journal != NULL)
+    {
 
-            MmsJournal mmsJournal = (MmsJournal) LinkedList_getData(journal);
+      MmsJournal mmsJournal = (MmsJournal) LinkedList_getData(journal);
 
-            if (strcmp(mmsJournal->name, name) == 0)
-                return mmsJournal;
+      if(strcmp(mmsJournal->name, name) == 0)
+        return mmsJournal;
 
-            journal = LinkedList_getNext(journal);
-        }
+      journal = LinkedList_getNext(journal);
     }
+  }
 
-    return NULL;
+  return NULL;
 }
 
 bool
 MmsDomain_addNamedVariableList(MmsDomain* self, MmsNamedVariableList variableList)
 {
-	LinkedList_add(self->namedVariableLists, variableList);
+  LinkedList_add(self->namedVariableLists, variableList);
 
-	return true;
+  return true;
 }
 
 MmsNamedVariableList
-MmsDomain_getNamedVariableList(MmsDomain* self, const char* variableListName)
+MmsDomain_getNamedVariableList(MmsDomain* self, const char * variableListName)
 {
-	MmsNamedVariableList variableList = NULL;
+  MmsNamedVariableList variableList = NULL;
 
-	if (self == NULL)
-	    goto exit_function;
+  if(self == NULL)
+    goto exit_function;
 
-	variableList = mmsServer_getNamedVariableListWithName(self->namedVariableLists, variableListName);
+  variableList = mmsServer_getNamedVariableListWithName(self->namedVariableLists, variableListName);
 
 exit_function:
-	return variableList;
+  return variableList;
 }
 
 void
-MmsDomain_deleteNamedVariableList(MmsDomain* self, char* variableListName)
+MmsDomain_deleteNamedVariableList(MmsDomain* self, char * variableListName)
 {
-	mmsServer_deleteVariableList(self->namedVariableLists, variableListName);
+  mmsServer_deleteVariableList(self->namedVariableLists, variableListName);
 }
 
 LinkedList
 MmsDomain_getNamedVariableLists(MmsDomain* self)
 {
-	return self->namedVariableLists;
+  return self->namedVariableLists;
 }
 
-MmsVariableSpecification*
-MmsDomain_getNamedVariable(MmsDomain* self, char* nameId)
+MmsVariableSpecification *
+MmsDomain_getNamedVariable(MmsDomain* self, char * nameId)
 {
-	if (self->namedVariables != NULL) {
+  if(self->namedVariables != NULL)
+  {
 
-		char* separator = strchr(nameId, '$');
+    char * separator = strchr(nameId, '$');
 
-		int i;
+    int i;
 
-		if (separator == NULL) {
+    if(separator == NULL)
+    {
 
-			for (i = 0; i < self->namedVariablesCount; i++) {
-				if (strcmp(self->namedVariables[i]->name, nameId) == 0) {
-					return self->namedVariables[i];
-				}
-			}
+      for(i = 0; i < self->namedVariablesCount; i++)
+      {
+        if(strcmp(self->namedVariables[i]->name, nameId) == 0)
+        {
+          return self->namedVariables[i];
+        }
+      }
 
-			return NULL;
-		}
-		else {
-			MmsVariableSpecification* namedVariable = NULL;
+      return NULL;
+    }
+    else
+    {
+      MmsVariableSpecification* namedVariable = NULL;
 
-			for (i = 0; i < self->namedVariablesCount; i++) {
+      for(i = 0; i < self->namedVariablesCount; i++)
+      {
 
-				if (strlen(self->namedVariables[i]->name) == (unsigned) (separator - nameId)) {
+        if(strlen(self->namedVariables[i]->name) == (unsigned)(separator - nameId))
+        {
 
-					if (strncmp(self->namedVariables[i]->name, nameId, separator - nameId) == 0) {
-						namedVariable = self->namedVariables[i];
-						break;
-					}
-				}
-			}
+          if(strncmp(self->namedVariables[i]->name, nameId, separator - nameId) == 0)
+          {
+            namedVariable = self->namedVariables[i];
+            break;
+          }
+        }
+      }
 
-			if (namedVariable != NULL) {
-				namedVariable = MmsVariableSpecification_getNamedVariableRecursive(namedVariable, separator + 1);
-			}
+      if(namedVariable != NULL)
+      {
+        namedVariable = MmsVariableSpecification_getNamedVariableRecursive(namedVariable, separator + 1);
+      }
 
-			return namedVariable;
-		}
-	}
-	return NULL;
+      return namedVariable;
+    }
+  }
+  return NULL;
 }

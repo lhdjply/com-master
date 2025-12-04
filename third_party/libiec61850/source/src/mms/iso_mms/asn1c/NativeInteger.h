@@ -9,8 +9,8 @@
  * will do).
  * This type may be used when integer range is limited by subtype constraints.
  */
-#ifndef	_NativeInteger_H_
-#define	_NativeInteger_H_
+#ifndef _NativeInteger_H_
+#define _NativeInteger_H_
 
 #include <asn_application.h>
 #include <INTEGER.h>
@@ -50,4 +50,4 @@ per_type_encoder_f NativeInteger_encode_uper;
 }
 #endif
 
-#endif	/* _NativeInteger_H_ */
+#endif  /* _NativeInteger_H_ */

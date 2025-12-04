@@ -33,34 +33,34 @@
 
 typedef enum
 {
-    idle, requestIndicated, connected
+  idle, requestIndicated, connected
 } AcseConnectionState;
 
 typedef enum
 {
-    ACSE_ERROR,
-    ACSE_ASSOCIATE,
-    ACSE_ASSOCIATE_FAILED,
-    ACSE_OK,
-    ACSE_ABORT,
-    ACSE_RELEASE_REQUEST,
-    ACSE_RELEASE_RESPONSE
+  ACSE_ERROR,
+  ACSE_ASSOCIATE,
+  ACSE_ASSOCIATE_FAILED,
+  ACSE_OK,
+  ACSE_ABORT,
+  ACSE_RELEASE_REQUEST,
+  ACSE_RELEASE_RESPONSE
 } AcseIndication;
 
 typedef struct sAcseConnection
 {
-    AcseConnectionState state;
-    long nextReference;
-    uint8_t* userDataBuffer;
-    int userDataBufferSize;
-    AcseAuthenticationParameter authentication;
-    AcseAuthenticator authenticator;
-    IsoApplicationReference applicationReference;
-    void* authenticatorParameter;
-    void* securityToken;
+  AcseConnectionState state;
+  long nextReference;
+  uint8_t * userDataBuffer;
+  int userDataBufferSize;
+  AcseAuthenticationParameter authentication;
+  AcseAuthenticator authenticator;
+  IsoApplicationReference applicationReference;
+  void * authenticatorParameter;
+  void * securityToken;
 
 #if (CONFIG_MMS_SUPPORT_TLS == 1)
-    TLSSocket tlsSocket;
+  TLSSocket tlsSocket;
 #endif
 } AcseConnection;
 
@@ -69,7 +69,7 @@ typedef struct sAcseConnection
 #define ACSE_RESULT_REJECT_TRANSIENT 2
 
 LIB61850_INTERNAL void
-AcseConnection_init(AcseConnection* self, AcseAuthenticator authenticator, void* parameter, TLSSocket tlsSocket);
+AcseConnection_init(AcseConnection* self, AcseAuthenticator authenticator, void * parameter, TLSSocket tlsSocket);
 
 LIB61850_INTERNAL AcseIndication
 AcseConnection_parseMessage(AcseConnection* self, ByteBuffer* message);
@@ -79,18 +79,18 @@ AcseConnection_createAssociateFailedMessage(AcseConnection* connection, BufferCh
 
 LIB61850_INTERNAL void
 AcseConnection_createAssociateResponseMessage(
-        AcseConnection* self,
-        uint8_t resultCode,
-        BufferChain acseWriteBuffer,
-        BufferChain payloadBuffer
-        );
+  AcseConnection* self,
+  uint8_t resultCode,
+  BufferChain acseWriteBuffer,
+  BufferChain payloadBuffer
+);
 
 LIB61850_INTERNAL void
 AcseConnection_createAssociateRequestMessage(AcseConnection* self,
-        IsoConnectionParameters isoParameters,
-        BufferChain writeBuffer,
-        BufferChain payload,
-        AcseAuthenticationParameter authParameter);
+                                             IsoConnectionParameters isoParameters,
+                                             BufferChain writeBuffer,
+                                             BufferChain payload,
+                                             AcseAuthenticationParameter authParameter);
 
 LIB61850_INTERNAL void
 AcseConnection_createAbortMessage(AcseConnection* self, BufferChain writeBuffer, bool isProvider);

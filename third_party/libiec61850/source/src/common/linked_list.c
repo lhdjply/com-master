@@ -3,7 +3,7 @@
  *
  *  Copyright 2013, 2014 Michael Zillgith
  *
- *	This file is part of libIEC61850.
+ *  This file is part of libIEC61850.
  *
  *  libIEC61850 is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -27,28 +27,28 @@
 LinkedList
 LinkedList_getLastElement(LinkedList self)
 {
-    while (self->next)
-    {
-        self = self->next;
-    }
+  while(self->next)
+  {
+    self = self->next;
+  }
 
-    return self;
+  return self;
 }
 
 LinkedList
 LinkedList_create()
 {
-    LinkedList self;
+  LinkedList self;
 
-    self = (LinkedList) GLOBAL_MALLOC(sizeof(struct sLinkedList));
+  self = (LinkedList) GLOBAL_MALLOC(sizeof(struct sLinkedList));
 
-    if (self)
-    {
-        self->data = NULL;
-        self->next = NULL;
-    }
+  if(self)
+  {
+    self->data = NULL;
+    self->next = NULL;
+  }
 
-    return self;
+  return self;
 }
 
 /**
@@ -57,29 +57,28 @@ LinkedList_create()
 void
 LinkedList_destroyDeep(LinkedList self, LinkedListValueDeleteFunction valueDeleteFunction)
 {
-    if (self)
+  if(self)
+  {
+    LinkedList nextElement = self;
+    LinkedList currentElement;
+
+    do
     {
-        LinkedList nextElement = self;
-        LinkedList currentElement;
+      currentElement = nextElement;
+      nextElement = currentElement->next;
 
-        do
-        {
-            currentElement = nextElement;
-            nextElement = currentElement->next;
+      if(currentElement->data)
+        valueDeleteFunction(currentElement->data);
 
-            if (currentElement->data)
-                valueDeleteFunction(currentElement->data);
-
-            GLOBAL_FREEMEM(currentElement);
-        }
-        while (nextElement);
-    }
+      GLOBAL_FREEMEM(currentElement);
+    } while(nextElement);
+  }
 }
 
 void
 LinkedList_destroy(LinkedList self)
 {
-    LinkedList_destroyDeep(self, Memory_free);
+  LinkedList_destroyDeep(self, Memory_free);
 }
 
 /**
@@ -88,146 +87,145 @@ LinkedList_destroy(LinkedList self)
 void
 LinkedList_destroyStatic(LinkedList self)
 {
-    if (self)
-    {
-        LinkedList nextElement = self;
-        LinkedList currentElement;
+  if(self)
+  {
+    LinkedList nextElement = self;
+    LinkedList currentElement;
 
-        do
-        {
-            currentElement = nextElement;
-            nextElement = currentElement->next;
-            GLOBAL_FREEMEM(currentElement);
-        }
-        while (nextElement);
-    }
+    do
+    {
+      currentElement = nextElement;
+      nextElement = currentElement->next;
+      GLOBAL_FREEMEM(currentElement);
+    } while(nextElement);
+  }
 }
 
 int
 LinkedList_size(LinkedList self)
 {
-    LinkedList nextElement = self;
-    int size = 0;
+  LinkedList nextElement = self;
+  int size = 0;
 
-    while (nextElement->next)
-    {
-        nextElement = nextElement->next;
-        size++;
-    }
+  while(nextElement->next)
+  {
+    nextElement = nextElement->next;
+    size++;
+  }
 
-    return size;
+  return size;
 }
 
 void
-LinkedList_add(LinkedList self, void* data)
+LinkedList_add(LinkedList self, void * data)
 {
-    LinkedList newElement = LinkedList_create();
+  LinkedList newElement = LinkedList_create();
 
-    if (newElement)
-    {
-        newElement->data = data;
+  if(newElement)
+  {
+    newElement->data = data;
 
-        LinkedList listEnd = LinkedList_getLastElement(self);
+    LinkedList listEnd = LinkedList_getLastElement(self);
 
-        listEnd->next = newElement;
-    }
+    listEnd->next = newElement;
+  }
 }
 
 bool
-LinkedList_contains(LinkedList self, void* data)
+LinkedList_contains(LinkedList self, void * data)
 {
-    LinkedList currentElement = self->next;
+  LinkedList currentElement = self->next;
 
-    while (currentElement)
-    {
-        if (currentElement->data == data)
-            return true;
+  while(currentElement)
+  {
+    if(currentElement->data == data)
+      return true;
 
-        currentElement = currentElement->next;
-    }
+    currentElement = currentElement->next;
+  }
 
-    return false;
+  return false;
 }
 
 bool
-LinkedList_remove(LinkedList self, void* data)
+LinkedList_remove(LinkedList self, void * data)
 {
-    LinkedList lastElement = self;
+  LinkedList lastElement = self;
 
-    LinkedList currentElement = self->next;
+  LinkedList currentElement = self->next;
 
-    while (currentElement)
+  while(currentElement)
+  {
+    if(currentElement->data == data)
     {
-        if (currentElement->data == data)
-        {
-            lastElement->next = currentElement->next;
-            GLOBAL_FREEMEM(currentElement);
-            return true;
-        }
-
-        lastElement = currentElement;
-        currentElement = currentElement->next;
+      lastElement->next = currentElement->next;
+      GLOBAL_FREEMEM(currentElement);
+      return true;
     }
 
-    return false;
+    lastElement = currentElement;
+    currentElement = currentElement->next;
+  }
+
+  return false;
 }
 
 LinkedList
-LinkedList_insertAfter(LinkedList self, void* data)
+LinkedList_insertAfter(LinkedList self, void * data)
 {
-    LinkedList newElement = LinkedList_create();
+  LinkedList newElement = LinkedList_create();
 
-    if (newElement)
-    {
-        newElement->data = data;
-        newElement->next = LinkedList_getNext(self);
+  if(newElement)
+  {
+    newElement->data = data;
+    newElement->next = LinkedList_getNext(self);
 
-        self->next = newElement;
-    }
+    self->next = newElement;
+  }
 
-    return newElement;
+  return newElement;
 }
 
 LinkedList
 LinkedList_getNext(LinkedList self)
 {
-    return self->next;
+  return self->next;
 }
 
 LinkedList
 LinkedList_get(LinkedList self, int index)
 {
-    LinkedList element = LinkedList_getNext(self);
+  LinkedList element = LinkedList_getNext(self);
 
-    int i = 0;
+  int i = 0;
 
-    while (i < index)
-    {
-        element = LinkedList_getNext(element);
+  while(i < index)
+  {
+    element = LinkedList_getNext(element);
 
-        if (element == NULL)
-            return NULL;
+    if(element == NULL)
+      return NULL;
 
-        i++;
-    }
+    i++;
+  }
 
-    return element;
+  return element;
 }
 
-void*
+void *
 LinkedList_getData(LinkedList self)
 {
-    return self->data;
+  return self->data;
 }
 
 void
 LinkedList_printStringList(LinkedList self)
 {
-    LinkedList element = self;
+  LinkedList element = self;
 
-    while ((element = LinkedList_getNext(element)) != NULL)
-    {
-        char* str = (char*) (element->data);
-        printf("%s\n", str);
-    }
+  while((element = LinkedList_getNext(element)) != NULL)
+  {
+    char * str = (char *)(element->data);
+    printf("%s\n", str);
+  }
 }

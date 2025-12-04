@@ -36,190 +36,190 @@
 #include "goose_receiver_internal.h"
 
 GooseSubscriber
-GooseSubscriber_create(char* goCbRef, MmsValue* dataSetValues)
+GooseSubscriber_create(char * goCbRef, MmsValue* dataSetValues)
 {
-    GooseSubscriber self = (GooseSubscriber) GLOBAL_CALLOC(1, sizeof(struct sGooseSubscriber));
+  GooseSubscriber self = (GooseSubscriber) GLOBAL_CALLOC(1, sizeof(struct sGooseSubscriber));
 
-    if (self)
-    {
-        StringUtils_copyStringMax(self->goCBRef, 130, goCbRef);
+  if(self)
+  {
+    StringUtils_copyStringMax(self->goCBRef, 130, goCbRef);
 
-        self->goCBRefLen = strlen(goCbRef);
-        self->timestamp = MmsValue_newUtcTime(0);
-        self->dataSetValues = dataSetValues;
+    self->goCBRefLen = strlen(goCbRef);
+    self->timestamp = MmsValue_newUtcTime(0);
+    self->dataSetValues = dataSetValues;
 
-        if (dataSetValues)
-            self->dataSetValuesSelfAllocated = false;
-        else
-            self->dataSetValuesSelfAllocated = true;
+    if(dataSetValues)
+      self->dataSetValuesSelfAllocated = false;
+    else
+      self->dataSetValuesSelfAllocated = true;
 
-        memset(self->dstMac, 0xFF, 6);
-        self->dstMacSet = false;
-        self->appId = -1;
-        self->isObserver = false;
-        self->vlanSet = false;
-        self->parseError = GOOSE_PARSE_ERROR_NO_ERROR;
-    }
+    memset(self->dstMac, 0xFF, 6);
+    self->dstMacSet = false;
+    self->appId = -1;
+    self->isObserver = false;
+    self->vlanSet = false;
+    self->parseError = GOOSE_PARSE_ERROR_NO_ERROR;
+  }
 
-    return self;
+  return self;
 }
 
 bool
 GooseSubscriber_isValid(GooseSubscriber self)
 {
-    if (self->stateValid == false)
-        return false;
+  if(self->stateValid == false)
+    return false;
 
-    if (Hal_getTimeInMs() > self->invalidityTime)
-        return false;
+  if(Hal_getTimeInMs() > self->invalidityTime)
+    return false;
 
-    return true;
+  return true;
 }
 
 GooseParseError
 GooseSubscriber_getParseError(GooseSubscriber self)
 {
-    return self->parseError;
+  return self->parseError;
 }
 
 void
 GooseSubscriber_setDstMac(GooseSubscriber self, uint8_t dstMac[6])
 {
-  memcpy(self->dstMac, dstMac,6);
+  memcpy(self->dstMac, dstMac, 6);
   self->dstMacSet = true;
 }
 
 void
 GooseSubscriber_setAppId(GooseSubscriber self, uint16_t appId)
 {
-    self->appId = (int32_t) appId;
+  self->appId = (int32_t) appId;
 }
 
 void
 GooseSubscriber_destroy(GooseSubscriber self)
 {
-    if (self)
-    {
-        MmsValue_delete(self->timestamp);
+  if(self)
+  {
+    MmsValue_delete(self->timestamp);
 
-        if (self->dataSetValuesSelfAllocated)
-            MmsValue_delete(self->dataSetValues);
+    if(self->dataSetValuesSelfAllocated)
+      MmsValue_delete(self->dataSetValues);
 
-        GLOBAL_FREEMEM(self);
-    }
+    GLOBAL_FREEMEM(self);
+  }
 }
 
 void
-GooseSubscriber_setListener(GooseSubscriber self, GooseListener listener, void* parameter)
+GooseSubscriber_setListener(GooseSubscriber self, GooseListener listener, void * parameter)
 {
-    self->listener = listener;
-    self->listenerParameter = parameter;
+  self->listener = listener;
+  self->listenerParameter = parameter;
 }
 
 int32_t
 GooseSubscriber_getAppId(GooseSubscriber self)
 {
-    return self->appId;
+  return self->appId;
 }
 
-char*
+char *
 GooseSubscriber_getGoId(GooseSubscriber self)
 {
-    return self->goId;
+  return self->goId;
 }
 
-char*
+char *
 GooseSubscriber_getGoCbRef(GooseSubscriber self)
 {
-    return self->goCBRef;
+  return self->goCBRef;
 }
 
-char*
+char *
 GooseSubscriber_getDataSet(GooseSubscriber self)
 {
-    return self->datSet;
+  return self->datSet;
 }
 
-void 
-GooseSubscriber_getSrcMac(GooseSubscriber self, uint8_t *buffer)
+void
+GooseSubscriber_getSrcMac(GooseSubscriber self, uint8_t * buffer)
 {
-    memcpy(buffer, self->srcMac,6);
+  memcpy(buffer, self->srcMac, 6);
 }
 
-void 
-GooseSubscriber_getDstMac(GooseSubscriber self, uint8_t *buffer)
+void
+GooseSubscriber_getDstMac(GooseSubscriber self, uint8_t * buffer)
 {
-    memcpy(buffer, self->dstMac,6);
+  memcpy(buffer, self->dstMac, 6);
 }
 
 uint32_t
 GooseSubscriber_getStNum(GooseSubscriber self)
 {
-    return self->stNum;
+  return self->stNum;
 }
 
 uint32_t
 GooseSubscriber_getSqNum(GooseSubscriber self)
 {
-    return self->sqNum;
+  return self->sqNum;
 }
 
 bool
 GooseSubscriber_isTest(GooseSubscriber self)
 {
-    return self->simulation;
+  return self->simulation;
 }
 
 uint32_t
 GooseSubscriber_getConfRev(GooseSubscriber self)
 {
-    return self->confRev;
+  return self->confRev;
 }
 
 bool
 GooseSubscriber_needsCommission(GooseSubscriber self)
 {
-    return self->ndsCom;
+  return self->ndsCom;
 }
 
 uint32_t
 GooseSubscriber_getTimeAllowedToLive(GooseSubscriber self)
 {
-    return self->timeAllowedToLive;
+  return self->timeAllowedToLive;
 }
 
 uint64_t
 GooseSubscriber_getTimestamp(GooseSubscriber self)
 {
-    return MmsValue_getUtcTimeInMs(self->timestamp);
+  return MmsValue_getUtcTimeInMs(self->timestamp);
 }
 
-MmsValue*
+MmsValue *
 GooseSubscriber_getDataSetValues(GooseSubscriber self)
 {
-    return self->dataSetValues;
+  return self->dataSetValues;
 }
 
 bool
 GooseSubscriber_isVlanSet(GooseSubscriber self)
 {
-    return self->vlanSet;
+  return self->vlanSet;
 }
 
 uint16_t
 GooseSubscriber_getVlanId(GooseSubscriber self)
 {
-    return self->vlanId;
+  return self->vlanId;
 }
 
 uint8_t
 GooseSubscriber_getVlanPrio(GooseSubscriber self)
 {
-    return self->vlanPrio;
+  return self->vlanPrio;
 }
 
 void
 GooseSubscriber_setObserver(GooseSubscriber self)
 {
-    self->isObserver = true;
+  self->isObserver = true;
 }

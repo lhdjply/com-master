@@ -26,16 +26,17 @@
 
 #include "iec61850_model.h"
 
-LIB61850_INTERNAL char*
-MmsMapping_getMmsDomainFromObjectReference(const char* objectReference, char* buffer);
+LIB61850_INTERNAL char *
+MmsMapping_getMmsDomainFromObjectReference(const char * objectReference, char * buffer);
 
-LIB61850_INTERNAL char*
-MmsMapping_createMmsVariableNameFromObjectReference(const char* objectReference, FunctionalConstraint fc, char* buffer);
+LIB61850_INTERNAL char *
+MmsMapping_createMmsVariableNameFromObjectReference(const char * objectReference, FunctionalConstraint fc,
+                                                    char * buffer);
 
-LIB61850_INTERNAL MmsVariableAccessSpecification*
-MmsMapping_ObjectReferenceToVariableAccessSpec(char* objectReference);
+LIB61850_INTERNAL MmsVariableAccessSpecification *
+MmsMapping_ObjectReferenceToVariableAccessSpec(char * objectReference);
 
-LIB61850_INTERNAL char*
+LIB61850_INTERNAL char *
 MmsMapping_varAccessSpecToObjectReference(MmsVariableAccessSpecification* varAccessSpec);
 
 #endif /* SRC_IEC61850_INC_PRIVATE_IEC61850_COMMON_INTERNAL_H_ */

@@ -31,48 +31,51 @@
 extern "C" {
 #endif
 
-typedef struct sRSession* RSession;
+typedef struct sRSession * RSession;
 
-typedef enum {
-    R_SESSION_SEC_ALGO_NONE = 0,
-    R_SESSION_SEC_ALGO_AES_128_GCM = 1,
-    R_SESSION_SEC_ALGO_AES_256_GCM = 2
+typedef enum
+{
+  R_SESSION_SEC_ALGO_NONE = 0,
+  R_SESSION_SEC_ALGO_AES_128_GCM = 1,
+  R_SESSION_SEC_ALGO_AES_256_GCM = 2
 } RSecurityAlgorithm;
 
-typedef enum {
-    R_SESSION_SIG_ALGO_NONE = 0,
-    R_SESSION_SIG_ALGO_HMAC_SHA256_80 = 1,
-    R_SESSION_SIG_ALGO_HMAC_SHA256_128 = 2,
-    R_SESSION_SIG_ALGO_HMAC_SHA256_256 = 3,
-    R_SESSION_SIG_ALGO_AES_GMAC_64 = 4,
-    R_SESSION_SIG_ALGO_AES_GMAC_128 = 5,
-    R_SESSION_SIG_ALGO_HMAC_SHA3_80 = 6,
-    R_SESSION_SIG_ALGO_HMAC_SHA3_128 = 7,
-    R_SESSION_SIG_ALGO_HMAC_SHA3_256 = 8
+typedef enum
+{
+  R_SESSION_SIG_ALGO_NONE = 0,
+  R_SESSION_SIG_ALGO_HMAC_SHA256_80 = 1,
+  R_SESSION_SIG_ALGO_HMAC_SHA256_128 = 2,
+  R_SESSION_SIG_ALGO_HMAC_SHA256_256 = 3,
+  R_SESSION_SIG_ALGO_AES_GMAC_64 = 4,
+  R_SESSION_SIG_ALGO_AES_GMAC_128 = 5,
+  R_SESSION_SIG_ALGO_HMAC_SHA3_80 = 6,
+  R_SESSION_SIG_ALGO_HMAC_SHA3_128 = 7,
+  R_SESSION_SIG_ALGO_HMAC_SHA3_256 = 8
 } RSignatureAlgorithm;
 
-typedef enum {
-    R_SESSION_ERROR_OK = 0,
-    R_SESSION_ERROR_INVALID_KEY = 1,
-    R_SESSION_ERROR_KEY_QUEUE_FULL = 2,
-    R_SESSION_ERROR_NO_SOCKET = 3,
-    R_SESSION_ERROR_OUT_OF_MEMORY = 4,
-    R_SESSION_ERROR_FAILED_TO_SEND = 5,
-    R_SESSION_ERROR_FAILED_TO_RECEIVE = 6,
-    R_SESSION_ERROR_INVALID_MESSAGE = 7,
-    R_SESSION_ERROR_SET_FAILED = 8
+typedef enum
+{
+  R_SESSION_ERROR_OK = 0,
+  R_SESSION_ERROR_INVALID_KEY = 1,
+  R_SESSION_ERROR_KEY_QUEUE_FULL = 2,
+  R_SESSION_ERROR_NO_SOCKET = 3,
+  R_SESSION_ERROR_OUT_OF_MEMORY = 4,
+  R_SESSION_ERROR_FAILED_TO_SEND = 5,
+  R_SESSION_ERROR_FAILED_TO_RECEIVE = 6,
+  R_SESSION_ERROR_INVALID_MESSAGE = 7,
+  R_SESSION_ERROR_SET_FAILED = 8
 } RSessionError;
 
-typedef struct sRSessionPayloadElement* RSessionPayloadElement;
+typedef struct sRSessionPayloadElement * RSessionPayloadElement;
 
 struct sRSessionPayloadElement
 {
-    bool simulation;
-    uint16_t appId;
-    uint8_t payloadType;
-    uint8_t* payload;
-    int payloadSize;
-    RSessionPayloadElement nextElement; /* NULL when no more elements follow */
+  bool simulation;
+  uint16_t appId;
+  uint8_t payloadType;
+  uint8_t * payload;
+  int payloadSize;
+  RSessionPayloadElement nextElement; /* NULL when no more elements follow */
 };
 
 /**
@@ -94,12 +97,12 @@ RSession_setBufferSize(RSession self, uint16_t bufferSize);
 
 /**
  * \brief Set the security algorithms for the session instance
- * 
+ *
  * \note only for version 1 of the protocol!
- * 
+ *
  * \param secAlgo encryption algorithm to be used for the session instance
  * \param sigAlgo signature algorithm to be used for the session instance
- * 
+ *
  * \return returns R_SESSION_ERROR_OK
  */
 LIB61850_API RSessionError
@@ -107,13 +110,13 @@ RSession_setSecurity(RSession self, RSecurityAlgorithm secAlgo, RSignatureAlgori
 
 /**
  * \brief Bind the RSession instance to a specific local IP address and UDP port
- * 
+ *
  * \param self the RSession instance
  * \param localAddress the local IP address to use
  * \param localPort the local UDP port to use (default is 102)
 */
 LIB61850_API RSessionError
-RSession_setLocalAddress(RSession self, const char* localAddress, int localPort);
+RSession_setLocalAddress(RSession self, const char * localAddress, int localPort);
 
 /**
  * \brief Add this instance to an IPv4/IPv6 multicast group
@@ -124,7 +127,7 @@ RSession_setLocalAddress(RSession self, const char* localAddress, int localPort)
  * \return R_SESSION_ERROR_OK on success, R_SESSION_ERROR_SET_FAILED otherwise
  */
 LIB61850_API RSessionError
-RSession_addMulticastGroup(RSession self, const char* multicastAddress);
+RSession_addMulticastGroup(RSession self, const char * multicastAddress);
 
 /**
  * \brief Sets the multicast TTL (number of hops) for this RSession instance
@@ -147,7 +150,7 @@ RSession_setMulticastTtl(RSession self, int ttl);
  * \return R_SESSION_ERROR_OK on success, error code otherwise
  */
 LIB61850_API RSessionError
-RSession_setRemoteAddress(RSession self, const char* remoteAddress, int remotePort);
+RSession_setRemoteAddress(RSession self, const char * remoteAddress, int remotePort);
 
 /**
  * \brief Start sending and receiving messages (bind to a local UDP port/interface)
@@ -180,11 +183,12 @@ RSession_stop(RSession self);
  * \param sigAlgo the applicable signature algorithm
  */
 LIB61850_API RSessionError
-RSession_addKey(RSession self, uint32_t keyId, uint8_t* key, int keyLength, RSecurityAlgorithm secAlgo, RSignatureAlgorithm sigAlgo);
+RSession_addKey(RSession self, uint32_t keyId, uint8_t * key, int keyLength, RSecurityAlgorithm secAlgo,
+                RSignatureAlgorithm sigAlgo);
 
 /**
  * \brief Remove key from the list of accepted keys
- * 
+ *
  * \param self the RSession instance
  * \param keyId the key ID is unique for the security association
  */
@@ -193,37 +197,37 @@ RSession_removeKey(RSession self, uint32_t keyId);
 
 /**
  * \brief Remove all keys from the list of accepted keys
- * 
- * \param self the RSession instance 
+ *
+ * \param self the RSession instance
  */
 void
 RSession_removeAllKeys(RSession self);
 
 typedef enum
 {
-    RSESSION_KEY_EVENT__NEED_KEY = 1
+  RSESSION_KEY_EVENT__NEED_KEY = 1
 } RSessionKeyEvent;
 
-typedef void (*RSession_KeyEventHandler) (void* parameter, RSession rSession, RSessionKeyEvent event, uint32_t keyID);
+typedef void (*RSession_KeyEventHandler) (void * parameter, RSession rSession, RSessionKeyEvent event, uint32_t keyID);
 
 /**
  * \brief Set a callback handler to receive key events from the RSession instance
  *
  * e.g. when the RSession instance has no valid key for the received messages or to publish messages.
- * 
+ *
  * \param self the RSession instance
  * \param handler the callback that is called when a new event happens
  * \param parameter user provided parameter that is passed to the user callback
  */
 LIB61850_API void
-RSession_setKeyEventHandler(RSession self, RSession_KeyEventHandler handler, void* parameter);
+RSession_setKeyEventHandler(RSession self, RSession_KeyEventHandler handler, void * parameter);
 
 /**
  * \brief Set the active key for the sender/publisher
  *
  * \param self the RSession instance
  * \param keyId the key ID of the new active key (has to be added with \ref RSession_addKey before).
- * 
+ *
  * \return R_SESSION_ERROR_INVALID_KEY when no valid key with the given keyId is avialable, R_SESSION_ERROR_OK otherwise
  */
 LIB61850_API RSessionError

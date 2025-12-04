@@ -34,90 +34,90 @@
 void
 mmsClient_createIdentifyRequest(uint32_t invokeId, ByteBuffer* request)
 {
-    uint32_t invokeIdSize = BerEncoder_UInt32determineEncodedSize(invokeId);
-    uint32_t confirmedRequestPduSize = 2 + 2 + invokeIdSize;
+  uint32_t invokeIdSize = BerEncoder_UInt32determineEncodedSize(invokeId);
+  uint32_t confirmedRequestPduSize = 2 + 2 + invokeIdSize;
 
-    int bufPos = 0;
-    uint8_t* buffer = request->buffer;
+  int bufPos = 0;
+  uint8_t * buffer = request->buffer;
 
-    bufPos = BerEncoder_encodeTL(0xa0, confirmedRequestPduSize, buffer, bufPos);
-    bufPos = BerEncoder_encodeTL(0x02, invokeIdSize, buffer, bufPos);
-    bufPos = BerEncoder_encodeUInt32(invokeId, buffer, bufPos);
+  bufPos = BerEncoder_encodeTL(0xa0, confirmedRequestPduSize, buffer, bufPos);
+  bufPos = BerEncoder_encodeTL(0x02, invokeIdSize, buffer, bufPos);
+  bufPos = BerEncoder_encodeUInt32(invokeId, buffer, bufPos);
 
-    bufPos = BerEncoder_encodeTL(0x82, 0, buffer, bufPos);
+  bufPos = BerEncoder_encodeTL(0x82, 0, buffer, bufPos);
 
-    request->size = bufPos;
+  request->size = bufPos;
 }
 
 bool
 mmsClient_parseIdentifyResponse(MmsConnection self, ByteBuffer* response, uint32_t respBufPos, uint32_t invokeId,
-                                MmsConnection_IdentifyHandler handler, void* parameter)
+                                MmsConnection_IdentifyHandler handler, void * parameter)
 {
-    (void)self;
+  (void)self;
 
-    uint8_t* buffer = ByteBuffer_getBuffer(response);
-    int maxBufPos = ByteBuffer_getSize(response);
-    int length;
-    int bufPos = (int)respBufPos;
+  uint8_t * buffer = ByteBuffer_getBuffer(response);
+  int maxBufPos = ByteBuffer_getSize(response);
+  int length;
+  int bufPos = (int)respBufPos;
 
-    uint8_t tag = buffer[bufPos++];
-    if (tag != 0xa2)
-        goto exit_error;
+  uint8_t tag = buffer[bufPos++];
+  if(tag != 0xa2)
+    goto exit_error;
+
+  bufPos = BerDecoder_decodeLength(buffer, &length, bufPos, maxBufPos);
+  if(bufPos < 0)
+    goto exit_error;
+
+  int endPos = bufPos + length;
+
+  char vendorNameBuf[100];
+  char modelNameBuf[100];
+  char revisionBuf[100];
+
+  char * vendorName = NULL;
+  char * modelName = NULL;
+  char * revision = NULL;
+
+  while(bufPos < endPos)
+  {
+    tag = buffer[bufPos++];
 
     bufPos = BerDecoder_decodeLength(buffer, &length, bufPos, maxBufPos);
-    if (bufPos < 0)
-        goto exit_error;
+    if(bufPos < 0)
+      goto exit_error;
 
-    int endPos = bufPos + length;
-
-    char vendorNameBuf[100];
-    char modelNameBuf[100];
-    char revisionBuf[100];
-
-    char* vendorName = NULL;
-    char* modelName = NULL;
-    char* revision = NULL;
-
-    while (bufPos < endPos)
+    switch(tag)
     {
-        tag = buffer[bufPos++];
-
-        bufPos = BerDecoder_decodeLength(buffer, &length, bufPos, maxBufPos);
-        if (bufPos < 0)
-            goto exit_error;
-
-        switch (tag)
-        {
-        case 0x80: /* vendorName */
-            vendorName = StringUtils_createStringFromBufferInBufferMax(vendorNameBuf, buffer + bufPos, length,
-                                                                       sizeof(vendorNameBuf));
-            bufPos += length;
-            break;
-        case 0x81: /* modelName */
-            modelName = StringUtils_createStringFromBufferInBufferMax(modelNameBuf, buffer + bufPos, length,
-                                                                      sizeof(modelNameBuf));
-            bufPos += length;
-            break;
-        case 0x82: /* revision */
-            revision = StringUtils_createStringFromBufferInBufferMax(revisionBuf, buffer + bufPos, length,
-                                                                     sizeof(revisionBuf));
-            bufPos += length;
-            break;
-        case 0x83: /* list of abstract syntaxes */
-            bufPos += length;
-            break;
-        case 0x00: /* indefinite length end tag -> ignore */
-            break;
-        default: /* ignore unknown tags */
-            bufPos += length;
-            break;
-        }
+      case 0x80: /* vendorName */
+        vendorName = StringUtils_createStringFromBufferInBufferMax(vendorNameBuf, buffer + bufPos, length,
+                                                                   sizeof(vendorNameBuf));
+        bufPos += length;
+        break;
+      case 0x81: /* modelName */
+        modelName = StringUtils_createStringFromBufferInBufferMax(modelNameBuf, buffer + bufPos, length,
+                                                                  sizeof(modelNameBuf));
+        bufPos += length;
+        break;
+      case 0x82: /* revision */
+        revision = StringUtils_createStringFromBufferInBufferMax(revisionBuf, buffer + bufPos, length,
+                                                                 sizeof(revisionBuf));
+        bufPos += length;
+        break;
+      case 0x83: /* list of abstract syntaxes */
+        bufPos += length;
+        break;
+      case 0x00: /* indefinite length end tag -> ignore */
+        break;
+      default: /* ignore unknown tags */
+        bufPos += length;
+        break;
     }
+  }
 
-    handler(invokeId, parameter, MMS_ERROR_NONE, vendorName, modelName, revision);
+  handler(invokeId, parameter, MMS_ERROR_NONE, vendorName, modelName, revision);
 
-    return true;
+  return true;
 
 exit_error:
-    return false;
+  return false;
 }

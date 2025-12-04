@@ -43,23 +43,24 @@ extern "C" {
 /**@{*/
 
 
-typedef enum {
-    DATA_ACCESS_ERROR_SUCCESS_NO_UPDATE = -3,
-    DATA_ACCESS_ERROR_NO_RESPONSE = -2, /* for server internal purposes only! */
-    DATA_ACCESS_ERROR_SUCCESS = -1,
-    DATA_ACCESS_ERROR_OBJECT_INVALIDATED = 0,
-    DATA_ACCESS_ERROR_HARDWARE_FAULT = 1,
-    DATA_ACCESS_ERROR_TEMPORARILY_UNAVAILABLE = 2,
-    DATA_ACCESS_ERROR_OBJECT_ACCESS_DENIED = 3,
-    DATA_ACCESS_ERROR_OBJECT_UNDEFINED = 4,
-    DATA_ACCESS_ERROR_INVALID_ADDRESS = 5,
-    DATA_ACCESS_ERROR_TYPE_UNSUPPORTED = 6,
-    DATA_ACCESS_ERROR_TYPE_INCONSISTENT = 7,
-    DATA_ACCESS_ERROR_OBJECT_ATTRIBUTE_INCONSISTENT = 8,
-    DATA_ACCESS_ERROR_OBJECT_ACCESS_UNSUPPORTED = 9,
-    DATA_ACCESS_ERROR_OBJECT_NONE_EXISTENT = 10,
-    DATA_ACCESS_ERROR_OBJECT_VALUE_INVALID = 11,
-    DATA_ACCESS_ERROR_UNKNOWN = 12
+typedef enum
+{
+  DATA_ACCESS_ERROR_SUCCESS_NO_UPDATE = -3,
+  DATA_ACCESS_ERROR_NO_RESPONSE = -2, /* for server internal purposes only! */
+  DATA_ACCESS_ERROR_SUCCESS = -1,
+  DATA_ACCESS_ERROR_OBJECT_INVALIDATED = 0,
+  DATA_ACCESS_ERROR_HARDWARE_FAULT = 1,
+  DATA_ACCESS_ERROR_TEMPORARILY_UNAVAILABLE = 2,
+  DATA_ACCESS_ERROR_OBJECT_ACCESS_DENIED = 3,
+  DATA_ACCESS_ERROR_OBJECT_UNDEFINED = 4,
+  DATA_ACCESS_ERROR_INVALID_ADDRESS = 5,
+  DATA_ACCESS_ERROR_TYPE_UNSUPPORTED = 6,
+  DATA_ACCESS_ERROR_TYPE_INCONSISTENT = 7,
+  DATA_ACCESS_ERROR_OBJECT_ATTRIBUTE_INCONSISTENT = 8,
+  DATA_ACCESS_ERROR_OBJECT_ACCESS_UNSUPPORTED = 9,
+  DATA_ACCESS_ERROR_OBJECT_NONE_EXISTENT = 10,
+  DATA_ACCESS_ERROR_OBJECT_VALUE_INVALID = 11,
+  DATA_ACCESS_ERROR_UNKNOWN = 12
 } MmsDataAccessError;
 
 /**
@@ -79,7 +80,7 @@ typedef struct sMmsValue MmsValue;
  *
  * \return a newly created array instance
  */
-LIB61850_API MmsValue*
+LIB61850_API MmsValue *
 MmsValue_createArray(const MmsVariableSpecification* elementType, int size);
 
 /**
@@ -100,7 +101,7 @@ MmsValue_getArraySize(const MmsValue* self);
  *
  * \return the element object
  */
-LIB61850_API MmsValue*
+LIB61850_API MmsValue *
 MmsValue_getElement(const MmsValue* array, int index);
 
 /**
@@ -110,7 +111,7 @@ MmsValue_getElement(const MmsValue* array, int index);
  *
  * \return a newly created empty array instance
  */
-LIB61850_API MmsValue*
+LIB61850_API MmsValue *
 MmsValue_createEmptyArray(int size);
 
 /**
@@ -299,7 +300,7 @@ MmsValue_getBoolean(const MmsValue* value);
  *
  * \returns the string value as 0 terminated C string
  */
-LIB61850_API const char*
+LIB61850_API const char *
 MmsValue_toString(MmsValue* self);
 
 /**
@@ -313,7 +314,7 @@ LIB61850_API int
 MmsValue_getStringSize(MmsValue* self);
 
 LIB61850_API void
-MmsValue_setVisibleString(MmsValue* self, const char* string);
+MmsValue_setVisibleString(MmsValue* self, const char * string);
 
 
 /**
@@ -431,7 +432,7 @@ MmsValue_setBitStringFromIntegerBigEndian(MmsValue* self, uint32_t intValue);
  * \param self MmsValue instance to operate on. Has to be of a type MMS_BOOLEAN.
  * \param timeval the new value in seconds since epoch (1970/01/01 00:00 UTC)
  */
-LIB61850_API MmsValue*
+LIB61850_API MmsValue *
 MmsValue_setUtcTime(MmsValue* self, uint32_t timeval);
 
 /**
@@ -440,7 +441,7 @@ MmsValue_setUtcTime(MmsValue* self, uint32_t timeval);
  * \param self MmsValue instance to operate on. Has to be of a type MMS_UTCTIME.
  * \param timeval the new value in milliseconds since epoch (1970/01/01 00:00 UTC)
  */
-LIB61850_API MmsValue*
+LIB61850_API MmsValue *
 MmsValue_setUtcTimeMs(MmsValue* self, uint64_t timeval);
 
 /**
@@ -452,7 +453,7 @@ MmsValue_setUtcTimeMs(MmsValue* self, uint64_t timeval);
  * \param buffer buffer containing the encoded UTCTime.
  */
 LIB61850_API void
-MmsValue_setUtcTimeByBuffer(MmsValue* self, const uint8_t* buffer);
+MmsValue_setUtcTimeByBuffer(MmsValue* self, const uint8_t * buffer);
 
 /**
  * \brief return the raw buffer containing the UTC time data
@@ -463,7 +464,7 @@ MmsValue_setUtcTimeByBuffer(MmsValue* self, const uint8_t* buffer);
  *
  * \return the buffer containing the raw data
  */
-LIB61850_API uint8_t*
+LIB61850_API uint8_t *
 MmsValue_getUtcTimeBuffer(MmsValue* self);
 
 /**
@@ -485,7 +486,7 @@ MmsValue_getUtcTimeInMs(const MmsValue* value);
  * \return the value in milliseconds since epoch (1970/01/01 00:00 UTC)
  */
 LIB61850_API uint64_t
-MmsValue_getUtcTimeInMsWithUs(const MmsValue* self, uint32_t* usec);
+MmsValue_getUtcTimeInMsWithUs(const MmsValue* self, uint32_t * usec);
 
 /**
  * \brief set the TimeQuality byte of the UtcTime
@@ -505,7 +506,7 @@ MmsValue_setUtcTimeQuality(MmsValue* self, uint8_t timeQuality);
 
 /**
  * \brief Update an MmsValue object of type MMS_UTCTIME with a millisecond time.
- * 
+ *
  * Meaning of the bits in the timeQuality byte:
  *
  * bit 7 = leapSecondsKnown
@@ -516,10 +517,10 @@ MmsValue_setUtcTimeQuality(MmsValue* self, uint8_t timeQuality);
  * \param self MmsValue instance to operate on. Has to be of a type MMS_UTCTIME.
  * \param timeval the new value in milliseconds since epoch (1970/01/01 00:00 UTC)
  * \param timeQuality the byte representing the time quality
- * 
+ *
  * \return the updated MmsValue instance
  */
-LIB61850_API MmsValue*
+LIB61850_API MmsValue *
 MmsValue_setUtcTimeMsEx(MmsValue* self, uint64_t timeval, uint8_t timeQuality);
 
 /**
@@ -570,7 +571,7 @@ MmsValue_getBinaryTimeAsUtcMs(const MmsValue* self);
  * \param size the size of the buffer that contains the new value
  */
 LIB61850_API void
-MmsValue_setOctetString(MmsValue* self, const uint8_t* buf, int size);
+MmsValue_setOctetString(MmsValue* self, const uint8_t * buf, int size);
 
 /**
  * \brief Set a single octet of an MmsValue object of type MMS_OCTET_STRING.
@@ -622,7 +623,7 @@ MmsValue_getOctetStringMaxSize(MmsValue* self);
  *
  * \return reference to the buffer
  */
-LIB61850_API uint8_t*
+LIB61850_API uint8_t *
 MmsValue_getOctetStringBuffer(MmsValue* self);
 
 /**
@@ -687,16 +688,16 @@ MmsValue_equalTypes(const MmsValue* self, const MmsValue* otherValue);
  *************************************************************************************/
 
 
-LIB61850_API MmsValue*
+LIB61850_API MmsValue *
 MmsValue_newDataAccessError(MmsDataAccessError accessError);
 
-LIB61850_API MmsValue*
+LIB61850_API MmsValue *
 MmsValue_newInteger(int size);
 
-LIB61850_API MmsValue*
+LIB61850_API MmsValue *
 MmsValue_newUnsigned(int size);
 
-LIB61850_API MmsValue*
+LIB61850_API MmsValue *
 MmsValue_newBoolean(bool boolean);
 
 /**
@@ -706,34 +707,34 @@ MmsValue_newBoolean(bool boolean);
  *
  * \return new MmsValue instance of type MMS_BITSTRING
  */
-LIB61850_API MmsValue*
+LIB61850_API MmsValue *
 MmsValue_newBitString(int bitSize);
 
-LIB61850_API MmsValue*
+LIB61850_API MmsValue *
 MmsValue_newOctetString(int size, int maxSize);
 
-LIB61850_API MmsValue*
+LIB61850_API MmsValue *
 MmsValue_newStructure(const MmsVariableSpecification* typeSpec);
 
-LIB61850_API MmsValue*
+LIB61850_API MmsValue *
 MmsValue_createEmptyStructure(int size);
 
-LIB61850_API MmsValue*
+LIB61850_API MmsValue *
 MmsValue_newDefaultValue(const MmsVariableSpecification* typeSpec);
 
-LIB61850_API MmsValue*
+LIB61850_API MmsValue *
 MmsValue_newIntegerFromInt8(int8_t integer);
 
-LIB61850_API MmsValue*
+LIB61850_API MmsValue *
 MmsValue_newIntegerFromInt16(int16_t integer);
 
-LIB61850_API MmsValue*
+LIB61850_API MmsValue *
 MmsValue_newIntegerFromInt32(int32_t integer);
 
-LIB61850_API MmsValue*
+LIB61850_API MmsValue *
 MmsValue_newIntegerFromInt64(int64_t integer);
 
-LIB61850_API MmsValue*
+LIB61850_API MmsValue *
 MmsValue_newUnsignedFromUint32(uint32_t integer);
 
 /**
@@ -743,7 +744,7 @@ MmsValue_newUnsignedFromUint32(uint32_t integer);
  *
  * \return new MmsValue instance of type MMS_FLOAT
  */
-LIB61850_API MmsValue*
+LIB61850_API MmsValue *
 MmsValue_newFloat(float value);
 
 /**
@@ -753,7 +754,7 @@ MmsValue_newFloat(float value);
  *
  * \return new MmsValue instance of type MMS_FLOAT
  */
-LIB61850_API MmsValue*
+LIB61850_API MmsValue *
 MmsValue_newDouble(double value);
 
 /**
@@ -766,7 +767,7 @@ MmsValue_newDouble(double value);
  *
  * \return an MmsValue instance that is an exact copy of the given instance.
  */
-LIB61850_API MmsValue*
+LIB61850_API MmsValue *
 MmsValue_clone(const MmsValue* self);
 
 /**
@@ -779,8 +780,8 @@ MmsValue_clone(const MmsValue* self);
  *
  * \return a pointer to the position in the buffer just after the last byte written.
  */
-LIB61850_API uint8_t*
-MmsValue_cloneToBuffer(const MmsValue* self, uint8_t* destinationAddress);
+LIB61850_API uint8_t *
+MmsValue_cloneToBuffer(const MmsValue* self, uint8_t * destinationAddress);
 
 /**
  * \brief Determine the required amount of bytes by a clone.
@@ -832,8 +833,8 @@ MmsValue_deleteConditional(MmsValue* value);
  *
  * \return new MmsValue instance of type MMS_VISIBLE_STRING
  */
-LIB61850_API MmsValue*
-MmsValue_newVisibleString(const char* string);
+LIB61850_API MmsValue *
+MmsValue_newVisibleString(const char * string);
 
 /**
  * \brief Create a new MmsValue instance of type MMS_VISIBLE_STRING.
@@ -846,7 +847,7 @@ MmsValue_newVisibleString(const char* string);
  *
  * \return new MmsValue instance of type MMS_VISIBLE_STRING
  */
-LIB61850_API MmsValue*
+LIB61850_API MmsValue *
 MmsValue_newVisibleStringWithSize(int size);
 
 /**
@@ -860,7 +861,7 @@ MmsValue_newVisibleStringWithSize(int size);
  *
  * \return new MmsValue instance of type MMS_STRING
  */
-LIB61850_API MmsValue*
+LIB61850_API MmsValue *
 MmsValue_newMmsStringWithSize(int size);
 
 /**
@@ -874,7 +875,7 @@ MmsValue_newMmsStringWithSize(int size);
  *
  * \return new MmsValue instance of type MMS_BINARYTIME
  */
-LIB61850_API MmsValue*
+LIB61850_API MmsValue *
 MmsValue_newBinaryTime(bool timeOfDay);
 
 /**
@@ -885,8 +886,8 @@ MmsValue_newBinaryTime(bool timeOfDay);
  *
  * \return new MmsValue instance of type MMS_VISIBLE_STRING
  */
-LIB61850_API MmsValue*
-MmsValue_newVisibleStringFromByteArray(const uint8_t* byteArray, int size);
+LIB61850_API MmsValue *
+MmsValue_newVisibleStringFromByteArray(const uint8_t * byteArray, int size);
 
 /**
  * \brief Create a new MmsValue instance of type MMS_STRING from the specified byte array
@@ -896,8 +897,8 @@ MmsValue_newVisibleStringFromByteArray(const uint8_t* byteArray, int size);
  *
  * \return new MmsValue instance of type MMS_STRING
  */
-LIB61850_API MmsValue*
-MmsValue_newMmsStringFromByteArray(const uint8_t* byteArray, int size);
+LIB61850_API MmsValue *
+MmsValue_newMmsStringFromByteArray(const uint8_t * byteArray, int size);
 
 /**
  * \brief Create a new MmsValue instance of type MMS_STRING.
@@ -906,8 +907,8 @@ MmsValue_newMmsStringFromByteArray(const uint8_t* byteArray, int size);
  *
  * \return new MmsValue instance of type MMS_STRING
  */
-LIB61850_API MmsValue*
-MmsValue_newMmsString(const char* string);
+LIB61850_API MmsValue *
+MmsValue_newMmsString(const char * string);
 
 /**
  * \brief Set the value of MmsValue instance of type MMS_STRING
@@ -915,7 +916,7 @@ MmsValue_newMmsString(const char* string);
  * \param string a text string that will be the new value of the instance
  */
 LIB61850_API void
-MmsValue_setMmsString(MmsValue* value, const char* string);
+MmsValue_setMmsString(MmsValue* value, const char * string);
 
 /**
  * \brief Create a new MmsValue instance of type MMS_UTCTIME.
@@ -924,7 +925,7 @@ MmsValue_setMmsString(MmsValue* value, const char* string);
  *
  * \return new MmsValue instance of type MMS_UTCTIME
  */
-LIB61850_API MmsValue*
+LIB61850_API MmsValue *
 MmsValue_newUtcTime(uint32_t timeval);
 
 /**
@@ -934,7 +935,7 @@ MmsValue_newUtcTime(uint32_t timeval);
  *
  * \return new MmsValue instance of type MMS_UTCTIME
  */
-LIB61850_API MmsValue*
+LIB61850_API MmsValue *
 MmsValue_newUtcTimeByMsTime(uint64_t timeval);
 
 
@@ -975,8 +976,8 @@ MmsValue_getType(const MmsValue* self);
  *
  * \return the sub elements MmsValue instance or NULL if the element does not exist
  */
-LIB61850_API MmsValue*
-MmsValue_getSubElement(MmsValue* self, MmsVariableSpecification* varSpec, char* mmsPath);
+LIB61850_API MmsValue *
+MmsValue_getSubElement(MmsValue* self, MmsVariableSpecification* varSpec, char * mmsPath);
 
 /**
  * \brief return the value type as a human readable string
@@ -985,7 +986,7 @@ MmsValue_getSubElement(MmsValue* self, MmsVariableSpecification* varSpec, char* 
  *
  * \return the value type as a human readable string
  */
-LIB61850_API const char*
+LIB61850_API const char *
 MmsValue_getTypeString(MmsValue* self);
 
 /**
@@ -1000,8 +1001,8 @@ MmsValue_getTypeString(MmsValue* self);
  *
  * \return a pointer to the start of the buffer
  */
-LIB61850_API const char*
-MmsValue_printToBuffer(const MmsValue* self, char* buffer, int bufferSize);
+LIB61850_API const char *
+MmsValue_printToBuffer(const MmsValue* self, char * buffer, int bufferSize);
 
 /**
  * \brief create a new MmsValue instance from a BER encoded MMS Data element (deserialize)
@@ -1015,8 +1016,8 @@ MmsValue_printToBuffer(const MmsValue* self, char* buffer, int bufferSize);
  *
  * \return the MmsValue instance created from the buffer
  */
-LIB61850_API MmsValue*
-MmsValue_decodeMmsData(uint8_t* buffer, int bufPos, int bufferLength, int* endBufPos);
+LIB61850_API MmsValue *
+MmsValue_decodeMmsData(uint8_t * buffer, int bufPos, int bufferLength, int * endBufPos);
 
 /**
  * \brief create a new MmsValue instance from a BER encoded MMS Data element (deserialize) with a defined maximum recursion depth
@@ -1029,8 +1030,8 @@ MmsValue_decodeMmsData(uint8_t* buffer, int bufPos, int bufferLength, int* endBu
  *
  * \return the MmsValue instance created from the buffer
  */
-LIB61850_API MmsValue*
-MmsValue_decodeMmsDataMaxRecursion(uint8_t* buffer, int bufPos, int bufferLength, int* endBufPos, int maxDepth);
+LIB61850_API MmsValue *
+MmsValue_decodeMmsDataMaxRecursion(uint8_t * buffer, int bufPos, int bufferLength, int * endBufPos, int maxDepth);
 
 /**
  * \brief Serialize the MmsValue instance as BER encoded MMS Data element
@@ -1044,7 +1045,7 @@ MmsValue_decodeMmsDataMaxRecursion(uint8_t* buffer, int bufPos, int bufferLength
  * \return the encoded length of the corresponding MMS data element
  */
 LIB61850_API int
-MmsValue_encodeMmsData(MmsValue* self, uint8_t* buffer, int bufPos, bool encode);
+MmsValue_encodeMmsData(MmsValue* self, uint8_t * buffer, int bufPos, bool encode);
 
 /**
  * \brief Get the maximum possible BER encoded size of the MMS data element
@@ -1071,7 +1072,7 @@ MmsVariableSpecification_getMaxEncodedSize(MmsVariableSpecification* self);
  *
  * \return a static string representing the error
  */
-LIB61850_API const char*
+LIB61850_API const char *
 MmsError_toString(MmsError err);
 
 /**@}*/

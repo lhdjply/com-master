@@ -94,22 +94,22 @@
 
 #ifdef _WIN32
 
-/* L2 GOOSE/SMV will be disabled for Windows if ethernet support (winpcap) is not available */
-#ifdef EXCLUDE_ETHERNET_WINDOWS
-#ifdef CONFIG_IEC61850_L2_GOOSE
-#undef CONFIG_IEC61850_L2_GOOSE
-#endif
-#ifdef CONFIG_IEC61850_L2_SMV
-#undef CONFIG_IEC61850_L2_SMV
-#endif
-#define CONFIG_IEC61850_L2_GOOSE 0
-#define CONFIG_IEC61850_L2_SMV 0
-#define CONFIG_INCUDE_ETHERNET_WINDOWS 0
-#else
-#define CONFIG_INCLUDE_ETHERNET_WINDOWS 1
-#undef CONFIG_ETHERNET_INTERFACE_ID
-#define CONFIG_ETHERNET_INTERFACE_ID "0"
-#endif
+  /* L2 GOOSE/SMV will be disabled for Windows if ethernet support (winpcap) is not available */
+  #ifdef EXCLUDE_ETHERNET_WINDOWS
+    #ifdef CONFIG_IEC61850_L2_GOOSE
+      #undef CONFIG_IEC61850_L2_GOOSE
+    #endif
+    #ifdef CONFIG_IEC61850_L2_SMV
+      #undef CONFIG_IEC61850_L2_SMV
+    #endif
+    #define CONFIG_IEC61850_L2_GOOSE 0
+    #define CONFIG_IEC61850_L2_SMV 0
+    #define CONFIG_INCUDE_ETHERNET_WINDOWS 0
+  #else
+    #define CONFIG_INCLUDE_ETHERNET_WINDOWS 1
+    #undef CONFIG_ETHERNET_INTERFACE_ID
+    #define CONFIG_ETHERNET_INTERFACE_ID "0"
+  #endif
 #endif
 
 /* The GOOSE retransmission interval in ms for the stable condition - i.e. no monitored value changed */
@@ -215,20 +215,20 @@
 #define MMS_DEFAULT_PROFILE 1
 
 #if MMS_DEFAULT_PROFILE
-#define MMS_READ_SERVICE 1
-#define MMS_WRITE_SERVICE 1
-#define MMS_GET_NAME_LIST 1
-#define MMS_JOURNAL_SERVICE 1
-#define MMS_GET_VARIABLE_ACCESS_ATTRIBUTES 1
-#define MMS_DATA_SET_SERVICE 1
-#define MMS_DYNAMIC_DATA_SETS 1
-#define MMS_GET_DATA_SET_ATTRIBUTES 1
-#define MMS_STATUS_SERVICE 1
-#define MMS_IDENTIFY_SERVICE 1
-#define MMS_FILE_SERVICE 1
-#define MMS_OBTAIN_FILE_SERVICE 1
-#define MMS_DELETE_FILE_SERVICE 1
-#define MMS_RENAME_FILE_SERVICE 0
+  #define MMS_READ_SERVICE 1
+  #define MMS_WRITE_SERVICE 1
+  #define MMS_GET_NAME_LIST 1
+  #define MMS_JOURNAL_SERVICE 1
+  #define MMS_GET_VARIABLE_ACCESS_ATTRIBUTES 1
+  #define MMS_DATA_SET_SERVICE 1
+  #define MMS_DYNAMIC_DATA_SETS 1
+  #define MMS_GET_DATA_SET_ATTRIBUTES 1
+  #define MMS_STATUS_SERVICE 1
+  #define MMS_IDENTIFY_SERVICE 1
+  #define MMS_FILE_SERVICE 1
+  #define MMS_OBTAIN_FILE_SERVICE 1
+  #define MMS_DELETE_FILE_SERVICE 1
+  #define MMS_RENAME_FILE_SERVICE 0
 #endif /* MMS_DEFAULT_PROFILE */
 
 /* Sort getNameList response according to the MMS specified collation order - this is required by the standard
@@ -259,42 +259,42 @@
  ************************************************************************************/
 
 #if (CONFIG_DEFAULT_MAX_SERV_OUTSTANDING_CALLING < 1)
-#error "Invalid configuration: CONFIG_DEFAULT_MAX_SERV_OUTSTANDING_CALLING must be greater than 0!"
+  #error "Invalid configuration: CONFIG_DEFAULT_MAX_SERV_OUTSTANDING_CALLING must be greater than 0!"
 #endif
 
 #if (CONFIG_DEFAULT_MAX_SERV_OUTSTANDING_CALLED < 1)
-#error "Invalid configuration: CONFIG_DEFAULT_MAX_SERV_OUTSTANDING_CALLED must be greater than 0!"
+  #error "Invalid configuration: CONFIG_DEFAULT_MAX_SERV_OUTSTANDING_CALLED must be greater than 0!"
 #endif
 
 #if (MMS_JOURNAL_SERVICE != 1)
 
-#if (CONFIG_IEC61850_LOG_SERVICE == 1)
-#warning "Invalid configuration: CONFIG_IEC61850_LOG_SERVICE requires MMS_JOURNAL_SERVICE!"
-#endif
+  #if (CONFIG_IEC61850_LOG_SERVICE == 1)
+    #warning "Invalid configuration: CONFIG_IEC61850_LOG_SERVICE requires MMS_JOURNAL_SERVICE!"
+  #endif
 
-#undef CONFIG_IEC61850_LOG_SERVICE
-#define CONFIG_IEC61850_LOG_SERVICE 0
+  #undef CONFIG_IEC61850_LOG_SERVICE
+  #define CONFIG_IEC61850_LOG_SERVICE 0
 
 #endif
 
 #if (MMS_WRITE_SERVICE != 1)
 
-#if (CONFIG_IEC61850_CONTROL_SERVICE == 1)
-#warning "Invalid configuration: CONFIG_IEC61850_CONTROL_SERVICE requires MMS_WRITE_SERVICE!"
-#endif
+  #if (CONFIG_IEC61850_CONTROL_SERVICE == 1)
+    #warning "Invalid configuration: CONFIG_IEC61850_CONTROL_SERVICE requires MMS_WRITE_SERVICE!"
+  #endif
 
-#undef CONFIG_IEC61850_CONTROL_SERVICE
-#define CONFIG_IEC61850_CONTROL_SERVICE 0
+  #undef CONFIG_IEC61850_CONTROL_SERVICE
+  #define CONFIG_IEC61850_CONTROL_SERVICE 0
 #endif
 
 #if (MMS_FILE_SERVICE != 1)
 
-#if (MMS_OBTAIN_FILE_SERVICE == 1)
-#warning "Invalid configuration: MMS_OBTAIN_FILE_SERVICE requires MMS_FILE_SERVICE!"
-#endif
+  #if (MMS_OBTAIN_FILE_SERVICE == 1)
+    #warning "Invalid configuration: MMS_OBTAIN_FILE_SERVICE requires MMS_FILE_SERVICE!"
+  #endif
 
-#undef MMS_OBTAIN_FILE_SERVICE
-#define MMS_OBTAIN_FILE_SERVICE 0
+  #undef MMS_OBTAIN_FILE_SERVICE
+  #define MMS_OBTAIN_FILE_SERVICE 0
 #endif
 
 #endif /* STACK_CONFIG_H_ */

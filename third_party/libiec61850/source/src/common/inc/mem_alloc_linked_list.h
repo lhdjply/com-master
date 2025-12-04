@@ -35,13 +35,13 @@
 extern "C" {
 #endif
 
-typedef struct sMemAllocLinkedList* MemAllocLinkedList;
+typedef struct sMemAllocLinkedList * MemAllocLinkedList;
 
 LIB61850_INTERNAL MemAllocLinkedList
 MemAllocLinkedList_create(MemoryAllocator* ma);
 
 LIB61850_INTERNAL LinkedList
-MemAllocLinkedList_add(MemAllocLinkedList list, void* data);
+MemAllocLinkedList_add(MemAllocLinkedList list, void * data);
 
 #endif /* MEM_ALLOC_LINKED_LIST_H_ */
 

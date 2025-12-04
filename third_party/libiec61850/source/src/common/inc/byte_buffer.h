@@ -30,28 +30,29 @@
 extern "C" {
 #endif
 
-typedef struct {
-    uint8_t* buffer;
-    int maxSize;
-    int size;
+typedef struct
+{
+  uint8_t * buffer;
+  int maxSize;
+  int size;
 } ByteBuffer;
 
-LIB61850_INTERNAL ByteBuffer*
+LIB61850_INTERNAL ByteBuffer *
 ByteBuffer_create(ByteBuffer* self, int maxSize);
 
 LIB61850_INTERNAL void
 ByteBuffer_destroy(ByteBuffer* self);
 
 LIB61850_INTERNAL void
-ByteBuffer_wrap(ByteBuffer* self, uint8_t* buf, int size, int maxSize);
+ByteBuffer_wrap(ByteBuffer* self, uint8_t * buf, int size, int maxSize);
 
 LIB61850_INTERNAL int
-ByteBuffer_append(ByteBuffer* self, uint8_t* data, int dataSize);
+ByteBuffer_append(ByteBuffer* self, uint8_t * data, int dataSize);
 
 LIB61850_INTERNAL int
 ByteBuffer_appendByte(ByteBuffer* self, uint8_t byte);
 
-LIB61850_INTERNAL uint8_t*
+LIB61850_INTERNAL uint8_t *
 ByteBuffer_getBuffer(ByteBuffer* self);
 
 LIB61850_INTERNAL int
@@ -64,7 +65,7 @@ LIB61850_INTERNAL int
 ByteBuffer_setSize(ByteBuffer* self, int size);
 
 LIB61850_INTERNAL void
-ByteBuffer_print(ByteBuffer* self, char* message);
+ByteBuffer_print(ByteBuffer* self, char * message);
 
 #ifdef __cplusplus
 }

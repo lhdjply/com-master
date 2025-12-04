@@ -35,25 +35,26 @@
 #include "ied_server_private.h"
 #include "mms_value_internal.h"
 
-struct sMmsSampledValueControlBlock {
-    SVControlBlock* svcb;
+struct sMmsSampledValueControlBlock
+{
+  SVControlBlock * svcb;
 
-    bool svEna;
-    MmsServerConnection reservedByClient;
+  bool svEna;
+  MmsServerConnection reservedByClient;
 
-    char* dstAddress;
+  char * dstAddress;
 
-    MmsDomain* domain;
-    LogicalNode* logicalNode;
+  MmsDomain * domain;
+  LogicalNode * logicalNode;
 
-    MmsVariableSpecification* mmsType;
-    MmsValue* mmsValue;
+  MmsVariableSpecification * mmsType;
+  MmsValue * mmsValue;
 
-    MmsValue* svEnaValue;
-    MmsValue* resvValue;
+  MmsValue * svEnaValue;
+  MmsValue * resvValue;
 
-    SVCBEventHandler eventHandler;
-    void* eventHandlerParameter;
+  SVCBEventHandler eventHandler;
+  void * eventHandlerParameter;
 };
 
 static MmsValue objectAccessDenied = {MMS_DATA_ACCESS_ERROR, false, {DATA_ACCESS_ERROR_OBJECT_ACCESS_DENIED}};
@@ -61,515 +62,546 @@ static MmsValue objectAccessDenied = {MMS_DATA_ACCESS_ERROR, false, {DATA_ACCESS
 MmsSampledValueControlBlock
 MmsSampledValueControlBlock_create()
 {
-    MmsSampledValueControlBlock self = (MmsSampledValueControlBlock) GLOBAL_CALLOC(1, sizeof(struct sMmsSampledValueControlBlock));
+  MmsSampledValueControlBlock self = (MmsSampledValueControlBlock) GLOBAL_CALLOC(1,
+                                                                                 sizeof(struct sMmsSampledValueControlBlock));
 
-    return self;
+  return self;
 }
 
 void
 MmsSampledValueControlBlock_destroy(MmsSampledValueControlBlock self)
 {
-    if (self) {
-        MmsValue_delete(self->mmsValue);
+  if(self)
+  {
+    MmsValue_delete(self->mmsValue);
 
-        GLOBAL_FREEMEM(self);
-    }
+    GLOBAL_FREEMEM(self);
+  }
 }
 
 static MmsSampledValueControlBlock
-lookupSVCB(MmsMapping* self, MmsDomain* domain, char* lnName, char* objectName)
+lookupSVCB(MmsMapping* self, MmsDomain* domain, char * lnName, char * objectName)
 {
-    LinkedList element = LinkedList_getNext(self->svControls);
+  LinkedList element = LinkedList_getNext(self->svControls);
 
-    while (element != NULL) {
-        MmsSampledValueControlBlock mmsSVCB = (MmsSampledValueControlBlock) element->data;
+  while(element != NULL)
+  {
+    MmsSampledValueControlBlock mmsSVCB = (MmsSampledValueControlBlock) element->data;
 
-        if (mmsSVCB->domain == domain) {
-            if (strcmp(mmsSVCB->logicalNode->name, lnName) == 0) {
-                if (strcmp(mmsSVCB->svcb->name, objectName) == 0) {
-                    return mmsSVCB;
-                }
-            }
+    if(mmsSVCB->domain == domain)
+    {
+      if(strcmp(mmsSVCB->logicalNode->name, lnName) == 0)
+      {
+        if(strcmp(mmsSVCB->svcb->name, objectName) == 0)
+        {
+          return mmsSVCB;
         }
-
-        element = LinkedList_getNext(element);
+      }
     }
 
-    return NULL;
+    element = LinkedList_getNext(element);
+  }
+
+  return NULL;
 }
 
 static void
 MmsSampledValueControlBlock_enable(MmsSampledValueControlBlock self)
 {
-    self->svEna = true;
-    MmsValue_setBoolean(self->svEnaValue, true);
+  self->svEna = true;
+  MmsValue_setBoolean(self->svEnaValue, true);
 
-    if (DEBUG_IED_SERVER)
-        printf("IED_SERVER: enable SVCB %s\n", self->svcb->name);
+  if(DEBUG_IED_SERVER)
+    printf("IED_SERVER: enable SVCB %s\n", self->svcb->name);
 
-    if (self->eventHandler)
-        self->eventHandler(self->svcb, IEC61850_SVCB_EVENT_ENABLE, self->eventHandlerParameter);
+  if(self->eventHandler)
+    self->eventHandler(self->svcb, IEC61850_SVCB_EVENT_ENABLE, self->eventHandlerParameter);
 }
 
 static void
 MmsSampledValueControlBlock_disable(MmsSampledValueControlBlock self)
 {
-    self->svEna = false;
-    MmsValue_setBoolean(self->svEnaValue, false);
+  self->svEna = false;
+  MmsValue_setBoolean(self->svEnaValue, false);
 
-    if (DEBUG_IED_SERVER)
-        printf("IED_SERVER: disable SVCB %s\n", self->svcb->name);
+  if(DEBUG_IED_SERVER)
+    printf("IED_SERVER: disable SVCB %s\n", self->svcb->name);
 
-    if (self->eventHandler)
-        self->eventHandler(self->svcb, IEC61850_SVCB_EVENT_DISABLE, self->eventHandlerParameter);
+  if(self->eventHandler)
+    self->eventHandler(self->svcb, IEC61850_SVCB_EVENT_DISABLE, self->eventHandlerParameter);
 }
 
 static bool
 MmsSampledValueControlBlock_isEnabled(MmsSampledValueControlBlock self)
 {
-    return self->svEna;
+  return self->svEna;
 }
 
 MmsDataAccessError
-LIBIEC61850_SV_writeAccessSVControlBlock(MmsMapping* self, MmsDomain* domain, const char* variableIdOrig,
-        MmsValue* value, MmsServerConnection connection)
+LIBIEC61850_SV_writeAccessSVControlBlock(MmsMapping* self, MmsDomain* domain, const char * variableIdOrig,
+                                         MmsValue* value, MmsServerConnection connection)
 {
-    char variableId[130];
+  char variableId[130];
 
-    StringUtils_copyStringMax(variableId, 130, variableIdOrig);
+  StringUtils_copyStringMax(variableId, 130, variableIdOrig);
 
-    char* separator = strchr(variableId, '$');
+  char * separator = strchr(variableId, '$');
 
-    *separator = 0;
+  *separator = 0;
 
-    char* lnName = variableId;
+  char * lnName = variableId;
 
-    if (lnName == NULL)
-        return DATA_ACCESS_ERROR_OBJECT_ACCESS_DENIED;
+  if(lnName == NULL)
+    return DATA_ACCESS_ERROR_OBJECT_ACCESS_DENIED;
 
-    char* objectName = MmsMapping_getNextNameElement(separator + 1);
+  char * objectName = MmsMapping_getNextNameElement(separator + 1);
 
-    if (objectName == NULL)
-        return DATA_ACCESS_ERROR_OBJECT_ACCESS_DENIED;
+  if(objectName == NULL)
+    return DATA_ACCESS_ERROR_OBJECT_ACCESS_DENIED;
 
-    char* varName = MmsMapping_getNextNameElement(objectName);
+  char * varName = MmsMapping_getNextNameElement(objectName);
 
-    if (varName)
-        *(varName - 1) = 0;
+  if(varName)
+    *(varName - 1) = 0;
+  else
+    return DATA_ACCESS_ERROR_OBJECT_ACCESS_DENIED;
+
+  MmsSampledValueControlBlock mmsSVCB = lookupSVCB(self, domain, lnName, objectName);
+
+  if(mmsSVCB == NULL)
+    return DATA_ACCESS_ERROR_OBJECT_ACCESS_DENIED;
+
+  /* check if write access to SVCB is allowed on this connection */
+  if(self->controlBlockAccessHandler)
+  {
+    ACSIClass acsiClass;
+
+    if(mmsSVCB->svcb->isUnicast)
+      acsiClass = ACSI_CLASS_USVCB;
     else
-       return DATA_ACCESS_ERROR_OBJECT_ACCESS_DENIED;
+      acsiClass = ACSI_CLASS_MSVCB;
 
-    MmsSampledValueControlBlock mmsSVCB = lookupSVCB(self, domain, lnName, objectName);
+    LogicalNode* ln = mmsSVCB->logicalNode;
 
-    if (mmsSVCB == NULL)
+    LogicalDevice* ld = (LogicalDevice *)ln->parent;
+
+    ClientConnection clientConnection = private_IedServer_getClientConnectionByHandle(self->iedServer, connection);
+
+    if(self->controlBlockAccessHandler(self->controlBlockAccessHandlerParameter, clientConnection, acsiClass, ld, ln,
+                                       mmsSVCB->svcb->name, varName, IEC61850_CB_ACCESS_TYPE_WRITE) == false)
+    {
+      return DATA_ACCESS_ERROR_OBJECT_ACCESS_DENIED;
+    }
+  }
+
+  if(mmsSVCB->reservedByClient)
+  {
+    if(mmsSVCB->reservedByClient != connection)
+      return DATA_ACCESS_ERROR_TEMPORARILY_UNAVAILABLE;
+  }
+
+  if(strcmp(varName, "Resv") == 0)
+  {
+    if(MmsValue_getType(value) != MMS_BOOLEAN)
+      return DATA_ACCESS_ERROR_TYPE_INCONSISTENT;
+
+    if(MmsValue_getBoolean(value))
+    {
+      mmsSVCB->reservedByClient = connection;
+      MmsValue_setBoolean(mmsSVCB->resvValue, true);
+    }
+    else
+    {
+      mmsSVCB->reservedByClient = NULL;
+      MmsValue_setBoolean(mmsSVCB->resvValue, false);
+    }
+
+    return DATA_ACCESS_ERROR_SUCCESS;
+  }
+  else if(strcmp(varName, "SvEna") == 0)
+  {
+    if(MmsValue_getType(value) != MMS_BOOLEAN)
+      return DATA_ACCESS_ERROR_TYPE_INCONSISTENT;
+
+    if(MmsValue_getBoolean(value))
+      MmsSampledValueControlBlock_enable(mmsSVCB);
+    else
+      MmsSampledValueControlBlock_disable(mmsSVCB);
+
+    return DATA_ACCESS_ERROR_SUCCESS;
+  }
+  else
+  {
+    if(MmsSampledValueControlBlock_isEnabled(mmsSVCB))
+      return DATA_ACCESS_ERROR_TEMPORARILY_UNAVAILABLE;
+    else
+    {
+      bool allowAccess = false;
+
+      /* In 61850-9-2 mapping only Resv and SvEna are writable! */
+
+      if(allowAccess)
+        return DATA_ACCESS_ERROR_SUCCESS;
+      else
         return DATA_ACCESS_ERROR_OBJECT_ACCESS_DENIED;
 
-    /* check if write access to SVCB is allowed on this connection */
-    if (self->controlBlockAccessHandler)
-    {
-        ACSIClass acsiClass;
-
-        if (mmsSVCB->svcb->isUnicast)
-            acsiClass = ACSI_CLASS_USVCB;
-        else
-            acsiClass = ACSI_CLASS_MSVCB;
-
-        LogicalNode* ln = mmsSVCB->logicalNode;
-
-        LogicalDevice* ld = (LogicalDevice*)ln->parent;
-
-        ClientConnection clientConnection = private_IedServer_getClientConnectionByHandle(self->iedServer, connection);
-
-        if (self->controlBlockAccessHandler(self->controlBlockAccessHandlerParameter, clientConnection, acsiClass, ld, ln, mmsSVCB->svcb->name, varName, IEC61850_CB_ACCESS_TYPE_WRITE) == false) {
-            return DATA_ACCESS_ERROR_OBJECT_ACCESS_DENIED;
-        }
     }
-
-    if (mmsSVCB->reservedByClient) {
-        if (mmsSVCB->reservedByClient != connection)
-            return DATA_ACCESS_ERROR_TEMPORARILY_UNAVAILABLE;
-    }
-
-    if (strcmp(varName, "Resv") == 0) {
-        if (MmsValue_getType(value) != MMS_BOOLEAN)
-            return DATA_ACCESS_ERROR_TYPE_INCONSISTENT;
-
-        if (MmsValue_getBoolean(value)) {
-            mmsSVCB->reservedByClient = connection;
-            MmsValue_setBoolean(mmsSVCB->resvValue, true);
-        }
-        else {
-            mmsSVCB->reservedByClient = NULL;
-            MmsValue_setBoolean(mmsSVCB->resvValue, false);
-        }
-
-        return DATA_ACCESS_ERROR_SUCCESS;
-    }
-    else if (strcmp(varName, "SvEna") == 0) {
-        if (MmsValue_getType(value) != MMS_BOOLEAN)
-            return DATA_ACCESS_ERROR_TYPE_INCONSISTENT;
-
-        if (MmsValue_getBoolean(value))
-            MmsSampledValueControlBlock_enable(mmsSVCB);
-        else
-            MmsSampledValueControlBlock_disable(mmsSVCB);
-
-        return DATA_ACCESS_ERROR_SUCCESS;
-    }
-    else {
-        if (MmsSampledValueControlBlock_isEnabled(mmsSVCB))
-            return DATA_ACCESS_ERROR_TEMPORARILY_UNAVAILABLE;
-        else {
-            bool allowAccess = false;
-
-            /* In 61850-9-2 mapping only Resv and SvEna are writable! */
-
-            if (allowAccess)
-                return DATA_ACCESS_ERROR_SUCCESS;
-            else
-                return DATA_ACCESS_ERROR_OBJECT_ACCESS_DENIED;
-
-        }
-    }
+  }
 }
 
-MmsValue*
-LIBIEC61850_SV_readAccessSampledValueControlBlock(MmsMapping* self, MmsDomain* domain, char* variableIdOrig,  MmsServerConnection connection)
+MmsValue *
+LIBIEC61850_SV_readAccessSampledValueControlBlock(MmsMapping* self, MmsDomain* domain, char * variableIdOrig,
+                                                  MmsServerConnection connection)
 {
-    MmsValue* value = NULL;
+  MmsValue* value = NULL;
 
-    char variableId[130];
+  char variableId[130];
 
-    StringUtils_copyStringMax(variableId, 130, variableIdOrig);
+  StringUtils_copyStringMax(variableId, 130, variableIdOrig);
 
-    char* separator = strchr(variableId, '$');
+  char * separator = strchr(variableId, '$');
 
-    *separator = 0;
+  *separator = 0;
 
-    char* lnName = variableId;
+  char * lnName = variableId;
 
-    if (lnName == NULL)
-        return NULL;
+  if(lnName == NULL)
+    return NULL;
 
-    char* objectName = MmsMapping_getNextNameElement(separator + 1);
+  char * objectName = MmsMapping_getNextNameElement(separator + 1);
 
-    if (objectName == NULL)
-        return NULL;
+  if(objectName == NULL)
+    return NULL;
 
-    char* varName = MmsMapping_getNextNameElement(objectName);
+  char * varName = MmsMapping_getNextNameElement(objectName);
 
-    if (varName)
-        *(varName - 1) = 0;
+  if(varName)
+    *(varName - 1) = 0;
 
-    MmsSampledValueControlBlock mmsSVCB = lookupSVCB(self, domain, lnName, objectName);
+  MmsSampledValueControlBlock mmsSVCB = lookupSVCB(self, domain, lnName, objectName);
 
-    if (mmsSVCB) {
+  if(mmsSVCB)
+  {
 
-        /* check if read access to SVCB is allowed on this connection */
-        if (self->controlBlockAccessHandler)
-        {
-            ACSIClass acsiClass;
+    /* check if read access to SVCB is allowed on this connection */
+    if(self->controlBlockAccessHandler)
+    {
+      ACSIClass acsiClass;
 
-            if (mmsSVCB->svcb->isUnicast)
-                acsiClass = ACSI_CLASS_USVCB;
-            else
-                acsiClass = ACSI_CLASS_MSVCB;
+      if(mmsSVCB->svcb->isUnicast)
+        acsiClass = ACSI_CLASS_USVCB;
+      else
+        acsiClass = ACSI_CLASS_MSVCB;
 
-            LogicalNode* ln = mmsSVCB->logicalNode;
+      LogicalNode* ln = mmsSVCB->logicalNode;
 
-            LogicalDevice* ld = (LogicalDevice*)ln->parent;
+      LogicalDevice* ld = (LogicalDevice *)ln->parent;
 
-            ClientConnection clientConnection = private_IedServer_getClientConnectionByHandle(self->iedServer, connection);
+      ClientConnection clientConnection = private_IedServer_getClientConnectionByHandle(self->iedServer, connection);
 
-            if (self->controlBlockAccessHandler(self->controlBlockAccessHandlerParameter, clientConnection, acsiClass, ld, ln, mmsSVCB->svcb->name, varName, IEC61850_CB_ACCESS_TYPE_READ) == false) {
-                return &objectAccessDenied;
-            }
-        }
-
-        if (varName) {
-            value = MmsValue_getSubElement(mmsSVCB->mmsValue, mmsSVCB->mmsType, varName);
-        }
-        else {
-            value = mmsSVCB->mmsValue;
-        }
+      if(self->controlBlockAccessHandler(self->controlBlockAccessHandlerParameter, clientConnection, acsiClass, ld, ln,
+                                         mmsSVCB->svcb->name, varName, IEC61850_CB_ACCESS_TYPE_READ) == false)
+      {
+        return &objectAccessDenied;
+      }
     }
 
-    return value;
+    if(varName)
+    {
+      value = MmsValue_getSubElement(mmsSVCB->mmsValue, mmsSVCB->mmsType, varName);
+    }
+    else
+    {
+      value = mmsSVCB->mmsValue;
+    }
+  }
+
+  return value;
 }
 
-static SVControlBlock*
+static SVControlBlock *
 getSVCBForLogicalNodeWithIndex(MmsMapping* self, LogicalNode* logicalNode, int index, bool isUnicast)
 {
-    int svCount = 0;
+  int svCount = 0;
 
-    SVControlBlock* svcb = self->model->svCBs;
+  SVControlBlock* svcb = self->model->svCBs;
 
-    /* Iterate list of SvCBs */
-    while (svcb != NULL ) {
-        if ((svcb->parent == logicalNode) && (svcb->isUnicast == isUnicast)) {
-            if (svCount == index)
-                return svcb;
+  /* Iterate list of SvCBs */
+  while(svcb != NULL)
+  {
+    if((svcb->parent == logicalNode) && (svcb->isUnicast == isUnicast))
+    {
+      if(svCount == index)
+        return svcb;
 
-            svCount++;
-        }
-
-        svcb = svcb->sibling;
+      svCount++;
     }
 
-    return NULL ;
+    svcb = svcb->sibling;
+  }
+
+  return NULL ;
 }
 
 
-static MmsVariableSpecification*
-createSVControlBlockMmsStructure(char* gcbName, bool isUnicast)
+static MmsVariableSpecification *
+createSVControlBlockMmsStructure(char * gcbName, bool isUnicast)
 {
-    MmsVariableSpecification* gcb = (MmsVariableSpecification*) GLOBAL_CALLOC(1, sizeof(MmsVariableSpecification));
-    gcb->name = StringUtils_copyString(gcbName);
-    gcb->type = MMS_STRUCTURE;
+  MmsVariableSpecification* gcb = (MmsVariableSpecification *) GLOBAL_CALLOC(1, sizeof(MmsVariableSpecification));
+  gcb->name = StringUtils_copyString(gcbName);
+  gcb->type = MMS_STRUCTURE;
 
-    int elementCount;
+  int elementCount;
 
-    if (isUnicast)
-        elementCount = 10;
-    else
-        elementCount = 9;
+  if(isUnicast)
+    elementCount = 10;
+  else
+    elementCount = 9;
 
-    gcb->typeSpec.structure.elementCount = elementCount;
-    gcb->typeSpec.structure.elements = (MmsVariableSpecification**)
-            GLOBAL_CALLOC(elementCount, sizeof(MmsVariableSpecification*));
+  gcb->typeSpec.structure.elementCount = elementCount;
+  gcb->typeSpec.structure.elements = (MmsVariableSpecification **)
+                                     GLOBAL_CALLOC(elementCount, sizeof(MmsVariableSpecification *));
 
-    int currentElement = 0;
+  int currentElement = 0;
 
-    MmsVariableSpecification* namedVariable;
+  MmsVariableSpecification* namedVariable;
 
-    namedVariable = (MmsVariableSpecification*) GLOBAL_CALLOC(1, sizeof(MmsVariableSpecification));
-    namedVariable->name = StringUtils_copyString("SvEna");
+  namedVariable = (MmsVariableSpecification *) GLOBAL_CALLOC(1, sizeof(MmsVariableSpecification));
+  namedVariable->name = StringUtils_copyString("SvEna");
+  namedVariable->type = MMS_BOOLEAN;
+
+  gcb->typeSpec.structure.elements[currentElement++] = namedVariable;
+
+  if(isUnicast)
+  {
+    namedVariable = (MmsVariableSpecification *) GLOBAL_CALLOC(1, sizeof(MmsVariableSpecification));
+    namedVariable->name = StringUtils_copyString("Resv");
     namedVariable->type = MMS_BOOLEAN;
 
     gcb->typeSpec.structure.elements[currentElement++] = namedVariable;
+  }
 
-    if (isUnicast) {
-        namedVariable = (MmsVariableSpecification*) GLOBAL_CALLOC(1, sizeof(MmsVariableSpecification));
-        namedVariable->name = StringUtils_copyString("Resv");
-        namedVariable->type = MMS_BOOLEAN;
+  namedVariable = (MmsVariableSpecification *) GLOBAL_CALLOC(1, sizeof(MmsVariableSpecification));
+  if(isUnicast)
+    namedVariable->name = StringUtils_copyString("UsvID");
+  else
+    namedVariable->name = StringUtils_copyString("MsvID");
+  namedVariable->typeSpec.visibleString = -129;
+  namedVariable->type = MMS_VISIBLE_STRING;
 
-        gcb->typeSpec.structure.elements[currentElement++] = namedVariable;
-    }
+  gcb->typeSpec.structure.elements[currentElement++] = namedVariable;
 
-    namedVariable = (MmsVariableSpecification*) GLOBAL_CALLOC(1, sizeof(MmsVariableSpecification));
-    if (isUnicast)
-        namedVariable->name = StringUtils_copyString("UsvID");
-    else
-        namedVariable->name = StringUtils_copyString("MsvID");
-    namedVariable->typeSpec.visibleString = -129;
-    namedVariable->type = MMS_VISIBLE_STRING;
+  namedVariable = (MmsVariableSpecification *) GLOBAL_CALLOC(1, sizeof(MmsVariableSpecification));
+  namedVariable->name = StringUtils_copyString("DatSet");
+  namedVariable->typeSpec.visibleString = -129;
+  namedVariable->type = MMS_VISIBLE_STRING;
 
-    gcb->typeSpec.structure.elements[currentElement++] = namedVariable;
+  gcb->typeSpec.structure.elements[currentElement++] = namedVariable;
 
-    namedVariable = (MmsVariableSpecification*) GLOBAL_CALLOC(1, sizeof(MmsVariableSpecification));
-    namedVariable->name = StringUtils_copyString("DatSet");
-    namedVariable->typeSpec.visibleString = -129;
-    namedVariable->type = MMS_VISIBLE_STRING;
+  namedVariable = (MmsVariableSpecification *) GLOBAL_CALLOC(1, sizeof(MmsVariableSpecification));
+  namedVariable->name = StringUtils_copyString("ConfRev");
+  namedVariable->type = MMS_INTEGER;
+  namedVariable->typeSpec.integer = 32;
 
-    gcb->typeSpec.structure.elements[currentElement++] = namedVariable;
+  gcb->typeSpec.structure.elements[currentElement++] = namedVariable;
 
-    namedVariable = (MmsVariableSpecification*) GLOBAL_CALLOC(1, sizeof(MmsVariableSpecification));
-    namedVariable->name = StringUtils_copyString("ConfRev");
-    namedVariable->type = MMS_INTEGER;
-    namedVariable->typeSpec.integer = 32;
+  namedVariable = (MmsVariableSpecification *) GLOBAL_CALLOC(1, sizeof(MmsVariableSpecification));
+  namedVariable->name = StringUtils_copyString("SmpRate");
+  namedVariable->type = MMS_INTEGER;
+  namedVariable->typeSpec.unsignedInteger = 32;
 
-    gcb->typeSpec.structure.elements[currentElement++] = namedVariable;
+  gcb->typeSpec.structure.elements[currentElement++] = namedVariable;
 
-    namedVariable = (MmsVariableSpecification*) GLOBAL_CALLOC(1, sizeof(MmsVariableSpecification));
-    namedVariable->name = StringUtils_copyString("SmpRate");
-    namedVariable->type = MMS_INTEGER;
-    namedVariable->typeSpec.unsignedInteger = 32;
+  namedVariable = (MmsVariableSpecification *) GLOBAL_CALLOC(1, sizeof(MmsVariableSpecification));
+  namedVariable->name = StringUtils_copyString("OptFlds");
+  namedVariable->type = MMS_BIT_STRING;
+  namedVariable->typeSpec.bitString = 5;
 
-    gcb->typeSpec.structure.elements[currentElement++] = namedVariable;
+  gcb->typeSpec.structure.elements[currentElement++] = namedVariable;
 
-    namedVariable = (MmsVariableSpecification*) GLOBAL_CALLOC(1, sizeof(MmsVariableSpecification));
-    namedVariable->name = StringUtils_copyString("OptFlds");
-    namedVariable->type = MMS_BIT_STRING;
-    namedVariable->typeSpec.bitString = 5;
+  namedVariable = (MmsVariableSpecification *) GLOBAL_CALLOC(1, sizeof(MmsVariableSpecification));
+  namedVariable->name = StringUtils_copyString("SmpMod");
+  namedVariable->type = MMS_INTEGER;
+  namedVariable->typeSpec.integer = 8;
 
-    gcb->typeSpec.structure.elements[currentElement++] = namedVariable;
+  gcb->typeSpec.structure.elements[currentElement++] = namedVariable;
 
-    namedVariable = (MmsVariableSpecification*) GLOBAL_CALLOC(1, sizeof(MmsVariableSpecification));
-    namedVariable->name = StringUtils_copyString("SmpMod");
-    namedVariable->type = MMS_INTEGER;
-    namedVariable->typeSpec.integer = 8;
+  namedVariable = (MmsVariableSpecification *) GLOBAL_CALLOC(1, sizeof(MmsVariableSpecification));
+  namedVariable->name = StringUtils_copyString("DstAddress");
+  MmsMapping_createPhyComAddrStructure(namedVariable);
 
-    gcb->typeSpec.structure.elements[currentElement++] = namedVariable;
+  gcb->typeSpec.structure.elements[currentElement++] = namedVariable;
 
-    namedVariable = (MmsVariableSpecification*) GLOBAL_CALLOC(1, sizeof(MmsVariableSpecification));
-    namedVariable->name = StringUtils_copyString("DstAddress");
-    MmsMapping_createPhyComAddrStructure(namedVariable);
+  namedVariable = (MmsVariableSpecification *) GLOBAL_CALLOC(1, sizeof(MmsVariableSpecification));
+  namedVariable->name = StringUtils_copyString("noASDU");
+  namedVariable->type = MMS_INTEGER;
+  namedVariable->typeSpec.integer = 32;
 
-    gcb->typeSpec.structure.elements[currentElement++] = namedVariable;
+  gcb->typeSpec.structure.elements[currentElement++] = namedVariable;
 
-    namedVariable = (MmsVariableSpecification*) GLOBAL_CALLOC(1, sizeof(MmsVariableSpecification));
-    namedVariable->name = StringUtils_copyString("noASDU");
-    namedVariable->type = MMS_INTEGER;
-    namedVariable->typeSpec.integer = 32;
-
-    gcb->typeSpec.structure.elements[currentElement++] = namedVariable;
-
-    return gcb;
+  return gcb;
 }
 
 static void
-createDataSetReference(char* buffer, char* domainName, char* lnName, char* dataSetName)
+createDataSetReference(char * buffer, char * domainName, char * lnName, char * dataSetName)
 {
-    StringUtils_createStringInBuffer(buffer, 130, 5, domainName, "/", lnName, "$", dataSetName);
+  StringUtils_createStringInBuffer(buffer, 130, 5, domainName, "/", lnName, "$", dataSetName);
 }
 
 void
-LIBIEC61850_SV_setSVCBHandler(MmsMapping* self, SVControlBlock* svcb, SVCBEventHandler handler, void* parameter)
+LIBIEC61850_SV_setSVCBHandler(MmsMapping* self, SVControlBlock* svcb, SVCBEventHandler handler, void * parameter)
 {
-    LinkedList svcbElement = LinkedList_getNext(self->svControls);
+  LinkedList svcbElement = LinkedList_getNext(self->svControls);
 
-    while (svcbElement != NULL) {
-        MmsSampledValueControlBlock mmsSVCB = (MmsSampledValueControlBlock) svcbElement->data;
+  while(svcbElement != NULL)
+  {
+    MmsSampledValueControlBlock mmsSVCB = (MmsSampledValueControlBlock) svcbElement->data;
 
-        if (mmsSVCB->svcb == svcb) {
-            mmsSVCB->eventHandler = handler;
-            mmsSVCB->eventHandlerParameter = parameter;
-            break;
-        }
-
-        svcbElement = LinkedList_getNext(svcbElement);
+    if(mmsSVCB->svcb == svcb)
+    {
+      mmsSVCB->eventHandler = handler;
+      mmsSVCB->eventHandlerParameter = parameter;
+      break;
     }
 
-    if (DEBUG_IED_SERVER) {
-        if (svcbElement == NULL)
-            printf("IED_SERVER: setSVCBHandler failed\n");
-    }
+    svcbElement = LinkedList_getNext(svcbElement);
+  }
+
+  if(DEBUG_IED_SERVER)
+  {
+    if(svcbElement == NULL)
+      printf("IED_SERVER: setSVCBHandler failed\n");
+  }
 }
 
-MmsVariableSpecification*
+MmsVariableSpecification *
 LIBIEC61850_SV_createSVControlBlocks(MmsMapping* self, MmsDomain* domain,
-        LogicalNode* logicalNode, int svCount, bool unicast)
+                                     LogicalNode* logicalNode, int svCount, bool unicast)
 {
-    MmsVariableSpecification* namedVariable = (MmsVariableSpecification*) GLOBAL_CALLOC(1,
-            sizeof(MmsVariableSpecification));
+  MmsVariableSpecification* namedVariable = (MmsVariableSpecification *) GLOBAL_CALLOC(1,
+                                                                                       sizeof(MmsVariableSpecification));
 
-    if (unicast)
-        namedVariable->name = StringUtils_copyString("US");
-    else
-        namedVariable->name = StringUtils_copyString("MS");
+  if(unicast)
+    namedVariable->name = StringUtils_copyString("US");
+  else
+    namedVariable->name = StringUtils_copyString("MS");
 
-    namedVariable->type = MMS_STRUCTURE;
+  namedVariable->type = MMS_STRUCTURE;
 
-    namedVariable->typeSpec.structure.elementCount = svCount;
-    namedVariable->typeSpec.structure.elements = (MmsVariableSpecification**) GLOBAL_CALLOC(svCount,
-            sizeof(MmsVariableSpecification*));
+  namedVariable->typeSpec.structure.elementCount = svCount;
+  namedVariable->typeSpec.structure.elements = (MmsVariableSpecification **) GLOBAL_CALLOC(svCount,
+                                                                                           sizeof(MmsVariableSpecification *));
 
-    int currentSVCB = 0;
+  int currentSVCB = 0;
 
-    char dataRefBuffer[130];
+  char dataRefBuffer[130];
 
-    while (currentSVCB < svCount) {
-        SVControlBlock* svControlBlock = getSVCBForLogicalNodeWithIndex(
-                self, logicalNode, currentSVCB, unicast);
+  while(currentSVCB < svCount)
+  {
+    SVControlBlock* svControlBlock = getSVCBForLogicalNodeWithIndex(
+                                       self, logicalNode, currentSVCB, unicast);
 
-        MmsVariableSpecification* svTypeSpec = createSVControlBlockMmsStructure(svControlBlock->name, unicast);
+    MmsVariableSpecification* svTypeSpec = createSVControlBlockMmsStructure(svControlBlock->name, unicast);
 
-        MmsValue* svValues = MmsValue_newStructure(svTypeSpec);
+    MmsValue* svValues = MmsValue_newStructure(svTypeSpec);
 
-        namedVariable->typeSpec.structure.elements[currentSVCB] = svTypeSpec;
+    namedVariable->typeSpec.structure.elements[currentSVCB] = svTypeSpec;
 
-        int currentIndex = 0;
+    int currentIndex = 0;
 
-        /* SvEna */
-        MmsValue* svEna = MmsValue_getElement(svValues, currentIndex++);
+    /* SvEna */
+    MmsValue* svEna = MmsValue_getElement(svValues, currentIndex++);
 
-        MmsValue* resv = NULL;
+    MmsValue* resv = NULL;
 
-        if (unicast) {
-            /* Resv */
-            resv = MmsValue_getElement(svValues, currentIndex++);
-        }
-
-
-        /* SvID */
-        MmsValue* svID = MmsValue_getElement(svValues, currentIndex++);
-        MmsValue_setVisibleString(svID, svControlBlock->svId);
-
-        /* DatSet */
-        MmsValue* dataSetRef = MmsValue_getElement(svValues, currentIndex++);
-
-        createDataSetReference(dataRefBuffer, MmsDomain_getName(domain),
-                logicalNode->name, svControlBlock->dataSetName);
-
-        MmsValue_setVisibleString(dataSetRef, dataRefBuffer);
-
-        /* ConfRev */
-        MmsValue* confRev = MmsValue_getElement(svValues, currentIndex++);
-        MmsValue_setInt32(confRev, svControlBlock->confRev);
-
-        /* SmpRate */
-        MmsValue* smpRate = MmsValue_getElement(svValues, currentIndex++);
-        MmsValue_setInt32(smpRate, svControlBlock->smpRate);
-
-        /* OptFlds */
-        MmsValue* optFlds = MmsValue_getElement(svValues, currentIndex++);
-        MmsValue_setBitStringFromInteger(optFlds, svControlBlock->optFlds);
-
-        /* SmpMod */
-        MmsValue* smpMod = MmsValue_getElement(svValues, currentIndex++);
-        MmsValue_setInt32(smpMod, svControlBlock->smpMod);
-
-        /* Set communication parameters - DstAddress */
-        uint8_t priority = CONFIG_GOOSE_DEFAULT_PRIORITY;
-        uint8_t dstAddr[] = CONFIG_GOOSE_DEFAULT_DST_ADDRESS;
-        uint16_t vid = CONFIG_GOOSE_DEFAULT_VLAN_ID;
-        uint16_t appId = CONFIG_GOOSE_DEFAULT_APPID;
-
-        if (svControlBlock->dstAddress != NULL) {
-            priority = svControlBlock->dstAddress->vlanPriority;
-            vid = svControlBlock->dstAddress->vlanId;
-            appId = svControlBlock->dstAddress->appId;
-
-            int i;
-            for (i = 0; i < 6; i++) {
-                dstAddr[i] = svControlBlock->dstAddress->dstAddress[i];
-            }
-        }
-
-        MmsValue* dstAddress = MmsValue_getElement(svValues, currentIndex++);
-
-        MmsValue* addr = MmsValue_getElement(dstAddress, 0);
-        MmsValue_setOctetString(addr, dstAddr, 6);
-
-        MmsValue* prio = MmsValue_getElement(dstAddress, 1);
-        MmsValue_setUint8(prio, priority);
-
-        MmsValue* vlanId = MmsValue_getElement(dstAddress, 2);
-        MmsValue_setUint16(vlanId, vid);
-
-        MmsValue* appIdVal = MmsValue_getElement(dstAddress, 3);
-        MmsValue_setUint16(appIdVal, appId);
-
-        /* noASDU */
-        MmsValue* noASDU = MmsValue_getElement(svValues, currentIndex++);
-        MmsValue_setInt32(noASDU, svControlBlock->noASDU);
-
-        MmsSampledValueControlBlock mmsSvCb = MmsSampledValueControlBlock_create();
-
-        mmsSvCb->mmsValue = svValues;
-        mmsSvCb->svEnaValue = svEna;
-        mmsSvCb->resvValue = resv;
-        mmsSvCb->mmsType = svTypeSpec;
-        mmsSvCb->domain = domain;
-        mmsSvCb->logicalNode = logicalNode;
-        mmsSvCb->svcb = svControlBlock;
-
-        LinkedList_add(self->svControls, (void*) mmsSvCb);
-
-        currentSVCB++;
+    if(unicast)
+    {
+      /* Resv */
+      resv = MmsValue_getElement(svValues, currentIndex++);
     }
 
-    return namedVariable;
+
+    /* SvID */
+    MmsValue* svID = MmsValue_getElement(svValues, currentIndex++);
+    MmsValue_setVisibleString(svID, svControlBlock->svId);
+
+    /* DatSet */
+    MmsValue* dataSetRef = MmsValue_getElement(svValues, currentIndex++);
+
+    createDataSetReference(dataRefBuffer, MmsDomain_getName(domain),
+                           logicalNode->name, svControlBlock->dataSetName);
+
+    MmsValue_setVisibleString(dataSetRef, dataRefBuffer);
+
+    /* ConfRev */
+    MmsValue* confRev = MmsValue_getElement(svValues, currentIndex++);
+    MmsValue_setInt32(confRev, svControlBlock->confRev);
+
+    /* SmpRate */
+    MmsValue* smpRate = MmsValue_getElement(svValues, currentIndex++);
+    MmsValue_setInt32(smpRate, svControlBlock->smpRate);
+
+    /* OptFlds */
+    MmsValue* optFlds = MmsValue_getElement(svValues, currentIndex++);
+    MmsValue_setBitStringFromInteger(optFlds, svControlBlock->optFlds);
+
+    /* SmpMod */
+    MmsValue* smpMod = MmsValue_getElement(svValues, currentIndex++);
+    MmsValue_setInt32(smpMod, svControlBlock->smpMod);
+
+    /* Set communication parameters - DstAddress */
+    uint8_t priority = CONFIG_GOOSE_DEFAULT_PRIORITY;
+    uint8_t dstAddr[] = CONFIG_GOOSE_DEFAULT_DST_ADDRESS;
+    uint16_t vid = CONFIG_GOOSE_DEFAULT_VLAN_ID;
+    uint16_t appId = CONFIG_GOOSE_DEFAULT_APPID;
+
+    if(svControlBlock->dstAddress != NULL)
+    {
+      priority = svControlBlock->dstAddress->vlanPriority;
+      vid = svControlBlock->dstAddress->vlanId;
+      appId = svControlBlock->dstAddress->appId;
+
+      int i;
+      for(i = 0; i < 6; i++)
+      {
+        dstAddr[i] = svControlBlock->dstAddress->dstAddress[i];
+      }
+    }
+
+    MmsValue* dstAddress = MmsValue_getElement(svValues, currentIndex++);
+
+    MmsValue* addr = MmsValue_getElement(dstAddress, 0);
+    MmsValue_setOctetString(addr, dstAddr, 6);
+
+    MmsValue* prio = MmsValue_getElement(dstAddress, 1);
+    MmsValue_setUint8(prio, priority);
+
+    MmsValue* vlanId = MmsValue_getElement(dstAddress, 2);
+    MmsValue_setUint16(vlanId, vid);
+
+    MmsValue* appIdVal = MmsValue_getElement(dstAddress, 3);
+    MmsValue_setUint16(appIdVal, appId);
+
+    /* noASDU */
+    MmsValue* noASDU = MmsValue_getElement(svValues, currentIndex++);
+    MmsValue_setInt32(noASDU, svControlBlock->noASDU);
+
+    MmsSampledValueControlBlock mmsSvCb = MmsSampledValueControlBlock_create();
+
+    mmsSvCb->mmsValue = svValues;
+    mmsSvCb->svEnaValue = svEna;
+    mmsSvCb->resvValue = resv;
+    mmsSvCb->mmsType = svTypeSpec;
+    mmsSvCb->domain = domain;
+    mmsSvCb->logicalNode = logicalNode;
+    mmsSvCb->svcb = svControlBlock;
+
+    LinkedList_add(self->svControls, (void *) mmsSvCb);
+
+    currentSVCB++;
+  }
+
+  return namedVariable;
 }
 
 #endif /* (CONFIG_IEC61850_SAMPLED_VALUES_SUPPORT == 1) */

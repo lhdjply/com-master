@@ -30,1352 +30,1355 @@
 #include "ied_connection_private.h"
 
 #ifdef _MSC_VER
-#define snprintf _snprintf
+  #define snprintf _snprintf
 #endif
 
 #ifndef DEBUG_IED_CLIENT
-#define DEBUG_IED_CLIENT 0
+  #define DEBUG_IED_CLIENT 0
 #endif
 
 struct sControlObjectClient
 {
-    ControlModel ctlModel;
-    char* objectReference;
-    IedConnection connection;
-    bool test;
-    bool interlockCheck;
-    bool synchroCheck;
-    bool hasTimeActivatedMode;
+  ControlModel ctlModel;
+  char * objectReference;
+  IedConnection connection;
+  bool test;
+  bool interlockCheck;
+  bool synchroCheck;
+  bool hasTimeActivatedMode;
 
-    MmsValue* analogValue; /* for APC-CDCs */
+  MmsValue * analogValue; /* for APC-CDCs */
 
-    int edition; /* 1 = Ed. 1 - 2 = Ed. 2 - to distinguish time stamp format */
-    bool hasCtlNum; /* Check if ctlNum attribute is present - ctlNum is(/can be?) absent in edition 1 APC CDC */
+  int edition; /* 1 = Ed. 1 - 2 = Ed. 2 - to distinguish time stamp format */
+  bool hasCtlNum; /* Check if ctlNum attribute is present - ctlNum is(/can be?) absent in edition 1 APC CDC */
 
-    bool useConstantT; /* some servers require a constant T parameter for select and operate */
-    uint64_t constantT; /* timestamp of select/operate to be used when constant T option is selected */
+  bool useConstantT; /* some servers require a constant T parameter for select and operate */
+  uint64_t constantT; /* timestamp of select/operate to be used when constant T option is selected */
 
-    LastApplError lastApplError;
-    MmsError lastMmsError;
-    MmsDataAccessError lastAccessError; /* last error of read or write command */
+  LastApplError lastApplError;
+  MmsError lastMmsError;
+  MmsDataAccessError lastAccessError; /* last error of read or write command */
 
-    CommandTerminationHandler commandTerminationHandler;
-    void* commandTerminaionHandlerParameter;
+  CommandTerminationHandler commandTerminationHandler;
+  void * commandTerminaionHandlerParameter;
 
-    /* control operation parameters */
-    MmsValue* ctlVal;
-    uint64_t opertime;
-    uint8_t ctlNum;
-    char* orIdent;
-    int orCat;
+  /* control operation parameters */
+  MmsValue * ctlVal;
+  uint64_t opertime;
+  uint8_t ctlNum;
+  char * orIdent;
+  int orCat;
 };
 
 static void
-convertToMmsAndInsertFC(char* newItemId, const char* originalObjectName, const char* fc)
+convertToMmsAndInsertFC(char * newItemId, const char * originalObjectName, const char * fc)
 {
-    int originalLength = (int) strlen(originalObjectName);
+  int originalLength = (int) strlen(originalObjectName);
 
-    int srcIndex = 0;
-    int dstIndex = 0;
+  int srcIndex = 0;
+  int dstIndex = 0;
 
-    while (originalObjectName[srcIndex] != '.')
-    {
-        newItemId[dstIndex] = originalObjectName[srcIndex];
-        srcIndex++;
-        dstIndex++;
-    }
-
-    newItemId[dstIndex++] = '$';
-    newItemId[dstIndex++] = fc[0];
-    newItemId[dstIndex++] = fc[1];
-    newItemId[dstIndex++] = '$';
+  while(originalObjectName[srcIndex] != '.')
+  {
+    newItemId[dstIndex] = originalObjectName[srcIndex];
     srcIndex++;
+    dstIndex++;
+  }
 
-    while (srcIndex < originalLength)
-    {
-        if (originalObjectName[srcIndex] == '.')
-            newItemId[dstIndex] = '$';
-        else
-            newItemId[dstIndex] = originalObjectName[srcIndex];
+  newItemId[dstIndex++] = '$';
+  newItemId[dstIndex++] = fc[0];
+  newItemId[dstIndex++] = fc[1];
+  newItemId[dstIndex++] = '$';
+  srcIndex++;
 
-        dstIndex++;
-        srcIndex++;
-    }
+  while(srcIndex < originalLength)
+  {
+    if(originalObjectName[srcIndex] == '.')
+      newItemId[dstIndex] = '$';
+    else
+      newItemId[dstIndex] = originalObjectName[srcIndex];
 
-    newItemId[dstIndex] = 0;
+    dstIndex++;
+    srcIndex++;
+  }
+
+  newItemId[dstIndex] = 0;
 }
 
 static void
 resetLastApplError(ControlObjectClient self)
 {
-    self->lastApplError.error = CONTROL_ERROR_NO_ERROR;
-    self->lastApplError.addCause = ADD_CAUSE_UNKNOWN;
-    self->lastApplError.ctlNum = 0;
+  self->lastApplError.error = CONTROL_ERROR_NO_ERROR;
+  self->lastApplError.addCause = ADD_CAUSE_UNKNOWN;
+  self->lastApplError.ctlNum = 0;
 }
 
 ControlObjectClient
-ControlObjectClient_createEx(const char* objectReference, IedConnection connection, ControlModel ctlModel, MmsVariableSpecification* controlObjectSpec)
+ControlObjectClient_createEx(const char * objectReference, IedConnection connection, ControlModel ctlModel,
+                             MmsVariableSpecification* controlObjectSpec)
 {
-    ControlObjectClient self = NULL;
+  ControlObjectClient self = NULL;
 
-    /* check what control elements are available */
-    bool hasOper = false;
-    bool hasTimeActivatedControl = false;
-    bool hasCtlNum = false;
-    bool isAPC = false;
-    MmsVariableSpecification* ctlVal = NULL;
-    MmsVariableSpecification* t = NULL;
+  /* check what control elements are available */
+  bool hasOper = false;
+  bool hasTimeActivatedControl = false;
+  bool hasCtlNum = false;
+  bool isAPC = false;
+  MmsVariableSpecification* ctlVal = NULL;
+  MmsVariableSpecification* t = NULL;
 
-    if (MmsVariableSpecification_getType(controlObjectSpec) == MMS_STRUCTURE)
+  if(MmsVariableSpecification_getType(controlObjectSpec) == MMS_STRUCTURE)
+  {
+    MmsVariableSpecification* oper = MmsVariableSpecification_getNamedVariableRecursive(controlObjectSpec, "Oper");
+
+    if(oper)
     {
-        MmsVariableSpecification* oper = MmsVariableSpecification_getNamedVariableRecursive(controlObjectSpec, "Oper");
+      hasOper = true;
 
-        if (oper)
-        {
-            hasOper = true;
+      ctlVal = MmsVariableSpecification_getNamedVariableRecursive(oper, "ctlVal");
 
-            ctlVal = MmsVariableSpecification_getNamedVariableRecursive(oper, "ctlVal");
+      if(ctlVal == NULL)
+        ctlVal = MmsVariableSpecification_getNamedVariableRecursive(oper, "setMag");
 
-            if (ctlVal == NULL)
-                ctlVal = MmsVariableSpecification_getNamedVariableRecursive(oper, "setMag");
+      if(ctlVal)
+      {
+        if(MmsVariableSpecification_getType(ctlVal) == MMS_STRUCTURE)
+          isAPC = true;
+      }
 
-            if (ctlVal)
-            {
-                if (MmsVariableSpecification_getType(ctlVal) == MMS_STRUCTURE)
-                    isAPC = true;
-            }
+      MmsVariableSpecification* operTm = MmsVariableSpecification_getNamedVariableRecursive(oper, "operTm");
 
-            MmsVariableSpecification* operTm = MmsVariableSpecification_getNamedVariableRecursive(oper, "operTm");
+      if(operTm)
+        hasTimeActivatedControl = true;
 
-            if (operTm)
-                hasTimeActivatedControl = true;
+      MmsVariableSpecification* ctlNum = MmsVariableSpecification_getNamedVariableRecursive(oper, "ctlNum");
 
-            MmsVariableSpecification* ctlNum = MmsVariableSpecification_getNamedVariableRecursive(oper, "ctlNum");
+      if(ctlNum)
+        hasCtlNum = true;
 
-            if (ctlNum)
-                hasCtlNum = true;
-
-            t = MmsVariableSpecification_getNamedVariableRecursive(oper, "T");
-        }
-
-        /* TODO Add additional checks dependent on control model */
+      t = MmsVariableSpecification_getNamedVariableRecursive(oper, "T");
     }
 
-    if (hasOper == false)
-    {
-        if (DEBUG_IED_CLIENT)
-            printf("IED_CLIENT: control is missing required element \"Oper\"\n");
+    /* TODO Add additional checks dependent on control model */
+  }
 
-        goto exit_function;
-    }
+  if(hasOper == false)
+  {
+    if(DEBUG_IED_CLIENT)
+      printf("IED_CLIENT: control is missing required element \"Oper\"\n");
 
-    if ((ctlVal == NULL) || (t == NULL))
-    {
-        if (DEBUG_IED_CLIENT)
-            printf("IED_CLIENT:   \"Oper\" is missing required element\n");
-        goto exit_function;
-    }
+    goto exit_function;
+  }
 
-    self = (ControlObjectClient) GLOBAL_CALLOC(1, sizeof(struct sControlObjectClient));
+  if((ctlVal == NULL) || (t == NULL))
+  {
+    if(DEBUG_IED_CLIENT)
+      printf("IED_CLIENT:   \"Oper\" is missing required element\n");
+    goto exit_function;
+  }
 
-    if (self == NULL)
-        goto exit_function;
+  self = (ControlObjectClient) GLOBAL_CALLOC(1, sizeof(struct sControlObjectClient));
 
-    self->objectReference = StringUtils_copyString(objectReference);
-    self->connection = connection;
-    self->ctlModel = ctlModel;
-    self->hasTimeActivatedMode = hasTimeActivatedControl;
-    self->hasCtlNum = hasCtlNum;
-    self->ctlVal = MmsValue_newDefaultValue(ctlVal);
+  if(self == NULL)
+    goto exit_function;
 
-    if (isAPC)
-        self->analogValue = MmsValue_createEmptyStructure(1);
+  self->objectReference = StringUtils_copyString(objectReference);
+  self->connection = connection;
+  self->ctlModel = ctlModel;
+  self->hasTimeActivatedMode = hasTimeActivatedControl;
+  self->hasCtlNum = hasCtlNum;
+  self->ctlVal = MmsValue_newDefaultValue(ctlVal);
+
+  if(isAPC)
+    self->analogValue = MmsValue_createEmptyStructure(1);
+  else
+    self->analogValue = NULL;
+
+  /* Check for T element type (Binary time -> Ed.1,UTC time -> Ed.2) */
+  if(t)
+  {
+    if(MmsVariableSpecification_getType(t) == MMS_BINARY_TIME)
+      self->edition = 1;
     else
-        self->analogValue = NULL;
+      self->edition = 2;
+  }
+  else
+    self->edition = 1;
 
-    /* Check for T element type (Binary time -> Ed.1,UTC time -> Ed.2) */
-    if (t)
-    {
-        if (MmsVariableSpecification_getType(t) == MMS_BINARY_TIME)
-            self->edition = 1;
-        else
-            self->edition = 2;
-    }
-    else
-        self->edition = 1;
+  if(DEBUG_IED_CLIENT)
+    printf("IED_CLIENT: Detected edition %i control\n", self->edition);
 
-    if (DEBUG_IED_CLIENT)
-        printf("IED_CLIENT: Detected edition %i control\n", self->edition);
-
-    iedConnection_addControlClient(connection, self);
+  iedConnection_addControlClient(connection, self);
 
 exit_function:
-    return self;
+  return self;
 }
 
 ControlObjectClient
-ControlObjectClient_create(const char* objectReference, IedConnection connection)
+ControlObjectClient_create(const char * objectReference, IedConnection connection)
 {
-    ControlObjectClient self = NULL;
+  ControlObjectClient self = NULL;
 
-    /* request control model from server */
-    char reference[129];
+  /* request control model from server */
+  char reference[129];
 
-    if (strlen(objectReference) < 120)
-    {
-        StringUtils_concatString(reference, 129, objectReference, ".ctlModel");
-    }
-    else
-        goto exit_function;
+  if(strlen(objectReference) < 120)
+  {
+    StringUtils_concatString(reference, 129, objectReference, ".ctlModel");
+  }
+  else
+    goto exit_function;
 
-    IedClientError error;
+  IedClientError error;
 
-    uint32_t ctlModel = IedConnection_readUnsigned32Value(connection, &error, reference, IEC61850_FC_CF);
+  uint32_t ctlModel = IedConnection_readUnsigned32Value(connection, &error, reference, IEC61850_FC_CF);
 
-    if (error != IED_ERROR_OK)
-    {
-        if (DEBUG_IED_CLIENT)
-            printf("IED_CLIENT: ControlObjectClient_create: failed to get %s from server\n", reference);
+  if(error != IED_ERROR_OK)
+  {
+    if(DEBUG_IED_CLIENT)
+      printf("IED_CLIENT: ControlObjectClient_create: failed to get %s from server\n", reference);
 
-        goto exit_function;
-    }
+    goto exit_function;
+  }
 
-    MmsVariableSpecification* ctlVarSpec =
-            IedConnection_getVariableSpecification(connection, &error, objectReference, IEC61850_FC_CO);
+  MmsVariableSpecification* ctlVarSpec =
+    IedConnection_getVariableSpecification(connection, &error, objectReference, IEC61850_FC_CO);
 
-    if (error != IED_ERROR_OK)
-    {
-        if (DEBUG_IED_CLIENT)
-            printf("IED_CLIENT: ControlObjectClient_create: failed to get data directory of control object\n");
+  if(error != IED_ERROR_OK)
+  {
+    if(DEBUG_IED_CLIENT)
+      printf("IED_CLIENT: ControlObjectClient_create: failed to get data directory of control object\n");
 
-        goto exit_function;
-    }
+    goto exit_function;
+  }
 
-    self = ControlObjectClient_createEx(objectReference, connection, (ControlModel) ctlModel, ctlVarSpec);
+  self = ControlObjectClient_createEx(objectReference, connection, (ControlModel) ctlModel, ctlVarSpec);
 
-    MmsVariableSpecification_destroy(ctlVarSpec);
+  MmsVariableSpecification_destroy(ctlVarSpec);
 
 exit_function:
-    return self;
+  return self;
 }
 
 void
 ControlObjectClient_destroy(ControlObjectClient self)
 {
-    if (self)
-    {
-        GLOBAL_FREEMEM(self->objectReference);
+  if(self)
+  {
+    GLOBAL_FREEMEM(self->objectReference);
 
-        iedConnection_removeControlClient(self->connection, self);
+    iedConnection_removeControlClient(self->connection, self);
 
-        if (self->ctlVal)
-            MmsValue_delete(self->ctlVal);
+    if(self->ctlVal)
+      MmsValue_delete(self->ctlVal);
 
-        if (self->analogValue)
-            MmsValue_delete(self->analogValue);
+    if(self->analogValue)
+      MmsValue_delete(self->analogValue);
 
-        if (self->orIdent)
-            GLOBAL_FREEMEM(self->orIdent);
+    if(self->orIdent)
+      GLOBAL_FREEMEM(self->orIdent);
 
-        GLOBAL_FREEMEM(self);
-    }
+    GLOBAL_FREEMEM(self);
+  }
 }
 
 void
 ControlObjectClient_setCommandTerminationHandler(ControlObjectClient self, CommandTerminationHandler handler,
-        void* handlerParameter)
+                                                 void * handlerParameter)
 {
-    self->commandTerminaionHandlerParameter = handlerParameter;
-    self->commandTerminationHandler = handler;
+  self->commandTerminaionHandlerParameter = handlerParameter;
+  self->commandTerminationHandler = handler;
 }
 
-const char*
+const char *
 ControlObjectClient_getObjectReference(ControlObjectClient self)
 {
-    return self->objectReference;
+  return self->objectReference;
 }
 
 ControlModel
 ControlObjectClient_getControlModel(ControlObjectClient self)
 {
-    return self->ctlModel;
+  return self->ctlModel;
 }
 
 void
 ControlObjectClient_setControlModel(ControlObjectClient self, ControlModel ctlModel)
 {
-    self->ctlModel = ctlModel;
+  self->ctlModel = ctlModel;
 }
 
 void
 ControlObjectClient_changeServerControlModel(ControlObjectClient self, ControlModel ctlModel)
 {
-    /* TODO write new ctlModel to server */
-    self->ctlModel = ctlModel;
+  /* TODO write new ctlModel to server */
+  self->ctlModel = ctlModel;
 }
 
 MmsType
 ControlObjectClient_getCtlValType(ControlObjectClient self)
 {
-    if (self->analogValue)
-        return MmsValue_getType(self->analogValue);
-    else
-        return MmsValue_getType(self->ctlVal);
+  if(self->analogValue)
+    return MmsValue_getType(self->analogValue);
+  else
+    return MmsValue_getType(self->ctlVal);
 }
 
 IedClientError
 ControlObjectClient_getLastError(ControlObjectClient self)
 {
-    if (self->lastAccessError != DATA_ACCESS_ERROR_SUCCESS)
-        return iedConnection_mapDataAccessErrorToIedError(self->lastAccessError);
-    else
-        return iedConnection_mapMmsErrorToIedError(self->lastMmsError);
+  if(self->lastAccessError != DATA_ACCESS_ERROR_SUCCESS)
+    return iedConnection_mapDataAccessErrorToIedError(self->lastAccessError);
+  else
+    return iedConnection_mapMmsErrorToIedError(self->lastMmsError);
 }
 
 void
-ControlObjectClient_setOrigin(ControlObjectClient self, const char* orIdent, int orCat)
+ControlObjectClient_setOrigin(ControlObjectClient self, const char * orIdent, int orCat)
 {
-    if (self->orIdent)
-        GLOBAL_FREEMEM(self->orIdent);
+  if(self->orIdent)
+    GLOBAL_FREEMEM(self->orIdent);
 
-    if (orIdent)
-        self->orIdent = StringUtils_copyString(orIdent);
-    else
-        self->orIdent = NULL;
+  if(orIdent)
+    self->orIdent = StringUtils_copyString(orIdent);
+  else
+    self->orIdent = NULL;
 
-    self->orCat = orCat;
+  self->orCat = orCat;
 }
 
-static MmsValue*
+static MmsValue *
 createOriginValue(ControlObjectClient self)
 {
-    MmsValue* origin = MmsValue_createEmptyStructure(2);
+  MmsValue* origin = MmsValue_createEmptyStructure(2);
 
-    if (origin == NULL)
-        goto exit_function;
-
-    MmsValue* orCat = MmsValue_newIntegerFromInt16(self->orCat);
-
-    if (orCat == NULL)
-        goto cleanup_on_error;
-
-    MmsValue_setElement(origin, 0, orCat);
-
-    MmsValue* orIdent;
-
-    if (self->orIdent)
-    {
-        int octetStringLen = strlen(self->orIdent);
-        orIdent = MmsValue_newOctetString(0, octetStringLen);
-
-        if (orIdent == NULL)
-            goto cleanup_on_error;
-
-        MmsValue_setOctetString(orIdent, (uint8_t*) self->orIdent, octetStringLen);
-    }
-    else
-        orIdent = MmsValue_newOctetString(0, 0);
-
-    if (orIdent == NULL)
-        goto cleanup_on_error;
-
-    MmsValue_setElement(origin, 1, orIdent);
-
+  if(origin == NULL)
     goto exit_function;
 
-    cleanup_on_error:
-    MmsValue_delete(origin);
-    origin = NULL;
+  MmsValue* orCat = MmsValue_newIntegerFromInt16(self->orCat);
 
-    exit_function:
-    return origin;
+  if(orCat == NULL)
+    goto cleanup_on_error;
+
+  MmsValue_setElement(origin, 0, orCat);
+
+  MmsValue* orIdent;
+
+  if(self->orIdent)
+  {
+    int octetStringLen = strlen(self->orIdent);
+    orIdent = MmsValue_newOctetString(0, octetStringLen);
+
+    if(orIdent == NULL)
+      goto cleanup_on_error;
+
+    MmsValue_setOctetString(orIdent, (uint8_t *) self->orIdent, octetStringLen);
+  }
+  else
+    orIdent = MmsValue_newOctetString(0, 0);
+
+  if(orIdent == NULL)
+    goto cleanup_on_error;
+
+  MmsValue_setElement(origin, 1, orIdent);
+
+  goto exit_function;
+
+cleanup_on_error:
+  MmsValue_delete(origin);
+  origin = NULL;
+
+exit_function:
+  return origin;
 }
 
-static MmsValue*
+static MmsValue *
 prepareOperParameters(ControlObjectClient self, MmsValue* ctlVal, uint64_t operTime)
 {
-    resetLastApplError(self);
+  resetLastApplError(self);
 
-    MmsValue* operParameters;
+  MmsValue* operParameters;
 
-    int operElementCount = 5;
+  int operElementCount = 5;
 
-    if (self->hasTimeActivatedMode)
-        operElementCount++;
+  if(self->hasTimeActivatedMode)
+    operElementCount++;
 
-    if (self->hasCtlNum)
-        operElementCount++;
+  if(self->hasCtlNum)
+    operElementCount++;
 
-    operParameters = MmsValue_createEmptyStructure(operElementCount);
+  operParameters = MmsValue_createEmptyStructure(operElementCount);
 
-    /* support simplified usage of APC controls - user doesn't need to create the structure */
-    if (self->analogValue != NULL)
+  /* support simplified usage of APC controls - user doesn't need to create the structure */
+  if(self->analogValue != NULL)
+  {
+    if(MmsValue_getType(ctlVal) != MMS_STRUCTURE)
     {
-        if (MmsValue_getType(ctlVal) != MMS_STRUCTURE)
-        {
-            MmsValue_setElement(self->analogValue, 0, ctlVal);
-            ctlVal = self->analogValue;
-        }
+      MmsValue_setElement(self->analogValue, 0, ctlVal);
+      ctlVal = self->analogValue;
     }
+  }
 
-    MmsValue_setElement(operParameters, 0, ctlVal);
+  MmsValue_setElement(operParameters, 0, ctlVal);
 
-    int index = 1;
+  int index = 1;
 
-    if (self->hasTimeActivatedMode)
-    {
-        MmsValue* operTm = MmsValue_newUtcTimeByMsTime(operTime);
-        MmsValue_setElement(operParameters, index++, operTm);
-    }
+  if(self->hasTimeActivatedMode)
+  {
+    MmsValue* operTm = MmsValue_newUtcTimeByMsTime(operTime);
+    MmsValue_setElement(operParameters, index++, operTm);
+  }
 
-    MmsValue* origin = createOriginValue(self);
-    MmsValue_setElement(operParameters, index++, origin);
+  MmsValue* origin = createOriginValue(self);
+  MmsValue_setElement(operParameters, index++, origin);
 
-    if (!((self->ctlModel == CONTROL_MODEL_SBO_NORMAL) ||
-            (self->ctlModel == CONTROL_MODEL_SBO_ENHANCED)))
-    {
-        self->ctlNum++;
-    }
+  if(!((self->ctlModel == CONTROL_MODEL_SBO_NORMAL) ||
+       (self->ctlModel == CONTROL_MODEL_SBO_ENHANCED)))
+  {
+    self->ctlNum++;
+  }
 
-    if (self->hasCtlNum)
-    {
-        MmsValue* ctlNum = MmsValue_newUnsignedFromUint32(self->ctlNum);
-        MmsValue_setElement(operParameters, index++, ctlNum);
-    }
+  if(self->hasCtlNum)
+  {
+    MmsValue* ctlNum = MmsValue_newUnsignedFromUint32(self->ctlNum);
+    MmsValue_setElement(operParameters, index++, ctlNum);
+  }
 
-    uint64_t timestamp;
+  uint64_t timestamp;
 
-    if ((self->ctlModel == CONTROL_MODEL_SBO_ENHANCED) && (self->useConstantT))
-        timestamp = self->constantT;
-    else
-        timestamp = Hal_getTimeInMs();
+  if((self->ctlModel == CONTROL_MODEL_SBO_ENHANCED) && (self->useConstantT))
+    timestamp = self->constantT;
+  else
+    timestamp = Hal_getTimeInMs();
 
-    if (self->useConstantT)
-        self->constantT = timestamp;
+  if(self->useConstantT)
+    self->constantT = timestamp;
 
-    MmsValue* ctlTime;
+  MmsValue* ctlTime;
 
-    if (self->edition == 2)
-    {
-        ctlTime = MmsValue_newUtcTimeByMsTime(timestamp);
+  if(self->edition == 2)
+  {
+    ctlTime = MmsValue_newUtcTimeByMsTime(timestamp);
 
-        if (self->connection)
-            MmsValue_setUtcTimeQuality(ctlTime, self->connection->timeQuality);
-    }
-    else
-    {
-        ctlTime = MmsValue_newBinaryTime(false);
-        MmsValue_setBinaryTime(ctlTime, timestamp);
-    }
+    if(self->connection)
+      MmsValue_setUtcTimeQuality(ctlTime, self->connection->timeQuality);
+  }
+  else
+  {
+    ctlTime = MmsValue_newBinaryTime(false);
+    MmsValue_setBinaryTime(ctlTime, timestamp);
+  }
 
-    MmsValue_setElement(operParameters, index++, ctlTime);
+  MmsValue_setElement(operParameters, index++, ctlTime);
 
-    MmsValue* ctlTest = MmsValue_newBoolean(self->test);
-    MmsValue_setElement(operParameters, index++, ctlTest);
+  MmsValue* ctlTest = MmsValue_newBoolean(self->test);
+  MmsValue_setElement(operParameters, index++, ctlTest);
 
-    MmsValue* check = MmsValue_newBitString(2);
-    MmsValue_setBitStringBit(check, 1, self->interlockCheck);
-    MmsValue_setBitStringBit(check, 0, self->synchroCheck);
-    MmsValue_setElement(operParameters, index++, check);
+  MmsValue* check = MmsValue_newBitString(2);
+  MmsValue_setBitStringBit(check, 1, self->interlockCheck);
+  MmsValue_setBitStringBit(check, 0, self->synchroCheck);
+  MmsValue_setElement(operParameters, index++, check);
 
-    char domainId[65];
-    char itemId[65];
+  char domainId[65];
+  char itemId[65];
 
-    MmsMapping_getMmsDomainFromObjectReference(self->objectReference, domainId);
+  MmsMapping_getMmsDomainFromObjectReference(self->objectReference, domainId);
 
-    convertToMmsAndInsertFC(itemId, self->objectReference + strlen(domainId) + 1, "CO");
+  convertToMmsAndInsertFC(itemId, self->objectReference + strlen(domainId) + 1, "CO");
 
-    StringUtils_appendString(itemId, 65, "$Oper");
+  StringUtils_appendString(itemId, 65, "$Oper");
 
-    if (DEBUG_IED_CLIENT)
-        printf("IED_CLIENT: operate: %s/%s\n", domainId, itemId);
+  if(DEBUG_IED_CLIENT)
+    printf("IED_CLIENT: operate: %s/%s\n", domainId, itemId);
 
-    return operParameters;
+  return operParameters;
 }
 
 bool
 ControlObjectClient_operate(ControlObjectClient self, MmsValue* ctlVal, uint64_t operTime)
 {
-    bool success = false;
+  bool success = false;
 
-    if (ctlVal == NULL)
-    {
-        if (DEBUG_IED_CLIENT)
-            printf("IED_CLIENT: operate - (ctlVal == NULL)!\n");
+  if(ctlVal == NULL)
+  {
+    if(DEBUG_IED_CLIENT)
+      printf("IED_CLIENT: operate - (ctlVal == NULL)!\n");
 
-        goto exit_function;
-    }
+    goto exit_function;
+  }
 
-    MmsValue* operParameters = prepareOperParameters(self, ctlVal, operTime);
+  MmsValue* operParameters = prepareOperParameters(self, ctlVal, operTime);
 
-    char domainId[65];
-    char itemId[65];
+  char domainId[65];
+  char itemId[65];
 
-    MmsMapping_getMmsDomainFromObjectReference(self->objectReference, domainId);
+  MmsMapping_getMmsDomainFromObjectReference(self->objectReference, domainId);
 
-    convertToMmsAndInsertFC(itemId, self->objectReference + strlen(domainId) + 1, "CO");
+  convertToMmsAndInsertFC(itemId, self->objectReference + strlen(domainId) + 1, "CO");
 
-    StringUtils_appendString(itemId, 65, "$Oper");
+  StringUtils_appendString(itemId, 65, "$Oper");
 
-    if (DEBUG_IED_CLIENT)
-        printf("IED_CLIENT: operate: %s/%s\n", domainId, itemId);
+  if(DEBUG_IED_CLIENT)
+    printf("IED_CLIENT: operate: %s/%s\n", domainId, itemId);
 
-    MmsError mmsError;
+  MmsError mmsError;
 
-    MmsDataAccessError writeResult = MmsConnection_writeVariable(IedConnection_getMmsConnection(self->connection),
-            &mmsError, domainId, itemId, operParameters);
+  MmsDataAccessError writeResult = MmsConnection_writeVariable(IedConnection_getMmsConnection(self->connection),
+                                                               &mmsError, domainId, itemId, operParameters);
 
-    MmsValue_setElement(operParameters, 0, NULL);
-    MmsValue_delete(operParameters);
+  MmsValue_setElement(operParameters, 0, NULL);
+  MmsValue_delete(operParameters);
 
-    self->lastMmsError = mmsError;
-    self->lastAccessError = writeResult;
+  self->lastMmsError = mmsError;
+  self->lastAccessError = writeResult;
 
-    if (mmsError != MMS_ERROR_NONE)
-    {
-        if (DEBUG_IED_CLIENT)
-            printf("IED_CLIENT: operate failed!\n");
+  if(mmsError != MMS_ERROR_NONE)
+  {
+    if(DEBUG_IED_CLIENT)
+      printf("IED_CLIENT: operate failed!\n");
 
-        goto exit_function;
-    }
+    goto exit_function;
+  }
 
-    MmsValue_update(self->ctlVal, ctlVal);
+  MmsValue_update(self->ctlVal, ctlVal);
 
-    self->opertime = operTime;
+  self->opertime = operTime;
 
-    success = true;
+  success = true;
 
 exit_function:
 
-    if (self->analogValue)
-        MmsValue_setElement(self->analogValue, 0, NULL);
+  if(self->analogValue)
+    MmsValue_setElement(self->analogValue, 0, NULL);
 
-    return success;
+  return success;
 }
 
 static void
-internalOperateHandler(uint32_t invokeId, void* parameter, MmsError err, MmsDataAccessError accessError)
+internalOperateHandler(uint32_t invokeId, void * parameter, MmsError err, MmsDataAccessError accessError)
 {
-    ControlObjectClient self = (ControlObjectClient) parameter;
+  ControlObjectClient self = (ControlObjectClient) parameter;
 
-    IedConnectionOutstandingCall call = iedConnection_lookupOutstandingCall(self->connection, invokeId);
+  IedConnectionOutstandingCall call = iedConnection_lookupOutstandingCall(self->connection, invokeId);
 
-    if (call)
+  if(call)
+  {
+    ControlObjectClient_ControlActionHandler handler = (ControlObjectClient_ControlActionHandler) call->callback;
+
+    IedClientError iedError = iedConnection_mapMmsErrorToIedError(err);
+
+    bool success = false;
+
+    self->lastMmsError = err;
+    self->lastAccessError = accessError;
+
+    if(iedError == IED_ERROR_OK)
     {
-        ControlObjectClient_ControlActionHandler handler = (ControlObjectClient_ControlActionHandler) call->callback;
+      iedError = iedConnection_mapDataAccessErrorToIedError(accessError);
 
-        IedClientError iedError = iedConnection_mapMmsErrorToIedError(err);
-
-        bool success = false;
-
-        self->lastMmsError = err;
-        self->lastAccessError = accessError;
-
-        if (iedError == IED_ERROR_OK)
-        {
-            iedError = iedConnection_mapDataAccessErrorToIedError(accessError);
-
-            if (iedError == IED_ERROR_OK)
-                success = true;
-        }
-
-        handler(invokeId, call->callbackParameter, iedError, CONTROL_ACTION_TYPE_OPERATE, success);
-
-        iedConnection_releaseOutstandingCall(self->connection, call);
+      if(iedError == IED_ERROR_OK)
+        success = true;
     }
-    else
-    {
-        if (DEBUG_IED_CLIENT)
-            printf("IED_CLIENT: internal error - no matching outstanding call (ID: %u)!\n", invokeId);
-    }
+
+    handler(invokeId, call->callbackParameter, iedError, CONTROL_ACTION_TYPE_OPERATE, success);
+
+    iedConnection_releaseOutstandingCall(self->connection, call);
+  }
+  else
+  {
+    if(DEBUG_IED_CLIENT)
+      printf("IED_CLIENT: internal error - no matching outstanding call (ID: %u)!\n", invokeId);
+  }
 }
 
 uint32_t
 ControlObjectClient_operateAsync(ControlObjectClient self, IedClientError* err, MmsValue* ctlVal, uint64_t operTime,
-        ControlObjectClient_ControlActionHandler handler, void* parameter)
+                                 ControlObjectClient_ControlActionHandler handler, void * parameter)
 {
-    *err = IED_ERROR_OK;
-    uint32_t invokeId = 0;
+  *err = IED_ERROR_OK;
+  uint32_t invokeId = 0;
 
-    if (ctlVal == NULL)
-    {
-        *err = IED_ERROR_USER_PROVIDED_INVALID_ARGUMENT;
-        goto exit_function;
-    }
+  if(ctlVal == NULL)
+  {
+    *err = IED_ERROR_USER_PROVIDED_INVALID_ARGUMENT;
+    goto exit_function;
+  }
 
-    IedConnectionOutstandingCall call = iedConnection_allocateOutstandingCall(self->connection);
+  IedConnectionOutstandingCall call = iedConnection_allocateOutstandingCall(self->connection);
 
-    if (call == NULL)
-    {
-        *err = IED_ERROR_OUTSTANDING_CALL_LIMIT_REACHED;
-        goto exit_function;
-    }
+  if(call == NULL)
+  {
+    *err = IED_ERROR_OUTSTANDING_CALL_LIMIT_REACHED;
+    goto exit_function;
+  }
 
-    call->callback = handler;
-    call->callbackParameter = parameter;
+  call->callback = handler;
+  call->callbackParameter = parameter;
 
-    MmsValue* operParameters = prepareOperParameters(self, ctlVal, operTime);
+  MmsValue* operParameters = prepareOperParameters(self, ctlVal, operTime);
 
-    char domainId[65];
-    char itemId[65];
+  char domainId[65];
+  char itemId[65];
 
-    MmsMapping_getMmsDomainFromObjectReference(self->objectReference, domainId);
+  MmsMapping_getMmsDomainFromObjectReference(self->objectReference, domainId);
 
-    convertToMmsAndInsertFC(itemId, self->objectReference + strlen(domainId) + 1, "CO");
+  convertToMmsAndInsertFC(itemId, self->objectReference + strlen(domainId) + 1, "CO");
 
-    StringUtils_appendString(itemId, 65, "$Oper");
+  StringUtils_appendString(itemId, 65, "$Oper");
 
-    if (DEBUG_IED_CLIENT)
-        printf("IED_CLIENT: operate: %s/%s\n", domainId, itemId);
+  if(DEBUG_IED_CLIENT)
+    printf("IED_CLIENT: operate: %s/%s\n", domainId, itemId);
 
-    MmsError mmsError;
+  MmsError mmsError;
 
-    MmsConnection_writeVariableAsync(self->connection->connection, &(call->invokeId), &mmsError, domainId, itemId, operParameters, internalOperateHandler, self);
+  MmsConnection_writeVariableAsync(self->connection->connection, &(call->invokeId), &mmsError, domainId, itemId,
+                                   operParameters, internalOperateHandler, self);
 
-    invokeId = call->invokeId;
+  invokeId = call->invokeId;
 
-    MmsValue_setElement(operParameters, 0, NULL);
-    MmsValue_delete(operParameters);
+  MmsValue_setElement(operParameters, 0, NULL);
+  MmsValue_delete(operParameters);
 
-    *err = iedConnection_mapMmsErrorToIedError(mmsError);
+  *err = iedConnection_mapMmsErrorToIedError(mmsError);
 
-    if (mmsError != MMS_ERROR_NONE)
-    {
-        iedConnection_releaseOutstandingCall(self->connection, call);
-    }
-    else
-    {
-        MmsValue_update(self->ctlVal, ctlVal);
+  if(mmsError != MMS_ERROR_NONE)
+  {
+    iedConnection_releaseOutstandingCall(self->connection, call);
+  }
+  else
+  {
+    MmsValue_update(self->ctlVal, ctlVal);
 
-        self->opertime = operTime;
-    }
+    self->opertime = operTime;
+  }
 
 exit_function:
 
-    if (self->analogValue)
-        MmsValue_setElement(self->analogValue, 0, NULL);
+  if(self->analogValue)
+    MmsValue_setElement(self->analogValue, 0, NULL);
 
-    return invokeId;
+  return invokeId;
 }
 
-static MmsValue*
+static MmsValue *
 prepareSBOwParameters(ControlObjectClient self, MmsValue* ctlVal)
 {
-    int selValElementCount = 5;
+  int selValElementCount = 5;
 
-    if (self->hasTimeActivatedMode)
-        selValElementCount++;
+  if(self->hasTimeActivatedMode)
+    selValElementCount++;
 
-    if (self->hasCtlNum)
-        selValElementCount++;
+  if(self->hasCtlNum)
+    selValElementCount++;
 
-    MmsValue* selValParameters = MmsValue_createEmptyStructure(selValElementCount);
+  MmsValue* selValParameters = MmsValue_createEmptyStructure(selValElementCount);
 
-    /* support simplified usage of APC controls - user doesn't need to create the structure */
-    if (self->analogValue)
+  /* support simplified usage of APC controls - user doesn't need to create the structure */
+  if(self->analogValue)
+  {
+    if(MmsValue_getType(ctlVal) != MMS_STRUCTURE)
     {
-        if (MmsValue_getType(ctlVal) != MMS_STRUCTURE)
-        {
-            MmsValue_setElement(self->analogValue, 0, ctlVal);
-            ctlVal = self->analogValue;
-        }
+      MmsValue_setElement(self->analogValue, 0, ctlVal);
+      ctlVal = self->analogValue;
     }
+  }
 
-    MmsValue_setElement(selValParameters, 0, ctlVal);
+  MmsValue_setElement(selValParameters, 0, ctlVal);
 
-    int index = 1;
+  int index = 1;
 
-    if (self->hasTimeActivatedMode)
-    {
-        MmsValue* operTm = MmsValue_newUtcTimeByMsTime(0);
-        MmsValue_setElement(selValParameters, index++, operTm);
-    }
+  if(self->hasTimeActivatedMode)
+  {
+    MmsValue* operTm = MmsValue_newUtcTimeByMsTime(0);
+    MmsValue_setElement(selValParameters, index++, operTm);
+  }
 
-    MmsValue* origin = createOriginValue(self);
-    MmsValue_setElement(selValParameters, index++, origin);
+  MmsValue* origin = createOriginValue(self);
+  MmsValue_setElement(selValParameters, index++, origin);
 
-    self->ctlNum++;
+  self->ctlNum++;
 
-    if (self->hasCtlNum)
-    {
-        MmsValue* ctlNum = MmsValue_newUnsignedFromUint32(self->ctlNum);
-        MmsValue_setElement(selValParameters, index++, ctlNum);
-    }
+  if(self->hasCtlNum)
+  {
+    MmsValue* ctlNum = MmsValue_newUnsignedFromUint32(self->ctlNum);
+    MmsValue_setElement(selValParameters, index++, ctlNum);
+  }
 
-    uint64_t timestamp = Hal_getTimeInMs();
-    MmsValue* ctlTime;
+  uint64_t timestamp = Hal_getTimeInMs();
+  MmsValue* ctlTime;
 
-    if (self->useConstantT)
-        self->constantT = timestamp;
+  if(self->useConstantT)
+    self->constantT = timestamp;
 
-    if (self->edition == 2)
-    {
-        ctlTime = MmsValue_newUtcTimeByMsTime(timestamp);
+  if(self->edition == 2)
+  {
+    ctlTime = MmsValue_newUtcTimeByMsTime(timestamp);
 
-        if (self->connection)
-            MmsValue_setUtcTimeQuality(ctlTime, self->connection->timeQuality);
-    }
-    else
-    {
-        ctlTime = MmsValue_newBinaryTime(false);
-        MmsValue_setBinaryTime(ctlTime, timestamp);
-    }
+    if(self->connection)
+      MmsValue_setUtcTimeQuality(ctlTime, self->connection->timeQuality);
+  }
+  else
+  {
+    ctlTime = MmsValue_newBinaryTime(false);
+    MmsValue_setBinaryTime(ctlTime, timestamp);
+  }
 
-    MmsValue_setElement(selValParameters, index++, ctlTime);
+  MmsValue_setElement(selValParameters, index++, ctlTime);
 
-    MmsValue* ctlTest = MmsValue_newBoolean(self->test);
-    MmsValue_setElement(selValParameters, index++, ctlTest);
+  MmsValue* ctlTest = MmsValue_newBoolean(self->test);
+  MmsValue_setElement(selValParameters, index++, ctlTest);
 
-    MmsValue* check = MmsValue_newBitString(2);
-    MmsValue_setBitStringBit(check, 1, self->interlockCheck);
-    MmsValue_setBitStringBit(check, 0, self->synchroCheck);
-    MmsValue_setElement(selValParameters, index++, check);
+  MmsValue* check = MmsValue_newBitString(2);
+  MmsValue_setBitStringBit(check, 1, self->interlockCheck);
+  MmsValue_setBitStringBit(check, 0, self->synchroCheck);
+  MmsValue_setElement(selValParameters, index++, check);
 
-    return selValParameters;
+  return selValParameters;
 }
 
 bool
 ControlObjectClient_selectWithValue(ControlObjectClient self, MmsValue* ctlVal)
 {
-    bool retVal = true;
+  bool retVal = true;
 
-    resetLastApplError(self);
+  resetLastApplError(self);
 
-    char domainId[65];
-    char itemId[65];
+  char domainId[65];
+  char itemId[65];
 
-    MmsMapping_getMmsDomainFromObjectReference(self->objectReference, domainId);
+  MmsMapping_getMmsDomainFromObjectReference(self->objectReference, domainId);
 
-    convertToMmsAndInsertFC(itemId, self->objectReference + strlen(domainId) + 1, "CO");
+  convertToMmsAndInsertFC(itemId, self->objectReference + strlen(domainId) + 1, "CO");
 
-    StringUtils_appendString(itemId, 65, "$SBOw");
+  StringUtils_appendString(itemId, 65, "$SBOw");
 
-    if (DEBUG_IED_CLIENT)
-        printf("IED_CLIENT: select with value: %s/%s\n", domainId, itemId);
+  if(DEBUG_IED_CLIENT)
+    printf("IED_CLIENT: select with value: %s/%s\n", domainId, itemId);
 
-    MmsError mmsError;
+  MmsError mmsError;
 
-    int selValElementCount = 5;
+  int selValElementCount = 5;
 
-    if (self->hasTimeActivatedMode)
-        selValElementCount++;
+  if(self->hasTimeActivatedMode)
+    selValElementCount++;
 
-    if (self->hasCtlNum)
-        selValElementCount++;
+  if(self->hasCtlNum)
+    selValElementCount++;
 
-    MmsValue* selValParameters = prepareSBOwParameters(self, ctlVal);
+  MmsValue* selValParameters = prepareSBOwParameters(self, ctlVal);
 
-    MmsDataAccessError writeResult = MmsConnection_writeVariable(IedConnection_getMmsConnection(self->connection),
-            &mmsError, domainId, itemId, selValParameters);
+  MmsDataAccessError writeResult = MmsConnection_writeVariable(IedConnection_getMmsConnection(self->connection),
+                                                               &mmsError, domainId, itemId, selValParameters);
 
-    MmsValue_setElement(selValParameters, 0, NULL);
-    MmsValue_delete(selValParameters);
+  MmsValue_setElement(selValParameters, 0, NULL);
+  MmsValue_delete(selValParameters);
 
-    self->lastMmsError = mmsError;
-    self->lastAccessError = writeResult;
+  self->lastMmsError = mmsError;
+  self->lastAccessError = writeResult;
 
-    if (mmsError != MMS_ERROR_NONE)
+  if(mmsError != MMS_ERROR_NONE)
+  {
+    if(DEBUG_IED_CLIENT)
+      printf("IED_CLIENT: select-with-value failed!\n");
+
+    retVal = false;
+
+    goto exit_function;
+  }
+  else
+  {
+    if(writeResult != DATA_ACCESS_ERROR_SUCCESS)
     {
-        if (DEBUG_IED_CLIENT)
-            printf("IED_CLIENT: select-with-value failed!\n");
+      if(DEBUG_IED_CLIENT)
+        printf("IED_CLIENT: select-with-value failed!\n");
 
-        retVal = false;
+      retVal = false;
 
-        goto exit_function;
+      goto exit_function;
     }
-    else
-    {
-        if (writeResult != DATA_ACCESS_ERROR_SUCCESS)
-        {
-            if (DEBUG_IED_CLIENT)
-                printf("IED_CLIENT: select-with-value failed!\n");
+  }
 
-            retVal = false;
-
-            goto exit_function;
-        }
-    }
-
-    MmsValue_update(self->ctlVal, ctlVal);
+  MmsValue_update(self->ctlVal, ctlVal);
 
 exit_function:
 
-    if (self->analogValue)
-        MmsValue_setElement(self->analogValue, 0, NULL);
+  if(self->analogValue)
+    MmsValue_setElement(self->analogValue, 0, NULL);
 
-    return retVal;
+  return retVal;
 }
 
 static void
-internalSelWithValHandler(uint32_t invokeId, void* parameter, MmsError err, MmsDataAccessError accessError)
+internalSelWithValHandler(uint32_t invokeId, void * parameter, MmsError err, MmsDataAccessError accessError)
 {
-    ControlObjectClient self = (ControlObjectClient)parameter;
+  ControlObjectClient self = (ControlObjectClient)parameter;
 
-    IedConnectionOutstandingCall call = iedConnection_lookupOutstandingCall(self->connection, invokeId);
+  IedConnectionOutstandingCall call = iedConnection_lookupOutstandingCall(self->connection, invokeId);
 
-    if (call)
+  if(call)
+  {
+    ControlObjectClient_ControlActionHandler handler = (ControlObjectClient_ControlActionHandler)call->callback;
+
+    IedClientError iedError = iedConnection_mapMmsErrorToIedError(err);
+
+    bool success = false;
+
+    self->lastMmsError = err;
+    self->lastAccessError = accessError;
+
+    if(iedError == IED_ERROR_OK)
     {
-        ControlObjectClient_ControlActionHandler handler = (ControlObjectClient_ControlActionHandler)call->callback;
+      iedError = iedConnection_mapDataAccessErrorToIedError(accessError);
 
-        IedClientError iedError = iedConnection_mapMmsErrorToIedError(err);
+      if(iedError == IED_ERROR_OK)
+        success = true;
+    }
 
-        bool success = false;
-
-        self->lastMmsError = err;
-        self->lastAccessError = accessError;
-
-        if (iedError == IED_ERROR_OK)
-        {
-            iedError = iedConnection_mapDataAccessErrorToIedError(accessError);
-
-            if (iedError == IED_ERROR_OK)
-                success = true;
-        }
-
-        if (success)
-        {
-            if (DEBUG_IED_CLIENT)
-                printf("IED_CLIENT: select-with-value+\n");
-        }
-        else
-        {
-            if (DEBUG_IED_CLIENT)
-                printf("IED_CLIENT: select-with-value failed!\n");
-        }
-
-        handler(invokeId, call->callbackParameter, iedError, CONTROL_ACTION_TYPE_SELECT, success);
-
-        iedConnection_releaseOutstandingCall(self->connection, call);
+    if(success)
+    {
+      if(DEBUG_IED_CLIENT)
+        printf("IED_CLIENT: select-with-value+\n");
     }
     else
     {
-        if (DEBUG_IED_CLIENT)
-            printf("IED_CLIENT: internal error - no matching outstanding call!\n");
+      if(DEBUG_IED_CLIENT)
+        printf("IED_CLIENT: select-with-value failed!\n");
     }
+
+    handler(invokeId, call->callbackParameter, iedError, CONTROL_ACTION_TYPE_SELECT, success);
+
+    iedConnection_releaseOutstandingCall(self->connection, call);
+  }
+  else
+  {
+    if(DEBUG_IED_CLIENT)
+      printf("IED_CLIENT: internal error - no matching outstanding call!\n");
+  }
 }
 
 uint32_t
 ControlObjectClient_selectWithValueAsync(ControlObjectClient self, IedClientError* err, MmsValue* ctlVal,
-                                         ControlObjectClient_ControlActionHandler handler, void* parameter)
+                                         ControlObjectClient_ControlActionHandler handler, void * parameter)
 {
-    *err = IED_ERROR_OK;
-    uint32_t invokeId = 0;
+  *err = IED_ERROR_OK;
+  uint32_t invokeId = 0;
 
-    if (ctlVal == NULL)
-    {
-        *err = IED_ERROR_USER_PROVIDED_INVALID_ARGUMENT;
-        goto exit_function;
-    }
+  if(ctlVal == NULL)
+  {
+    *err = IED_ERROR_USER_PROVIDED_INVALID_ARGUMENT;
+    goto exit_function;
+  }
 
-    IedConnectionOutstandingCall call = iedConnection_allocateOutstandingCall(self->connection);
+  IedConnectionOutstandingCall call = iedConnection_allocateOutstandingCall(self->connection);
 
-    if (call == NULL)
-    {
-        *err = IED_ERROR_OUTSTANDING_CALL_LIMIT_REACHED;
-        goto exit_function;
-    }
+  if(call == NULL)
+  {
+    *err = IED_ERROR_OUTSTANDING_CALL_LIMIT_REACHED;
+    goto exit_function;
+  }
 
-    MmsValue* selValParameters = prepareSBOwParameters(self, ctlVal);
+  MmsValue* selValParameters = prepareSBOwParameters(self, ctlVal);
 
-    resetLastApplError(self);
+  resetLastApplError(self);
 
-    char domainId[65];
-    char itemId[65];
+  char domainId[65];
+  char itemId[65];
 
-    MmsMapping_getMmsDomainFromObjectReference(self->objectReference, domainId);
+  MmsMapping_getMmsDomainFromObjectReference(self->objectReference, domainId);
 
-    convertToMmsAndInsertFC(itemId, self->objectReference + strlen(domainId) + 1, "CO");
+  convertToMmsAndInsertFC(itemId, self->objectReference + strlen(domainId) + 1, "CO");
 
-    StringUtils_appendString(itemId, 65, "$SBOw");
+  StringUtils_appendString(itemId, 65, "$SBOw");
 
-    call->callback = handler;
-    call->callbackParameter = parameter;
+  call->callback = handler;
+  call->callbackParameter = parameter;
 
-    MmsError mmsError;
+  MmsError mmsError;
 
-    if (DEBUG_IED_CLIENT)
-        printf("IED_CLIENT: select with value: %s/%s\n", domainId, itemId);
+  if(DEBUG_IED_CLIENT)
+    printf("IED_CLIENT: select with value: %s/%s\n", domainId, itemId);
 
-    MmsConnection_writeVariableAsync(self->connection->connection, &(call->invokeId), &mmsError, domainId, itemId,
-                                     selValParameters, internalSelWithValHandler, self);
+  MmsConnection_writeVariableAsync(self->connection->connection, &(call->invokeId), &mmsError, domainId, itemId,
+                                   selValParameters, internalSelWithValHandler, self);
 
-    invokeId = call->invokeId;
+  invokeId = call->invokeId;
 
-    MmsValue_setElement(selValParameters, 0, NULL);
-    MmsValue_delete(selValParameters);
+  MmsValue_setElement(selValParameters, 0, NULL);
+  MmsValue_delete(selValParameters);
 
-    *err = iedConnection_mapMmsErrorToIedError(mmsError);
+  *err = iedConnection_mapMmsErrorToIedError(mmsError);
 
-    if (mmsError != MMS_ERROR_NONE)
-    {
-        iedConnection_releaseOutstandingCall(self->connection, call);
-    }
-    else
-    {
-        MmsValue_update(self->ctlVal, ctlVal);
-    }
+  if(mmsError != MMS_ERROR_NONE)
+  {
+    iedConnection_releaseOutstandingCall(self->connection, call);
+  }
+  else
+  {
+    MmsValue_update(self->ctlVal, ctlVal);
+  }
 
 exit_function:
 
-    if (self->analogValue)
-        MmsValue_setElement(self->analogValue, 0, NULL);
+  if(self->analogValue)
+    MmsValue_setElement(self->analogValue, 0, NULL);
 
-    return invokeId;
+  return invokeId;
 }
 
 bool
 ControlObjectClient_select(ControlObjectClient self)
 {
-    resetLastApplError(self);
+  resetLastApplError(self);
 
-    char domainId[65];
-    char itemId[65];
+  char domainId[65];
+  char itemId[65];
 
-    MmsMapping_getMmsDomainFromObjectReference(self->objectReference, domainId);
+  MmsMapping_getMmsDomainFromObjectReference(self->objectReference, domainId);
 
-    convertToMmsAndInsertFC(itemId, self->objectReference + strlen(domainId) + 1, "CO");
+  convertToMmsAndInsertFC(itemId, self->objectReference + strlen(domainId) + 1, "CO");
 
-    StringUtils_appendString(itemId, 65, "$SBO");
+  StringUtils_appendString(itemId, 65, "$SBO");
 
-    if (DEBUG_IED_CLIENT)
-        printf("IED_CLIENT: select: %s/%s\n", domainId, itemId);
+  if(DEBUG_IED_CLIENT)
+    printf("IED_CLIENT: select: %s/%s\n", domainId, itemId);
 
-    MmsError mmsError;
+  MmsError mmsError;
 
-    MmsValue* value =
-        MmsConnection_readVariable(IedConnection_getMmsConnection(self->connection), &mmsError, domainId, itemId);
+  MmsValue* value =
+    MmsConnection_readVariable(IedConnection_getMmsConnection(self->connection), &mmsError, domainId, itemId);
 
-    bool selected = false;
+  bool selected = false;
 
-    self->ctlNum++;
+  self->ctlNum++;
 
-    self->lastMmsError = mmsError;
-    self->lastAccessError = DATA_ACCESS_ERROR_SUCCESS;
+  self->lastMmsError = mmsError;
+  self->lastAccessError = DATA_ACCESS_ERROR_SUCCESS;
 
-    if (value == NULL)
+  if(value == NULL)
+  {
+    if(DEBUG_IED_CLIENT)
+      printf("IED_CLIENT: select: read SBO failed!\n");
+    goto exit_function;
+  }
+
+  if(MmsValue_getType(value) == MMS_VISIBLE_STRING)
+  {
+    if(strcmp(MmsValue_toString(value), "") == 0)
     {
-        if (DEBUG_IED_CLIENT)
-            printf("IED_CLIENT: select: read SBO failed!\n");
-        goto exit_function;
-    }
-
-    if (MmsValue_getType(value) == MMS_VISIBLE_STRING)
-    {
-        if (strcmp(MmsValue_toString(value), "") == 0)
-        {
-            if (DEBUG_IED_CLIENT)
-                printf("select-response-\n");
-        }
-        else
-        {
-            if (DEBUG_IED_CLIENT)
-                printf("select-response+: (%s)\n", MmsValue_toString(value));
-            selected = true;
-        }
-    }
-    else if (MmsValue_getType(value) == MMS_DATA_ACCESS_ERROR)
-    {
-        self->lastAccessError = MmsValue_getDataAccessError(value);
-
-        if (DEBUG_IED_CLIENT)
-            printf("IED_CLIENT: select returned data-access-error: %i\n", self->lastAccessError);
+      if(DEBUG_IED_CLIENT)
+        printf("select-response-\n");
     }
     else
     {
-        if (DEBUG_IED_CLIENT)
-            printf("IED_CLIENT: select: unexpected response from server!\n");
+      if(DEBUG_IED_CLIENT)
+        printf("select-response+: (%s)\n", MmsValue_toString(value));
+      selected = true;
     }
+  }
+  else if(MmsValue_getType(value) == MMS_DATA_ACCESS_ERROR)
+  {
+    self->lastAccessError = MmsValue_getDataAccessError(value);
 
-    MmsValue_delete(value);
+    if(DEBUG_IED_CLIENT)
+      printf("IED_CLIENT: select returned data-access-error: %i\n", self->lastAccessError);
+  }
+  else
+  {
+    if(DEBUG_IED_CLIENT)
+      printf("IED_CLIENT: select: unexpected response from server!\n");
+  }
+
+  MmsValue_delete(value);
 
 exit_function:
-    return selected;
+  return selected;
 }
 
 static void
-internalSelectHandler(uint32_t invokeId, void* parameter, MmsError err, MmsValue* value)
+internalSelectHandler(uint32_t invokeId, void * parameter, MmsError err, MmsValue* value)
 {
-    ControlObjectClient self = (ControlObjectClient) parameter;
+  ControlObjectClient self = (ControlObjectClient) parameter;
 
-    IedConnectionOutstandingCall call = iedConnection_lookupOutstandingCall(self->connection, invokeId);
+  IedConnectionOutstandingCall call = iedConnection_lookupOutstandingCall(self->connection, invokeId);
 
-    if (call)
+  if(call)
+  {
+    ControlObjectClient_ControlActionHandler handler = (ControlObjectClient_ControlActionHandler) call->callback;
+
+    IedClientError iedError = iedConnection_mapMmsErrorToIedError(err);
+
+    bool success = false;
+
+    self->lastMmsError = err;
+    self->lastAccessError = DATA_ACCESS_ERROR_SUCCESS;
+
+    self->ctlNum++;
+
+    if(iedError == IED_ERROR_OK)
     {
-        ControlObjectClient_ControlActionHandler handler =  (ControlObjectClient_ControlActionHandler) call->callback;
+      if(MmsValue_getType(value) == MMS_DATA_ACCESS_ERROR)
+      {
+        MmsDataAccessError dataAccessError = MmsValue_getDataAccessError(value);
+        self->lastAccessError = dataAccessError;
+        iedError = iedConnection_mapDataAccessErrorToIedError(dataAccessError);
+      }
+      else if(MmsValue_getType(value) == MMS_VISIBLE_STRING)
+      {
+        char domainId[65];
+        char itemId[65];
 
-        IedClientError iedError = iedConnection_mapMmsErrorToIedError(err);
+        MmsMapping_getMmsDomainFromObjectReference(self->objectReference, domainId);
 
-        bool success = false;
+        convertToMmsAndInsertFC(itemId, self->objectReference + strlen(domainId) + 1, "CO");
 
-        self->lastMmsError = err;
-        self->lastAccessError = DATA_ACCESS_ERROR_SUCCESS;
+        StringUtils_appendString(itemId, 65, "$SBO");
 
-        self->ctlNum++;
-
-        if (iedError == IED_ERROR_OK)
+        if(strcmp(MmsValue_toString(value), "") == 0)
         {
-            if (MmsValue_getType(value) == MMS_DATA_ACCESS_ERROR)
-            {
-                MmsDataAccessError dataAccessError = MmsValue_getDataAccessError(value);
-                self->lastAccessError = dataAccessError;
-                iedError = iedConnection_mapDataAccessErrorToIedError(dataAccessError);
-            }
-            else if (MmsValue_getType(value) == MMS_VISIBLE_STRING)
-            {
-                char domainId[65];
-                char itemId[65];
-
-                MmsMapping_getMmsDomainFromObjectReference(self->objectReference, domainId);
-
-                convertToMmsAndInsertFC(itemId, self->objectReference + strlen(domainId) + 1, "CO");
-
-                StringUtils_appendString(itemId, 65, "$SBO");
-
-                if (strcmp(MmsValue_toString(value), "") == 0)
-                {
-                    if (DEBUG_IED_CLIENT)
-                        printf("select-response-\n");
-                }
-                else
-                {
-                    if (DEBUG_IED_CLIENT)
-                        printf("select-response+: (%s)\n", MmsValue_toString(value));
-                    success = true;
-                }
-            }
-            else
-            {
-                if (DEBUG_IED_CLIENT)
-                    printf("IED_CLIENT: select: unexpected response from server!\n");
-            }
+          if(DEBUG_IED_CLIENT)
+            printf("select-response-\n");
         }
-
-        handler(invokeId, call->callbackParameter, iedError, CONTROL_ACTION_TYPE_SELECT, success);
-
-        iedConnection_releaseOutstandingCall(self->connection, call);
+        else
+        {
+          if(DEBUG_IED_CLIENT)
+            printf("select-response+: (%s)\n", MmsValue_toString(value));
+          success = true;
+        }
+      }
+      else
+      {
+        if(DEBUG_IED_CLIENT)
+          printf("IED_CLIENT: select: unexpected response from server!\n");
+      }
     }
-    else
-    {
-        if (DEBUG_IED_CLIENT)
-            printf("IED_CLIENT: internal error - no matching outstanding call!\n");
-    }
 
-    MmsValue_delete(value);
+    handler(invokeId, call->callbackParameter, iedError, CONTROL_ACTION_TYPE_SELECT, success);
+
+    iedConnection_releaseOutstandingCall(self->connection, call);
+  }
+  else
+  {
+    if(DEBUG_IED_CLIENT)
+      printf("IED_CLIENT: internal error - no matching outstanding call!\n");
+  }
+
+  MmsValue_delete(value);
 }
 
 uint32_t
-ControlObjectClient_selectAsync(ControlObjectClient self, IedClientError* err, ControlObjectClient_ControlActionHandler handler, void* parameter)
+ControlObjectClient_selectAsync(ControlObjectClient self, IedClientError* err,
+                                ControlObjectClient_ControlActionHandler handler, void * parameter)
 {
-    *err = IED_ERROR_OK;
-    uint32_t invokeId = 0;
+  *err = IED_ERROR_OK;
+  uint32_t invokeId = 0;
 
-    resetLastApplError(self);
+  resetLastApplError(self);
 
-    char domainId[65];
-    char itemId[65];
+  char domainId[65];
+  char itemId[65];
 
-    MmsMapping_getMmsDomainFromObjectReference(self->objectReference, domainId);
+  MmsMapping_getMmsDomainFromObjectReference(self->objectReference, domainId);
 
-    convertToMmsAndInsertFC(itemId, self->objectReference + strlen(domainId) + 1, "CO");
+  convertToMmsAndInsertFC(itemId, self->objectReference + strlen(domainId) + 1, "CO");
 
-    StringUtils_appendString(itemId, 65, "$SBO");
+  StringUtils_appendString(itemId, 65, "$SBO");
 
-    IedConnectionOutstandingCall call = iedConnection_allocateOutstandingCall(self->connection);
+  IedConnectionOutstandingCall call = iedConnection_allocateOutstandingCall(self->connection);
 
-    if (call == NULL)
-    {
-        *err = IED_ERROR_OUTSTANDING_CALL_LIMIT_REACHED;
-        return 0;
-    }
+  if(call == NULL)
+  {
+    *err = IED_ERROR_OUTSTANDING_CALL_LIMIT_REACHED;
+    return 0;
+  }
 
-    call->callback = handler;
-    call->callbackParameter = parameter;
+  call->callback = handler;
+  call->callbackParameter = parameter;
 
-    MmsError mmsError;
+  MmsError mmsError;
 
-    if (DEBUG_IED_CLIENT)
-        printf("IED_CLIENT: select: %s/%s\n", domainId, itemId);
+  if(DEBUG_IED_CLIENT)
+    printf("IED_CLIENT: select: %s/%s\n", domainId, itemId);
 
-    MmsConnection_readVariableAsync(IedConnection_getMmsConnection(self->connection),
-            &(call->invokeId), &mmsError, domainId, itemId, internalSelectHandler, self);
+  MmsConnection_readVariableAsync(IedConnection_getMmsConnection(self->connection),
+                                  &(call->invokeId), &mmsError, domainId, itemId, internalSelectHandler, self);
 
-    invokeId = call->invokeId;
+  invokeId = call->invokeId;
 
-    *err = iedConnection_mapMmsErrorToIedError(mmsError);
+  *err = iedConnection_mapMmsErrorToIedError(mmsError);
 
-    if (mmsError != MMS_ERROR_NONE)
-    {
-        iedConnection_releaseOutstandingCall(self->connection, call);
-    }
+  if(mmsError != MMS_ERROR_NONE)
+  {
+    iedConnection_releaseOutstandingCall(self->connection, call);
+  }
 
-    return invokeId;
+  return invokeId;
 }
 
-static MmsValue*
+static MmsValue *
 createCancelParameters(ControlObjectClient self)
 {
-    MmsValue* cancelParameters;
+  MmsValue* cancelParameters;
 
-    if (self->hasTimeActivatedMode)
-        cancelParameters = MmsValue_createEmptyStructure(6);
-    else
-        cancelParameters = MmsValue_createEmptyStructure(5);
+  if(self->hasTimeActivatedMode)
+    cancelParameters = MmsValue_createEmptyStructure(6);
+  else
+    cancelParameters = MmsValue_createEmptyStructure(5);
 
-    MmsValue_setElement(cancelParameters, 0, self->ctlVal);
+  MmsValue_setElement(cancelParameters, 0, self->ctlVal);
 
-    int index = 1;
+  int index = 1;
 
-    if (self->hasTimeActivatedMode)
-    {
-        MmsValue* operTm = MmsValue_newUtcTimeByMsTime(self->opertime);
-        MmsValue_setElement(cancelParameters, index++, operTm);
-    }
+  if(self->hasTimeActivatedMode)
+  {
+    MmsValue* operTm = MmsValue_newUtcTimeByMsTime(self->opertime);
+    MmsValue_setElement(cancelParameters, index++, operTm);
+  }
 
-    MmsValue* origin = createOriginValue(self);
+  MmsValue* origin = createOriginValue(self);
 
-    MmsValue_setElement(cancelParameters, index++, origin);
+  MmsValue_setElement(cancelParameters, index++, origin);
 
-    MmsValue* ctlNum = MmsValue_newUnsignedFromUint32(self->ctlNum);
-    MmsValue_setElement(cancelParameters, index++, ctlNum);
+  MmsValue* ctlNum = MmsValue_newUnsignedFromUint32(self->ctlNum);
+  MmsValue_setElement(cancelParameters, index++, ctlNum);
 
-    uint64_t timestamp;
+  uint64_t timestamp;
 
-    if (self->useConstantT)
-        timestamp = self->constantT;
-    else
-        timestamp = Hal_getTimeInMs();
+  if(self->useConstantT)
+    timestamp = self->constantT;
+  else
+    timestamp = Hal_getTimeInMs();
 
-    MmsValue* ctlTime;
+  MmsValue* ctlTime;
 
-    if (self->edition == 2)
-    {
-        ctlTime = MmsValue_newUtcTimeByMsTime(timestamp);
+  if(self->edition == 2)
+  {
+    ctlTime = MmsValue_newUtcTimeByMsTime(timestamp);
 
-        if (self->connection)
-            MmsValue_setUtcTimeQuality(ctlTime, self->connection->timeQuality);
-    }
-    else
-    {
-        ctlTime = MmsValue_newBinaryTime(false);
-        MmsValue_setBinaryTime(ctlTime, timestamp);
-    }
-    MmsValue_setElement(cancelParameters, index++, ctlTime);
+    if(self->connection)
+      MmsValue_setUtcTimeQuality(ctlTime, self->connection->timeQuality);
+  }
+  else
+  {
+    ctlTime = MmsValue_newBinaryTime(false);
+    MmsValue_setBinaryTime(ctlTime, timestamp);
+  }
+  MmsValue_setElement(cancelParameters, index++, ctlTime);
 
-    MmsValue* ctlTest = MmsValue_newBoolean(self->test);
-    MmsValue_setElement(cancelParameters, index++, ctlTest);
+  MmsValue* ctlTest = MmsValue_newBoolean(self->test);
+  MmsValue_setElement(cancelParameters, index++, ctlTest);
 
-    return cancelParameters;
+  return cancelParameters;
 }
 
 bool
 ControlObjectClient_cancel(ControlObjectClient self)
 {
-    resetLastApplError(self);
+  resetLastApplError(self);
 
-    MmsValue* cancelParameters = createCancelParameters(self);
+  MmsValue* cancelParameters = createCancelParameters(self);
 
-    char domainId[65];
-    char itemId[65];
+  char domainId[65];
+  char itemId[65];
 
-    MmsMapping_getMmsDomainFromObjectReference(self->objectReference, domainId);
+  MmsMapping_getMmsDomainFromObjectReference(self->objectReference, domainId);
 
-    convertToMmsAndInsertFC(itemId, self->objectReference + strlen(domainId) + 1, "CO");
+  convertToMmsAndInsertFC(itemId, self->objectReference + strlen(domainId) + 1, "CO");
 
-    StringUtils_appendString(itemId, 65, "$Cancel");
+  StringUtils_appendString(itemId, 65, "$Cancel");
 
-    if (DEBUG_IED_CLIENT)
-        printf("IED_CLIENT: cancel: %s/%s\n", domainId, itemId);
+  if(DEBUG_IED_CLIENT)
+    printf("IED_CLIENT: cancel: %s/%s\n", domainId, itemId);
 
-    MmsError mmsError;
+  MmsError mmsError;
 
-    MmsDataAccessError writeResult = MmsConnection_writeVariable(IedConnection_getMmsConnection(self->connection),
-            &mmsError, domainId, itemId, cancelParameters);
+  MmsDataAccessError writeResult = MmsConnection_writeVariable(IedConnection_getMmsConnection(self->connection),
+                                                               &mmsError, domainId, itemId, cancelParameters);
 
-    self->lastMmsError = mmsError;
-    self->lastAccessError = writeResult;
+  self->lastMmsError = mmsError;
+  self->lastAccessError = writeResult;
 
-    MmsValue_setElement(cancelParameters, 0, NULL);
-    MmsValue_delete(cancelParameters);
+  MmsValue_setElement(cancelParameters, 0, NULL);
+  MmsValue_delete(cancelParameters);
 
-    if (mmsError != MMS_ERROR_NONE)
+  if(mmsError != MMS_ERROR_NONE)
+  {
+    if(DEBUG_IED_CLIENT)
+      printf("IED_CLIENT: cancel failed!\n");
+    return false;
+  }
+  else
+  {
+    if(writeResult != DATA_ACCESS_ERROR_SUCCESS)
     {
-        if (DEBUG_IED_CLIENT)
-            printf("IED_CLIENT: cancel failed!\n");
-        return false;
+      if(DEBUG_IED_CLIENT)
+        printf("IED_CLIENT: cancel failed!\n");
+      return false;
     }
-    else
-    {
-        if (writeResult != DATA_ACCESS_ERROR_SUCCESS)
-        {
-            if (DEBUG_IED_CLIENT)
-                printf("IED_CLIENT: cancel failed!\n");
-            return false;
-        }
-    }
+  }
 
-    return true;
+  return true;
 }
 
 static void
-internalCancelHandler(uint32_t invokeId, void* parameter, MmsError err, MmsDataAccessError accessError)
+internalCancelHandler(uint32_t invokeId, void * parameter, MmsError err, MmsDataAccessError accessError)
 {
-    ControlObjectClient self = (ControlObjectClient)parameter;
+  ControlObjectClient self = (ControlObjectClient)parameter;
 
-    IedConnectionOutstandingCall call = iedConnection_lookupOutstandingCall(self->connection, invokeId);
+  IedConnectionOutstandingCall call = iedConnection_lookupOutstandingCall(self->connection, invokeId);
 
-    if (call)
+  if(call)
+  {
+    ControlObjectClient_ControlActionHandler handler = (ControlObjectClient_ControlActionHandler)call->callback;
+
+    IedClientError iedError = iedConnection_mapMmsErrorToIedError(err);
+
+    bool success = false;
+
+    self->lastMmsError = err;
+    self->lastAccessError = accessError;
+
+    if(iedError == IED_ERROR_OK)
     {
-        ControlObjectClient_ControlActionHandler handler = (ControlObjectClient_ControlActionHandler)call->callback;
+      iedError = iedConnection_mapDataAccessErrorToIedError(accessError);
 
-        IedClientError iedError = iedConnection_mapMmsErrorToIedError(err);
+      if(iedError == IED_ERROR_OK)
+        success = true;
+    }
 
-        bool success = false;
-
-        self->lastMmsError = err;
-        self->lastAccessError = accessError;
-
-        if (iedError == IED_ERROR_OK)
-        {
-            iedError = iedConnection_mapDataAccessErrorToIedError(accessError);
-
-            if (iedError == IED_ERROR_OK)
-                success = true;
-        }
-
-        if (success)
-        {
-            if (DEBUG_IED_CLIENT)
-                printf("IED_CLIENT: cancel+\n");
-        }
-        else
-        {
-            if (DEBUG_IED_CLIENT)
-                printf("IED_CLIENT: cancel failed!\n");
-        }
-
-        handler(invokeId, call->callbackParameter, iedError, CONTROL_ACTION_TYPE_CANCEL, success);
-
-        iedConnection_releaseOutstandingCall(self->connection, call);
+    if(success)
+    {
+      if(DEBUG_IED_CLIENT)
+        printf("IED_CLIENT: cancel+\n");
     }
     else
     {
-        if (DEBUG_IED_CLIENT)
-            printf("IED_CLIENT: internal error - no matching outstanding call!\n");
+      if(DEBUG_IED_CLIENT)
+        printf("IED_CLIENT: cancel failed!\n");
     }
+
+    handler(invokeId, call->callbackParameter, iedError, CONTROL_ACTION_TYPE_CANCEL, success);
+
+    iedConnection_releaseOutstandingCall(self->connection, call);
+  }
+  else
+  {
+    if(DEBUG_IED_CLIENT)
+      printf("IED_CLIENT: internal error - no matching outstanding call!\n");
+  }
 }
 
 uint32_t
 ControlObjectClient_cancelAsync(ControlObjectClient self, IedClientError* err,
-                                ControlObjectClient_ControlActionHandler handler, void* parameter)
+                                ControlObjectClient_ControlActionHandler handler, void * parameter)
 {
-    *err = IED_ERROR_OK;
-    uint32_t invokeId = 0;
+  *err = IED_ERROR_OK;
+  uint32_t invokeId = 0;
 
-    IedConnectionOutstandingCall call = iedConnection_allocateOutstandingCall(self->connection);
+  IedConnectionOutstandingCall call = iedConnection_allocateOutstandingCall(self->connection);
 
-    if (call == NULL)
-    {
-        *err = IED_ERROR_OUTSTANDING_CALL_LIMIT_REACHED;
-        goto exit_function;
-    }
+  if(call == NULL)
+  {
+    *err = IED_ERROR_OUTSTANDING_CALL_LIMIT_REACHED;
+    goto exit_function;
+  }
 
-    MmsValue* cancelParameters = createCancelParameters(self);
+  MmsValue* cancelParameters = createCancelParameters(self);
 
-    resetLastApplError(self);
+  resetLastApplError(self);
 
-    char domainId[65];
-    char itemId[65];
+  char domainId[65];
+  char itemId[65];
 
-    MmsMapping_getMmsDomainFromObjectReference(self->objectReference, domainId);
+  MmsMapping_getMmsDomainFromObjectReference(self->objectReference, domainId);
 
-    convertToMmsAndInsertFC(itemId, self->objectReference + strlen(domainId) + 1, "CO");
+  convertToMmsAndInsertFC(itemId, self->objectReference + strlen(domainId) + 1, "CO");
 
-    StringUtils_appendString(itemId, 65, "$Cancel");
+  StringUtils_appendString(itemId, 65, "$Cancel");
 
-    call->callback = handler;
-    call->callbackParameter = parameter;
+  call->callback = handler;
+  call->callbackParameter = parameter;
 
-    MmsError mmsError;
+  MmsError mmsError;
 
-    if (DEBUG_IED_CLIENT)
-        printf("IED_CLIENT: select with value: %s/%s\n", domainId, itemId);
+  if(DEBUG_IED_CLIENT)
+    printf("IED_CLIENT: select with value: %s/%s\n", domainId, itemId);
 
-    MmsConnection_writeVariableAsync(self->connection->connection, &(call->invokeId), &mmsError, domainId, itemId,
-                                     cancelParameters, internalCancelHandler, self);
+  MmsConnection_writeVariableAsync(self->connection->connection, &(call->invokeId), &mmsError, domainId, itemId,
+                                   cancelParameters, internalCancelHandler, self);
 
-    invokeId = call->invokeId;
+  invokeId = call->invokeId;
 
-    MmsValue_setElement(cancelParameters, 0, NULL);
-    MmsValue_delete(cancelParameters);
+  MmsValue_setElement(cancelParameters, 0, NULL);
+  MmsValue_delete(cancelParameters);
 
-    *err = iedConnection_mapMmsErrorToIedError(mmsError);
+  *err = iedConnection_mapMmsErrorToIedError(mmsError);
 
-    if (mmsError != MMS_ERROR_NONE)
-    {
-        iedConnection_releaseOutstandingCall(self->connection, call);
-    }
+  if(mmsError != MMS_ERROR_NONE)
+  {
+    iedConnection_releaseOutstandingCall(self->connection, call);
+  }
 
 exit_function:
-    return invokeId;
+  return invokeId;
 }
 
 void
 ControlObjectClient_useConstantT(ControlObjectClient self, bool useConstantT)
 {
-    self->useConstantT = useConstantT;
+  self->useConstantT = useConstantT;
 }
 
 void
 ControlObjectClient_enableInterlockCheck(ControlObjectClient self)
 {
-    self->interlockCheck = true;
+  self->interlockCheck = true;
 }
 
 void
 ControlObjectClient_setInterlockCheck(ControlObjectClient self, bool value)
 {
-    self->interlockCheck = value;
+  self->interlockCheck = value;
 }
 
 void
 ControlObjectClient_enableSynchroCheck(ControlObjectClient self)
 {
-    self->synchroCheck = true;
+  self->synchroCheck = true;
 }
 
 void
 ControlObjectClient_setSynchroCheck(ControlObjectClient self, bool value)
 {
-    self->synchroCheck = value;
+  self->synchroCheck = value;
 }
 
 void
 ControlObjectClient_setTestMode(ControlObjectClient self, bool value)
 {
-    self->test = value;
+  self->test = value;
 }
 
 void
 ControlObjectClient_setLastApplError(ControlObjectClient self, LastApplError lastApplError)
 {
-    self->lastApplError = lastApplError;
+  self->lastApplError = lastApplError;
 }
 
 LastApplError
 ControlObjectClient_getLastApplError(ControlObjectClient self)
 {
-    return self->lastApplError;
+  return self->lastApplError;
 }
 
 void
 ControlObjectClient_setCtlNum(ControlObjectClient self, uint8_t ctlNum)
 {
-    self->ctlNum = ctlNum;
+  self->ctlNum = ctlNum;
 }
 
 void
 controlObjectClient_invokeCommandTerminationHandler(ControlObjectClient self)
 {
-    if (self->commandTerminationHandler)
-        self->commandTerminationHandler(self->commandTerminaionHandlerParameter, self);
+  if(self->commandTerminationHandler)
+    self->commandTerminationHandler(self->commandTerminaionHandlerParameter, self);
 }

@@ -45,7 +45,7 @@ extern "C" {
 #include "tls_config.h"
 #include "hal_socket.h"
 
-typedef struct sTLSSocket* TLSSocket;
+typedef struct sTLSSocket * TLSSocket;
 
 /**
  * \brief This function create a new TLSSocket instance using the given Socket instance
@@ -75,8 +75,8 @@ TLSSocket_performHandshake(TLSSocket self);
  *
  * \return the certificate byte buffer
  */
-PAL_API uint8_t*
-TLSSocket_getPeerCertificate(TLSSocket self, int* certSize);
+PAL_API uint8_t *
+TLSSocket_getPeerCertificate(TLSSocket self, int * certSize);
 
 /**
  * \brief read from socket to local buffer (non-blocking)
@@ -91,7 +91,7 @@ TLSSocket_getPeerCertificate(TLSSocket self, int* certSize);
  * \return the number of bytes read or -1 if an error occurred
  */
 PAL_API int
-TLSSocket_read(TLSSocket self, uint8_t* buf, int size);
+TLSSocket_read(TLSSocket self, uint8_t * buf, int size);
 
 /**
  * \brief send a message through the socket
@@ -103,7 +103,7 @@ TLSSocket_read(TLSSocket self, uint8_t* buf, int size);
  * \return number of bytes transmitted of -1 in case of an error
  */
 PAL_API int
-TLSSocket_write(TLSSocket self, uint8_t* buf, int size);
+TLSSocket_write(TLSSocket self, uint8_t * buf, int size);
 
 /**
  * \brief Closes the TLS connection and released all resources

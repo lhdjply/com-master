@@ -3,22 +3,22 @@
  *
  *  Copyright 2013-2018 Michael Zillgith
  *
- *	This file is part of libIEC61850.
+ *  This file is part of libIEC61850.
  *
- *	libIEC61850 is free software: you can redistribute it and/or modify
- *	it under the terms of the GNU General Public License as published by
- *	the Free Software Foundation, either version 3 of the License, or
- *	(at your option) any later version.
+ *  libIEC61850 is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- *	libIEC61850 is distributed in the hope that it will be useful,
- *	but WITHOUT ANY WARRANTY; without even the implied warranty of
- *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *	GNU General Public License for more details.
+ *  libIEC61850 is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
  *
- *	You should have received a copy of the GNU General Public License
- *	along with libIEC61850.  If not, see <http://www.gnu.org/licenses/>.
+ *  You should have received a copy of the GNU General Public License
+ *  along with libIEC61850.  If not, see <http://www.gnu.org/licenses/>.
  *
- *	See COPYING file for the complete license text.
+ *  See COPYING file for the complete license text.
  */
 
 #ifndef MMS_DEVICE_MODEL_H_
@@ -35,38 +35,41 @@
 extern "C" {
 #endif
 
-typedef struct {
-    char* deviceName;
+typedef struct
+{
+  char * deviceName;
 
-    /* MMS VMD scope variables support */
-    int namedVariablesCount;
-    MmsVariableSpecification** namedVariables;
+  /* MMS VMD scope variables support */
+  int namedVariablesCount;
+  MmsVariableSpecification ** namedVariables;
 
-    /* MMS VMD scope named variables list support */
-    LinkedList /*<MmsNamedVariableList>*/ namedVariableLists;
+  /* MMS VMD scope named variables list support */
+  LinkedList /*<MmsNamedVariableList>*/ namedVariableLists;
 
-    /* MMS domain support */
-    int domainCount;
-    MmsDomain** domains;
+  /* MMS domain support */
+  int domainCount;
+  MmsDomain ** domains;
 } MmsDevice;
 
 
-struct sMmsJournal {
-    char* name;
-    LogStorage logStorage;
+struct sMmsJournal
+{
+  char * name;
+  LogStorage logStorage;
 };
 
-typedef struct sMmsJournal* MmsJournal;
+typedef struct sMmsJournal * MmsJournal;
 
 /*
  * Server side data structure to hold information of an MMS domain (Logical Device)
  */
-struct sMmsDomain {
-    char* domainName;
-    int namedVariablesCount;
-    MmsVariableSpecification** namedVariables;
-    LinkedList /*<MmsNamedVariableList>*/ namedVariableLists;
-    LinkedList /* <MmsJournal> */ journals;
+struct sMmsDomain
+{
+  char * domainName;
+  int namedVariablesCount;
+  MmsVariableSpecification ** namedVariables;
+  LinkedList /*<MmsNamedVariableList>*/ namedVariableLists;
+  LinkedList /* <MmsJournal> */ journals;
 };
 
 /**
@@ -84,17 +87,17 @@ struct sMmsDomain {
  *
  * \return the new MmsDomain instance
  */
-LIB61850_INTERNAL MmsDomain*
-MmsDomain_create(char* domainName);
+LIB61850_INTERNAL MmsDomain *
+MmsDomain_create(char * domainName);
 
-LIB61850_INTERNAL char*
+LIB61850_INTERNAL char *
 MmsDomain_getName(MmsDomain* self);
 
 LIB61850_INTERNAL void
-MmsDomain_addJournal(MmsDomain* self, const char* name);
+MmsDomain_addJournal(MmsDomain* self, const char * name);
 
 LIB61850_INTERNAL MmsJournal
-MmsDomain_getJournal(MmsDomain* self, const char* name);
+MmsDomain_getJournal(MmsDomain* self, const char * name);
 
 /**
  * Delete a MmsDomain instance
@@ -129,19 +132,19 @@ MmsDomain_addNamedVariableList(MmsDomain* self, MmsNamedVariableList variableLis
  *
  */
 LIB61850_INTERNAL void
-MmsDomain_deleteNamedVariableList(MmsDomain* self, char* variableListName);
+MmsDomain_deleteNamedVariableList(MmsDomain* self, char * variableListName);
 
 LIB61850_INTERNAL MmsNamedVariableList
-MmsDomain_getNamedVariableList(MmsDomain* self, const char* variableListName);
+MmsDomain_getNamedVariableList(MmsDomain* self, const char * variableListName);
 
 LIB61850_INTERNAL LinkedList
 MmsDomain_getNamedVariableLists(MmsDomain* self);
 
 LIB61850_INTERNAL LinkedList
-MmsDomain_getNamedVariableListValues(MmsDomain* self, char* variableListName);
+MmsDomain_getNamedVariableListValues(MmsDomain* self, char * variableListName);
 
 LIB61850_INTERNAL LinkedList
-MmsDomain_createNamedVariableListValues(MmsDomain* self, char* variableListName);
+MmsDomain_createNamedVariableListValues(MmsDomain* self, char * variableListName);
 
 /**
  * \brief Get the MmsTypeSpecification instance of a MMS named variable
@@ -151,8 +154,8 @@ MmsDomain_createNamedVariableListValues(MmsDomain* self, char* variableListName)
  *
  * \return MmsTypeSpecification instance of the named variable
  */
-LIB61850_INTERNAL MmsVariableSpecification*
-MmsDomain_getNamedVariable(MmsDomain* self, char* nameId);
+LIB61850_INTERNAL MmsVariableSpecification *
+MmsDomain_getNamedVariable(MmsDomain* self, char * nameId);
 
 /**
  * \brief Create a new MmsDevice instance.
@@ -165,8 +168,8 @@ MmsDomain_getNamedVariable(MmsDomain* self, char* nameId);
  *
  * \return the new MmsDevice instance
  */
-LIB61850_INTERNAL MmsDevice*
-MmsDevice_create(char* deviceName);
+LIB61850_INTERNAL MmsDevice *
+MmsDevice_create(char * deviceName);
 
 /**
  * \brief Delete the MmsDevice instance
@@ -181,8 +184,8 @@ MmsDevice_destroy(MmsDevice* self);
  *
  * \return the new MmsDevice instance
  */
-LIB61850_INTERNAL MmsDomain*
-MmsDevice_getDomain(MmsDevice* self, const char* domainId);
+LIB61850_INTERNAL MmsDomain *
+MmsDevice_getDomain(MmsDevice* self, const char * domainId);
 
 /**
  * \brief Get the MmsTypeSpecification instance of a MMS named variable of VMD scope
@@ -192,17 +195,17 @@ MmsDevice_getDomain(MmsDevice* self, const char* domainId);
  *
  * \return MmsTypeSpecification instance of the named variable
  */
-LIB61850_INTERNAL MmsVariableSpecification*
-MmsDevice_getNamedVariable(MmsDevice* self, char* variableName);
+LIB61850_INTERNAL MmsVariableSpecification *
+MmsDevice_getNamedVariable(MmsDevice* self, char * variableName);
 
 LIB61850_INTERNAL LinkedList
 MmsDevice_getNamedVariableLists(MmsDevice* self);
 
 LIB61850_INTERNAL MmsNamedVariableList
-MmsDevice_getNamedVariableListWithName(MmsDevice* self, const char* variableListName);
+MmsDevice_getNamedVariableListWithName(MmsDevice* self, const char * variableListName);
 
 LIB61850_INTERNAL MmsJournal
-MmsJournal_create(const char* name);
+MmsJournal_create(const char * name);
 
 LIB61850_INTERNAL void
 MmsJournal_destroy(MmsJournal self);

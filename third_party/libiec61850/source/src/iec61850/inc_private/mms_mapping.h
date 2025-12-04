@@ -34,19 +34,20 @@
 #define REPORT_CONTROL_QUALITY_CHANGED 4U
 #define REPORT_CONTROL_NOT_UPDATED 8U
 
-typedef enum {
-    LOG_CONTROL_NONE,
-    LOG_CONTROL_VALUE_UPDATE,
-    LOG_CONTROL_VALUE_CHANGED,
-    LOG_CONTROL_QUALITY_CHANGED
+typedef enum
+{
+  LOG_CONTROL_NONE,
+  LOG_CONTROL_VALUE_UPDATE,
+  LOG_CONTROL_VALUE_CHANGED,
+  LOG_CONTROL_QUALITY_CHANGED
 } LogInclusionFlag;
 
 typedef struct sMmsMapping MmsMapping;
 
-LIB61850_INTERNAL MmsMapping*
+LIB61850_INTERNAL MmsMapping *
 MmsMapping_create(IedModel* model, IedServer iedServer);
 
-LIB61850_INTERNAL MmsDevice*
+LIB61850_INTERNAL MmsDevice *
 MmsMapping_getMmsDeviceModel(MmsMapping* mapping);
 
 LIB61850_INTERNAL void
@@ -60,15 +61,15 @@ MmsMapping_checkForSettingGroupReservationTimeouts(MmsMapping* self, uint64_t cu
 
 LIB61850_INTERNAL void
 MmsMapping_setSgChangedHandler(MmsMapping* self, SettingGroupControlBlock* sgcb,
-        ActiveSettingGroupChangedHandler handler, void* parameter);
+                               ActiveSettingGroupChangedHandler handler, void * parameter);
 
 LIB61850_INTERNAL void
 MmsMapping_setEditSgChangedHandler(MmsMapping* self, SettingGroupControlBlock* sgcb,
-        EditSettingGroupChangedHandler handler, void* parameter);
+                                   EditSettingGroupChangedHandler handler, void * parameter);
 
 LIB61850_INTERNAL void
 MmsMapping_setConfirmEditSgHandler(MmsMapping* self, SettingGroupControlBlock* sgcb,
-        EditSettingGroupConfirmationHandler handler, void* parameter);
+                                   EditSettingGroupConfirmationHandler handler, void * parameter);
 
 LIB61850_INTERNAL void
 MmsMapping_changeActiveSettingGroup(MmsMapping* self, SettingGroupControlBlock* sgcb, uint8_t newActiveSg);
@@ -88,7 +89,7 @@ MmsMapping_startEventWorkerThread(MmsMapping* self);
 LIB61850_INTERNAL void
 MmsMapping_stopEventWorkerThread(MmsMapping* self);
 
-LIB61850_INTERNAL DataSet*
+LIB61850_INTERNAL DataSet *
 MmsMapping_createDataSetByNamedVariableList(MmsMapping* self, MmsNamedVariableList variableList);
 
 LIB61850_INTERNAL void
@@ -110,54 +111,55 @@ LIB61850_INTERNAL void
 MmsMapping_useIntegratedGoosePublisher(MmsMapping* self, bool enable);
 
 LIB61850_INTERNAL void
-MmsMapping_useGooseVlanTag(MmsMapping* self, LogicalNode* ln, const char* gcbName, bool useVlanTag);
+MmsMapping_useGooseVlanTag(MmsMapping* self, LogicalNode* ln, const char * gcbName, bool useVlanTag);
 
 LIB61850_INTERNAL void
-MmsMapping_setGooseInterfaceId(MmsMapping* self,  LogicalNode* ln, const char* gcbName, const char* interfaceId);
+MmsMapping_setGooseInterfaceId(MmsMapping* self,  LogicalNode* ln, const char * gcbName, const char * interfaceId);
 
 LIB61850_INTERNAL void
 MmsMapping_addControlObject(MmsMapping* self, ControlObject* controlObject);
 
-LIB61850_INTERNAL char*
-MmsMapping_getNextNameElement(char* name);
+LIB61850_INTERNAL char *
+MmsMapping_getNextNameElement(char * name);
 
 LIB61850_INTERNAL void /* Create PHYCOMADDR ACSI type instance */
 MmsMapping_createPhyComAddrStructure(MmsVariableSpecification* namedVariable);
 
-LIB61850_INTERNAL ControlObject*
-MmsMapping_getControlObject(MmsMapping* self, MmsDomain* domain, char* lnName, char* coName);
+LIB61850_INTERNAL ControlObject *
+MmsMapping_getControlObject(MmsMapping* self, MmsDomain* domain, char * lnName, char * coName);
 
 LIB61850_INTERNAL MmsNamedVariableList
-MmsMapping_getDomainSpecificVariableList(MmsMapping* self, const char* variableListReference);
+MmsMapping_getDomainSpecificVariableList(MmsMapping* self, const char * variableListReference);
 
-LIB61850_INTERNAL DataSet*
-MmsMapping_getDomainSpecificDataSet(MmsMapping* self, const char* dataSetName);
+LIB61850_INTERNAL DataSet *
+MmsMapping_getDomainSpecificDataSet(MmsMapping* self, const char * dataSetName);
 
 LIB61850_INTERNAL void
 MmsMapping_freeDynamicallyCreatedDataSet(DataSet* dataSet);
 
 LIB61850_INTERNAL void
-MmsMapping_setConnectionIndicationHandler(MmsMapping* self, IedConnectionIndicationHandler handler, void* parameter);
+MmsMapping_setConnectionIndicationHandler(MmsMapping* self, IedConnectionIndicationHandler handler, void * parameter);
 
 LIB61850_INTERNAL void
-MmsMapping_setLogStorage(MmsMapping* self, const char* logRef, LogStorage logStorage);
+MmsMapping_setLogStorage(MmsMapping* self, const char * logRef, LogStorage logStorage);
 
 LIB61850_INTERNAL void
-MmsMapping_installWriteAccessHandler(MmsMapping* self, DataAttribute* dataAttribute, WriteAccessHandler handler, void* parameter);
+MmsMapping_installWriteAccessHandler(MmsMapping* self, DataAttribute* dataAttribute, WriteAccessHandler handler,
+                                     void * parameter);
 
 LIB61850_INTERNAL void
-MmsMapping_installReadAccessHandler(MmsMapping* self, ReadAccessHandler handler, void* paramter);
+MmsMapping_installReadAccessHandler(MmsMapping* self, ReadAccessHandler handler, void * paramter);
 
 LIB61850_INTERNAL MmsDataAccessError
-Control_writeAccessControlObject(MmsMapping* self, MmsDomain* domain, const char* variableIdOrig,
-                         MmsValue* value, MmsServerConnection connection);
+Control_writeAccessControlObject(MmsMapping* self, MmsDomain* domain, const char * variableIdOrig,
+                                 MmsValue* value, MmsServerConnection connection);
 
-LIB61850_INTERNAL MmsValue*
-Control_readAccessControlObject(MmsMapping* self, MmsDomain* domain, char* variableIdOrig,
-        MmsServerConnection connection, bool isDirectAccess);
+LIB61850_INTERNAL MmsValue *
+Control_readAccessControlObject(MmsMapping* self, MmsDomain* domain, char * variableIdOrig,
+                                MmsServerConnection connection, bool isDirectAccess);
 
-LIB61850_INTERNAL ControlObject*
-Control_lookupControlObject(MmsMapping* self, MmsDomain* domain, char* lnName, char* objectName);
+LIB61850_INTERNAL ControlObject *
+Control_lookupControlObject(MmsMapping* self, MmsDomain* domain, char * lnName, char * objectName);
 
 LIB61850_INTERNAL void
 Control_processControlActions(MmsMapping* self, uint64_t currentTimeInMs);

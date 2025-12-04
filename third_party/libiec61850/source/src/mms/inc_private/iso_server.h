@@ -37,42 +37,42 @@ extern "C" {
 
 typedef enum
 {
-    ISO_SVR_STATE_IDLE,
-    ISO_SVR_STATE_RUNNING,
-    ISO_SVR_STATE_STOPPED,
-    ISO_SVR_STATE_ERROR
+  ISO_SVR_STATE_IDLE,
+  ISO_SVR_STATE_RUNNING,
+  ISO_SVR_STATE_STOPPED,
+  ISO_SVR_STATE_ERROR
 } IsoServerState;
 
-typedef struct sIsoServer* IsoServer;
+typedef struct sIsoServer * IsoServer;
 
 typedef enum
 {
-    ISO_CONNECTION_OPENED,
-    ISO_CONNECTION_CLOSED
+  ISO_CONNECTION_OPENED,
+  ISO_CONNECTION_CLOSED
 } IsoConnectionIndication;
 
-typedef struct sIsoConnection* IsoConnection;
+typedef struct sIsoConnection * IsoConnection;
 
 typedef struct sIsoServerCallbacks
 {
-    void
-    (*clientConnected)(IsoConnection connection);
+  void
+  (*clientConnected)(IsoConnection connection);
 } IsoServerCallbacks;
 
 typedef void
 (*ConnectionIndicationHandler)(IsoConnectionIndication indication,
-        void* parameter, IsoConnection connection);
+                               void * parameter, IsoConnection connection);
 
 typedef void
-(*MessageReceivedHandler)(void* parameter, ByteBuffer* message, ByteBuffer* response);
+(*MessageReceivedHandler)(void * parameter, ByteBuffer* message, ByteBuffer* response);
 
 typedef void
-(*UserLayerTickHandler)(void* parameter);
+(*UserLayerTickHandler)(void * parameter);
 
-LIB61850_INTERNAL char*
+LIB61850_INTERNAL char *
 IsoConnection_getPeerAddress(IsoConnection self);
 
-LIB61850_INTERNAL char*
+LIB61850_INTERNAL char *
 IsoConnection_getLocalAddress(IsoConnection self);
 
 LIB61850_INTERNAL void
@@ -86,10 +86,10 @@ IsoConnection_unlock(IsoConnection self);
 
 LIB61850_INTERNAL void
 IsoConnection_installListener(IsoConnection self, MessageReceivedHandler rcvdHandler,
-        UserLayerTickHandler tickHandler,
-        void* parameter);
+                              UserLayerTickHandler tickHandler,
+                              void * parameter);
 
-LIB61850_INTERNAL void*
+LIB61850_INTERNAL void *
 IsoConnection_getSecurityToken(IsoConnection self);
 
 /**
@@ -111,22 +111,22 @@ LIB61850_INTERNAL void
 IsoServer_setMaxConnections(IsoServer self, int maxConnections);
 
 LIB61850_INTERNAL void
-IsoServer_setLocalIpAddress(IsoServer self, const char* ipAddress);
+IsoServer_setLocalIpAddress(IsoServer self, const char * ipAddress);
 
 LIB61850_INTERNAL IsoServerState
 IsoServer_getState(IsoServer self);
 
 LIB61850_INTERNAL void
 IsoServer_setConnectionHandler(IsoServer self, ConnectionIndicationHandler handler,
-        void* parameter);
+                               void * parameter);
 
 LIB61850_INTERNAL void
-IsoServer_setAuthenticator(IsoServer self, AcseAuthenticator authenticator, void* authenticatorParameter);
+IsoServer_setAuthenticator(IsoServer self, AcseAuthenticator authenticator, void * authenticatorParameter);
 
 LIB61850_INTERNAL AcseAuthenticator
 IsoServer_getAuthenticator(IsoServer self);
 
-LIB61850_INTERNAL void*
+LIB61850_INTERNAL void *
 IsoServer_getAuthenticatorParameter(IsoServer self);
 
 LIB61850_INTERNAL TLSConfiguration

@@ -26,28 +26,28 @@
 #include "mms_server_internal.h"
 
 MmsJournal
-MmsJournal_create(const char* name)
+MmsJournal_create(const char * name)
 {
-    if (DEBUG_MMS_SERVER)
-        printf("MMS_SERVER: create new journal %s\n", name);
+  if(DEBUG_MMS_SERVER)
+    printf("MMS_SERVER: create new journal %s\n", name);
 
-    MmsJournal self = (MmsJournal) GLOBAL_MALLOC(sizeof(struct sMmsJournal));
+  MmsJournal self = (MmsJournal) GLOBAL_MALLOC(sizeof(struct sMmsJournal));
 
-    if (self)
-    {
-        self->name = StringUtils_copyString(name);
-        self->logStorage = NULL;
-    }
+  if(self)
+  {
+    self->name = StringUtils_copyString(name);
+    self->logStorage = NULL;
+  }
 
-    return self;
+  return self;
 }
 
 void
 MmsJournal_destroy(MmsJournal self)
 {
-    if (self)
-    {
-        GLOBAL_FREEMEM(self->name);
-        GLOBAL_FREEMEM(self);
-    }
+  if(self)
+  {
+    GLOBAL_FREEMEM(self->name);
+    GLOBAL_FREEMEM(self);
+  }
 }

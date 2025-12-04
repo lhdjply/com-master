@@ -94,7 +94,7 @@ extern "C" {
  * function when called by the library. If you need the data contained in the ASDU elsewhere
  * you have to copy and store the data by yourself!
  */
-typedef struct sSVSubscriber_ASDU* SVSubscriber_ASDU;
+typedef struct sSVSubscriber_ASDU * SVSubscriber_ASDU;
 
 /**
  * \brief opaque handle to a SV subscriber instance
@@ -103,7 +103,7 @@ typedef struct sSVSubscriber_ASDU* SVSubscriber_ASDU;
  * by the Ethernet destination address, the appID value (both are on SV message level) and the svID value
  * that is part of each ASDU (SVSubscriber_ASDU object).
  */
-typedef struct sSVSubscriber* SVSubscriber;
+typedef struct sSVSubscriber * SVSubscriber;
 
 /**
  * \brief Callback function for received SV messages
@@ -114,12 +114,12 @@ typedef struct sSVSubscriber* SVSubscriber;
  * \param parameter a user provided parameter that is simply passed to the callback
  * \param asdu SV ASDU data structure. This structure is only valid inside of the  callback function
  */
-typedef void (*SVUpdateListener)(SVSubscriber subscriber, void* parameter, SVSubscriber_ASDU asdu);
+typedef void (*SVUpdateListener)(SVSubscriber subscriber, void * parameter, SVSubscriber_ASDU asdu);
 
 /**
  * \brief opaque handle to a SV receiver instance
  */
-typedef struct sSVReceiver* SVReceiver;
+typedef struct sSVReceiver * SVReceiver;
 
 /**
  * \brief Create a new SV receiver instance.
@@ -175,7 +175,7 @@ SVReceiver_enableDestAddrCheck(SVReceiver self);
  * \param interfaceId the Ethernet interface id (platform specific e.g. eth0 for linux).
  */
 LIB61850_API void
-SVReceiver_setInterfaceId(SVReceiver self, const char* interfaceId);
+SVReceiver_setInterfaceId(SVReceiver self, const char * interfaceId);
 
 /**
  * \brief Add a subscriber instance to the receiver
@@ -267,7 +267,7 @@ SVReceiver_tick(SVReceiver self);
  */
 
 LIB61850_API SVSubscriber
-SVSubscriber_create(const uint8_t* ethAddr, uint16_t appID);
+SVSubscriber_create(const uint8_t * ethAddr, uint16_t appID);
 
 /**
  * \brief Set a callback handler to process received SV messages
@@ -281,7 +281,7 @@ SVSubscriber_create(const uint8_t* ethAddr, uint16_t appID);
  * \param a user provided parameter that is provided to the callback function
  */
 LIB61850_API void
-SVSubscriber_setListener(SVSubscriber self,  SVUpdateListener listener, void* parameter);
+SVSubscriber_setListener(SVSubscriber self,  SVUpdateListener listener, void * parameter);
 
 LIB61850_API void
 SVSubscriber_destroy(SVSubscriber self);
@@ -311,7 +311,7 @@ SVSubscriber_ASDU_getSmpCnt(SVSubscriber_ASDU self);
  *
  * \param self ASDU object instance
  */
-LIB61850_API const char*
+LIB61850_API const char *
 SVSubscriber_ASDU_getSvId(SVSubscriber_ASDU self);
 
 /**
@@ -319,7 +319,7 @@ SVSubscriber_ASDU_getSvId(SVSubscriber_ASDU self);
  *
  * \param self ASDU object instance
  */
-LIB61850_API const char*
+LIB61850_API const char *
 SVSubscriber_ASDU_getDatSet(SVSubscriber_ASDU self);
 
 /**

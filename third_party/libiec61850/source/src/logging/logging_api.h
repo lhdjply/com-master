@@ -46,7 +46,7 @@ extern "C" {
  */
 
 /** The LogStorage object handle */
-typedef struct sLogStorage* LogStorage;
+typedef struct sLogStorage * LogStorage;
 
 /**
  * \brief Will be called for each new LogEntry by the getEntries and getEntriesAfter functions
@@ -58,7 +58,7 @@ typedef struct sLogStorage* LogStorage;
  *
  * \return true ready to receive new data, false abort operation
  */
-typedef bool (*LogEntryCallback) (void* parameter, uint64_t timestamp, uint64_t entryID, bool moreFollow);
+typedef bool (*LogEntryCallback) (void * parameter, uint64_t timestamp, uint64_t entryID, bool moreFollow);
 
 /**
  * \brief Will be called for each new LogEntryData by the getEntries and getEntriesAfter functions
@@ -72,28 +72,30 @@ typedef bool (*LogEntryCallback) (void* parameter, uint64_t timestamp, uint64_t 
  *
  * \return true ready to receive new data, false abort operation
  */
-typedef bool (*LogEntryDataCallback) (void* parameter, const char* dataRef, uint8_t* data, int dataSize, uint8_t reasonCode, bool moreFollow);
+typedef bool (*LogEntryDataCallback) (void * parameter, const char * dataRef, uint8_t * data, int dataSize,
+                                      uint8_t reasonCode, bool moreFollow);
 
 struct sLogStorage
 {
-    void* instanceData;
+  void * instanceData;
 
-    int maxLogEntries;
+  int maxLogEntries;
 
-    uint64_t (*addEntry) (LogStorage self, uint64_t timestamp);
+  uint64_t (*addEntry) (LogStorage self, uint64_t timestamp);
 
-    bool (*addEntryData) (LogStorage self, uint64_t entryID, const char* dataRef, uint8_t* data, int dataSize, uint8_t reasonCode);
+  bool (*addEntryData) (LogStorage self, uint64_t entryID, const char * dataRef, uint8_t * data, int dataSize,
+                        uint8_t reasonCode);
 
-    bool (*getEntries) (LogStorage self, uint64_t startingTime, uint64_t endingTime,
-            LogEntryCallback entryCallback, LogEntryDataCallback entryDataCallback, void* parameter);
+  bool (*getEntries) (LogStorage self, uint64_t startingTime, uint64_t endingTime,
+                      LogEntryCallback entryCallback, LogEntryDataCallback entryDataCallback, void * parameter);
 
-    bool (*getEntriesAfter) (LogStorage self, uint64_t startingTime, uint64_t entryID,
-            LogEntryCallback entryCallback, LogEntryDataCallback entryDataCallback, void* parameter);
+  bool (*getEntriesAfter) (LogStorage self, uint64_t startingTime, uint64_t entryID,
+                           LogEntryCallback entryCallback, LogEntryDataCallback entryDataCallback, void * parameter);
 
-    bool (*getOldestAndNewestEntries) (LogStorage self, uint64_t* newEntry, uint64_t* newEntryTime,
-            uint64_t* oldEntry, uint64_t* oldEntryTime);
+  bool (*getOldestAndNewestEntries) (LogStorage self, uint64_t * newEntry, uint64_t * newEntryTime,
+                                     uint64_t * oldEntry, uint64_t * oldEntryTime);
 
-    void (*destroy) (LogStorage self);
+  void (*destroy) (LogStorage self);
 };
 
 /**
@@ -115,7 +117,7 @@ LogStorage_setMaxLogEntries(LogStorage self, int maxEntries);
  * \return new LogStorage instance
  */
 LIB61850_API LogStorage
-SqliteLogStorage_createInstance(const char* filename);
+SqliteLogStorage_createInstance(const char * filename);
 
 /**
  * \brief Get the maximum allowed number of log entries for this log
@@ -151,7 +153,8 @@ LogStorage_addEntry(LogStorage self, uint64_t timestamp);
  * \return true if the entry data was successfully added, false otherwise
  */
 LIB61850_API bool
-LogStorage_addEntryData(LogStorage self, uint64_t entryID, const char* dataRef, uint8_t* data, int dataSize, uint8_t reasonCode);
+LogStorage_addEntryData(LogStorage self, uint64_t entryID, const char * dataRef, uint8_t * data, int dataSize,
+                        uint8_t reasonCode);
 
 /**
  * \brief Get log entries specified by a time range
@@ -167,7 +170,7 @@ LogStorage_addEntryData(LogStorage self, uint64_t entryID, const char* dataRef, 
  */
 LIB61850_API bool
 LogStorage_getEntries(LogStorage self, uint64_t startingTime, uint64_t endingTime,
-        LogEntryCallback entryCallback, LogEntryDataCallback entryDataCallback, void* parameter);
+                      LogEntryCallback entryCallback, LogEntryDataCallback entryDataCallback, void * parameter);
 
 /**
  * \brief Get log entries specified by a start log entry
@@ -186,7 +189,7 @@ LogStorage_getEntries(LogStorage self, uint64_t startingTime, uint64_t endingTim
  */
 LIB61850_API bool
 LogStorage_getEntriesAfter(LogStorage self, uint64_t startingTime, uint64_t entryID,
-        LogEntryCallback entryCallback, LogEntryDataCallback entryDataCallback, void* parameter);
+                           LogEntryCallback entryCallback, LogEntryDataCallback entryDataCallback, void * parameter);
 
 /**
  * \brief Get the entry time and entryID of the oldest and the newest log entries
@@ -201,8 +204,8 @@ LogStorage_getEntriesAfter(LogStorage self, uint64_t startingTime, uint64_t entr
  *
  */
 LIB61850_API bool
-LogStorage_getOldestAndNewestEntries(LogStorage self, uint64_t* newEntry, uint64_t* newEntryTime,
-        uint64_t* oldEntry, uint64_t* oldEntryTime);
+LogStorage_getOldestAndNewestEntries(LogStorage self, uint64_t * newEntry, uint64_t * newEntryTime,
+                                     uint64_t * oldEntry, uint64_t * oldEntryTime);
 
 /**
  * \brief Destroy the LogStorage instance and free all related resources

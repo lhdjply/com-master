@@ -58,13 +58,13 @@ LIB61850_INTERNAL bool
 MmsServerConnection_addNamedVariableList(MmsServerConnection self, MmsNamedVariableList variableList);
 
 LIB61850_INTERNAL MmsNamedVariableList
-MmsServerConnection_getNamedVariableList(MmsServerConnection self, const char* variableListName);
+MmsServerConnection_getNamedVariableList(MmsServerConnection self, const char * variableListName);
 
 LIB61850_INTERNAL LinkedList
 MmsServerConnection_getNamedVariableLists(MmsServerConnection self);
 
 LIB61850_INTERNAL void
-MmsServerConnection_deleteNamedVariableList(MmsServerConnection self, char* listName);
+MmsServerConnection_deleteNamedVariableList(MmsServerConnection self, char * listName);
 
 /** \brief send information report for a single VMD specific variable
  *
@@ -72,7 +72,7 @@ MmsServerConnection_deleteNamedVariableList(MmsServerConnection self, char* list
  */
 LIB61850_INTERNAL void
 MmsServerConnection_sendInformationReportSingleVariableVMDSpecific(MmsServerConnection self,
-    char* itemId, MmsValue* value, bool handlerMode);
+                                                                   char * itemId, MmsValue* value, bool handlerMode);
 
 
 /** \brief send information report for a VMD specific named variable list
@@ -80,8 +80,8 @@ MmsServerConnection_sendInformationReportSingleVariableVMDSpecific(MmsServerConn
  *   \param handlerMode send this message in the context of a stack callback handler
  */
 LIB61850_INTERNAL void /* send information report for a VMD specific named variable list */
-MmsServerConnection_sendInformationReportVMDSpecific(MmsServerConnection self, char* itemId, LinkedList values
-        , bool handlerMode);
+MmsServerConnection_sendInformationReportVMDSpecific(MmsServerConnection self, char * itemId, LinkedList values
+                                                     , bool handlerMode);
 
 /** \brief send information report for list of variables
  *
@@ -89,19 +89,19 @@ MmsServerConnection_sendInformationReportVMDSpecific(MmsServerConnection self, c
  */
 LIB61850_INTERNAL void
 MmsServerConnection_sendInformationReportListOfVariables(
-        MmsServerConnection self,
-        LinkedList /* MmsVariableAccessSpecification */ variableAccessDeclarations,
-        LinkedList /* MmsValue */ values,
-        bool handlerMode
-        );
+  MmsServerConnection self,
+  LinkedList /* MmsVariableAccessSpecification */ variableAccessDeclarations,
+  LinkedList /* MmsValue */ values,
+  bool handlerMode
+);
 
 LIB61850_INTERNAL void
 MmsServerConnection_sendWriteResponse(MmsServerConnection self, uint32_t invokeId, MmsDataAccessError indication,
-        bool handlerMode);
+                                      bool handlerMode);
 
 LIB61850_INTERNAL void
 MmsServerConnection_sendReadResponse(MmsServerConnection self, uint32_t invokeId, LinkedList values,
-        bool handlerMode);
+                                     bool handlerMode);
 
 LIB61850_INTERNAL uint32_t
 MmsServerConnection_getLastInvokeId(MmsServerConnection self);
@@ -109,7 +109,7 @@ MmsServerConnection_getLastInvokeId(MmsServerConnection self);
 LIB61850_INTERNAL uint32_t
 MmsServerConnection_getNextRequestInvokeId(MmsServerConnection self);
 
-LIB61850_INTERNAL const char*
+LIB61850_INTERNAL const char *
 MmsServerConnection_getFilesystemBasepath(MmsServerConnection self);
 
 LIB61850_INTERNAL MmsServer

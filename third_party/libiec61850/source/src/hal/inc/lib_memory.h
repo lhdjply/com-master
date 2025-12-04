@@ -29,22 +29,22 @@ extern "C" {
 #include <stdlib.h>
 
 typedef void
-(*MemoryExceptionHandler) (void* parameter);
+(*MemoryExceptionHandler)(void * parameter);
 
 PAL_API void
-Memory_installExceptionHandler(MemoryExceptionHandler handler, void* parameter);
+Memory_installExceptionHandler(MemoryExceptionHandler handler, void * parameter);
 
-PAL_API void*
+PAL_API void *
 Memory_malloc(size_t size);
 
-PAL_API void*
+PAL_API void *
 Memory_calloc(size_t nmemb, size_t size);
 
 PAL_API void *
-Memory_realloc(void *ptr, size_t size);
+Memory_realloc(void * ptr, size_t size);
 
 PAL_API void
-Memory_free(void* memb);
+Memory_free(void * memb);
 
 #ifdef __cplusplus
 }

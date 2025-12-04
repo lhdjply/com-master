@@ -27,27 +27,27 @@
 #include "libiec61850_platform_includes.h"
 
 LIB61850_INTERNAL int
-BerDecoder_decodeLength(uint8_t* buffer, int* length, int bufPos, int maxBufPos);
+BerDecoder_decodeLength(uint8_t * buffer, int * length, int bufPos, int maxBufPos);
 
-LIB61850_INTERNAL char*
-BerDecoder_decodeString(uint8_t* buffer, int strlen, int bufPos, int maxBufPos);
+LIB61850_INTERNAL char *
+BerDecoder_decodeString(uint8_t * buffer, int strlen, int bufPos, int maxBufPos);
 
 LIB61850_INTERNAL uint32_t
-BerDecoder_decodeUint32(uint8_t* buffer, int intlen, int bufPos);
+BerDecoder_decodeUint32(uint8_t * buffer, int intlen, int bufPos);
 
 LIB61850_INTERNAL int32_t
-BerDecoder_decodeInt32(uint8_t* buffer, int intlen, int bufPos);
+BerDecoder_decodeInt32(uint8_t * buffer, int intlen, int bufPos);
 
 LIB61850_INTERNAL float
-BerDecoder_decodeFloat(uint8_t* buffer, int bufPos);
+BerDecoder_decodeFloat(uint8_t * buffer, int bufPos);
 
 LIB61850_INTERNAL double
-BerDecoder_decodeDouble(uint8_t* buffer, int bufPos);
+BerDecoder_decodeDouble(uint8_t * buffer, int bufPos);
 
 LIB61850_INTERNAL bool
-BerDecoder_decodeBoolean(uint8_t* buffer, int bufPos);
+BerDecoder_decodeBoolean(uint8_t * buffer, int bufPos);
 
 LIB61850_INTERNAL void
-BerDecoder_decodeOID(uint8_t* buffer, int bufPos, int length, ItuObjectIdentifier* oid);
+BerDecoder_decodeOID(uint8_t * buffer, int bufPos, int length, ItuObjectIdentifier* oid);
 
 #endif /* BER_DECODER_H_ */

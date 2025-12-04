@@ -38,16 +38,16 @@
 #if (CONFIG_IEC61850_SERVICE_TRACKING == 1)
 typedef enum
 {
-    CST_NONE,
-    CST_SPCTRK,
-    CST_DPCTRK,
-    CST_INCTRK,
-    CST_ENCTRK1,
-    CST_APCFTRK,
-    CST_APCINTTRK,
-    CST_BSCTRK,
-    CST_ISCTRK,
-    CST_BACTRK
+  CST_NONE,
+  CST_SPCTRK,
+  CST_DPCTRK,
+  CST_INCTRK,
+  CST_ENCTRK1,
+  CST_APCFTRK,
+  CST_APCINTTRK,
+  CST_BSCTRK,
+  CST_ISCTRK,
+  CST_BACTRK
 } ControlServiceCDC;
 #endif /* (CONFIG_IEC61850_SERVICE_TRACKING == 1) */
 
@@ -55,95 +55,96 @@ typedef struct sControlObject ControlObject;
 
 struct sControlObject
 {
-    MmsDomain* mmsDomain;
-    IedServer iedServer;
-    char* lnName;
-    char* name;
+  MmsDomain * mmsDomain;
+  IedServer iedServer;
+  char * lnName;
+  char * name;
 
-    unsigned state:4;
-    unsigned ctlModel:4;
-    unsigned pendingEvents:8;
-    unsigned testMode:1;
-    unsigned interlockCheck:1;
-    unsigned synchroCheck:1;
-    unsigned timeActivatedOperate:1;
-    unsigned operateOnce:1;
-    unsigned isSelect:1;
-    ControlAddCause addCauseValue:6;
-    unsigned errorValue:2;
+  unsigned state: 4;
+  unsigned ctlModel: 4;
+  unsigned pendingEvents: 8;
+  unsigned testMode: 1;
+  unsigned interlockCheck: 1;
+  unsigned synchroCheck: 1;
+  unsigned timeActivatedOperate: 1;
+  unsigned operateOnce: 1;
+  unsigned isSelect: 1;
+  ControlAddCause addCauseValue: 6;
+  unsigned errorValue: 2;
 
 #if (CONFIG_MMS_THREADLESS_STACK != 1)
-    Semaphore stateLock;
-    Semaphore pendingEventsLock;
+  Semaphore stateLock;
+  Semaphore pendingEventsLock;
 #endif
 
-    MmsValue* mmsValue;
-    MmsVariableSpecification* typeSpec;
+  MmsValue * mmsValue;
+  MmsVariableSpecification * typeSpec;
 
-    MmsValue* oper;
-    MmsValue* sbo;
-    MmsValue* sbow;
-    MmsValue* cancel;
+  MmsValue * oper;
+  MmsValue * sbo;
+  MmsValue * sbow;
+  MmsValue * cancel;
 
-    MmsValue* ctlVal;
-    MmsValue* ctlNum;
-    MmsValue* origin;
-    MmsValue* timestamp;
+  MmsValue * ctlVal;
+  MmsValue * ctlNum;
+  MmsValue * origin;
+  MmsValue * timestamp;
 
-    Timestamp T;
+  Timestamp T;
 
-    MmsValue* ctlNumSt;
-    MmsValue* originSt;
+  MmsValue * ctlNumSt;
+  MmsValue * originSt;
 
-    /* for automatic update of stSeld attribute */
-    DataAttribute* stSeld;
+  /* for automatic update of stSeld attribute */
+  DataAttribute * stSeld;
 
-    /* for automatic update of opRcvd attribute */
-    DataAttribute* opRcvd;
+  /* for automatic update of opRcvd attribute */
+  DataAttribute * opRcvd;
 
-    /* for automatic update of opOk attribute */
-    DataAttribute* opOk;
+  /* for automatic update of opOk attribute */
+  DataAttribute * opOk;
 
-    /* for automatic update of tOpOk attribute */
-    DataAttribute* tOpOk;
+  /* for automatic update of tOpOk attribute */
+  DataAttribute * tOpOk;
 
-    /* for LastAppIError */
-    MmsValue* error;
-    MmsValue* addCause;
+  /* for LastAppIError */
+  MmsValue * error;
+  MmsValue * addCause;
 
-    uint64_t selectTime;
-    uint32_t selectTimeout;
-    MmsValue* sboClass;
-    MmsValue* sboTimeout;
+  uint64_t selectTime;
+  uint32_t selectTimeout;
+  MmsValue * sboClass;
+  MmsValue * sboTimeout;
 
-    uint64_t operateTime;
+  uint64_t operateTime;
 
-    MmsServerConnection mmsConnection;
+  MmsServerConnection mmsConnection;
 
-    uint32_t operateInvokeId;
+  uint32_t operateInvokeId;
 
-    ControlHandler operateHandler;
-    void* operateHandlerParameter;
+  ControlHandler operateHandler;
+  void * operateHandlerParameter;
 
-    ControlPerformCheckHandler checkHandler;
-    void* checkHandlerParameter;
+  ControlPerformCheckHandler checkHandler;
+  void * checkHandlerParameter;
 
-    ControlWaitForExecutionHandler waitForExecutionHandler;
-    void* waitForExecutionHandlerParameter;
+  ControlWaitForExecutionHandler waitForExecutionHandler;
+  void * waitForExecutionHandlerParameter;
 
-    ControlSelectStateChangedHandler selectStateChangedHandler;
-    void* selectStateChangedHandlerParameter;
+  ControlSelectStateChangedHandler selectStateChangedHandler;
+  void * selectStateChangedHandlerParameter;
 
 #if (CONFIG_IEC61850_SERVICE_TRACKING == 1)
-    /* Common data class (CDC) of control object */
-    ControlServiceCDC cdc;
+  /* Common data class (CDC) of control object */
+  ControlServiceCDC cdc;
 #endif /* (CONFIG_IEC61850_SERVICE_TRACKING == 1) */
 
-    DataObject* dataObject;
+  DataObject * dataObject;
 };
 
-LIB61850_INTERNAL ControlObject*
-ControlObject_create(IedServer iedServer, MmsDomain* domain, char* lnName, char* name, MmsVariableSpecification* operSpec);
+LIB61850_INTERNAL ControlObject *
+ControlObject_create(IedServer iedServer, MmsDomain* domain, char * lnName, char * name,
+                     MmsVariableSpecification* operSpec);
 
 LIB61850_INTERNAL void
 ControlObject_initialize(ControlObject* self);
@@ -154,39 +155,40 @@ ControlObject_destroy(ControlObject* self);
 LIB61850_INTERNAL void
 ControlObject_setMmsValue(ControlObject* self, MmsValue* value);
 
-LIB61850_INTERNAL MmsValue*
+LIB61850_INTERNAL MmsValue *
 ControlObject_getMmsValue(ControlObject* self);
 
 LIB61850_INTERNAL void
 ControlObject_setTypeSpec(ControlObject* self, MmsVariableSpecification* typeSpec);
 
-LIB61850_INTERNAL MmsVariableSpecification*
+LIB61850_INTERNAL MmsVariableSpecification *
 ControlObject_getTypeSpec(ControlObject* self);
 
-LIB61850_INTERNAL char*
+LIB61850_INTERNAL char *
 ControlObject_getName(ControlObject* self);
 
-LIB61850_INTERNAL char*
+LIB61850_INTERNAL char *
 ControlObject_getLNName(ControlObject* self);
 
-LIB61850_INTERNAL MmsDomain*
+LIB61850_INTERNAL MmsDomain *
 ControlObject_getDomain(ControlObject* self);
 
 LIB61850_INTERNAL bool
 ControlObject_select(ControlObject* self, MmsServerConnection connection);
 
 LIB61850_INTERNAL void
-ControlObject_installListener(ControlObject* self, ControlHandler listener, void* parameter);
+ControlObject_installListener(ControlObject* self, ControlHandler listener, void * parameter);
 
 LIB61850_INTERNAL void
-ControlObject_installCheckHandler(ControlObject* self, ControlPerformCheckHandler handler, void* parameter);
+ControlObject_installCheckHandler(ControlObject* self, ControlPerformCheckHandler handler, void * parameter);
 
 LIB61850_INTERNAL void
-ControlObject_installWaitForExecutionHandler(ControlObject* self, ControlWaitForExecutionHandler handler, void* parameter);
+ControlObject_installWaitForExecutionHandler(ControlObject* self, ControlWaitForExecutionHandler handler,
+                                             void * parameter);
 
 LIB61850_INTERNAL void
 ControlObject_installSelectStateChangedHandler(ControlObject* self, ControlSelectStateChangedHandler handler,
-        void* parameter);
+                                               void * parameter);
 
 LIB61850_INTERNAL void
 ControlObject_updateControlModel(ControlObject* self, ControlModel value, DataObject* ctlObject);

@@ -36,64 +36,64 @@
 
 struct sIedServer
 {
-    IedModel* model;
-    MmsDevice* mmsDevice;
-    MmsServer mmsServer;
-    char* localIpAddress;
-    MmsMapping* mmsMapping;
-    LinkedList clientConnections;
-    uint8_t writeAccessPolicies;
+  IedModel * model;
+  MmsDevice * mmsDevice;
+  MmsServer mmsServer;
+  char * localIpAddress;
+  MmsMapping * mmsMapping;
+  LinkedList clientConnections;
+  uint8_t writeAccessPolicies;
 
 #if (CONFIG_IEC61850_REPORT_SERVICE == 1)
-    int reportBufferSizeBRCBs;
-    int reportBufferSizeURCBs;
-    bool enableBRCBResvTms;
-    bool enableOwnerForRCB;
-    bool syncIntegrityReportTimes;
-    uint8_t rcbSettingsWritable;
+  int reportBufferSizeBRCBs;
+  int reportBufferSizeURCBs;
+  bool enableBRCBResvTms;
+  bool enableOwnerForRCB;
+  bool syncIntegrityReportTimes;
+  uint8_t rcbSettingsWritable;
 #endif
 
 #if (CONFIG_MMS_THREADLESS_STACK != 1)
-    Semaphore dataModelLock;
-    Semaphore clientConnectionsLock;
+  Semaphore dataModelLock;
+  Semaphore clientConnectionsLock;
 #endif
 
 #if (CONFIG_MMS_SERVER_CONFIG_SERVICES_AT_RUNTIME == 1)
-    bool logServiceEnabled;
+  bool logServiceEnabled;
 #endif
 
 #if (CONFIG_MMS_THREADLESS_STACK != 1)
-    Thread serverThread;
+  Thread serverThread;
 #endif
 
 #if (CONFIG_IEC61850_SUPPORT_SERVER_IDENTITY == 1)
-    char* vendorName;
-    char* modelName;
-    char* revision;
+  char * vendorName;
+  char * modelName;
+  char * revision;
 #endif
 
 #if (CONFIG_IEC61850_SETTING_GROUPS == 1)
-    bool enableEditSG;
-    bool hasSGCBResvTms;
+  bool enableEditSG;
+  bool hasSGCBResvTms;
 #endif
 
-    uint8_t edition;
+  uint8_t edition;
 
-    uint8_t timeQuality; /* user settable time quality for internally updated times */
+  uint8_t timeQuality; /* user settable time quality for internally updated times */
 
-    bool ignoreReadAccess; /* when true don't answer read request (for test purposes) */
+  bool ignoreReadAccess; /* when true don't answer read request (for test purposes) */
 
-    bool running;
+  bool running;
 };
 
 LIB61850_INTERNAL IEC61850_ServiceError
 private_IedServer_convertMmsDataAccessErrorToServiceError(MmsDataAccessError mmsError);
 
 LIB61850_INTERNAL ClientConnection
-private_IedServer_getClientConnectionByHandle(IedServer self, void* serverConnectionHandle);
+private_IedServer_getClientConnectionByHandle(IedServer self, void * serverConnectionHandle);
 
 LIB61850_INTERNAL ClientConnection
-private_ClientConnection_create(void* serverConnectionHandle);
+private_ClientConnection_create(void * serverConnectionHandle);
 
 LIB61850_INTERNAL void
 private_ClientConnection_invalidate(ClientConnection self);
@@ -107,7 +107,7 @@ private_ClientConnection_increaseTasksCount(ClientConnection self);
 LIB61850_INTERNAL void
 private_ClientConnection_decreaseTasksCount(ClientConnection self);
 
-LIB61850_INTERNAL void*
+LIB61850_INTERNAL void *
 private_ClientConnection_getServerConnectionHandle(ClientConnection self);
 
 LIB61850_INTERNAL void

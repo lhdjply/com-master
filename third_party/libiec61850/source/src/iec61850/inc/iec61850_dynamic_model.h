@@ -54,8 +54,8 @@ extern "C" {
  *
  * \return the new data model instance
  */
-LIB61850_API IedModel*
-IedModel_create(const char* name);
+LIB61850_API IedModel *
+IedModel_create(const char * name);
 
 /**
  * \brief Set the name of the IED (use only for dynamic model!)
@@ -69,7 +69,7 @@ IedModel_create(const char* name);
  * \param the name of the configured IED
  */
 LIB61850_API void
-IedModel_setIedNameForDynamicModel(IedModel* self, const char* name);
+IedModel_setIedNameForDynamicModel(IedModel* self, const char * name);
 
 /**
  * \brief destroy a dynamically created data model
@@ -91,8 +91,8 @@ IedModel_destroy(IedModel* model);
  *
  * \return the newly created LogicalDevice instance
  */
-LIB61850_API LogicalDevice*
-LogicalDevice_create(const char* name, IedModel* parent);
+LIB61850_API LogicalDevice *
+LogicalDevice_create(const char * name, IedModel* parent);
 
 /**
  * \brief Create a new logical device and add it to the IED model
@@ -103,8 +103,8 @@ LogicalDevice_create(const char* name, IedModel* parent);
  *
  * \return the newly created LogicalDevice instance
  */
-LIB61850_API LogicalDevice*
-LogicalDevice_createEx(const char* inst, IedModel* parent, const char* ldName);
+LIB61850_API LogicalDevice *
+LogicalDevice_createEx(const char * inst, IedModel* parent, const char * ldName);
 
 /**
  * \brief Create a new logical mode  and add it to a logical device
@@ -114,14 +114,14 @@ LogicalDevice_createEx(const char* inst, IedModel* parent, const char* ldName);
  *
  * \return the newly created LogicalNode instance
  */
-LIB61850_API LogicalNode*
-LogicalNode_create(const char* name, LogicalDevice* parent);
+LIB61850_API LogicalNode *
+LogicalNode_create(const char * name, LogicalDevice* parent);
 
 /**
  * \brief create a new data object or array data object and add it to a parent model node
  *
  * The parent model node has to be of type DataObject or LogicalNode.
- * 
+ *
  * NOTE: When the data object is an array the array elements will also be created by this function.
  * This will result in child DataObject instances for each array element.
  *
@@ -131,8 +131,8 @@ LogicalNode_create(const char* name, LogicalDevice* parent);
  *
  * \return the newly create DataObject instance
  */
-LIB61850_API DataObject*
-DataObject_create(const char* name, ModelNode* parent, int arrayElements);
+LIB61850_API DataObject *
+DataObject_create(const char * name, ModelNode* parent, int arrayElements);
 
 /**
  * \brief create a new data attribute and add it to a parent model node
@@ -149,9 +149,9 @@ DataObject_create(const char* name, ModelNode* parent, int arrayElements);
  *
  * \return the newly create DataAttribute instance
  */
-LIB61850_API DataAttribute*
-DataAttribute_create(const char* name, ModelNode* parent, DataAttributeType type, FunctionalConstraint fc,
-        uint8_t triggerOptions, int arrayElements, uint32_t sAddr);
+LIB61850_API DataAttribute *
+DataAttribute_create(const char * name, ModelNode* parent, DataAttributeType type, FunctionalConstraint fc,
+                     uint8_t triggerOptions, int arrayElements, uint32_t sAddr);
 
 /**
  * \brief Get the data type of the data attribute
@@ -185,7 +185,7 @@ DataAttribute_getTrgOps(DataAttribute* self);
 
 /**
  * \brief Set the value of the data attribute (can be used to set default values before server is created)
- * 
+ *
  * \param self the data attribute instance
  * \param value the new default value
  */
@@ -211,9 +211,9 @@ DataAttribute_setValue(DataAttribute* self, MmsValue* value);
  *
  * \return the new RCB instance.
  */
-LIB61850_API ReportControlBlock*
-ReportControlBlock_create(const char* name, LogicalNode* parent, const char* rptId, bool isBuffered, const char*
-        dataSetName, uint32_t confRef, uint8_t trgOps, uint8_t options, uint32_t bufTm, uint32_t intgPd);
+LIB61850_API ReportControlBlock *
+ReportControlBlock_create(const char * name, LogicalNode* parent, const char * rptId, bool isBuffered, const char *
+                          dataSetName, uint32_t confRef, uint8_t trgOps, uint8_t options, uint32_t bufTm, uint32_t intgPd);
 
 /**
  * \brief Set a pre-configured client for the RCB
@@ -225,7 +225,7 @@ ReportControlBlock_create(const char* name, LogicalNode* parent, const char* rpt
  * \param clientAddress buffer containing the client address (4 byte in case of an IPv4 address, 16 byte in case of an IPv6 address, NULL for no client)
  */
 LIB61850_API void
-ReportControlBlock_setPreconfiguredClient(ReportControlBlock* self, uint8_t clientType, const uint8_t* clientAddress);
+ReportControlBlock_setPreconfiguredClient(ReportControlBlock* self, uint8_t clientType, const uint8_t * clientAddress);
 
 /**
  * \brief Get the name of the RCB instance
@@ -236,7 +236,7 @@ ReportControlBlock_setPreconfiguredClient(ReportControlBlock* self, uint8_t clie
  *
  * \return the RCB instance name
  */
-LIB61850_API const char*
+LIB61850_API const char *
 ReportControlBlock_getName(ReportControlBlock* self);
 
 /**
@@ -256,7 +256,7 @@ ReportControlBlock_isBuffered(ReportControlBlock* self);
  *
  * \return the parent (LogicalNode) of the RCB instance
  */
-LIB61850_API LogicalNode*
+LIB61850_API LogicalNode *
 ReportControlBlock_getParent(ReportControlBlock* self);
 
 /**
@@ -266,7 +266,7 @@ ReportControlBlock_getParent(ReportControlBlock* self);
  *
  * \return a null terminated string containing the current data set name (the string has to be released by the caller!)
  */
-LIB61850_API char*
+LIB61850_API char *
 ReportControlBlock_getRptID(ReportControlBlock* self);
 
 /**
@@ -286,7 +286,7 @@ ReportControlBlock_getRptEna(ReportControlBlock* self);
  *
  * \return a null terminated string containing the current data set name (the string has to be released by the caller!)
  */
-LIB61850_API char*
+LIB61850_API char *
 ReportControlBlock_getDataSet(ReportControlBlock* self);
 
 /**
@@ -361,7 +361,7 @@ ReportControlBlock_getGI(ReportControlBlock* self);
 LIB61850_API bool
 ReportControlBlock_getPurgeBuf(ReportControlBlock* self);
 
-LIB61850_API MmsValue*
+LIB61850_API MmsValue *
 ReportControlBlock_getEntryId(ReportControlBlock* self);
 
 LIB61850_API uint64_t
@@ -373,7 +373,7 @@ ReportControlBlock_getResvTms(ReportControlBlock* self);
 LIB61850_API bool
 ReportControlBlock_getResv(ReportControlBlock* self);
 
-LIB61850_API MmsValue*
+LIB61850_API MmsValue *
 ReportControlBlock_getOwner(ReportControlBlock* self);
 
 /**
@@ -393,14 +393,15 @@ ReportControlBlock_getOwner(ReportControlBlock* self);
  *
  * \return the new LCB instance
  */
-LIB61850_API LogControlBlock*
-LogControlBlock_create(const char* name, LogicalNode* parent, const char* dataSetName, const char* logRef, uint8_t trgOps,
-        uint32_t intgPd, bool logEna, bool reasonCode);
+LIB61850_API LogControlBlock *
+LogControlBlock_create(const char * name, LogicalNode* parent, const char * dataSetName, const char * logRef,
+                       uint8_t trgOps,
+                       uint32_t intgPd, bool logEna, bool reasonCode);
 
-LIB61850_API const char*
+LIB61850_API const char *
 LogControlBlock_getName(LogControlBlock* self);
 
-LIB61850_API LogicalNode*
+LIB61850_API LogicalNode *
 LogControlBlock_getParent(LogControlBlock* self);
 
 /**
@@ -411,8 +412,8 @@ LogControlBlock_getParent(LogControlBlock* self);
  *
  * \return the new LOG instance
  */
-LIB61850_API Log*
-Log_create(const char* name, LogicalNode* parent);
+LIB61850_API Log *
+Log_create(const char * name, LogicalNode* parent);
 
 /**
  * \brief create a setting group control block (SGCB)
@@ -425,7 +426,7 @@ Log_create(const char* name, LogicalNode* parent);
  *
  * \return the new SGCB instance
  */
-LIB61850_API SettingGroupControlBlock*
+LIB61850_API SettingGroupControlBlock *
 SettingGroupControlBlock_create(LogicalNode* parent, uint8_t actSG, uint8_t numOfSGs);
 
 /**
@@ -444,9 +445,10 @@ SettingGroupControlBlock_create(LogicalNode* parent, uint8_t actSG, uint8_t numO
  *
  * \return the new GoCB instance
  */
-LIB61850_API GSEControlBlock*
-GSEControlBlock_create(const char* name, LogicalNode* parent, const char* appId, const char* dataSet, uint32_t confRev,
-        bool fixedOffs, int minTime, int maxTime);
+LIB61850_API GSEControlBlock *
+GSEControlBlock_create(const char * name, LogicalNode* parent, const char * appId, const char * dataSet,
+                       uint32_t confRev,
+                       bool fixedOffs, int minTime, int maxTime);
 
 /**
  * \brief create a new Multicast/Unicast Sampled Value (SV) control block (SvCB)
@@ -464,11 +466,12 @@ GSEControlBlock_create(const char* name, LogicalNode* parent, const char* appId,
  *
  * \return the new SvCB instance
  */
-LIB61850_API SVControlBlock*
-SVControlBlock_create(const char* name, LogicalNode* parent, const char* svID, const char* dataSet, uint32_t confRev, uint8_t smpMod,
-        uint16_t smpRate, uint8_t optFlds, bool isUnicast);
+LIB61850_API SVControlBlock *
+SVControlBlock_create(const char * name, LogicalNode* parent, const char * svID, const char * dataSet, uint32_t confRev,
+                      uint8_t smpMod,
+                      uint16_t smpRate, uint8_t optFlds, bool isUnicast);
 
-LIB61850_API const char*
+LIB61850_API const char *
 SVControlBlock_getName(SVControlBlock* self);
 
 LIB61850_API void
@@ -489,7 +492,7 @@ GSEControlBlock_addPhyComAddress(GSEControlBlock* self, PhyComAddress* phyComAdd
  *
  * \return the new PhyComAddress object
  */
-LIB61850_API PhyComAddress*
+LIB61850_API PhyComAddress *
 PhyComAddress_create(uint8_t vlanPriority, uint16_t vlanId, uint16_t appId, uint8_t dstAddress[]);
 
 /**
@@ -500,8 +503,8 @@ PhyComAddress_create(uint8_t vlanPriority, uint16_t vlanId, uint16_t appId, uint
  *
  * \return the new data set instance
  */
-LIB61850_API DataSet*
-DataSet_create(const char* name, LogicalNode* parent);
+LIB61850_API DataSet *
+DataSet_create(const char * name, LogicalNode* parent);
 
 /**
  * \brief Get the name of the data set
@@ -510,7 +513,7 @@ DataSet_create(const char* name, LogicalNode* parent);
  *
  * \returns the name of the data set (not the object reference).
  */
-LIB61850_API const char*
+LIB61850_API const char *
 DataSet_getName(DataSet* self);
 
 /**
@@ -523,10 +526,10 @@ DataSet_getName(DataSet* self);
 LIB61850_API int
 DataSet_getSize(DataSet* self);
 
-LIB61850_API DataSetEntry*
+LIB61850_API DataSetEntry *
 DataSet_getFirstEntry(DataSet* self);
 
-LIB61850_API DataSetEntry*
+LIB61850_API DataSetEntry *
 DataSetEntry_getNext(DataSetEntry* self);
 
 /**
@@ -549,8 +552,8 @@ DataSetEntry_getNext(DataSetEntry* self);
  *
  * \return the new data set entry instance
  */
-LIB61850_API DataSetEntry*
-DataSetEntry_create(DataSet* dataSet, const char* variable, int index, const char* component);
+LIB61850_API DataSetEntry *
+DataSetEntry_create(DataSet* dataSet, const char * variable, int index, const char * component);
 
 /**@}*/
 

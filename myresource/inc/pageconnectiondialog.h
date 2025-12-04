@@ -7,7 +7,7 @@ class PageConnectionDialog : public QDialog
 {
     Q_OBJECT
 
-public:
+  public:
     explicit PageConnectionDialog(QWidget *parent = nullptr);
     ~PageConnectionDialog();
 
@@ -18,33 +18,33 @@ public:
     bool getUseAuthentication() const;
     int getTimeout() const;
 
-private slots:
+  private slots:
     void onConnectClicked();
     void onCancelClicked();
     void onAuthenticationToggled(bool enabled);
 
-private:
+  private:
     void setupUi();
     void connectSignals();
 
     // Connection parameters
-    QLineEdit *m_hostnameEdit;
-    QSpinBox *m_portSpinBox;
-    QCheckBox *m_authCheckBox;
-    QLineEdit *m_usernameEdit;
-    QLineEdit *m_passwordEdit;
-    QSpinBox *m_timeoutSpinBox;
-    
+    QLineEdit * m_hostnameEdit;
+    QSpinBox * m_portSpinBox;
+    QCheckBox * m_authCheckBox;
+    QLineEdit * m_usernameEdit;
+    QLineEdit * m_passwordEdit;
+    QSpinBox * m_timeoutSpinBox;
+
     // Buttons
-    QPushButton *m_connectButton;
-    QPushButton *m_cancelButton;
-    
+    QPushButton * m_connectButton;
+    QPushButton * m_cancelButton;
+
     // Progress
-    QProgressBar *m_progressBar;
-    QLabel *m_progressLabel;
-    
+    QProgressBar * m_progressBar;
+    QLabel * m_progressLabel;
+
     // Authentication group
-    QGroupBox *m_authGroupBox;
+    QGroupBox * m_authGroupBox;
 };
 
 #endif // PAGECONNECTIONDIALOG_H

@@ -29,15 +29,15 @@
 extern "C" {
 #endif
 
-typedef struct sSNTPClient* SNTPClient;
+typedef struct sSNTPClient * SNTPClient;
 
-typedef void (*SNTPClient_UserCallback)(void* parameter, bool isSynced);
+typedef void (*SNTPClient_UserCallback)(void * parameter, bool isSynced);
 
 LIB61850_API SNTPClient
 SNTPClient_create();
 
 LIB61850_API void
-SNTPClient_setLocalAddress(SNTPClient self, const char* localAddress);
+SNTPClient_setLocalAddress(SNTPClient self, const char * localAddress);
 
 LIB61850_API void
 SNTPClient_setLocalPort(SNTPClient self, int udpPort);
@@ -46,13 +46,13 @@ LIB61850_API HandleSet
 SNTPClient_getHandleSet(SNTPClient self);
 
 LIB61850_API void
-SNTPClient_addServer(SNTPClient self, const char* serverAddr, int serverPort);
+SNTPClient_addServer(SNTPClient self, const char * serverAddr, int serverPort);
 
 LIB61850_API void
 SNTPClient_setPollInterval(SNTPClient self, uint32_t intervalInSeconds);
 
 LIB61850_API void
-SNTPClient_setUserCallback(SNTPClient self, SNTPClient_UserCallback callback, void* parameter);
+SNTPClient_setUserCallback(SNTPClient self, SNTPClient_UserCallback callback, void * parameter);
 
 LIB61850_API bool
 SNTPClient_isSynchronized(SNTPClient self);

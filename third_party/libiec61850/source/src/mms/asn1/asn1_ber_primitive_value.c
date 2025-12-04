@@ -25,86 +25,86 @@
 
 #include "asn1_ber_primitive_value.h"
 
-Asn1PrimitiveValue*
+Asn1PrimitiveValue *
 Asn1PrimitiveValue_create(int size)
 {
-    Asn1PrimitiveValue* self = (Asn1PrimitiveValue*)GLOBAL_MALLOC(sizeof(Asn1PrimitiveValue));
+  Asn1PrimitiveValue* self = (Asn1PrimitiveValue *)GLOBAL_MALLOC(sizeof(Asn1PrimitiveValue));
 
-    if (self)
+  if(self)
+  {
+    self->size = 1;
+    self->maxSize = size;
+
+    self->octets = (uint8_t *)GLOBAL_CALLOC(1, size);
+
+    if(self->octets == NULL)
     {
-        self->size = 1;
-        self->maxSize = size;
-
-        self->octets = (uint8_t*)GLOBAL_CALLOC(1, size);
-
-        if (self->octets == NULL)
-        {
-            GLOBAL_FREEMEM(self);
-            self = NULL;
-        }
+      GLOBAL_FREEMEM(self);
+      self = NULL;
     }
+  }
 
-    return self;
+  return self;
 }
 
-Asn1PrimitiveValue*
+Asn1PrimitiveValue *
 Asn1PrimitiveValue_clone(Asn1PrimitiveValue* self)
 {
-    Asn1PrimitiveValue* clone = (Asn1PrimitiveValue*)GLOBAL_MALLOC(sizeof(Asn1PrimitiveValue));
+  Asn1PrimitiveValue* clone = (Asn1PrimitiveValue *)GLOBAL_MALLOC(sizeof(Asn1PrimitiveValue));
 
-    if (clone)
+  if(clone)
+  {
+    clone->size = self->size;
+    clone->maxSize = self->maxSize;
+
+    clone->octets = (uint8_t *)GLOBAL_MALLOC(self->maxSize);
+
+    if(clone->octets)
     {
-        clone->size = self->size;
-        clone->maxSize = self->maxSize;
-
-        clone->octets = (uint8_t*)GLOBAL_MALLOC(self->maxSize);
-
-        if (clone->octets)
-        {
-            memcpy(clone->octets, self->octets, clone->maxSize);
-        }
-        else
-        {
-            GLOBAL_FREEMEM(clone);
-            clone = NULL;
-        }
+      memcpy(clone->octets, self->octets, clone->maxSize);
     }
+    else
+    {
+      GLOBAL_FREEMEM(clone);
+      clone = NULL;
+    }
+  }
 
-    return clone;
+  return clone;
 }
 
 bool
 Asn1PrimitivaValue_compare(Asn1PrimitiveValue* self, Asn1PrimitiveValue* otherValue)
 {
-    if (self->size == otherValue->size)
-    {
-        if (memcmp(self->octets, otherValue->octets, self->size) == 0)
-            return true;
-        else
-            return false;
-    }
+  if(self->size == otherValue->size)
+  {
+    if(memcmp(self->octets, otherValue->octets, self->size) == 0)
+      return true;
     else
-        return false;
+      return false;
+  }
+  else
+    return false;
 }
 
 int
 Asn1PrimitiveValue_getSize(Asn1PrimitiveValue* self)
 {
-	return self->size;
+  return self->size;
 }
 
 int
 Asn1PrimitiveValue_getMaxSize(Asn1PrimitiveValue* self)
 {
-	return self->maxSize;
+  return self->maxSize;
 }
 
 void
 Asn1PrimitiveValue_destroy(Asn1PrimitiveValue* self)
 {
-    if (self)
-    {
-        GLOBAL_FREEMEM(self->octets);
-        GLOBAL_FREEMEM(self);
-    }
+  if(self)
+  {
+    GLOBAL_FREEMEM(self->octets);
+    GLOBAL_FREEMEM(self);
+  }
 }

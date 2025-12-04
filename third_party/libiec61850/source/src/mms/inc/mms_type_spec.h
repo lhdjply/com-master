@@ -68,8 +68,8 @@ MmsVariableSpecification_destroy(MmsVariableSpecification* self);
  * \param childId the relative MMS name to the child MMS variable (with "$" separators!)
  *
  */
-LIB61850_API MmsValue*
-MmsVariableSpecification_getChildValue(MmsVariableSpecification* self, MmsValue* value, const char* childId);
+LIB61850_API MmsValue *
+MmsVariableSpecification_getChildValue(MmsVariableSpecification* self, MmsValue* value, const char * childId);
 
 /**
  * \brief Get the child of self specified by its relative name
@@ -79,8 +79,8 @@ MmsVariableSpecification_getChildValue(MmsVariableSpecification* self, MmsValue*
  *
  * \return the variable specification of the child or NULL if not existing.
  */
-LIB61850_API MmsVariableSpecification*
-MmsVariableSpecification_getNamedVariableRecursive(MmsVariableSpecification* self, const char* nameId);
+LIB61850_API MmsVariableSpecification *
+MmsVariableSpecification_getNamedVariableRecursive(MmsVariableSpecification* self, const char * nameId);
 
 /**
  * \brief get the MMS type of the variable
@@ -113,7 +113,7 @@ MmsVariableSpecification_isValueOfType(MmsVariableSpecification* self, const Mms
  *
  * \return the name of the variable
  */
-LIB61850_API const char*
+LIB61850_API const char *
 MmsVariableSpecification_getName(MmsVariableSpecification* self);
 
 /**
@@ -142,7 +142,7 @@ MmsVariableSpecification_getStructureElements(MmsVariableSpecification* self);
 LIB61850_API int
 MmsVariableSpecification_getSize(MmsVariableSpecification* self);
 
-LIB61850_API MmsVariableSpecification*
+LIB61850_API MmsVariableSpecification *
 MmsVariableSpecification_getChildSpecificationByIndex(MmsVariableSpecification* self, int index);
 
 /**
@@ -154,10 +154,10 @@ MmsVariableSpecification_getChildSpecificationByIndex(MmsVariableSpecification* 
  *
  *  \return the type specification of the component or NULL if the component was not found
  */
-LIB61850_API MmsVariableSpecification*
-MmsVariableSpecification_getChildSpecificationByName(MmsVariableSpecification* self, const char* name, int* index);
+LIB61850_API MmsVariableSpecification *
+MmsVariableSpecification_getChildSpecificationByName(MmsVariableSpecification* self, const char * name, int * index);
 
-LIB61850_API MmsVariableSpecification*
+LIB61850_API MmsVariableSpecification *
 MmsVariableSpecification_getArrayElementSpecification(MmsVariableSpecification* self);
 
 LIB61850_API int

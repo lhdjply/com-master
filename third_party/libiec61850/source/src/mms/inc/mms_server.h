@@ -35,34 +35,37 @@ extern "C" {
 #include "mms_value.h"
 #include "iso_connection_parameters.h"
 
-typedef enum {
-	MMS_SERVER_NEW_CONNECTION,
-	MMS_SERVER_CONNECTION_CLOSED,
-	MMS_SERVER_CONNECTION_TICK
+typedef enum
+{
+  MMS_SERVER_NEW_CONNECTION,
+  MMS_SERVER_CONNECTION_CLOSED,
+  MMS_SERVER_CONNECTION_TICK
 } MmsServerEvent;
 
-typedef struct sMmsServer* MmsServer;
+typedef struct sMmsServer * MmsServer;
 
-typedef struct sMmsServerConnection* MmsServerConnection;
+typedef struct sMmsServerConnection * MmsServerConnection;
 
-typedef enum {
-    MMS_DOMAIN_SPECIFIC,
-    MMS_ASSOCIATION_SPECIFIC,
-    MMS_VMD_SPECIFIC
+typedef enum
+{
+  MMS_DOMAIN_SPECIFIC,
+  MMS_ASSOCIATION_SPECIFIC,
+  MMS_VMD_SPECIFIC
 } MmsVariableListType;
 
 LIB61850_INTERNAL void
-MmsServer_setLocalIpAddress(MmsServer self, const char* localIpAddress);
+MmsServer_setLocalIpAddress(MmsServer self, const char * localIpAddress);
 
 LIB61850_INTERNAL bool
 MmsServer_isRunning(MmsServer self);
 
-typedef enum {
-    MMS_VARLIST_CREATE,
-    MMS_VARLIST_DELETE,
-    MMS_VARLIST_READ,
-    MMS_VARLIST_WRITE,
-    MMS_VARLIST_GET_DIRECTORY
+typedef enum
+{
+  MMS_VARLIST_CREATE,
+  MMS_VARLIST_DELETE,
+  MMS_VARLIST_READ,
+  MMS_VARLIST_WRITE,
+  MMS_VARLIST_GET_DIRECTORY
 } MmsVariableListAccessType;
 
 /**
@@ -77,8 +80,9 @@ typedef enum {
  *
  * \return MMS_ERROR_NONE if the request is accepted, otherwise the MmsError value that has to be sent back to the client
  */
-typedef MmsError (*MmsNamedVariableListAccessHandler)(void* parameter, MmsVariableListAccessType accessType, MmsVariableListType listType, MmsDomain* domain,
-        char* listName, MmsServerConnection connection);
+typedef MmsError (*MmsNamedVariableListAccessHandler)(void * parameter, MmsVariableListAccessType accessType,
+                                                      MmsVariableListType listType, MmsDomain* domain,
+                                                      char * listName, MmsServerConnection connection);
 
 /**
  * \brief Install callback handler that is called when a named variable list is accessed by a client
@@ -88,17 +92,18 @@ typedef MmsError (*MmsNamedVariableListAccessHandler)(void* parameter, MmsVariab
  * \param parameter user provided parameter that is passed to the callback handler
  */
 LIB61850_INTERNAL void
-MmsServer_installVariableListAccessHandler(MmsServer self, MmsNamedVariableListAccessHandler handler, void* parameter);
+MmsServer_installVariableListAccessHandler(MmsServer self, MmsNamedVariableListAccessHandler handler, void * parameter);
 
 /**
  * \brief callback handler that is called for each received read journal request
- * 
+ *
  * \param parameter a user provided parameter
  * \param domain the MMS domain the journal is belonging to
  * \param logName the name of the journal
  * \param connection client connection that is accessing the journal
  */
-typedef bool (*MmsReadJournalHandler)(void* parameter, MmsDomain* domain, const char* logName, MmsServerConnection connection);
+typedef bool (*MmsReadJournalHandler)(void * parameter, MmsDomain* domain, const char * logName,
+                                      MmsServerConnection connection);
 
 /**
  * \brief Install callback handler that is called when a journal is accessed by a client
@@ -108,19 +113,21 @@ typedef bool (*MmsReadJournalHandler)(void* parameter, MmsDomain* domain, const 
  * \param parameter user provided parameter that is passed to the callback handler
  */
 LIB61850_INTERNAL void
-MmsServer_installReadJournalHandler(MmsServer self, MmsReadJournalHandler handler, void* parameter);
+MmsServer_installReadJournalHandler(MmsServer self, MmsReadJournalHandler handler, void * parameter);
 
-typedef enum {
-    MMS_GETNAMELIST_DOMAINS,
-    MMS_GETNAMELIST_JOURNALS,
-    MMS_GETNAMELIST_DATASETS,
-    MMS_GETNAMELIST_DATA
+typedef enum
+{
+  MMS_GETNAMELIST_DOMAINS,
+  MMS_GETNAMELIST_JOURNALS,
+  MMS_GETNAMELIST_DATASETS,
+  MMS_GETNAMELIST_DATA
 } MmsGetNameListType;
 
-typedef bool (*MmsGetNameListHandler)(void* parameter, MmsGetNameListType nameListType, MmsDomain* domain, MmsServerConnection connection);
+typedef bool (*MmsGetNameListHandler)(void * parameter, MmsGetNameListType nameListType, MmsDomain* domain,
+                                      MmsServerConnection connection);
 
 LIB61850_INTERNAL void
-MmsServer_installGetNameListHandler(MmsServer self, MmsGetNameListHandler handler, void* parameter);
+MmsServer_installGetNameListHandler(MmsServer self, MmsGetNameListHandler handler, void * parameter);
 
 /**
  * \brief ObtainFile service callback handler
@@ -133,7 +140,8 @@ MmsServer_installGetNameListHandler(MmsServer self, MmsGetNameListHandler handle
  * \param sourceFilename the source file name on the client side system
  * \param destinationFilename the target file name on the server side system
  */
-typedef bool (*MmsObtainFileHandler)(void* parameter, MmsServerConnection connection, const char* sourceFilename, const char* destinationFilename);
+typedef bool (*MmsObtainFileHandler)(void * parameter, MmsServerConnection connection, const char * sourceFilename,
+                                     const char * destinationFilename);
 
 /**
  * \brief Install callback handler that is invoked when the file upload (obtainFile service) is invoked by the client
@@ -145,7 +153,7 @@ typedef bool (*MmsObtainFileHandler)(void* parameter, MmsServerConnection connec
  * \param parameter user provided parameter that is passed to the callback handler
  */
 LIB61850_INTERNAL void
-MmsServer_installObtainFileHandler(MmsServer self, MmsObtainFileHandler handler, void* parameter);
+MmsServer_installObtainFileHandler(MmsServer self, MmsObtainFileHandler handler, void * parameter);
 
 /**
  * \brief Get file complete (obtainFile service terminated) callback handler
@@ -156,7 +164,8 @@ MmsServer_installObtainFileHandler(MmsServer self, MmsObtainFileHandler handler,
  * \param connection the connection that requested the service
  * \param destinationFilename the target file name on the server side system
  */
-typedef void (*MmsGetFileCompleteHandler)(void* parameter, MmsServerConnection connection, const char* destinationFilename);
+typedef void (*MmsGetFileCompleteHandler)(void * parameter, MmsServerConnection connection,
+                                          const char * destinationFilename);
 
 /**
  * \brief Install callback handler that is invoked when the file upload (obtainFile service) is completed and the
@@ -167,15 +176,16 @@ typedef void (*MmsGetFileCompleteHandler)(void* parameter, MmsServerConnection c
  * \param parameter user provided parameter that is passed to the callback handler
  */
 LIB61850_INTERNAL void
-MmsServer_installGetFileCompleteHandler(MmsServer self, MmsGetFileCompleteHandler handler, void* parameter);
+MmsServer_installGetFileCompleteHandler(MmsServer self, MmsGetFileCompleteHandler handler, void * parameter);
 
 
-typedef  enum {
-    MMS_FILE_ACCESS_TYPE_READ_DIRECTORY,
-    MMS_FILE_ACCESS_TYPE_OPEN,
-    MMS_FILE_ACCESS_TYPE_OBTAIN,
-    MMS_FILE_ACCESS_TYPE_DELETE,
-    MMS_FILE_ACCESS_TYPE_RENAME
+typedef  enum
+{
+  MMS_FILE_ACCESS_TYPE_READ_DIRECTORY,
+  MMS_FILE_ACCESS_TYPE_OPEN,
+  MMS_FILE_ACCESS_TYPE_OBTAIN,
+  MMS_FILE_ACCESS_TYPE_DELETE,
+  MMS_FILE_ACCESS_TYPE_RENAME
 } MmsFileServiceType;
 
 /**
@@ -189,8 +199,8 @@ typedef  enum {
  *
  * \return MMS_ERROR_NONE when the request is accepted, otherwise use the appropriate error code (e.g. MMS_ERROR_FILE_FILE_ACCESS_DENIED)
  */
-typedef MmsError (*MmsFileAccessHandler) (void* parameter, MmsServerConnection connection, MmsFileServiceType service,
-                                          const char* localFilename, const char* otherFilename);
+typedef MmsError (*MmsFileAccessHandler) (void * parameter, MmsServerConnection connection, MmsFileServiceType service,
+                                          const char * localFilename, const char * otherFilename);
 
 
 /**
@@ -202,7 +212,7 @@ typedef MmsError (*MmsFileAccessHandler) (void* parameter, MmsServerConnection c
  * \param parameter user provided parameter that is passed to the callback handler
  */
 LIB61850_API void
-MmsServer_installFileAccessHandler(MmsServer self, MmsFileAccessHandler handler, void* parameter);
+MmsServer_installFileAccessHandler(MmsServer self, MmsFileAccessHandler handler, void * parameter);
 
 /**
  * \brief Set the virtual filestore basepath for the MMS file services
@@ -215,7 +225,7 @@ MmsServer_installFileAccessHandler(MmsServer self, MmsFileAccessHandler handler,
  * \param basepath the new virtual filestore basepath
  */
 LIB61850_INTERNAL void
-MmsServer_setFilestoreBasepath(MmsServer self, const char* basepath);
+MmsServer_setFilestoreBasepath(MmsServer self, const char * basepath);
 
 /**
  * \brief Set the maximum number of TCP client connections
@@ -305,7 +315,7 @@ MmsServer_enableJournalService(MmsServer self, bool enable);
  * \param revision the revision attribute of the VMD
  */
 LIB61850_INTERNAL void
-MmsServer_setServerIdentity(MmsServer self, char* vendorName, char* modelName, char* revision);
+MmsServer_setServerIdentity(MmsServer self, char * vendorName, char * modelName, char * revision);
 
 /**
  * \brief get the vendor name attribute of the VMD identity
@@ -313,7 +323,7 @@ MmsServer_setServerIdentity(MmsServer self, char* vendorName, char* modelName, c
  * \param self the MmsServer instance to operate on
  * \return the vendor name attribute of the VMD as C string
  */
-LIB61850_INTERNAL char*
+LIB61850_INTERNAL char *
 MmsServer_getVendorName(MmsServer self);
 
 /**
@@ -322,7 +332,7 @@ MmsServer_getVendorName(MmsServer self);
  * \param self the MmsServer instance to operate on
  * \return the model name attribute of the VMD as C string
  */
-LIB61850_INTERNAL char*
+LIB61850_INTERNAL char *
 MmsServer_getModelName(MmsServer self);
 
 /**
@@ -331,7 +341,7 @@ MmsServer_getModelName(MmsServer self);
  * \param self the MmsServer instance to operate on
  * \return the revision attribute of the VMD as C string
  */
-LIB61850_INTERNAL char*
+LIB61850_INTERNAL char *
 MmsServer_getRevision(MmsServer self);
 
 /***************************************************
@@ -359,7 +369,8 @@ MmsServer_getRevision(MmsServer self);
  * \param connection is the MmsServerConnection instance that received the MMS status request
  * \param extendedDerivation indicates if the request contains the extendedDerivation parameter
  */
-typedef void (*MmsStatusRequestListener)(void* parameter, MmsServer mmsServer, MmsServerConnection connection, bool extendedDerivation);
+typedef void (*MmsStatusRequestListener)(void * parameter, MmsServer mmsServer, MmsServerConnection connection,
+                                         bool extendedDerivation);
 
 /**
  * \brief set the VMD state values for the VMD status service
@@ -399,15 +410,15 @@ MmsServer_getVMDPhysicalStatus(MmsServer self);
  * \param parameter a user provided parameter that is handed over to the listener
  */
 LIB61850_INTERNAL void
-MmsServer_setStatusRequestListener(MmsServer self, MmsStatusRequestListener listener, void* parameter);
+MmsServer_setStatusRequestListener(MmsServer self, MmsStatusRequestListener listener, void * parameter);
 
-LIB61850_INTERNAL char*
+LIB61850_INTERNAL char *
 MmsServerConnection_getClientAddress(MmsServerConnection self);
 
-LIB61850_INTERNAL char*
+LIB61850_INTERNAL char *
 MmsServerConnection_getLocalAddress(MmsServerConnection self);
 
-LIB61850_INTERNAL void*
+LIB61850_INTERNAL void *
 MmsServerConnection_getSecurityToken(MmsServerConnection self);
 
 LIB61850_INTERNAL void

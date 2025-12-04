@@ -35,38 +35,39 @@
  */
 
 LIB61850_INTERNAL int
-BerEncoder_encodeLength(uint32_t length, uint8_t* buffer, int bufPos);
+BerEncoder_encodeLength(uint32_t length, uint8_t * buffer, int bufPos);
 
 LIB61850_INTERNAL int
-BerEncoder_encodeTL(uint8_t tag, uint32_t length, uint8_t* buffer, int bufPos);
+BerEncoder_encodeTL(uint8_t tag, uint32_t length, uint8_t * buffer, int bufPos);
 
 LIB61850_INTERNAL int
-BerEncoder_encodeBoolean(uint8_t tag, bool value, uint8_t* buffer, int bufPos);
+BerEncoder_encodeBoolean(uint8_t tag, bool value, uint8_t * buffer, int bufPos);
 
 LIB61850_INTERNAL int
-BerEncoder_encodeStringWithTag(uint8_t tag, const char* string, uint8_t* buffer, int bufPos);
+BerEncoder_encodeStringWithTag(uint8_t tag, const char * string, uint8_t * buffer, int bufPos);
 
 LIB61850_INTERNAL int
-BerEncoder_encodeOctetString(uint8_t tag, uint8_t* octetString, uint32_t octetStringSize, uint8_t* buffer, int bufPos);
+BerEncoder_encodeOctetString(uint8_t tag, uint8_t * octetString, uint32_t octetStringSize, uint8_t * buffer,
+                             int bufPos);
 
 LIB61850_INTERNAL int
-BerEncoder_encodeAsn1PrimitiveValue(uint8_t tag, Asn1PrimitiveValue* value, uint8_t* buffer, int bufPos);
+BerEncoder_encodeAsn1PrimitiveValue(uint8_t tag, Asn1PrimitiveValue* value, uint8_t * buffer, int bufPos);
 
 LIB61850_INTERNAL int
-BerEncoder_encodeUInt32(uint32_t value, uint8_t* buffer, int bufPos);
+BerEncoder_encodeUInt32(uint32_t value, uint8_t * buffer, int bufPos);
 
 LIB61850_INTERNAL int
-BerEncoder_encodeInt32(int32_t value, uint8_t* buffer, int bufPos);
+BerEncoder_encodeInt32(int32_t value, uint8_t * buffer, int bufPos);
 
 LIB61850_INTERNAL int
-BerEncoder_encodeUInt32WithTL(uint8_t tag, uint32_t value, uint8_t* buffer, int bufPos);
+BerEncoder_encodeUInt32WithTL(uint8_t tag, uint32_t value, uint8_t * buffer, int bufPos);
 
 LIB61850_INTERNAL int
-BerEncoder_encodeBitString(uint8_t tag, int bitStringSize, uint8_t* bitString, uint8_t* buffer, int bufPos);
+BerEncoder_encodeBitString(uint8_t tag, int bitStringSize, uint8_t * bitString, uint8_t * buffer, int bufPos);
 
 LIB61850_INTERNAL int
-BerEncoder_encodeFloat(uint8_t* floatValue, uint8_t formatWidth, uint8_t exponentWidth,
-        uint8_t* buffer, int bufPos);
+BerEncoder_encodeFloat(uint8_t * floatValue, uint8_t formatWidth, uint8_t exponentWidth,
+                       uint8_t * buffer, int bufPos);
 
 /*
  * functions to determine size of encoded entities.
@@ -82,7 +83,7 @@ LIB61850_INTERNAL int
 BerEncoder_determineLengthSize(uint32_t length);
 
 LIB61850_INTERNAL int
-BerEncoder_determineEncodedStringSize(const char* string);
+BerEncoder_determineEncodedStringSize(const char * string);
 
 LIB61850_INTERNAL int
 BerEncoder_determineEncodedBitStringSize(int bitStringSize);
@@ -92,12 +93,12 @@ BerEncoder_determineEncodedBitStringSize(int bitStringSize);
  */
 
 LIB61850_INTERNAL int
-BerEncoder_encodeOIDToBuffer(const char* oidString, uint8_t* buffer, int maxBufLen);
+BerEncoder_encodeOIDToBuffer(const char * oidString, uint8_t * buffer, int maxBufLen);
 
 LIB61850_INTERNAL void
-BerEncoder_revertByteOrder(uint8_t* octets, const int size);
+BerEncoder_revertByteOrder(uint8_t * octets, const int size);
 
 LIB61850_INTERNAL int
-BerEncoder_compressInteger(uint8_t* integer, int originalSize);
+BerEncoder_compressInteger(uint8_t * integer, int originalSize);
 
 #endif /* BER_ENCODER_H_ */

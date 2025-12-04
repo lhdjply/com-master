@@ -36,14 +36,15 @@ extern "C" {
  * @{
  */
 
-typedef struct sSerialPort* SerialPort;
+typedef struct sSerialPort * SerialPort;
 
-typedef enum {
-    SERIAL_PORT_ERROR_NONE = 0,
-    SERIAL_PORT_ERROR_INVALID_ARGUMENT = 1,
-    SERIAL_PORT_ERROR_INVALID_BAUDRATE = 2,
-    SERIAL_PORT_ERROR_OPEN_FAILED = 3,
-    SERIAL_PORT_ERROR_UNKNOWN = 99
+typedef enum
+{
+  SERIAL_PORT_ERROR_NONE = 0,
+  SERIAL_PORT_ERROR_INVALID_ARGUMENT = 1,
+  SERIAL_PORT_ERROR_INVALID_BAUDRATE = 2,
+  SERIAL_PORT_ERROR_OPEN_FAILED = 3,
+  SERIAL_PORT_ERROR_UNKNOWN = 99
 } SerialPortError;
 
 /**
@@ -58,7 +59,7 @@ typedef enum {
  * \return the new SerialPort instance
  */
 PAL_API SerialPort
-SerialPort_create(const char* interfaceName, int baudRate, uint8_t dataBits, char parity, uint8_t stopBits);
+SerialPort_create(const char * interfaceName, int baudRate, uint8_t dataBits, char parity, uint8_t stopBits);
 
 /**
  * \brief Destroy the SerialPort instance and release all resources
@@ -120,7 +121,7 @@ SerialPort_readByte(SerialPort self);
  * \return number of bytes written, or -1 in case of an error
  */
 PAL_API int
-SerialPort_write(SerialPort self, uint8_t* buffer, int startPos, int numberOfBytes);
+SerialPort_write(SerialPort self, uint8_t * buffer, int startPos, int numberOfBytes);
 
 /**
  * \brief Get the error code of the last operation

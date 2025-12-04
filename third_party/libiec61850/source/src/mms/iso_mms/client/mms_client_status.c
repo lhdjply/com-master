@@ -34,81 +34,85 @@
 void
 mmsClient_createStatusRequest(uint32_t invokeId, ByteBuffer* request, bool extendedDerivation)
 {
-    uint32_t invokeIdSize = BerEncoder_UInt32determineEncodedSize(invokeId);
-    uint32_t confirmedRequestPduSize = 2 + 2 + 1 + invokeIdSize;
+  uint32_t invokeIdSize = BerEncoder_UInt32determineEncodedSize(invokeId);
+  uint32_t confirmedRequestPduSize = 2 + 2 + 1 + invokeIdSize;
 
-    int bufPos = 0;
-    uint8_t* buffer = request->buffer;
+  int bufPos = 0;
+  uint8_t * buffer = request->buffer;
 
-    bufPos = BerEncoder_encodeTL(0xa0, confirmedRequestPduSize, buffer, bufPos);
-    bufPos = BerEncoder_encodeTL(0x02, invokeIdSize, buffer, bufPos);
-    bufPos = BerEncoder_encodeUInt32(invokeId, buffer, bufPos);
+  bufPos = BerEncoder_encodeTL(0xa0, confirmedRequestPduSize, buffer, bufPos);
+  bufPos = BerEncoder_encodeTL(0x02, invokeIdSize, buffer, bufPos);
+  bufPos = BerEncoder_encodeUInt32(invokeId, buffer, bufPos);
 
-    bufPos = BerEncoder_encodeBoolean(0x80, extendedDerivation, buffer, bufPos);
+  bufPos = BerEncoder_encodeBoolean(0x80, extendedDerivation, buffer, bufPos);
 
-    request->size = bufPos;
+  request->size = bufPos;
 }
 
 bool
-mmsClient_parseStatusResponse(MmsConnection self, ByteBuffer* response, int bufPos, int* vmdLogicalStatus, int* vmdPhysicalStatus)
+mmsClient_parseStatusResponse(MmsConnection self, ByteBuffer* response, int bufPos, int * vmdLogicalStatus,
+                              int * vmdPhysicalStatus)
 {
-    (void)self;
+  (void)self;
 
-    uint8_t* buffer = ByteBuffer_getBuffer(response);
-    int maxBufPos = ByteBuffer_getSize(response);
-    int length;
+  uint8_t * buffer = ByteBuffer_getBuffer(response);
+  int maxBufPos = ByteBuffer_getSize(response);
+  int length;
 
-    uint8_t tag = buffer[bufPos++];
+  uint8_t tag = buffer[bufPos++];
 
-    if (tag != 0xa0) {
-        if (DEBUG_MMS_CLIENT)
-            printf("mmsClient_parseStatusResponse: unknown tag %02x\n", tag);
-        goto exit_error;
-    }
+  if(tag != 0xa0)
+  {
+    if(DEBUG_MMS_CLIENT)
+      printf("mmsClient_parseStatusResponse: unknown tag %02x\n", tag);
+    goto exit_error;
+  }
 
+  bufPos = BerDecoder_decodeLength(buffer, &length, bufPos, maxBufPos);
+  if(bufPos < 0) goto exit_error;
+
+  int endPos = bufPos + length;
+
+  bool hasPhysicalStatus = false;
+  bool hasLogicalStatus = false;
+
+  while(bufPos < endPos)
+  {
+    tag = buffer[bufPos++];
     bufPos = BerDecoder_decodeLength(buffer, &length, bufPos, maxBufPos);
-    if (bufPos < 0) goto exit_error;
+    if(bufPos < 0) goto exit_error;
 
-    int endPos = bufPos + length;
+    switch(tag)
+    {
+      case 0x80: /* vmdLogicalStatus */
+        if(vmdLogicalStatus != NULL)
+          *vmdLogicalStatus = BerDecoder_decodeUint32(buffer, length, bufPos);
 
-    bool hasPhysicalStatus = false;
-    bool hasLogicalStatus = false;
+        hasLogicalStatus = true;
+        bufPos += length;
+        break;
+      case 0x81: /* vmdPhysicalStatus */
+        if(vmdPhysicalStatus != NULL)
+          *vmdPhysicalStatus = BerDecoder_decodeUint32(buffer, length, bufPos);
 
-    while (bufPos < endPos) {
-        tag = buffer[bufPos++];
-        bufPos = BerDecoder_decodeLength(buffer, &length, bufPos, maxBufPos);
-        if (bufPos < 0) goto exit_error;
-
-        switch (tag) {
-        case 0x80: /* vmdLogicalStatus */
-            if (vmdLogicalStatus != NULL)
-                *vmdLogicalStatus = BerDecoder_decodeUint32(buffer, length, bufPos);
-
-            hasLogicalStatus = true;
-            bufPos += length;
-            break;
-        case 0x81: /* vmdPhysicalStatus */
-            if (vmdPhysicalStatus != NULL)
-                *vmdPhysicalStatus = BerDecoder_decodeUint32(buffer, length, bufPos);
-
-            hasPhysicalStatus = true;
-            bufPos += length;
-            break;
-        case 0x82: /* localDetail */
-            bufPos += length;
-            break;
-        case 0x00: /* indefinite length end tag -> ignore */
-            break;
-        default:
-            return false;
-        }
+        hasPhysicalStatus = true;
+        bufPos += length;
+        break;
+      case 0x82: /* localDetail */
+        bufPos += length;
+        break;
+      case 0x00: /* indefinite length end tag -> ignore */
+        break;
+      default:
+        return false;
     }
+  }
 
-    if (hasPhysicalStatus && hasLogicalStatus)
-        return true;
+  if(hasPhysicalStatus && hasLogicalStatus)
+    return true;
 
 exit_error:
-    return false;
+  return false;
 }
 
 

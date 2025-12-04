@@ -66,63 +66,63 @@ extern "C" {
 /**
  * \brief Configuration object to configure IEC 61850 stack features
  */
-typedef struct sIedServerConfig* IedServerConfig;
+typedef struct sIedServerConfig * IedServerConfig;
 
 struct sIedServerConfig
 {
-    /** size of the report buffer associated with a buffered report control block */
-    int reportBufferSize;
+  /** size of the report buffer associated with a buffered report control block */
+  int reportBufferSize;
 
-    /** size of the report buffer associated with an unbuffered report control block */
-    int reportBufferSizeURCBs;
+  /** size of the report buffer associated with an unbuffered report control block */
+  int reportBufferSizeURCBs;
 
-    /** Base path (directory where the file service serves files */
-    char* fileServiceBasepath;
+  /** Base path (directory where the file service serves files */
+  char * fileServiceBasepath;
 
-    /** when true (default) enable MMS file service */
-    bool enableFileService;
+  /** when true (default) enable MMS file service */
+  bool enableFileService;
 
-    /** when true (default) enable dynamic data set services for MMS */
-    bool enableDynamicDataSetService;
+  /** when true (default) enable dynamic data set services for MMS */
+  bool enableDynamicDataSetService;
 
-    /** the maximum number of allowed association specific data sets */
-    int maxAssociationSpecificDataSets;
+  /** the maximum number of allowed association specific data sets */
+  int maxAssociationSpecificDataSets;
 
-    /** the maximum number of allowed domain specific data sets */
-    int maxDomainSpecificDataSets;
+  /** the maximum number of allowed domain specific data sets */
+  int maxDomainSpecificDataSets;
 
-    /** maximum number of data set entries of dynamic data sets */
-    int maxDataSetEntries;
+  /** maximum number of data set entries of dynamic data sets */
+  int maxDataSetEntries;
 
-    /** when true (default) enable log service */
-    bool enableLogService;
+  /** when true (default) enable log service */
+  bool enableLogService;
 
-    /** when true (default) the integrated GOOSE publisher is used */
-    bool useIntegratedGoosePublisher;
+  /** when true (default) the integrated GOOSE publisher is used */
+  bool useIntegratedGoosePublisher;
 
-    /** IEC 61850 edition (0 = edition 1, 1 = edition 2, 2 = edition 2.1, ...) */
-    uint8_t edition;
+  /** IEC 61850 edition (0 = edition 1, 1 = edition 2, 2 = edition 2.1, ...) */
+  uint8_t edition;
 
-    /** maximum number of MMS (TCP) connections */
-    int maxMmsConnections;
+  /** maximum number of MMS (TCP) connections */
+  int maxMmsConnections;
 
-    /** enable EditSG service (default: true) */
-    bool enableEditSG;
+  /** enable EditSG service (default: true) */
+  bool enableEditSG;
 
-    /** enable visibility of SGCB.ResvTms (default: true) */
-    bool enableResvTmsForSGCB;
+  /** enable visibility of SGCB.ResvTms (default: true) */
+  bool enableResvTmsForSGCB;
 
-    /** BRCB has resvTms attribute - only edition 2 (default: true) */
-    bool enableResvTmsForBRCB;
+  /** BRCB has resvTms attribute - only edition 2 (default: true) */
+  bool enableResvTmsForBRCB;
 
-    /** RCB has owner attribute (default: true) */
-    bool enableOwnerForRCB;
+  /** RCB has owner attribute (default: true) */
+  bool enableOwnerForRCB;
 
-    /** integrity report start times will by synchronized with straight numbers (default: false) */
-    bool syncIntegrityReportTimes;
+  /** integrity report start times will by synchronized with straight numbers (default: false) */
+  bool syncIntegrityReportTimes;
 
-    /** for each configurable ReportSetting there is a separate flag (default: Dyn = enable write for all) */
-    uint8_t reportSettingsWritable;
+  /** for each configurable ReportSetting there is a separate flag (default: Dyn = enable write for all) */
+  uint8_t reportSettingsWritable;
 };
 
 /**
@@ -238,12 +238,12 @@ IedServerConfig_getSyncIntegrityReportTimes(IedServerConfig self);
  * \param basepath new file service base path
  */
 LIB61850_API void
-IedServerConfig_setFileServiceBasePath(IedServerConfig self, const char* basepath);
+IedServerConfig_setFileServiceBasePath(IedServerConfig self, const char * basepath);
 
 /**
  * \brief Get the basepath of the file services
  */
-LIB61850_API const char*
+LIB61850_API const char *
 IedServerConfig_getFileServiceBasePath(IedServerConfig self);
 
 /**
@@ -446,12 +446,12 @@ IedServerConfig_getReportSetting(IedServerConfig self, uint8_t setting);
 /**
  * An opaque handle for an IED server instance
  */
-typedef struct sIedServer* IedServer;
+typedef struct sIedServer * IedServer;
 
 /**
  * An opaque handle for a client connection
  */
-typedef struct sClientConnection* ClientConnection;
+typedef struct sClientConnection * ClientConnection;
 
 /**
  * \brief Create a new IedServer instance
@@ -503,7 +503,7 @@ IedServer_destroy(IedServer self);
  * \return true in case of success, false otherwise
  */
 LIB61850_API bool
-IedServer_addAccessPoint(IedServer self, const char* ipAddr, int tcpPort, TLSConfiguration tlsConfiguration);
+IedServer_addAccessPoint(IedServer self, const char * ipAddr, int tcpPort, TLSConfiguration tlsConfiguration);
 
 /**
  * \brief Set the local IP address to listen on
@@ -512,7 +512,7 @@ IedServer_addAccessPoint(IedServer self, const char* ipAddr, int tcpPort, TLSCon
  * \param localIpAddress the local IP address as C string (an internal copy will be created)
  */
 LIB61850_API void
-IedServer_setLocalIpAddress(IedServer self, const char* localIpAddress);
+IedServer_setLocalIpAddress(IedServer self, const char * localIpAddress);
 
 /**
  * \brief Set the identify for the MMS identify service
@@ -525,7 +525,7 @@ IedServer_setLocalIpAddress(IedServer self, const char* localIpAddress);
  * \param revision the IED revision/version number
  */
 LIB61850_API void
-IedServer_setServerIdentity(IedServer self, const char* vendor, const char* model, const char* revision);
+IedServer_setServerIdentity(IedServer self, const char * vendor, const char * model, const char * revision);
 
 /**
  * \brief Set the virtual filestore basepath for the MMS file services
@@ -538,7 +538,7 @@ IedServer_setServerIdentity(IedServer self, const char* vendor, const char* mode
  * \param basepath the new virtual filestore basepath
  */
 LIB61850_API void
-IedServer_setFilestoreBasepath(IedServer self, const char* basepath);
+IedServer_setFilestoreBasepath(IedServer self, const char * basepath);
 
 /**
  * \brief Assign a \ref LogStorage instance to a log reference
@@ -550,7 +550,7 @@ IedServer_setFilestoreBasepath(IedServer self, const char* basepath);
  * \param logStorage the log storage instance to assign
  */
 LIB61850_API void
-IedServer_setLogStorage(IedServer self, const char* logRef, LogStorage logStorage);
+IedServer_setLogStorage(IedServer self, const char * logRef, LogStorage logStorage);
 
 /**
  * \brief Start handling client connections
@@ -636,7 +636,7 @@ IedServer_stopThreadless(IedServer self);
  *
  * \return the IedModel* instance of the server
  */
-LIB61850_API IedModel*
+LIB61850_API IedModel *
 IedServer_getDataModel(IedServer self);
 
 /**
@@ -714,7 +714,7 @@ IedServer_disableGoosePublishing(IedServer self);
  * \param interfaceId the ID of the ethernet interface to be used for GOOSE publishing
  */
 LIB61850_API void
-IedServer_setGooseInterfaceId(IedServer self, const char* interfaceId);
+IedServer_setGooseInterfaceId(IedServer self, const char * interfaceId);
 
 /**
  * \brief Set the Ethernet interface to be used by GOOSE publishing
@@ -730,7 +730,7 @@ IedServer_setGooseInterfaceId(IedServer self, const char* interfaceId);
  * \param interfaceId the ID of the ethernet interface to be used for GOOSE publishing
  */
 LIB61850_API void
-IedServer_setGooseInterfaceIdEx(IedServer self, LogicalNode* ln, const char* gcbName, const char* interfaceId);
+IedServer_setGooseInterfaceIdEx(IedServer self, LogicalNode* ln, const char * gcbName, const char * interfaceId);
 
 /**
  * \brief Enable/disable the use of VLAN tags in GOOSE messages
@@ -746,11 +746,11 @@ IedServer_setGooseInterfaceIdEx(IedServer self, LogicalNode* ln, const char* gcb
  * \param useVlanTag true to enable VLAN tagging, false otherwise
  */
 LIB61850_API void
-IedServer_useGooseVlanTag(IedServer self, LogicalNode* ln, const char* gcbName, bool useVlanTag);
+IedServer_useGooseVlanTag(IedServer self, LogicalNode* ln, const char * gcbName, bool useVlanTag);
 
 /**
  * \brief Set the time quality for all timestamps internally generated by this IedServer instance
- * 
+ *
  * You can call this function during the initialization of the server or whenever a time quality
  * flag has to be updated (on clock failure or change of time synchronization state).
  *
@@ -761,7 +761,8 @@ IedServer_useGooseVlanTag(IedServer self, LogicalNode* ln, const char* gcbName, 
  * \param subsecondPrecision set the subsecond precision (number of significant bits of the fractionOfSecond part of the time stamp)
  */
 LIB61850_API void
-IedServer_setTimeQuality(IedServer self, bool leapSecondKnown, bool clockFailure, bool clockNotSynchronized, int subsecondPrecision);
+IedServer_setTimeQuality(IedServer self, bool leapSecondKnown, bool clockFailure, bool clockNotSynchronized,
+                         int subsecondPrecision);
 
 /**@}*/
 
@@ -786,7 +787,7 @@ IedServer_setTimeQuality(IedServer self, bool leapSecondKnown, bool clockFailure
  * \param authenticatorParameter user provided parameter that is passed to the authenticator
  */
 LIB61850_API void
-IedServer_setAuthenticator(IedServer self, AcseAuthenticator authenticator, void* authenticatorParameter);
+IedServer_setAuthenticator(IedServer self, AcseAuthenticator authenticator, void * authenticatorParameter);
 
 /**
  * \brief get the peer address of this connection as string
@@ -797,7 +798,7 @@ IedServer_setAuthenticator(IedServer self, AcseAuthenticator authenticator, void
  * \param self the ClientConnection instance
  * \return peer address as C string.
  */
-LIB61850_API const char*
+LIB61850_API const char *
 ClientConnection_getPeerAddress(ClientConnection self);
 
 /**
@@ -809,7 +810,7 @@ ClientConnection_getPeerAddress(ClientConnection self);
  * \param self the ClientConnection instance
  * \return local address as C string.
  */
-LIB61850_API const char*
+LIB61850_API const char *
 ClientConnection_getLocalAddress(ClientConnection self);
 
 /**
@@ -822,7 +823,7 @@ ClientConnection_getLocalAddress(ClientConnection self);
  *
  * \return the security token or NULL
  */
-LIB61850_API void*
+LIB61850_API void *
 ClientConnection_getSecurityToken(ClientConnection self);
 
 /**
@@ -872,7 +873,8 @@ ClientConnection_release(ClientConnection self);
  * \param connected true if a new connection is indicated, false if the connection has been closed or detected as lost.
  * \param parameter a user provided parameter
  */
-typedef void (*IedConnectionIndicationHandler) (IedServer self, ClientConnection connection, bool connected, void* parameter);
+typedef void (*IedConnectionIndicationHandler) (IedServer self, ClientConnection connection, bool connected,
+                                                void * parameter);
 
 /**
  * \brief set a callback function that will be called on connection events (open or close).
@@ -882,13 +884,13 @@ typedef void (*IedConnectionIndicationHandler) (IedServer self, ClientConnection
  * \param parameter a user provided parameter that is passed to the callback function.
  */
 LIB61850_API void
-IedServer_setConnectionIndicationHandler(IedServer self, IedConnectionIndicationHandler handler, void* parameter);
+IedServer_setConnectionIndicationHandler(IedServer self, IedConnectionIndicationHandler handler, void * parameter);
 
 /**
  * \brief Ignore all requests from clients (for testing purposes)
  *
  * NOTE: This function will block all client requests on MMS layer
- * 
+ *
  * \param self the instance of IedServer to configure.
  * \param enable when true all requests from clients will be ignored
  */
@@ -944,7 +946,7 @@ IedServer_unlockDataModel(IedServer self);
  *
  * \return MmsValue object of the MMS Named Variable or NULL if the value does not exist.
  */
-LIB61850_API MmsValue*
+LIB61850_API MmsValue *
 IedServer_getAttributeValue(IedServer self, DataAttribute* dataAttribute);
 
 /**
@@ -1060,7 +1062,7 @@ IedServer_getBitStringAttributeValue(IedServer self, const DataAttribute* dataAt
  *
  * \return the value as a C string (null terminated string)
  */
-LIB61850_API const char*
+LIB61850_API const char *
 IedServer_getStringAttributeValue(IedServer self, const DataAttribute* dataAttribute);
 
 /**
@@ -1078,7 +1080,7 @@ IedServer_getStringAttributeValue(IedServer self, const DataAttribute* dataAttri
  *
  * \return MmsValue object cached by the server.
  */
-LIB61850_API MmsValue*
+LIB61850_API MmsValue *
 IedServer_getFunctionalConstrainedData(IedServer self, DataObject* dataObject, FunctionalConstraint fc);
 
 /**
@@ -1218,7 +1220,7 @@ IedServer_updateBooleanAttributeValue(IedServer self, DataAttribute* dataAttribu
  * \param value the new visible string value of the data attribute.
  */
 LIB61850_API void
-IedServer_updateVisibleStringAttributeValue(IedServer self, DataAttribute* dataAttribute, char *value);
+IedServer_updateVisibleStringAttributeValue(IedServer self, DataAttribute* dataAttribute, char * value);
 
 /**
  * \brief Update the value of an IEC 61850 UTC time (timestamp) data attribute.
@@ -1316,8 +1318,8 @@ IedServer_getActiveSettingGroup(IedServer self, SettingGroupControlBlock* sgcb);
  * \return true if the change is accepted, false otherwise.
  *
  */
-typedef bool (*ActiveSettingGroupChangedHandler) (void* parameter, SettingGroupControlBlock* sgcb,
-        uint8_t newActSg, ClientConnection connection);
+typedef bool (*ActiveSettingGroupChangedHandler) (void * parameter, SettingGroupControlBlock* sgcb,
+                                                  uint8_t newActSg, ClientConnection connection);
 
 /**
  * \brief Set the callback handler for the SetActSG event
@@ -1329,7 +1331,7 @@ typedef bool (*ActiveSettingGroupChangedHandler) (void* parameter, SettingGroupC
  */
 LIB61850_API void
 IedServer_setActiveSettingGroupChangedHandler(IedServer self, SettingGroupControlBlock* sgcb,
-        ActiveSettingGroupChangedHandler handler, void* parameter);
+                                              ActiveSettingGroupChangedHandler handler, void * parameter);
 
 /**
  * \brief Callback handler that is invoked when the edit setting group is about to be changed by an
@@ -1348,8 +1350,8 @@ IedServer_setActiveSettingGroupChangedHandler(IedServer self, SettingGroupContro
  * \return true if the change is accepted, false otherwise.
  *
  */
-typedef bool (*EditSettingGroupChangedHandler) (void* parameter, SettingGroupControlBlock* sgcb,
-        uint8_t newEditSg, ClientConnection connection);
+typedef bool (*EditSettingGroupChangedHandler) (void * parameter, SettingGroupControlBlock* sgcb,
+                                                uint8_t newEditSg, ClientConnection connection);
 
 /**
  * \brief Set the callback handler for the SetEditSG event
@@ -1361,7 +1363,7 @@ typedef bool (*EditSettingGroupChangedHandler) (void* parameter, SettingGroupCon
  */
 LIB61850_API void
 IedServer_setEditSettingGroupChangedHandler(IedServer self, SettingGroupControlBlock* sgcb,
-        EditSettingGroupChangedHandler handler, void* parameter);
+                                            EditSettingGroupChangedHandler handler, void * parameter);
 
 /**
  * \brief Callback handler that is invoked when the edit setting group has been confirmed by an
@@ -1372,8 +1374,8 @@ IedServer_setEditSettingGroupChangedHandler(IedServer self, SettingGroupControlB
  * \param editSg the edit setting group that has been confirmed
  *
  */
-typedef void (*EditSettingGroupConfirmationHandler) (void* parameter, SettingGroupControlBlock* sgcb,
-        uint8_t editSg);
+typedef void (*EditSettingGroupConfirmationHandler) (void * parameter, SettingGroupControlBlock* sgcb,
+                                                     uint8_t editSg);
 
 /**
  * \brief Set the callback handler for the COnfEditSG event
@@ -1385,7 +1387,7 @@ typedef void (*EditSettingGroupConfirmationHandler) (void* parameter, SettingGro
  */
 LIB61850_API void
 IedServer_setEditSettingGroupConfirmationHandler(IedServer self, SettingGroupControlBlock* sgcb,
-        EditSettingGroupConfirmationHandler handler, void* parameter);
+                                                 EditSettingGroupConfirmationHandler handler, void * parameter);
 
 /**@}*/
 
@@ -1400,26 +1402,28 @@ IedServer_setEditSettingGroupConfirmationHandler(IedServer self, SettingGroupCon
 /**
  * \brief result code for ControlPerformCheckHandler
  */
-typedef enum {
-    CONTROL_ACCEPTED = -1, /**< check passed */
-    CONTROL_WAITING_FOR_SELECT = 0, /**< select operation in progress - handler will be called again later */
-    CONTROL_HARDWARE_FAULT = 1, /**< check failed due to hardware fault */
-    CONTROL_TEMPORARILY_UNAVAILABLE = 2, /**< control is already selected or operated */
-    CONTROL_OBJECT_ACCESS_DENIED = 3, /**< check failed due to access control reason - access denied for this client or state */
-    CONTROL_OBJECT_UNDEFINED = 4, /**< object not visible in this security context ??? */
-    CONTROL_VALUE_INVALID = 11 /**< ctlVal out of range */
+typedef enum
+{
+  CONTROL_ACCEPTED = -1, /**< check passed */
+  CONTROL_WAITING_FOR_SELECT = 0, /**< select operation in progress - handler will be called again later */
+  CONTROL_HARDWARE_FAULT = 1, /**< check failed due to hardware fault */
+  CONTROL_TEMPORARILY_UNAVAILABLE = 2, /**< control is already selected or operated */
+  CONTROL_OBJECT_ACCESS_DENIED = 3, /**< check failed due to access control reason - access denied for this client or state */
+  CONTROL_OBJECT_UNDEFINED = 4, /**< object not visible in this security context ??? */
+  CONTROL_VALUE_INVALID = 11 /**< ctlVal out of range */
 } CheckHandlerResult;
 
 /**
  * \brief result codes for control handler (ControlWaitForExecutionHandler and ControlHandler)
  */
-typedef enum {
-    CONTROL_RESULT_FAILED = 0, /**< check or operation failed */
-    CONTROL_RESULT_OK = 1,     /**< check or operation was successful */
-    CONTROL_RESULT_WAITING = 2 /**< check or operation is in progress */
+typedef enum
+{
+  CONTROL_RESULT_FAILED = 0, /**< check or operation failed */
+  CONTROL_RESULT_OK = 1,     /**< check or operation was successful */
+  CONTROL_RESULT_WAITING = 2 /**< check or operation is in progress */
 } ControlHandlerResult;
 
-typedef void* ControlAction;
+typedef void * ControlAction;
 
 /**
  * \brief Sets the error code for the next command termination or application error message
@@ -1456,8 +1460,8 @@ ControlAction_getOrCat(ControlAction self);
  *
  * \return the originator identifier
  */
-LIB61850_API uint8_t*
-ControlAction_getOrIdent(ControlAction self, int* orIdentSize);
+LIB61850_API uint8_t *
+ControlAction_getOrIdent(ControlAction self, int * orIdentSize);
 
 /**
  * \brief Get the ctlNum attribute send by the client
@@ -1516,7 +1520,7 @@ ControlAction_getClientConnection(ControlAction self);
  *
  * \return the controllable data object instance
  */
-LIB61850_API DataObject*
+LIB61850_API DataObject *
 ControlAction_getControlObject(ControlAction self);
 
 /**
@@ -1536,7 +1540,7 @@ ControlAction_getControlTime(ControlAction self);
  *
  * \return the time of the last received control action
  */
-LIB61850_API Timestamp*
+LIB61850_API Timestamp *
 ControlAction_getT(ControlAction self);
 
 /**
@@ -1559,7 +1563,8 @@ ControlAction_getT(ControlAction self);
  *
  * \return CONTROL_ACCEPTED if the static tests had been successful, one of the error codes otherwise
  */
-typedef CheckHandlerResult (*ControlPerformCheckHandler) (ControlAction action, void* parameter, MmsValue* ctlVal, bool test, bool interlockCheck);
+typedef CheckHandlerResult (*ControlPerformCheckHandler) (ControlAction action, void * parameter, MmsValue* ctlVal,
+                                                          bool test, bool interlockCheck);
 
 /**
  * \brief Control model callback to perform the dynamic tests (optional).
@@ -1584,7 +1589,8 @@ typedef CheckHandlerResult (*ControlPerformCheckHandler) (ControlAction action, 
  * \return CONTROL_RESULT_OK if the dynamic tests had been successful, CONTROL_RESULT_FAILED otherwise,
  *         CONTROL_RESULT_WAITING if the test is not yet finished
  */
-typedef ControlHandlerResult (*ControlWaitForExecutionHandler) (ControlAction action, void* parameter, MmsValue* ctlVal, bool test, bool synchroCheck);
+typedef ControlHandlerResult (*ControlWaitForExecutionHandler) (ControlAction action, void * parameter,
+                                                                MmsValue* ctlVal, bool test, bool synchroCheck);
 
 /**
  * \brief Control model callback to actually perform the control operation.
@@ -1607,18 +1613,19 @@ typedef ControlHandlerResult (*ControlWaitForExecutionHandler) (ControlAction ac
  * \return CONTROL_RESULT_OK if the control action bas been successful, CONTROL_RESULT_FAILED otherwise,
  *         CONTROL_RESULT_WAITING if the test is not yet finished
  */
-typedef ControlHandlerResult (*ControlHandler) (ControlAction action, void* parameter, MmsValue* ctlVal, bool test);
+typedef ControlHandlerResult (*ControlHandler) (ControlAction action, void * parameter, MmsValue* ctlVal, bool test);
 
 /**
  * \brief Reason why a select state of a control object changed
  */
-typedef enum {
-    SELECT_STATE_REASON_SELECTED, /**< control has been selected */
-    SELECT_STATE_REASON_CANCELED, /**< cancel received for the control */
-    SELECT_STATE_REASON_TIMEOUT,  /**< unselected due to timeout (sboTimeout) */
-    SELECT_STATE_REASON_OPERATED, /**< unselected due to successful operate */
-    SELECT_STATE_REASON_OPERATE_FAILED, /**< unselected due to failed operate */
-    SELECT_STATE_REASON_DISCONNECTED /**< unselected due to disconnection of selecting client */
+typedef enum
+{
+  SELECT_STATE_REASON_SELECTED, /**< control has been selected */
+  SELECT_STATE_REASON_CANCELED, /**< cancel received for the control */
+  SELECT_STATE_REASON_TIMEOUT,  /**< unselected due to timeout (sboTimeout) */
+  SELECT_STATE_REASON_OPERATED, /**< unselected due to successful operate */
+  SELECT_STATE_REASON_OPERATE_FAILED, /**< unselected due to failed operate */
+  SELECT_STATE_REASON_DISCONNECTED /**< unselected due to disconnection of selecting client */
 } SelectStateChangedReason;
 
 /**
@@ -1631,7 +1638,8 @@ typedef enum {
  * \param isSelected true when the control is selected, false otherwise
  * \param reason reason why the select state changed
  */
-typedef void (*ControlSelectStateChangedHandler) (ControlAction action, void* parameter, bool isSelected, SelectStateChangedReason reason);
+typedef void (*ControlSelectStateChangedHandler) (ControlAction action, void * parameter, bool isSelected,
+                                                  SelectStateChangedReason reason);
 
 /**
  * \brief Set control handler for controllable data object
@@ -1647,7 +1655,7 @@ typedef void (*ControlSelectStateChangedHandler) (ControlAction action, void* pa
  * \param parameter a user provided parameter that is passed to the control handler.
  */
 LIB61850_API void
-IedServer_setControlHandler(IedServer self, DataObject* node, ControlHandler handler, void* parameter);
+IedServer_setControlHandler(IedServer self, DataObject* node, ControlHandler handler, void * parameter);
 
 /**
  * \brief Set a handler for a controllable data object to perform operative tests
@@ -1664,7 +1672,8 @@ IedServer_setControlHandler(IedServer self, DataObject* node, ControlHandler han
  *
  */
 LIB61850_API void
-IedServer_setPerformCheckHandler(IedServer self, DataObject* node, ControlPerformCheckHandler handler, void* parameter);
+IedServer_setPerformCheckHandler(IedServer self, DataObject* node, ControlPerformCheckHandler handler,
+                                 void * parameter);
 
 /**
  * \brief Set a handler for a controllable data object to perform dynamic tests
@@ -1681,7 +1690,8 @@ IedServer_setPerformCheckHandler(IedServer self, DataObject* node, ControlPerfor
  *
  */
 LIB61850_API void
-IedServer_setWaitForExecutionHandler(IedServer self, DataObject* node, ControlWaitForExecutionHandler handler, void* parameter);
+IedServer_setWaitForExecutionHandler(IedServer self, DataObject* node, ControlWaitForExecutionHandler handler,
+                                     void * parameter);
 
 
 /**
@@ -1700,7 +1710,8 @@ IedServer_setWaitForExecutionHandler(IedServer self, DataObject* node, ControlWa
  * \param parameter a user provided parameter that is passed to the callback handler.
  */
 LIB61850_API void
-IedServer_setSelectStateChangedHandler(IedServer self, DataObject* node, ControlSelectStateChangedHandler handler, void* parameter);
+IedServer_setSelectStateChangedHandler(IedServer self, DataObject* node, ControlSelectStateChangedHandler handler,
+                                       void * parameter);
 
 /**
  * \brief Update the control model for the specified controllable data object with the given value and
@@ -1725,17 +1736,18 @@ IedServer_updateCtlModel(IedServer self, DataObject* ctlObject, ControlModel val
  * @{
  */
 
-typedef enum {
-    RCB_EVENT_GET_PARAMETER, /* << parameter read by client (not implemented) */
-    RCB_EVENT_SET_PARAMETER, /* << parameter set by client */
-    RCB_EVENT_UNRESERVED,    /* << RCB reservation canceled */
-    RCB_EVENT_RESERVED,      /* << RCB reserved */
-    RCB_EVENT_ENABLE,        /* << RCB enabled */
-    RCB_EVENT_DISABLE,       /* << RCB disabled */
-    RCB_EVENT_GI,            /* << GI report triggered */
-    RCB_EVENT_PURGEBUF,      /* << Purge buffer procedure executed */
-    RCB_EVENT_OVERFLOW,      /* << Report buffer overflow */
-    RCB_EVENT_REPORT_CREATED /* << A new report was created and inserted into the buffer */
+typedef enum
+{
+  RCB_EVENT_GET_PARAMETER, /* << parameter read by client (not implemented) */
+  RCB_EVENT_SET_PARAMETER, /* << parameter set by client */
+  RCB_EVENT_UNRESERVED,    /* << RCB reservation canceled */
+  RCB_EVENT_RESERVED,      /* << RCB reserved */
+  RCB_EVENT_ENABLE,        /* << RCB enabled */
+  RCB_EVENT_DISABLE,       /* << RCB disabled */
+  RCB_EVENT_GI,            /* << GI report triggered */
+  RCB_EVENT_PURGEBUF,      /* << Purge buffer procedure executed */
+  RCB_EVENT_OVERFLOW,      /* << Report buffer overflow */
+  RCB_EVENT_REPORT_CREATED /* << A new report was created and inserted into the buffer */
 } IedServer_RCBEventType;
 
 /**
@@ -1748,7 +1760,8 @@ typedef enum {
  * \param parameterName name of the parameter in case of RCB_EVENT_SET_PARAMETER
  * \param serviceError service error in case of RCB_EVENT_SET_PARAMETER
  */
-typedef void (*IedServer_RCBEventHandler) (void* parameter, ReportControlBlock* rcb, ClientConnection connection, IedServer_RCBEventType event, const char* parameterName, MmsDataAccessError serviceError);
+typedef void (*IedServer_RCBEventHandler) (void * parameter, ReportControlBlock* rcb, ClientConnection connection,
+                                           IedServer_RCBEventType event, const char * parameterName, MmsDataAccessError serviceError);
 
 /**
  * \brief Set a handler for report control block (RCB) events
@@ -1758,7 +1771,7 @@ typedef void (*IedServer_RCBEventHandler) (void* parameter, ReportControlBlock* 
  * \param parameter a user provided parameter that is passed to the handler.
  */
 LIB61850_API void
-IedServer_setRCBEventHandler(IedServer self, IedServer_RCBEventHandler handler, void* parameter);
+IedServer_setRCBEventHandler(IedServer self, IedServer_RCBEventHandler handler, void * parameter);
 
 /**@}*/
 
@@ -1783,7 +1796,7 @@ IedServer_setRCBEventHandler(IedServer self, IedServer_RCBEventHandler handler, 
  * \param the event type
  * \param user defined parameter
  */
-typedef void (*SVCBEventHandler) (SVControlBlock* svcb, int event, void* parameter);
+typedef void (*SVCBEventHandler) (SVControlBlock* svcb, int event, void * parameter);
 
 /**
  * \brief Set a handler for SVCB control block events (enable/disable)
@@ -1794,7 +1807,7 @@ typedef void (*SVCBEventHandler) (SVControlBlock* svcb, int event, void* paramet
  * \param parameter a user provided parameter that is passed to the handler.
  */
 LIB61850_API void
-IedServer_setSVCBHandler(IedServer self, SVControlBlock* svcb, SVCBEventHandler handler, void* parameter);
+IedServer_setSVCBHandler(IedServer self, SVControlBlock* svcb, SVCBEventHandler handler, void * parameter);
 
 /**@}*/
 
@@ -1806,7 +1819,7 @@ IedServer_setSVCBHandler(IedServer self, SVControlBlock* svcb, SVCBEventHandler 
  * @{
  */
 
-typedef struct sMmsGooseControlBlock* MmsGooseControlBlock;
+typedef struct sMmsGooseControlBlock * MmsGooseControlBlock;
 
 /** Control block has been enabled by client */
 #define IEC61850_GOCB_EVENT_ENABLE 1
@@ -1814,7 +1827,7 @@ typedef struct sMmsGooseControlBlock* MmsGooseControlBlock;
 /** Control block has been disabled by client */
 #define IEC61850_GOCB_EVENT_DISABLE 0
 
-typedef void (*GoCBEventHandler) (MmsGooseControlBlock goCb, int event, void* parameter);
+typedef void (*GoCBEventHandler) (MmsGooseControlBlock goCb, int event, void * parameter);
 
 /**
  * \brief Set a callback handler for GoCB events (enabled/disabled)
@@ -1827,15 +1840,15 @@ typedef void (*GoCBEventHandler) (MmsGooseControlBlock goCb, int event, void* pa
  * \param parameter user provided parameter that is passed to the callback handler
  */
 LIB61850_API void
-IedServer_setGoCBHandler(IedServer self, GoCBEventHandler handler, void* parameter);
+IedServer_setGoCBHandler(IedServer self, GoCBEventHandler handler, void * parameter);
 
-LIB61850_API char*
+LIB61850_API char *
 MmsGooseControlBlock_getName(MmsGooseControlBlock self);
 
-LIB61850_API LogicalNode*
+LIB61850_API LogicalNode *
 MmsGooseControlBlock_getLogicalNode(MmsGooseControlBlock self);
 
-LIB61850_API DataSet*
+LIB61850_API DataSet *
 MmsGooseControlBlock_getDataSet(MmsGooseControlBlock self);
 
 LIB61850_API bool
@@ -1894,7 +1907,7 @@ MmsGooseControlBlock_getNdsCom(MmsGooseControlBlock self);
  * \return DATA_ACCESS_ERROR_SUCCESS, or DATA_ACCESS_ERROR_SUCCESS_NO_UPDATE if access is accepted, DATA_ACCESS_ERROR_OBJECT_ACCESS_DENIED if access is denied.
  */
 typedef MmsDataAccessError
-(*WriteAccessHandler) (DataAttribute* dataAttribute, MmsValue* value, ClientConnection connection, void* parameter);
+(*WriteAccessHandler) (DataAttribute* dataAttribute, MmsValue* value, ClientConnection connection, void * parameter);
 
 /**
  * \brief Install a WriteAccessHandler for a data attribute.
@@ -1917,7 +1930,7 @@ typedef MmsDataAccessError
  */
 LIB61850_API void
 IedServer_handleWriteAccess(IedServer self, DataAttribute* dataAttribute,
-        WriteAccessHandler handler, void* parameter);
+                            WriteAccessHandler handler, void * parameter);
 
 /**
  * \brief Install a WriteAccessHandler for a data attribute and for all sub data attributes
@@ -1940,7 +1953,7 @@ IedServer_handleWriteAccess(IedServer self, DataAttribute* dataAttribute,
  */
 LIB61850_API void
 IedServer_handleWriteAccessForComplexAttribute(IedServer self, DataAttribute* dataAttribute,
-        WriteAccessHandler handler, void* parameter);
+                                               WriteAccessHandler handler, void * parameter);
 
 /**
  * \brief Install a WriteAccessHandler for all data attributes of a data object with a specific FC
@@ -1953,11 +1966,13 @@ IedServer_handleWriteAccessForComplexAttribute(IedServer self, DataAttribute* da
  * \param parameter a user provided parameter that is passed to the WriteAccessHandler when called.
 */
 LIB61850_API void
-IedServer_handleWriteAccessForDataObject(IedServer self, DataObject* dataObject, FunctionalConstraint fc, WriteAccessHandler handler, void* parameter);
+IedServer_handleWriteAccessForDataObject(IedServer self, DataObject* dataObject, FunctionalConstraint fc,
+                                         WriteAccessHandler handler, void * parameter);
 
-typedef enum {
-    ACCESS_POLICY_ALLOW,
-    ACCESS_POLICY_DENY
+typedef enum
+{
+  ACCESS_POLICY_ALLOW,
+  ACCESS_POLICY_DENY
 } AccessPolicy;
 
 /**
@@ -1988,7 +2003,8 @@ IedServer_setWriteAccessPolicy(IedServer self, FunctionalConstraint fc, AccessPo
  * \return DATA_ACCESS_ERROR_SUCCESS if access is accepted, DATA_ACCESS_ERROR_OBJECT_ACCESS_DENIED if access is denied.
  */
 typedef MmsDataAccessError
-(*ReadAccessHandler) (LogicalDevice* ld, LogicalNode* ln, DataObject* dataObject, FunctionalConstraint fc, ClientConnection connection, void* parameter);
+(*ReadAccessHandler) (LogicalDevice* ld, LogicalNode* ln, DataObject* dataObject, FunctionalConstraint fc,
+                      ClientConnection connection, void * parameter);
 
 /**
  * \brief Install the global read access handler
@@ -2000,51 +2016,55 @@ typedef MmsDataAccessError
  * \param parameter a user provided parameter that is passed to the callback function.
  */
 LIB61850_API void
-IedServer_setReadAccessHandler(IedServer self, ReadAccessHandler handler, void* parameter);
+IedServer_setReadAccessHandler(IedServer self, ReadAccessHandler handler, void * parameter);
 
-typedef enum {
-    DATASET_CREATE,
-    DATASET_DELETE,
-    DATASET_READ,
-    DATASET_WRITE,
-    DATASET_GET_DIRECTORY
+typedef enum
+{
+  DATASET_CREATE,
+  DATASET_DELETE,
+  DATASET_READ,
+  DATASET_WRITE,
+  DATASET_GET_DIRECTORY
 } IedServer_DataSetOperation;
 
 /**
  * \brief Callback that is called when the client is calling a dataset operation (create, delete, read, write, list directory)
- * 
+ *
  * \note This callback is called before the IedServer_RCBEventHandler and only in case of operations (RCB_EVENT_GET_PARAMETER, RCB_EVENT_SET_PARAMETER, RCB_EVENT_ENABLE
- * 
+ *
  * \param parameter user provided parameter
  * \param connection client connection that is involved
  * \param operation one of the following operation types: DATASET_CREATE, DATASET_DELETE, DATASET_READ, DATASET_WRITE, DATASET_GET_DIRECTORY
- * 
+ *
  * \return true to allow operation, false to deny operation
  */
 typedef bool
-(*IedServer_DataSetAccessHandler) (void* parameter, ClientConnection connection, IedServer_DataSetOperation operation, const char* datasetRef);
+(*IedServer_DataSetAccessHandler) (void * parameter, ClientConnection connection, IedServer_DataSetOperation operation,
+                                   const char * datasetRef);
 
 /**
  * \brief Set a handler to control access to a dataset (create, delete, read, write, list directory)
- * 
+ *
  * \param handler the callback handler to be used
  * \param parameter a user provided parameter that is passed to the handler.
  */
 LIB61850_API void
-IedServer_setDataSetAccessHandler(IedServer self, IedServer_DataSetAccessHandler handler, void* parameter);
+IedServer_setDataSetAccessHandler(IedServer self, IedServer_DataSetAccessHandler handler, void * parameter);
 
-typedef enum {
-    DIRECTORY_CAT_LD_LIST,
-    DIRECTORY_CAT_DATA_LIST,
-    DIRECTORY_CAT_DATASET_LIST,
-    DIRECTORY_CAT_LOG_LIST
+typedef enum
+{
+  DIRECTORY_CAT_LD_LIST,
+  DIRECTORY_CAT_DATA_LIST,
+  DIRECTORY_CAT_DATASET_LIST,
+  DIRECTORY_CAT_LOG_LIST
 } IedServer_DirectoryCategory;
 
 typedef bool
-(*IedServer_DirectoryAccessHandler) (void* parameter, ClientConnection connection, IedServer_DirectoryCategory category, LogicalDevice* logicalDevice);
+(*IedServer_DirectoryAccessHandler) (void * parameter, ClientConnection connection,
+                                     IedServer_DirectoryCategory category, LogicalDevice* logicalDevice);
 
 LIB61850_API void
-IedServer_setDirectoryAccessHandler(IedServer self, IedServer_DirectoryAccessHandler handler, void* parameter);
+IedServer_setDirectoryAccessHandler(IedServer self, IedServer_DirectoryAccessHandler handler, void * parameter);
 
 /**
  * \brief Callback that is called when a client is invoking a list objects service
@@ -2063,7 +2083,8 @@ IedServer_setDirectoryAccessHandler(IedServer self, IedServer_DirectoryAccessHan
  * \return true to include the object in the service response, otherwise false
  */
 typedef bool
-(*IedServer_ListObjectsAccessHandler)(void* parameter, ClientConnection connection, ACSIClass acsiClass, LogicalDevice* ld, LogicalNode* ln, const char* objectName, const char* subObjectName, FunctionalConstraint fc);
+(*IedServer_ListObjectsAccessHandler)(void * parameter, ClientConnection connection, ACSIClass acsiClass,
+                                      LogicalDevice* ld, LogicalNode* ln, const char * objectName, const char * subObjectName, FunctionalConstraint fc);
 
 /**
  * \brief Set a handler to control which objects are return by the list objects services
@@ -2072,11 +2093,12 @@ typedef bool
  * \param parameter a user provided parameter that is passed to the handler.
  */
 LIB61850_API void
-IedServer_setListObjectsAccessHandler(IedServer self, IedServer_ListObjectsAccessHandler handler, void* parameter);
+IedServer_setListObjectsAccessHandler(IedServer self, IedServer_ListObjectsAccessHandler handler, void * parameter);
 
-typedef enum {
-    IEC61850_CB_ACCESS_TYPE_READ,
-    IEC61850_CB_ACCESS_TYPE_WRITE
+typedef enum
+{
+  IEC61850_CB_ACCESS_TYPE_READ,
+  IEC61850_CB_ACCESS_TYPE_WRITE
 } IedServer_ControlBlockAccessType;
 
 /**
@@ -2096,7 +2118,9 @@ typedef enum {
  * \return true to include the object in the service response, otherwise false
  */
 typedef bool
-(*IedServer_ControlBlockAccessHandler)(void* parameter, ClientConnection connection, ACSIClass acsiClass, LogicalDevice* ld, LogicalNode* ln, const char* objectName, const char* subObjectName, IedServer_ControlBlockAccessType accessType);
+(*IedServer_ControlBlockAccessHandler)(void * parameter, ClientConnection connection, ACSIClass acsiClass,
+                                       LogicalDevice* ld, LogicalNode* ln, const char * objectName, const char * subObjectName,
+                                       IedServer_ControlBlockAccessType accessType);
 
 /**
  * \brief Set a handler to control read and write access to control blocks and logs
@@ -2105,7 +2129,7 @@ typedef bool
  * \param parameter a user provided parameter that is passed to the handler.
  */
 LIB61850_API void
-IedServer_setControlBlockAccessHandler(IedServer self, IedServer_ControlBlockAccessHandler handler, void* parameter);
+IedServer_setControlBlockAccessHandler(IedServer self, IedServer_ControlBlockAccessHandler handler, void * parameter);
 
 /**
  * \brief Temporarily ignore read requests (for testing purposes)

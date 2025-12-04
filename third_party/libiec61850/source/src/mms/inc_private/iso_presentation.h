@@ -28,13 +28,14 @@
 #include "buffer_chain.h"
 #include "iso_connection_parameters.h"
 
-typedef struct {
-	PSelector callingPresentationSelector;
-	PSelector calledPresentationSelector;
-	uint8_t nextContextId;
-	uint8_t acseContextId;
-	uint8_t mmsContextId;
-	ByteBuffer nextPayload;
+typedef struct
+{
+  PSelector callingPresentationSelector;
+  PSelector calledPresentationSelector;
+  uint8_t nextContextId;
+  uint8_t acseContextId;
+  uint8_t mmsContextId;
+  ByteBuffer nextPayload;
 } IsoPresentation;
 
 LIB61850_INTERNAL void
@@ -48,7 +49,7 @@ IsoPresentation_parseConnect(IsoPresentation* session, ByteBuffer* message);
 
 LIB61850_INTERNAL void
 IsoPresentation_createConnectPdu(IsoPresentation* self, IsoConnectionParameters parameters,
-        BufferChain buffer, BufferChain payload);
+                                 BufferChain buffer, BufferChain payload);
 
 LIB61850_INTERNAL void
 IsoPresentation_createCpaMessage(IsoPresentation* self, BufferChain writeBuffer, BufferChain payload);

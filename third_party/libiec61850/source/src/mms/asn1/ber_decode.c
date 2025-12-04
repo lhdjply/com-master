@@ -25,251 +25,252 @@
 #include "ber_decode.h"
 
 static int
-BerDecoder_decodeLengthRecursive(uint8_t* buffer, int* length, int bufPos, int maxBufPos, int depth, int maxDepth);
+BerDecoder_decodeLengthRecursive(uint8_t * buffer, int * length, int bufPos, int maxBufPos, int depth, int maxDepth);
 
 static int
-getIndefiniteLength(uint8_t* buffer, int bufPos, int maxBufPos, int depth, int maxDepth)
+getIndefiniteLength(uint8_t * buffer, int bufPos, int maxBufPos, int depth, int maxDepth)
 {
-    depth++;
+  depth++;
 
-    if (depth > maxDepth)
-        return -1;
-
-    int length = 0;
-
-    while (bufPos < maxBufPos)
-    {
-        if ((buffer[bufPos] == 0) && ((bufPos + 1) < maxBufPos) && (buffer[bufPos + 1] == 0))
-        {
-            return length + 2;
-        }
-        else
-        {
-            length++;
-
-            if ((buffer[bufPos++] & 0x1f) == 0x1f)
-            {
-                /* handle extended tags */
-                bufPos++;
-                length++;
-            }
-
-            int subLength = -1;
-
-            int newBufPos = BerDecoder_decodeLengthRecursive(buffer, &subLength, bufPos, maxBufPos, depth, maxDepth);
-
-            if (newBufPos == -1)
-                return -1;
-
-            length += subLength + newBufPos - bufPos;
-
-            bufPos = newBufPos + subLength;
-        }
-    }
-
+  if(depth > maxDepth)
     return -1;
-}
 
-static int
-BerDecoder_decodeLengthRecursive(uint8_t* buffer, int* length, int bufPos, int maxBufPos, int depth, int maxDepth)
-{
-    if (bufPos >= maxBufPos)
-        return -1;
+  int length = 0;
 
-    uint8_t len1 = buffer[bufPos++];
-
-    if (len1 & 0x80)
+  while(bufPos < maxBufPos)
+  {
+    if((buffer[bufPos] == 0) && ((bufPos + 1) < maxBufPos) && (buffer[bufPos + 1] == 0))
     {
-        int lenLength = len1 & 0x7f;
-
-        if (lenLength == 0)
-        { /* indefinite length form */
-            *length = getIndefiniteLength(buffer, bufPos, maxBufPos, depth, maxDepth);
-        }
-        else
-        {
-            *length = 0;
-
-            int i;
-            for (i = 0; i < lenLength; i++)
-            {
-                if (bufPos >= maxBufPos)
-                    return -1;
-
-                if (bufPos + (*length) > maxBufPos)
-                    return -1;
-
-                *length <<= 8;
-                *length += buffer[bufPos++];
-            }
-        }
+      return length + 2;
     }
     else
     {
-        *length = len1;
+      length++;
+
+      if((buffer[bufPos++] & 0x1f) == 0x1f)
+      {
+        /* handle extended tags */
+        bufPos++;
+        length++;
+      }
+
+      int subLength = -1;
+
+      int newBufPos = BerDecoder_decodeLengthRecursive(buffer, &subLength, bufPos, maxBufPos, depth, maxDepth);
+
+      if(newBufPos == -1)
+        return -1;
+
+      length += subLength + newBufPos - bufPos;
+
+      bufPos = newBufPos + subLength;
     }
+  }
 
-    if (*length < 0)
-        return -1;
+  return -1;
+}
 
-    if (bufPos + (*length) > maxBufPos)
-        return -1;
+static int
+BerDecoder_decodeLengthRecursive(uint8_t * buffer, int * length, int bufPos, int maxBufPos, int depth, int maxDepth)
+{
+  if(bufPos >= maxBufPos)
+    return -1;
 
-    return bufPos;
+  uint8_t len1 = buffer[bufPos++];
+
+  if(len1 & 0x80)
+  {
+    int lenLength = len1 & 0x7f;
+
+    if(lenLength == 0)
+    {
+      /* indefinite length form */
+      *length = getIndefiniteLength(buffer, bufPos, maxBufPos, depth, maxDepth);
+    }
+    else
+    {
+      *length = 0;
+
+      int i;
+      for(i = 0; i < lenLength; i++)
+      {
+        if(bufPos >= maxBufPos)
+          return -1;
+
+        if(bufPos + (*length) > maxBufPos)
+          return -1;
+
+        *length <<= 8;
+        *length += buffer[bufPos++];
+      }
+    }
+  }
+  else
+  {
+    *length = len1;
+  }
+
+  if(*length < 0)
+    return -1;
+
+  if(bufPos + (*length) > maxBufPos)
+    return -1;
+
+  return bufPos;
 }
 
 int
-BerDecoder_decodeLength(uint8_t* buffer, int* length, int bufPos, int maxBufPos)
+BerDecoder_decodeLength(uint8_t * buffer, int * length, int bufPos, int maxBufPos)
 {
-    return BerDecoder_decodeLengthRecursive(buffer, length, bufPos, maxBufPos, 0, 50);
+  return BerDecoder_decodeLengthRecursive(buffer, length, bufPos, maxBufPos, 0, 50);
 }
 
-char*
-BerDecoder_decodeString(uint8_t* buffer, int strlen, int bufPos, int maxBufPos)
+char *
+BerDecoder_decodeString(uint8_t * buffer, int strlen, int bufPos, int maxBufPos)
 {
-    if (maxBufPos - bufPos < 0)
-        return NULL;
+  if(maxBufPos - bufPos < 0)
+    return NULL;
 
-    char* string = (char*) GLOBAL_MALLOC(strlen + 1);
+  char * string = (char *) GLOBAL_MALLOC(strlen + 1);
 
-    if (string)
-    {
-        memcpy(string, buffer + bufPos, strlen);
-        string[strlen] = 0;
-    }
+  if(string)
+  {
+    memcpy(string, buffer + bufPos, strlen);
+    string[strlen] = 0;
+  }
 
-    return string;
+  return string;
 }
 
 uint32_t
-BerDecoder_decodeUint32(uint8_t* buffer, int intLen, int bufPos)
+BerDecoder_decodeUint32(uint8_t * buffer, int intLen, int bufPos)
 {
-    uint32_t value = 0;
+  uint32_t value = 0;
 
-    int i;
-    for (i = 0; i < intLen; i++)
-    {
-        value <<= 8;
-        value += buffer[bufPos + i];
-    }
+  int i;
+  for(i = 0; i < intLen; i++)
+  {
+    value <<= 8;
+    value += buffer[bufPos + i];
+  }
 
-    return value;
+  return value;
 }
 
 int32_t
-BerDecoder_decodeInt32(uint8_t* buffer, int intlen, int bufPos)
+BerDecoder_decodeInt32(uint8_t * buffer, int intlen, int bufPos)
 {
-    int32_t value;
-    int i;
+  int32_t value;
+  int i;
 
-    bool isNegative = ((buffer[bufPos] & 0x80) == 0x80);
+  bool isNegative = ((buffer[bufPos] & 0x80) == 0x80);
 
-    if (isNegative)
-        value = -1;
-    else
-        value = 0;
+  if(isNegative)
+    value = -1;
+  else
+    value = 0;
 
-    for (i = 0; i < intlen; i++)
-    {
-        value <<= 8;
-        value += buffer[bufPos + i];
-    }
+  for(i = 0; i < intlen; i++)
+  {
+    value <<= 8;
+    value += buffer[bufPos + i];
+  }
 
-    return value;
+  return value;
 }
 
 float
-BerDecoder_decodeFloat(uint8_t* buffer, int bufPos)
+BerDecoder_decodeFloat(uint8_t * buffer, int bufPos)
 {
-    float value;
-    uint8_t* valueBuf = (uint8_t*)&value;
+  float value;
+  uint8_t * valueBuf = (uint8_t *)&value;
 
-    int i;
+  int i;
 
-    bufPos += 1; /* skip exponentWidth field */
+  bufPos += 1; /* skip exponentWidth field */
 
 #if (ORDER_LITTLE_ENDIAN == 1)
-    for (i = 3; i >= 0; i--)
-    {
-        valueBuf[i] = buffer[bufPos++];
-    }
+  for(i = 3; i >= 0; i--)
+  {
+    valueBuf[i] = buffer[bufPos++];
+  }
 #else
-    for (i = 0; i < 4; i++)
-    {
-        valueBuf[i] = buffer[bufPos++];
-    }
+  for(i = 0; i < 4; i++)
+  {
+    valueBuf[i] = buffer[bufPos++];
+  }
 #endif
 
-    return value;
+  return value;
 }
 
 double
-BerDecoder_decodeDouble(uint8_t* buffer, int bufPos)
+BerDecoder_decodeDouble(uint8_t * buffer, int bufPos)
 {
-    double value;
-    uint8_t* valueBuf = (uint8_t*)&value;
+  double value;
+  uint8_t * valueBuf = (uint8_t *)&value;
 
-    int i;
+  int i;
 
-    bufPos += 1; /* skip exponentWidth field */
+  bufPos += 1; /* skip exponentWidth field */
 
 #if (ORDER_LITTLE_ENDIAN == 1)
-    for (i = 7; i >= 0; i--)
-    {
-        valueBuf[i] = buffer[bufPos++];
-    }
+  for(i = 7; i >= 0; i--)
+  {
+    valueBuf[i] = buffer[bufPos++];
+  }
 #else
-    for (i = 0; i < 8; i++)
-    {
-        valueBuf[i] = buffer[bufPos++];
-    }
+  for(i = 0; i < 8; i++)
+  {
+    valueBuf[i] = buffer[bufPos++];
+  }
 #endif
 
-    return value;
+  return value;
 }
 
 bool
-BerDecoder_decodeBoolean(uint8_t* buffer, int bufPos)
+BerDecoder_decodeBoolean(uint8_t * buffer, int bufPos)
 {
-    if (buffer[bufPos] != 0)
-        return true;
-    else
-        return false;
+  if(buffer[bufPos] != 0)
+    return true;
+  else
+    return false;
 }
 
 void
-BerDecoder_decodeOID(uint8_t* buffer, int bufPos, int length, ItuObjectIdentifier* oid)
+BerDecoder_decodeOID(uint8_t * buffer, int bufPos, int length, ItuObjectIdentifier* oid)
 {
-    int startPos = bufPos;
-    int currentArc = 0;
+  int startPos = bufPos;
+  int currentArc = 0;
 
-    /* clear all arcs */
-    int i;
-    for (i = 0; i < 10; i++)
-        oid->arc[i] = 0;
+  /* clear all arcs */
+  int i;
+  for(i = 0; i < 10; i++)
+    oid->arc[i] = 0;
 
-    /* parse first two arcs */
-    if (length > 0)
-    {
-        oid->arc[0] = buffer[bufPos] / 40;
-        oid->arc[1] = buffer[bufPos] % 40;
+  /* parse first two arcs */
+  if(length > 0)
+  {
+    oid->arc[0] = buffer[bufPos] / 40;
+    oid->arc[1] = buffer[bufPos] % 40;
 
-        currentArc = 2;
-        bufPos++;
-    }
+    currentArc = 2;
+    bufPos++;
+  }
 
-    /* parse remaining arcs */
-    while ((bufPos - startPos < length) && (currentArc < 10))
-    {
-        oid->arc[currentArc] = oid->arc[currentArc] << 7;
+  /* parse remaining arcs */
+  while((bufPos - startPos < length) && (currentArc < 10))
+  {
+    oid->arc[currentArc] = oid->arc[currentArc] << 7;
 
-        if (buffer[bufPos] < 0x80)
-            oid->arc[currentArc++] += buffer[bufPos];
-        else
-            oid->arc[currentArc] += (buffer[bufPos] & 0x7f);
+    if(buffer[bufPos] < 0x80)
+      oid->arc[currentArc++] += buffer[bufPos];
+    else
+      oid->arc[currentArc] += (buffer[bufPos] & 0x7f);
 
-        bufPos++;
-    }
+    bufPos++;
+  }
 
-    oid->arcCount = currentArc;
+  oid->arcCount = currentArc;
 }

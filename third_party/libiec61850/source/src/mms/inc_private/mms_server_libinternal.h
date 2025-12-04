@@ -27,21 +27,21 @@
 #include "mms_server.h"
 #include "mms_device_model.h"
 
-typedef MmsValue* (*MmsReadVariableHandler)(void* parameter, MmsDomain* domain,
-        char* variableId, MmsServerConnection connection, bool isDirectAccess);
+typedef MmsValue * (*MmsReadVariableHandler)(void * parameter, MmsDomain* domain,
+                                             char * variableId, MmsServerConnection connection, bool isDirectAccess);
 
-typedef MmsDataAccessError (*MmsReadAccessHandler) (void* parameter, MmsDomain* domain,
-        char* variableId, MmsServerConnection connection, bool isDirectAccess);
+typedef MmsDataAccessError(*MmsReadAccessHandler)(void * parameter, MmsDomain* domain,
+                                                  char * variableId, MmsServerConnection connection, bool isDirectAccess);
 
-typedef MmsDataAccessError (*MmsWriteVariableHandler)(void* parameter,
-        MmsDomain* domain, const char* variableId, int arrayIdx, const char* componentId, MmsValue* value,
-        MmsServerConnection connection);
+typedef MmsDataAccessError(*MmsWriteVariableHandler)(void * parameter,
+                                                     MmsDomain* domain, const char * variableId, int arrayIdx, const char * componentId, MmsValue* value,
+                                                     MmsServerConnection connection);
 
-typedef bool (*MmsListAccessHandler) (void* parameter, MmsGetNameListType listType, MmsDomain* domain,
-        char* variableId, MmsServerConnection connection);
+typedef bool (*MmsListAccessHandler)(void * parameter, MmsGetNameListType listType, MmsDomain* domain,
+                                     char * variableId, MmsServerConnection connection);
 
-typedef void (*MmsConnectionHandler)(void* parameter,
-        MmsServerConnection connection, MmsServerEvent event);
+typedef void (*MmsConnectionHandler)(void * parameter,
+                                     MmsServerConnection connection, MmsServerEvent event);
 
 LIB61850_INTERNAL MmsServer
 MmsServer_create(MmsDevice* device, TLSConfiguration tlsConfiguration);
@@ -53,43 +53,45 @@ MmsServer_destroy(MmsServer self);
  * \brief Add a new passive access point to the server
  */
 LIB61850_INTERNAL bool
-MmsServer_addAP(MmsServer self, const char* ipAddr, int tcpPort, TLSConfiguration tlsConfiguration);
+MmsServer_addAP(MmsServer self, const char * ipAddr, int tcpPort, TLSConfiguration tlsConfiguration);
 
 LIB61850_INTERNAL void
 MmsServer_installReadHandler(MmsServer self, MmsReadVariableHandler,
-        void* parameter);
+                             void * parameter);
 
 LIB61850_INTERNAL void
-MmsServer_installReadAccessHandler(MmsServer self, MmsReadAccessHandler, void* parameter);
+MmsServer_installReadAccessHandler(MmsServer self, MmsReadAccessHandler, void * parameter);
 
 LIB61850_INTERNAL void
 MmsServer_installWriteHandler(MmsServer self, MmsWriteVariableHandler,
-        void* parameter);
+                              void * parameter);
 
 LIB61850_INTERNAL void
-MmsServer_installListAccessHandler(MmsServer self, MmsListAccessHandler listAccessHandler, void* parameter);
+MmsServer_installListAccessHandler(MmsServer self, MmsListAccessHandler listAccessHandler, void * parameter);
 
 /**
  * A connection handler will be invoked whenever a new client connection is opened or closed
  */
 LIB61850_INTERNAL void
 MmsServer_installConnectionHandler(MmsServer self, MmsConnectionHandler,
-        void* parameter);
+                                   void * parameter);
 
 LIB61850_INTERNAL void
-MmsServer_setClientAuthenticator(MmsServer self, AcseAuthenticator authenticator, void* authenticatorParameter);
+MmsServer_setClientAuthenticator(MmsServer self, AcseAuthenticator authenticator, void * authenticatorParameter);
 
-LIB61850_INTERNAL MmsDevice*
+LIB61850_INTERNAL MmsDevice *
 MmsServer_getDevice(MmsServer self);
 
-LIB61850_INTERNAL MmsValue*
-MmsServer_getValueFromCache(MmsServer self, MmsDomain* domain, const char* itemId);
+LIB61850_INTERNAL MmsValue *
+MmsServer_getValueFromCache(MmsServer self, MmsDomain* domain, const char * itemId);
 
-LIB61850_INTERNAL MmsValue*
-MmsServer_getValueFromCacheEx(MmsServer self, MmsDomain* domain, const char* itemId, MmsVariableSpecification** typeSpec);
+LIB61850_INTERNAL MmsValue *
+MmsServer_getValueFromCacheEx(MmsServer self, MmsDomain* domain, const char * itemId,
+                              MmsVariableSpecification ** typeSpec);
 
-LIB61850_INTERNAL MmsValue*
-MmsServer_getValueFromCacheEx2(MmsServer self, MmsDomain* domain, const char* itemId, int idx, const char* componentId);
+LIB61850_INTERNAL MmsValue *
+MmsServer_getValueFromCacheEx2(MmsServer self, MmsDomain* domain, const char * itemId, int idx,
+                               const char * componentId);
 
 LIB61850_INTERNAL bool
 MmsServer_isLocked(MmsServer self);
@@ -118,8 +120,8 @@ LIB61850_INTERNAL void
 MmsServer_unlockModel(MmsServer self);
 
 LIB61850_INTERNAL void
-MmsServer_insertIntoCache(MmsServer self, MmsDomain* domain, char* itemId,
-        MmsValue* value);
+MmsServer_insertIntoCache(MmsServer self, MmsDomain* domain, char * itemId,
+                          MmsValue* value);
 
 /***************************************************
  * Functions for multi-threaded operation mode
@@ -202,7 +204,7 @@ MmsServer_getConnectionCounter(MmsServer self);
 LIB61850_INTERNAL void
 MmsServer_stopListeningThreadless(MmsServer self);
 
-LIB61850_INTERNAL const char*
+LIB61850_INTERNAL const char *
 MmsServer_getFilesystemBasepath(MmsServer self);
 
 #endif /* MMS_SERVER_LIBINTERNAL_H_ */

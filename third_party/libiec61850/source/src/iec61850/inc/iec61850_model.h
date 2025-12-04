@@ -88,232 +88,248 @@ typedef struct sLogControlBlock LogControlBlock;
 
 typedef struct sLog Log;
 
-typedef enum {
-	IEC61850_UNKNOWN_TYPE = -1,
-	IEC61850_BOOLEAN = 0,/* int */
-	IEC61850_INT8 = 1,   /* int8_t */
-	IEC61850_INT16 = 2,  /* int16_t */
-	IEC61850_INT32 = 3,  /* int32_t */
-	IEC61850_INT64 = 4,  /* int64_t */
-	IEC61850_INT128 = 5, /* no native mapping! */
-	IEC61850_INT8U = 6,  /* uint8_t */
-	IEC61850_INT16U = 7, /* uint16_t */
-	IEC61850_INT24U = 8, /* uint32_t */
-	IEC61850_INT32U = 9, /* uint32_t */
-	IEC61850_FLOAT32 = 10, /* float */
-	IEC61850_FLOAT64 = 11, /* double */
-	IEC61850_ENUMERATED = 12,
-	IEC61850_OCTET_STRING_64 = 13,
-	IEC61850_OCTET_STRING_6 = 14,
-	IEC61850_OCTET_STRING_8 = 15,
-	IEC61850_VISIBLE_STRING_32 = 16,
-	IEC61850_VISIBLE_STRING_64 = 17,
-	IEC61850_VISIBLE_STRING_65 = 18,
-	IEC61850_VISIBLE_STRING_129 = 19,
-	IEC61850_VISIBLE_STRING_255 = 20,
-	IEC61850_UNICODE_STRING_255 = 21,
-	IEC61850_TIMESTAMP = 22,
-	IEC61850_QUALITY = 23,
-	IEC61850_CHECK = 24,
-	IEC61850_CODEDENUM = 25,
-	IEC61850_GENERIC_BITSTRING = 26,
-	IEC61850_CONSTRUCTED = 27,
-	IEC61850_ENTRY_TIME = 28,
-	IEC61850_PHYCOMADDR = 29,
-	IEC61850_CURRENCY = 30,
-	IEC61850_OPTFLDS = 31, /* bit-string(10) */
-	IEC61850_TRGOPS = 32 /* bit-string(6) */
+typedef enum
+{
+  IEC61850_UNKNOWN_TYPE = -1,
+  IEC61850_BOOLEAN = 0,/* int */
+  IEC61850_INT8 = 1,   /* int8_t */
+  IEC61850_INT16 = 2,  /* int16_t */
+  IEC61850_INT32 = 3,  /* int32_t */
+  IEC61850_INT64 = 4,  /* int64_t */
+  IEC61850_INT128 = 5, /* no native mapping! */
+  IEC61850_INT8U = 6,  /* uint8_t */
+  IEC61850_INT16U = 7, /* uint16_t */
+  IEC61850_INT24U = 8, /* uint32_t */
+  IEC61850_INT32U = 9, /* uint32_t */
+  IEC61850_FLOAT32 = 10, /* float */
+  IEC61850_FLOAT64 = 11, /* double */
+  IEC61850_ENUMERATED = 12,
+  IEC61850_OCTET_STRING_64 = 13,
+  IEC61850_OCTET_STRING_6 = 14,
+  IEC61850_OCTET_STRING_8 = 15,
+  IEC61850_VISIBLE_STRING_32 = 16,
+  IEC61850_VISIBLE_STRING_64 = 17,
+  IEC61850_VISIBLE_STRING_65 = 18,
+  IEC61850_VISIBLE_STRING_129 = 19,
+  IEC61850_VISIBLE_STRING_255 = 20,
+  IEC61850_UNICODE_STRING_255 = 21,
+  IEC61850_TIMESTAMP = 22,
+  IEC61850_QUALITY = 23,
+  IEC61850_CHECK = 24,
+  IEC61850_CODEDENUM = 25,
+  IEC61850_GENERIC_BITSTRING = 26,
+  IEC61850_CONSTRUCTED = 27,
+  IEC61850_ENTRY_TIME = 28,
+  IEC61850_PHYCOMADDR = 29,
+  IEC61850_CURRENCY = 30,
+  IEC61850_OPTFLDS = 31, /* bit-string(10) */
+  IEC61850_TRGOPS = 32 /* bit-string(6) */
 } DataAttributeType;
 
-typedef enum {
-    LogicalDeviceModelType,
-    LogicalNodeModelType,
-    DataObjectModelType,
-    DataAttributeModelType
+typedef enum
+{
+  LogicalDeviceModelType,
+  LogicalNodeModelType,
+  DataObjectModelType,
+  DataAttributeModelType
 } ModelNodeType;
 
-struct sIedModel {
-    char* name;
-    LogicalDevice* firstChild;
-    DataSet* dataSets;
-    ReportControlBlock* rcbs;
-    GSEControlBlock* gseCBs;
-    SVControlBlock* svCBs;
-    SettingGroupControlBlock* sgcbs;
-    LogControlBlock* lcbs;
-    Log* logs;
-    void (*initializer) (void);
+struct sIedModel
+{
+  char * name;
+  LogicalDevice * firstChild;
+  DataSet * dataSets;
+  ReportControlBlock * rcbs;
+  GSEControlBlock * gseCBs;
+  SVControlBlock * svCBs;
+  SettingGroupControlBlock * sgcbs;
+  LogControlBlock * lcbs;
+  Log * logs;
+  void (*initializer) (void);
 };
 
-struct sLogicalDevice {
-    ModelNodeType modelType;
-    char* name; /* LD instance */
-    ModelNode* parent;
-    ModelNode* sibling;
-    ModelNode* firstChild;
-    char* ldName; /* ldName (when using functional naming) */
+struct sLogicalDevice
+{
+  ModelNodeType modelType;
+  char * name; /* LD instance */
+  ModelNode * parent;
+  ModelNode * sibling;
+  ModelNode * firstChild;
+  char * ldName; /* ldName (when using functional naming) */
 };
 
-struct sModelNode {
-    ModelNodeType modelType;
-    char* name;
-    ModelNode* parent;
-    ModelNode* sibling;
-    ModelNode* firstChild;
+struct sModelNode
+{
+  ModelNodeType modelType;
+  char * name;
+  ModelNode * parent;
+  ModelNode * sibling;
+  ModelNode * firstChild;
 };
 
-struct sLogicalNode {
-    ModelNodeType modelType;
-    char* name;
-    ModelNode* parent;
-    ModelNode* sibling;
-    ModelNode* firstChild;
+struct sLogicalNode
+{
+  ModelNodeType modelType;
+  char * name;
+  ModelNode * parent;
+  ModelNode * sibling;
+  ModelNode * firstChild;
 };
 
-struct sDataObject {
-    ModelNodeType modelType;
-    char* name;
-    ModelNode* parent;
-    ModelNode* sibling;
-    ModelNode* firstChild;
+struct sDataObject
+{
+  ModelNodeType modelType;
+  char * name;
+  ModelNode * parent;
+  ModelNode * sibling;
+  ModelNode * firstChild;
 
-    int elementCount; /* value > 0 if this is an array */
-    int arrayIndex; /* value > -1 when this is an array element */
+  int elementCount; /* value > 0 if this is an array */
+  int arrayIndex; /* value > -1 when this is an array element */
 };
 
-struct sDataAttribute {
-    ModelNodeType modelType;
-    char* name;
-    ModelNode* parent;
-    ModelNode* sibling;
-    ModelNode* firstChild;
+struct sDataAttribute
+{
+  ModelNodeType modelType;
+  char * name;
+  ModelNode * parent;
+  ModelNode * sibling;
+  ModelNode * firstChild;
 
-    int elementCount; /* value > 0 if this is an array */
-    int arrayIndex; /* value > -1 when this is an array element */
+  int elementCount; /* value > 0 if this is an array */
+  int arrayIndex; /* value > -1 when this is an array element */
 
-    FunctionalConstraint fc;
-    DataAttributeType type;
+  FunctionalConstraint fc;
+  DataAttributeType type;
 
-    uint8_t triggerOptions; /* TRG_OPT_DATA_CHANGED | TRG_OPT_QUALITY_CHANGED | TRG_OPT_DATA_UPDATE */
+  uint8_t triggerOptions; /* TRG_OPT_DATA_CHANGED | TRG_OPT_QUALITY_CHANGED | TRG_OPT_DATA_UPDATE */
 
-    MmsValue* mmsValue;
+  MmsValue * mmsValue;
 
-    uint32_t sAddr; /* TODO remove in version 2.0 */
+  uint32_t sAddr; /* TODO remove in version 2.0 */
 };
 
-typedef struct sDataSetEntry {
-    char* logicalDeviceName; /* logical device instance name */
-    bool isLDNameDynamicallyAllocated;
-    char* variableName;
-    int index;
-    char* componentName;
-    MmsValue* value;
-    struct sDataSetEntry* sibling;
+typedef struct sDataSetEntry
+{
+  char * logicalDeviceName; /* logical device instance name */
+  bool isLDNameDynamicallyAllocated;
+  char * variableName;
+  int index;
+  char * componentName;
+  MmsValue * value;
+  struct sDataSetEntry * sibling;
 } DataSetEntry;
 
-struct sDataSet {
-    char* logicalDeviceName; /* logical device instance name */
-    char* name; /* eg. MMXU1$dataset1 */
-    int elementCount;
-    DataSetEntry* fcdas;
-    DataSet* sibling;
+struct sDataSet
+{
+  char * logicalDeviceName; /* logical device instance name */
+  char * name; /* eg. MMXU1$dataset1 */
+  int elementCount;
+  DataSetEntry * fcdas;
+  DataSet * sibling;
 };
 
-struct sReportControlBlock {
-    LogicalNode* parent;
-    char* name;
-    char* rptId;
-    bool buffered;
-    char* dataSetName; /* pre loaded with relative name in logical node */
+struct sReportControlBlock
+{
+  LogicalNode * parent;
+  char * name;
+  char * rptId;
+  bool buffered;
+  char * dataSetName; /* pre loaded with relative name in logical node */
 
-    uint32_t confRef; /* ConfRef - configuration revision */
-    uint8_t trgOps; /* TrgOps - trigger conditions */
-    uint8_t options; /* OptFlds */
-    uint32_t bufferTime; /* BufTm - time to buffer events until a report is generated */
-    uint32_t intPeriod; /* IntgPd - integrity period */
+  uint32_t confRef; /* ConfRef - configuration revision */
+  uint8_t trgOps; /* TrgOps - trigger conditions */
+  uint8_t options; /* OptFlds */
+  uint32_t bufferTime; /* BufTm - time to buffer events until a report is generated */
+  uint32_t intPeriod; /* IntgPd - integrity period */
 
-    /* type (first byte) and address of the pre-configured client
-       type can be one of (0 - no reservation, 4 - IPv4 client, 6 - IPv6 client) */
-    uint8_t clientReservation[17];
+  /* type (first byte) and address of the pre-configured client
+     type can be one of (0 - no reservation, 4 - IPv4 client, 6 - IPv6 client) */
+  uint8_t clientReservation[17];
 
-    ReportControlBlock* sibling; /* next control block in list or NULL if this is the last entry
+  ReportControlBlock * sibling; /* next control block in list or NULL if this is the last entry
                                   * at runtime reuse as pointer to ReportControl instance!
                                   **/
 };
 
-struct sLogControlBlock {
-    LogicalNode* parent;
+struct sLogControlBlock
+{
+  LogicalNode * parent;
 
-    char* name;
+  char * name;
 
-    char* dataSetName;
-    char* logRef;        /* object reference to the journal */
+  char * dataSetName;
+  char * logRef;       /* object reference to the journal */
 
-    uint8_t trgOps;      /* TrgOps - trigger conditions */
-    uint32_t intPeriod;  /* IntgPd - integrity period */
+  uint8_t trgOps;      /* TrgOps - trigger conditions */
+  uint32_t intPeriod;  /* IntgPd - integrity period */
 
-    bool logEna;         /* enable log by default */
-    bool reasonCode;     /* include reason code in log */
+  bool logEna;         /* enable log by default */
+  bool reasonCode;     /* include reason code in log */
 
-    LogControlBlock* sibling; /* next control block in list or NULL if this is the last entry */
+  LogControlBlock * sibling; /* next control block in list or NULL if this is the last entry */
 };
 
-struct sLog {
-    LogicalNode* parent;
+struct sLog
+{
+  LogicalNode * parent;
 
-    char* name;
+  char * name;
 
-    Log* sibling; /* next log instance in list or NULL if this is the last entry */
+  Log * sibling; /* next log instance in list or NULL if this is the last entry */
 };
 
-struct sSettingGroupControlBlock {
-    LogicalNode* parent;
+struct sSettingGroupControlBlock
+{
+  LogicalNode * parent;
 
-    uint8_t actSG;       /* value from SCL file */
-    uint8_t numOfSGs;    /* value from SCL file */
+  uint8_t actSG;       /* value from SCL file */
+  uint8_t numOfSGs;    /* value from SCL file */
 
-    uint8_t editSG;      /* 0 at power-up */
-    bool cnfEdit;        /* false at power-up */
-    uint64_t timestamp;
-    uint16_t resvTms;
+  uint8_t editSG;      /* 0 at power-up */
+  bool cnfEdit;        /* false at power-up */
+  uint64_t timestamp;
+  uint16_t resvTms;
 
-    SettingGroupControlBlock* sibling; /* next control block in list or NULL if this is the last entry */
+  SettingGroupControlBlock * sibling; /* next control block in list or NULL if this is the last entry */
 };
 
-struct sGSEControlBlock {
-    LogicalNode* parent;
-    char* name;
-    char* appId;
-    char* dataSetName; /* pre loaded with relative name in logical node */
-    uint32_t confRev;  /* ConfRev - configuration revision */
-    bool fixedOffs;    /* fixed offsets */
-    PhyComAddress* address; /* GSE communication parameters */
-    int minTime; /* optional minTime parameter --> -1 if not present */
-    int maxTime; /* optional maxTime parameter --> -1 if not present */
-    GSEControlBlock* sibling; /* next control block in list or NULL if this is the last entry */
+struct sGSEControlBlock
+{
+  LogicalNode * parent;
+  char * name;
+  char * appId;
+  char * dataSetName; /* pre loaded with relative name in logical node */
+  uint32_t confRev;  /* ConfRev - configuration revision */
+  bool fixedOffs;    /* fixed offsets */
+  PhyComAddress * address; /* GSE communication parameters */
+  int minTime; /* optional minTime parameter --> -1 if not present */
+  int maxTime; /* optional maxTime parameter --> -1 if not present */
+  GSEControlBlock * sibling; /* next control block in list or NULL if this is the last entry */
 };
 
-struct sSVControlBlock {
-    LogicalNode* parent;
-    char* name;
+struct sSVControlBlock
+{
+  LogicalNode * parent;
+  char * name;
 
-    char* svId; /* MsvUD/UsvID */
-    char* dataSetName; /* pre loaded with relative name in logical node */
+  char * svId; /* MsvUD/UsvID */
+  char * dataSetName; /* pre loaded with relative name in logical node */
 
-    uint8_t optFlds;
+  uint8_t optFlds;
 
-    uint8_t smpMod;
-    uint16_t smpRate;
+  uint8_t smpMod;
+  uint16_t smpRate;
 
-    uint32_t confRev;  /* ConfRev - configuration revision */
+  uint32_t confRev;  /* ConfRev - configuration revision */
 
-    PhyComAddress* dstAddress; /* SV communication parameters */
+  PhyComAddress * dstAddress; /* SV communication parameters */
 
-    bool isUnicast;
+  bool isUnicast;
 
-    int noASDU;
+  int noASDU;
 
-    SVControlBlock* sibling; /* next control block in list or NULL if this is the last entry */
+  SVControlBlock * sibling; /* next control block in list or NULL if this is the last entry */
 };
 
 /**
@@ -335,8 +351,8 @@ ModelNode_getChildCount(ModelNode* self);
  *
  * \return the model node instance or NULL if model node does not exist.
  */
-LIB61850_API ModelNode*
-ModelNode_getChild(ModelNode* self, const char* name);
+LIB61850_API ModelNode *
+ModelNode_getChild(ModelNode* self, const char * name);
 
 /**
  * \brief return the child node of an array or other structure
@@ -346,7 +362,7 @@ ModelNode_getChild(ModelNode* self, const char* name);
  *
  * \return the model node instance or NULL if model node with given index does not exist.
  */
-LIB61850_API ModelNode*
+LIB61850_API ModelNode *
 ModelNode_getChildWithIdx(ModelNode* self, int idx);
 
 /**
@@ -362,8 +378,8 @@ ModelNode_getChildWithIdx(ModelNode* self, int idx);
  *
  * \return  the model node instance or NULL if model node does not exist.
  */
-LIB61850_API ModelNode*
-ModelNode_getChildWithFc(ModelNode* self, const char* name, FunctionalConstraint fc);
+LIB61850_API ModelNode *
+ModelNode_getChildWithFc(ModelNode* self, const char * name, FunctionalConstraint fc);
 
 /**
  * \brief Return the IEC 61850 object reference of a model node
@@ -374,8 +390,8 @@ ModelNode_getChildWithFc(ModelNode* self, const char* name, FunctionalConstraint
  *
  * \return the object reference string
  */
-LIB61850_API char*
-ModelNode_getObjectReference(ModelNode* self, char* objectReference);
+LIB61850_API char *
+ModelNode_getObjectReference(ModelNode* self, char * objectReference);
 
 /**
  * \brief Return the IEC 61850 object reference of a model node
@@ -387,8 +403,8 @@ ModelNode_getObjectReference(ModelNode* self, char* objectReference);
  *
  * \return the object reference string
  */
-LIB61850_API char*
-ModelNode_getObjectReferenceEx(ModelNode* node, char* objectReference, bool withoutIedName);
+LIB61850_API char *
+ModelNode_getObjectReferenceEx(ModelNode* node, char * objectReference, bool withoutIedName);
 
 /**
  * \brief Get the type of the ModelNode
@@ -407,7 +423,7 @@ ModelNode_getType(ModelNode* self);
  *
  * \return the name of the ModelNode
  */
-LIB61850_API const char*
+LIB61850_API const char *
 ModelNode_getName(ModelNode* self);
 
 /**
@@ -417,7 +433,7 @@ ModelNode_getName(ModelNode* self);
  *
  * \return the parent instance, or NULL when the ModelNode has no parent
  */
-LIB61850_API ModelNode*
+LIB61850_API ModelNode *
 ModelNode_getParent(ModelNode* self);
 
 /**
@@ -440,7 +456,7 @@ ModelNode_getChildren(ModelNode* self);
  * \param the name of the configured IED
  */
 LIB61850_API void
-IedModel_setIedName(IedModel* self, const char* iedName);
+IedModel_setIedName(IedModel* self, const char * iedName);
 
 /**
  * \brief Lookup a model node by its object reference
@@ -456,11 +472,11 @@ IedModel_setIedName(IedModel* self, const char* iedName);
  *
  * \return the model node instance or NULL if model node does not exist.
  */
-LIB61850_API ModelNode*
-IedModel_getModelNodeByObjectReference(IedModel* self, const char* objectReference);
+LIB61850_API ModelNode *
+IedModel_getModelNodeByObjectReference(IedModel* self, const char * objectReference);
 
-LIB61850_API SVControlBlock*
-IedModel_getSVControlBlock(IedModel* self, LogicalNode* parentLN, const char* svcbName);
+LIB61850_API SVControlBlock *
+IedModel_getSVControlBlock(IedModel* self, LogicalNode* parentLN, const char * svcbName);
 
 /**
  * \brief Lookup a model node by its short (normalized) reference
@@ -476,8 +492,8 @@ IedModel_getSVControlBlock(IedModel* self, LogicalNode* parentLN, const char* sv
  *
  * \return the model node instance or NULL if model node does not exist.
  */
-LIB61850_API ModelNode*
-IedModel_getModelNodeByShortObjectReference(IedModel* self, const char* objectReference);
+LIB61850_API ModelNode *
+IedModel_getModelNodeByShortObjectReference(IedModel* self, const char * objectReference);
 
 /**
  * \brief Lookup a model node by its short address
@@ -490,7 +506,7 @@ IedModel_getModelNodeByShortObjectReference(IedModel* self, const char* objectRe
  *
  * \return the model node instance or NULL if model node does not exist.
  */
-LIB61850_API ModelNode*
+LIB61850_API ModelNode *
 IedModel_getModelNodeByShortAddress(IedModel* self, uint32_t shortAddress);
 
 /**
@@ -501,8 +517,8 @@ IedModel_getModelNodeByShortAddress(IedModel* self, uint32_t shortAddress);
  *
  * \return The matching LogicalDevice instance
  */
-LIB61850_API LogicalDevice*
-IedModel_getDeviceByInst(IedModel* self, const char* ldInst);
+LIB61850_API LogicalDevice *
+IedModel_getDeviceByInst(IedModel* self, const char * ldInst);
 
 /**
  * \brief Lookup logical device (LD) instance by index
@@ -512,7 +528,7 @@ IedModel_getDeviceByInst(IedModel* self, const char* ldInst);
  *
  * \return the corresponding LogicalDevice* object or NULL if the index is out of range
  */
-LIB61850_API LogicalDevice*
+LIB61850_API LogicalDevice *
 IedModel_getDeviceByIndex(IedModel* self, int index);
 
 
@@ -524,8 +540,8 @@ IedModel_getDeviceByIndex(IedModel* self, int index);
  *
  * \return the logical device instance or NULL if it does not exist
  */
-LIB61850_API LogicalNode*
-LogicalDevice_getLogicalNode(LogicalDevice* self, const char* lnName);
+LIB61850_API LogicalNode *
+LogicalDevice_getLogicalNode(LogicalDevice* self, const char * lnName);
 
 /**
  * \brief Get the setting group control block (SGCB) of the logical device
@@ -534,7 +550,7 @@ LogicalDevice_getLogicalNode(LogicalDevice* self, const char* lnName);
  *
  * \return the SGCB instance or NULL if no SGCB is available
  */
-LIB61850_API SettingGroupControlBlock*
+LIB61850_API SettingGroupControlBlock *
 LogicalDevice_getSettingGroupControlBlock(LogicalDevice* self);
 
 /**@}*/
@@ -558,8 +574,8 @@ IedModel_setAttributeValuesToNull(IedModel* self);
  *
  * \return The matching LogicalDevice instance
  */
-LIB61850_API LogicalDevice*
-IedModel_getDevice(IedModel* self, const char* ldName);
+LIB61850_API LogicalDevice *
+IedModel_getDevice(IedModel* self, const char * ldName);
 
 /**
  * \brief Lookup a data set in the IED model
@@ -569,8 +585,8 @@ IedModel_getDevice(IedModel* self, const char* ldName);
  *
  * \return The matching DataSet instance
  */
-LIB61850_API DataSet*
-IedModel_lookupDataSet(IedModel* self, const char* dataSetReference);
+LIB61850_API DataSet *
+IedModel_lookupDataSet(IedModel* self, const char * dataSetReference);
 
 /**
  * \brief Lookup a DataAttribute instance with the corresponding MmsValue instance
@@ -580,7 +596,7 @@ IedModel_lookupDataSet(IedModel* self, const char* dataSetReference);
  *
  * \return the matching DataAttribute instance
  */
-LIB61850_API DataAttribute*
+LIB61850_API DataAttribute *
 IedModel_lookupDataAttributeByMmsValue(IedModel* self, MmsValue* value);
 
 
@@ -597,8 +613,8 @@ IedModel_getLogicalDeviceCount(IedModel* self);
 LIB61850_API int
 LogicalDevice_getLogicalNodeCount(LogicalDevice* self);
 
-LIB61850_API ModelNode*
-LogicalDevice_getChildByMmsVariableName(LogicalDevice* self, const char* mmsVariableName);
+LIB61850_API ModelNode *
+LogicalDevice_getChildByMmsVariableName(LogicalDevice* self, const char * mmsVariableName);
 
 LIB61850_API bool
 LogicalNode_hasFCData(LogicalNode* self, FunctionalConstraint fc);
@@ -617,8 +633,8 @@ LogicalNode_hasUnbufferedReports(LogicalNode* self);
  *
  * \return the data set instance or NULL if the data set does not exist
  */
-LIB61850_API DataSet*
-LogicalNode_getDataSet(LogicalNode* self, const char* dataSetName);
+LIB61850_API DataSet *
+LogicalNode_getDataSet(LogicalNode* self, const char * dataSetName);
 
 LIB61850_API bool
 DataObject_hasFCData(DataObject* self, FunctionalConstraint fc);

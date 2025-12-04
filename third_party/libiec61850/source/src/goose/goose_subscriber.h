@@ -39,18 +39,18 @@ extern "C" {
 
 typedef enum
 {
-    GOOSE_PARSE_ERROR_NO_ERROR = 0,
-    GOOSE_PARSE_ERROR_UNKNOWN_TAG,
-    GOOSE_PARSE_ERROR_TAGDECODE,
-    GOOSE_PARSE_ERROR_SUBLEVEL,
-    GOOSE_PARSE_ERROR_OVERFLOW,
-    GOOSE_PARSE_ERROR_UNDERFLOW,
-    GOOSE_PARSE_ERROR_TYPE_MISMATCH,
-    GOOSE_PARSE_ERROR_LENGTH_MISMATCH,
-    GOOSE_PARSE_ERROR_INVALID_PADDING
+  GOOSE_PARSE_ERROR_NO_ERROR = 0,
+  GOOSE_PARSE_ERROR_UNKNOWN_TAG,
+  GOOSE_PARSE_ERROR_TAGDECODE,
+  GOOSE_PARSE_ERROR_SUBLEVEL,
+  GOOSE_PARSE_ERROR_OVERFLOW,
+  GOOSE_PARSE_ERROR_UNDERFLOW,
+  GOOSE_PARSE_ERROR_TYPE_MISMATCH,
+  GOOSE_PARSE_ERROR_LENGTH_MISMATCH,
+  GOOSE_PARSE_ERROR_INVALID_PADDING
 } GooseParseError;
 
-typedef struct sGooseSubscriber* GooseSubscriber;
+typedef struct sGooseSubscriber * GooseSubscriber;
 
 /**
  * \brief user provided callback function that will be invoked when a GOOSE message is received.
@@ -58,7 +58,7 @@ typedef struct sGooseSubscriber* GooseSubscriber;
  * \param subscriber the subscriber object that invoked the callback function,
  * \param parameter a user provided parameter that will be passed to the callback function
  */
-typedef void (*GooseListener)(GooseSubscriber subscriber, void* parameter);
+typedef void (*GooseListener)(GooseSubscriber subscriber, void * parameter);
 
 /**
  * \brief create a new GOOSE subscriber instance.
@@ -81,14 +81,14 @@ typedef void (*GooseListener)(GooseSubscriber subscriber, void* parameter);
  * \param dataSetValues the MmsValue object where the data set values will be written or NULL.
  */
 LIB61850_API GooseSubscriber
-GooseSubscriber_create(char* goCbRef, MmsValue* dataSetValues);
+GooseSubscriber_create(char * goCbRef, MmsValue* dataSetValues);
 
 /**
  * \brief Get the GoId value of the received GOOSE message
  *
  * \param self GooseSubscriber instance to operate on.
  */
-LIB61850_API char*
+LIB61850_API char *
 GooseSubscriber_getGoId(GooseSubscriber self);
 
 /**
@@ -96,7 +96,7 @@ GooseSubscriber_getGoId(GooseSubscriber self);
  *
  * \param self GooseSubscriber instance to operate on.
  */
-LIB61850_API char*
+LIB61850_API char *
 GooseSubscriber_getGoCbRef(GooseSubscriber self);
 
 /**
@@ -104,7 +104,7 @@ GooseSubscriber_getGoCbRef(GooseSubscriber self);
  *
  * \param self GooseSubscriber instance to operate on.
  */
-LIB61850_API char*
+LIB61850_API char *
 GooseSubscriber_getDataSet(GooseSubscriber self);
 
 /**
@@ -168,7 +168,7 @@ GooseSubscriber_destroy(GooseSubscriber self);
  * \param parameter a user provided parameter that will be passed to the callback function
  */
 LIB61850_API void
-GooseSubscriber_setListener(GooseSubscriber self, GooseListener listener, void* parameter);
+GooseSubscriber_setListener(GooseSubscriber self, GooseListener listener, void * parameter);
 
 /**
  * \brief Get the APPID value of the received GOOSE message
@@ -185,7 +185,7 @@ GooseSubscriber_getAppId(GooseSubscriber self);
  * \param buffer buffer to store the MAC address (at least 6 byte)
  */
 LIB61850_API void
-GooseSubscriber_getSrcMac(GooseSubscriber self, uint8_t* buffer);
+GooseSubscriber_getSrcMac(GooseSubscriber self, uint8_t * buffer);
 
 /**
  * \brief Get the destination MAC address of the received GOOSE message
@@ -194,7 +194,7 @@ GooseSubscriber_getSrcMac(GooseSubscriber self, uint8_t* buffer);
  * \param buffer buffer to store the MAC address (at least 6 byte)
  */
 LIB61850_API void
-GooseSubscriber_getDstMac(GooseSubscriber self, uint8_t* buffer);
+GooseSubscriber_getDstMac(GooseSubscriber self, uint8_t * buffer);
 
 /**
  * \brief return the state number (stNum) of the last received GOOSE message.
@@ -288,7 +288,7 @@ GooseSubscriber_getTimestamp(GooseSubscriber self);
  *
  * \return MmsValue instance of the report data set
  */
-LIB61850_API MmsValue*
+LIB61850_API MmsValue *
 GooseSubscriber_getDataSetValues(GooseSubscriber self);
 
 LIB61850_API bool

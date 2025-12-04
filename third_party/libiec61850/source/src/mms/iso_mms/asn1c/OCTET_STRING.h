@@ -2,8 +2,8 @@
  * Copyright (c) 2003 Lev Walkin <vlm@lionet.info>. All rights reserved.
  * Redistribution and modifications are permitted subject to BSD license.
  */
-#ifndef	_OCTET_STRING_H_
-#define	_OCTET_STRING_H_
+#ifndef _OCTET_STRING_H_
+#define _OCTET_STRING_H_
 
 #include <asn_application.h>
 
@@ -11,11 +11,12 @@
 extern "C" {
 #endif
 
-typedef struct OCTET_STRING {
-	uint8_t *buf;	/* Buffer with consecutive OCTET_STRING bits */
-	int size;	/* Size of the buffer */
+typedef struct OCTET_STRING
+{
+  uint8_t * buf; /* Buffer with consecutive OCTET_STRING bits */
+  int size; /* Size of the buffer */
 
-	asn_struct_ctx_t _asn_ctx;	/* Parsing across buffer boundaries */
+  asn_struct_ctx_t _asn_ctx;  /* Parsing across buffer boundaries */
 } OCTET_STRING_t;
 
 LIB61850_INTERNAL extern asn_TYPE_descriptor_t asn_DEF_OCTET_STRING;
@@ -25,9 +26,9 @@ LIB61850_INTERNAL asn_struct_print_f OCTET_STRING_print;
 LIB61850_INTERNAL asn_struct_print_f OCTET_STRING_print_utf8;
 LIB61850_INTERNAL ber_type_decoder_f OCTET_STRING_decode_ber;
 LIB61850_INTERNAL der_type_encoder_f OCTET_STRING_encode_der;
-LIB61850_INTERNAL xer_type_decoder_f OCTET_STRING_decode_xer_hex;		/* Hexadecimal */
-LIB61850_INTERNAL xer_type_decoder_f OCTET_STRING_decode_xer_binary;	/* 01010111010 */
-LIB61850_INTERNAL xer_type_decoder_f OCTET_STRING_decode_xer_utf8;	/* ASCII/UTF-8 */
+LIB61850_INTERNAL xer_type_decoder_f OCTET_STRING_decode_xer_hex;   /* Hexadecimal */
+LIB61850_INTERNAL xer_type_decoder_f OCTET_STRING_decode_xer_binary;  /* 01010111010 */
+LIB61850_INTERNAL xer_type_decoder_f OCTET_STRING_decode_xer_utf8;  /* ASCII/UTF-8 */
 LIB61850_INTERNAL xer_type_encoder_f OCTET_STRING_encode_xer;
 LIB61850_INTERNAL xer_type_encoder_f OCTET_STRING_encode_xer_utf8;
 LIB61850_INTERNAL per_type_decoder_f OCTET_STRING_decode_uper;
@@ -47,10 +48,10 @@ LIB61850_INTERNAL per_type_encoder_f OCTET_STRING_encode_uper;
  * Returns 0 if it was possible to perform operation, -1 otherwise.
  */
 LIB61850_INTERNAL
-int OCTET_STRING_fromBuf(OCTET_STRING_t *s, const char *str, int size);
+int OCTET_STRING_fromBuf(OCTET_STRING_t * s, const char * str, int size);
 
 /* Handy conversion from the C string into the OCTET STRING. */
-#define	OCTET_STRING_fromString(s, str)	OCTET_STRING_fromBuf(s, str, -1)
+#define OCTET_STRING_fromString(s, str) OCTET_STRING_fromBuf(s, str, -1)
 
 /*
  * Allocate and fill the new OCTET STRING and return a pointer to the newly
@@ -58,25 +59,26 @@ int OCTET_STRING_fromBuf(OCTET_STRING_t *s, const char *str, int size);
  * empty OCTET STRING.
  */
 LIB61850_INTERNAL
-OCTET_STRING_t *OCTET_STRING_new_fromBuf(asn_TYPE_descriptor_t *td,
-	const char *str, int size);
+OCTET_STRING_t * OCTET_STRING_new_fromBuf(asn_TYPE_descriptor_t * td,
+                                          const char * str, int size);
 
 /****************************
  * Internally useful stuff. *
  ****************************/
 
-typedef struct asn_OCTET_STRING_specifics_s {
-	/*
-	 * Target structure description.
-	 */
-	int struct_size;	/* Size of the structure */
-	int ctx_offset;		/* Offset of the asn_struct_ctx_t member */
+typedef struct asn_OCTET_STRING_specifics_s
+{
+  /*
+   * Target structure description.
+   */
+  int struct_size;  /* Size of the structure */
+  int ctx_offset;   /* Offset of the asn_struct_ctx_t member */
 
-	int subvariant;		/* {0,1,2} for O-S, BIT STRING or ANY */
+  int subvariant;   /* {0,1,2} for O-S, BIT STRING or ANY */
 } asn_OCTET_STRING_specifics_t;
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif	/* _OCTET_STRING_H_ */
+#endif  /* _OCTET_STRING_H_ */

@@ -39,201 +39,206 @@ static uint8_t servicesSupported[] = { 0xee, 0x1c, 0x00, 0x00, 0x04, 0x08, 0x00,
 void
 mmsClient_createInitiateRequest(MmsConnection self, ByteBuffer* message)
 {
-    int dataStructureNestingLevel = DEFAULT_DATA_STRUCTURE_NESTING_LEVEL;
+  int dataStructureNestingLevel = DEFAULT_DATA_STRUCTURE_NESTING_LEVEL;
 
-    uint32_t localDetailSize =
-            BerEncoder_UInt32determineEncodedSize(self->parameters.maxPduSize);
+  uint32_t localDetailSize =
+    BerEncoder_UInt32determineEncodedSize(self->parameters.maxPduSize);
 
-    uint32_t proposedMaxServerOutstandingCallingSize =
-            BerEncoder_UInt32determineEncodedSize(self->maxOutstandingCalling);
+  uint32_t proposedMaxServerOutstandingCallingSize =
+    BerEncoder_UInt32determineEncodedSize(self->maxOutstandingCalling);
 
-    uint32_t proposedMaxServerOutstandingCalledSize =
-            BerEncoder_UInt32determineEncodedSize(self->maxOutstandingCalled);
+  uint32_t proposedMaxServerOutstandingCalledSize =
+    BerEncoder_UInt32determineEncodedSize(self->maxOutstandingCalled);
 
-    uint32_t dataStructureNestingLevelSize =
-            BerEncoder_UInt32determineEncodedSize(dataStructureNestingLevel);
+  uint32_t dataStructureNestingLevelSize =
+    BerEncoder_UInt32determineEncodedSize(dataStructureNestingLevel);
 
-    uint32_t initRequestDetailSize = 3 + 5 + 14;
+  uint32_t initRequestDetailSize = 3 + 5 + 14;
 
-    uint32_t initiateRequestPduSize = 2 + localDetailSize +
-                             2 + proposedMaxServerOutstandingCallingSize +
-                             2 + proposedMaxServerOutstandingCalledSize +
-                             2 + dataStructureNestingLevelSize +
-                             2 + initRequestDetailSize;
+  uint32_t initiateRequestPduSize = 2 + localDetailSize +
+                                    2 + proposedMaxServerOutstandingCallingSize +
+                                    2 + proposedMaxServerOutstandingCalledSize +
+                                    2 + dataStructureNestingLevelSize +
+                                    2 + initRequestDetailSize;
 
-    /* encode message (InitiateRequestPdu) */
+  /* encode message (InitiateRequestPdu) */
 
-    int bufPos = 0;
-    uint8_t* buffer = message->buffer;
+  int bufPos = 0;
+  uint8_t * buffer = message->buffer;
 
-    bufPos = BerEncoder_encodeTL(0xa8, initiateRequestPduSize, buffer, bufPos);
+  bufPos = BerEncoder_encodeTL(0xa8, initiateRequestPduSize, buffer, bufPos);
 
-    /* localDetail */
-    bufPos = BerEncoder_encodeTL(0x80, localDetailSize, buffer, bufPos);
-    bufPos = BerEncoder_encodeUInt32(self->parameters.maxPduSize, buffer, bufPos);
+  /* localDetail */
+  bufPos = BerEncoder_encodeTL(0x80, localDetailSize, buffer, bufPos);
+  bufPos = BerEncoder_encodeUInt32(self->parameters.maxPduSize, buffer, bufPos);
 
-    /* proposedMaxServerOutstandingCalling */
-    bufPos = BerEncoder_encodeTL(0x81, proposedMaxServerOutstandingCallingSize, buffer, bufPos);
-    bufPos = BerEncoder_encodeUInt32(self->maxOutstandingCalling, buffer, bufPos);
+  /* proposedMaxServerOutstandingCalling */
+  bufPos = BerEncoder_encodeTL(0x81, proposedMaxServerOutstandingCallingSize, buffer, bufPos);
+  bufPos = BerEncoder_encodeUInt32(self->maxOutstandingCalling, buffer, bufPos);
 
-    /* proposedMaxServerOutstandingCalled */
-    bufPos = BerEncoder_encodeTL(0x82, proposedMaxServerOutstandingCalledSize, buffer, bufPos);
-    bufPos = BerEncoder_encodeUInt32(self->maxOutstandingCalled, buffer, bufPos);
+  /* proposedMaxServerOutstandingCalled */
+  bufPos = BerEncoder_encodeTL(0x82, proposedMaxServerOutstandingCalledSize, buffer, bufPos);
+  bufPos = BerEncoder_encodeUInt32(self->maxOutstandingCalled, buffer, bufPos);
 
-    /* proposedDataStructureNestingLevel */
-    bufPos = BerEncoder_encodeTL(0x83, dataStructureNestingLevelSize, buffer, bufPos);
-    bufPos = BerEncoder_encodeUInt32(dataStructureNestingLevel, buffer, bufPos);
+  /* proposedDataStructureNestingLevel */
+  bufPos = BerEncoder_encodeTL(0x83, dataStructureNestingLevelSize, buffer, bufPos);
+  bufPos = BerEncoder_encodeUInt32(dataStructureNestingLevel, buffer, bufPos);
 
-    /* initRequestDetail */
-    bufPos = BerEncoder_encodeTL(0xa4, initRequestDetailSize, buffer, bufPos);
+  /* initRequestDetail */
+  bufPos = BerEncoder_encodeTL(0xa4, initRequestDetailSize, buffer, bufPos);
 
-    /* proposedVersionNumber = 1 */
-    buffer[bufPos++] = 0x80;
-    buffer[bufPos++] = 0x01;
-    buffer[bufPos++] = 0x01;
+  /* proposedVersionNumber = 1 */
+  buffer[bufPos++] = 0x80;
+  buffer[bufPos++] = 0x01;
+  buffer[bufPos++] = 0x01;
 
-    /* proposedParameterCBC: fixed */
-    buffer[bufPos++] = 0x81;
-    buffer[bufPos++] = 0x03;
-    buffer[bufPos++] = 0x05; /* padding */
-    buffer[bufPos++] = 0xf1; /* str1, str2, vnam, vlis, valt  */
-    buffer[bufPos++] = 0x00;
+  /* proposedParameterCBC: fixed */
+  buffer[bufPos++] = 0x81;
+  buffer[bufPos++] = 0x03;
+  buffer[bufPos++] = 0x05; /* padding */
+  buffer[bufPos++] = 0xf1; /* str1, str2, vnam, vlis, valt  */
+  buffer[bufPos++] = 0x00;
 
-    /* servicesSupportedCalling */
-    bufPos = BerEncoder_encodeBitString(0x82, 85, servicesSupported, buffer, bufPos);
+  /* servicesSupportedCalling */
+  bufPos = BerEncoder_encodeBitString(0x82, 85, servicesSupported, buffer, bufPos);
 
-    message->size = bufPos;
+  message->size = bufPos;
 }
 
 int
 mmsClient_createConcludeRequest(MmsConnection self, ByteBuffer* message)
 {
-    (void)self;
+  (void)self;
 
-    if (message->maxSize > 1) {
-        message->buffer[0] = 0x8b;
-        message->buffer[1] = 0;
-        message->size = 2;
-        return 2;
-    }
-    else
-        return -1;
+  if(message->maxSize > 1)
+  {
+    message->buffer[0] = 0x8b;
+    message->buffer[1] = 0;
+    message->size = 2;
+    return 2;
+  }
+  else
+    return -1;
 }
 
 static bool
-parseInitResponseDetail(MmsConnection self, uint8_t* buffer, int bufPos, int maxBufPos)
+parseInitResponseDetail(MmsConnection self, uint8_t * buffer, int bufPos, int maxBufPos)
 {
-    while (bufPos < maxBufPos) {
-        uint8_t tag = buffer[bufPos++];
-        int length;
+  while(bufPos < maxBufPos)
+  {
+    uint8_t tag = buffer[bufPos++];
+    int length;
 
-        bufPos = BerDecoder_decodeLength(buffer, &length, bufPos, maxBufPos);
+    bufPos = BerDecoder_decodeLength(buffer, &length, bufPos, maxBufPos);
 
-        if (bufPos < 0)
-            return false;
+    if(bufPos < 0)
+      return false;
 
-        switch (tag) {
+    switch(tag)
+    {
 
-        case 0x80: /* negotiated protocol version */
-            break;
+      case 0x80: /* negotiated protocol version */
+        break;
 
-        case 0x81: /* parameter CBB */
-            break;
+      case 0x81: /* parameter CBB */
+        break;
 
-        case 0x82: /* services supported called */
-            {
-                int i;
+      case 0x82: /* services supported called */
+        {
+          int i;
 
-                for (i = 0; i < 11; i++)
-                     self->parameters.servicesSupported[i] = buffer[bufPos + i + 1]; /* add 1 to skip padding */
-            }
-            break;
-
-        case 0x00: /* indefinite length end tag -> ignore */
-            break;
-
-        default:
-            break;
+          for(i = 0; i < 11; i++)
+            self->parameters.servicesSupported[i] = buffer[bufPos + i + 1]; /* add 1 to skip padding */
         }
+        break;
 
-        bufPos += length;
+      case 0x00: /* indefinite length end tag -> ignore */
+        break;
+
+      default:
+        break;
     }
 
-    return true;
+    bufPos += length;
+  }
+
+  return true;
 }
 
 bool
 mmsClient_parseInitiateResponse(MmsConnection self, ByteBuffer* response)
 {
-    self->parameters.maxPduSize = CONFIG_MMS_MAXIMUM_PDU_SIZE;
-    self->parameters.dataStructureNestingLevel = DEFAULT_DATA_STRUCTURE_NESTING_LEVEL;
-    self->parameters.maxServOutstandingCalled = CONFIG_DEFAULT_MAX_SERV_OUTSTANDING_CALLED;
-    self->parameters.maxServOutstandingCalling = CONFIG_DEFAULT_MAX_SERV_OUTSTANDING_CALLING;
+  self->parameters.maxPduSize = CONFIG_MMS_MAXIMUM_PDU_SIZE;
+  self->parameters.dataStructureNestingLevel = DEFAULT_DATA_STRUCTURE_NESTING_LEVEL;
+  self->parameters.maxServOutstandingCalled = CONFIG_DEFAULT_MAX_SERV_OUTSTANDING_CALLED;
+  self->parameters.maxServOutstandingCalling = CONFIG_DEFAULT_MAX_SERV_OUTSTANDING_CALLING;
 
-    int bufPos = 1; /* ignore tag - already checked */
+  int bufPos = 1; /* ignore tag - already checked */
 
-    int maxBufPos = ByteBuffer_getSize(response);
-    uint8_t* buffer = ByteBuffer_getBuffer(response);
+  int maxBufPos = ByteBuffer_getSize(response);
+  uint8_t * buffer = ByteBuffer_getBuffer(response);
 
-    int length;
+  int length;
+  bufPos = BerDecoder_decodeLength(buffer, &length, bufPos, maxBufPos);
+
+  if(bufPos < 0)
+    return false;
+
+  while(bufPos < maxBufPos)
+  {
+    uint8_t tag = buffer[bufPos++];
+
     bufPos = BerDecoder_decodeLength(buffer, &length, bufPos, maxBufPos);
 
-    if (bufPos < 0)
-        return false;
+    if(bufPos < 0)
+      return false;
 
-    while (bufPos < maxBufPos) {
-        uint8_t tag = buffer[bufPos++];
+    switch(tag)
+    {
+      case 0x80: /* local-detail-calling */
+        self->parameters.maxPduSize = BerDecoder_decodeUint32(buffer, length, bufPos);
 
-        bufPos = BerDecoder_decodeLength(buffer, &length, bufPos, maxBufPos);
+        if(self->parameters.maxPduSize > CONFIG_MMS_MAXIMUM_PDU_SIZE)
+          self->parameters.maxPduSize = CONFIG_MMS_MAXIMUM_PDU_SIZE;
 
-        if (bufPos < 0)
+        break;
+
+      case 0x81:  /* proposed-max-serv-outstanding-calling */
+        self->parameters.maxServOutstandingCalling = BerDecoder_decodeUint32(buffer, length, bufPos);
+
+        if(self->parameters.maxServOutstandingCalling > CONFIG_DEFAULT_MAX_SERV_OUTSTANDING_CALLING)
+          self->parameters.maxServOutstandingCalling = CONFIG_DEFAULT_MAX_SERV_OUTSTANDING_CALLING;
+
+        break;
+
+      case 0x82:  /* proposed-max-serv-outstanding-called */
+        self->parameters.maxServOutstandingCalled = BerDecoder_decodeUint32(buffer, length, bufPos);
+
+        if(self->parameters.maxServOutstandingCalled > CONFIG_DEFAULT_MAX_SERV_OUTSTANDING_CALLED)
+          self->parameters.maxServOutstandingCalled = CONFIG_DEFAULT_MAX_SERV_OUTSTANDING_CALLED;
+
+        break;
+      case 0x83: /* proposed-data-structure-nesting-level */
+        self->parameters.dataStructureNestingLevel = BerDecoder_decodeUint32(buffer, length, bufPos);
+        break;
+
+      case 0xa4: /* mms-init-request-detail */
+        {
+          if(parseInitResponseDetail(self, buffer, bufPos, bufPos + length) == false)
             return false;
-
-        switch (tag) {
-        case 0x80: /* local-detail-calling */
-            self->parameters.maxPduSize = BerDecoder_decodeUint32(buffer, length, bufPos);
-
-            if (self->parameters.maxPduSize > CONFIG_MMS_MAXIMUM_PDU_SIZE)
-                self->parameters.maxPduSize = CONFIG_MMS_MAXIMUM_PDU_SIZE;
-
-            break;
-
-        case 0x81:  /* proposed-max-serv-outstanding-calling */
-            self->parameters.maxServOutstandingCalling = BerDecoder_decodeUint32(buffer, length, bufPos);
-
-            if (self->parameters.maxServOutstandingCalling > CONFIG_DEFAULT_MAX_SERV_OUTSTANDING_CALLING)
-                self->parameters.maxServOutstandingCalling = CONFIG_DEFAULT_MAX_SERV_OUTSTANDING_CALLING;
-
-            break;
-
-        case 0x82:  /* proposed-max-serv-outstanding-called */
-            self->parameters.maxServOutstandingCalled = BerDecoder_decodeUint32(buffer, length, bufPos);
-
-            if (self->parameters.maxServOutstandingCalled > CONFIG_DEFAULT_MAX_SERV_OUTSTANDING_CALLED)
-                self->parameters.maxServOutstandingCalled = CONFIG_DEFAULT_MAX_SERV_OUTSTANDING_CALLED;
-
-            break;
-        case 0x83: /* proposed-data-structure-nesting-level */
-            self->parameters.dataStructureNestingLevel = BerDecoder_decodeUint32(buffer, length, bufPos);
-            break;
-
-        case 0xa4: /* mms-init-request-detail */
-            {
-                if (parseInitResponseDetail(self, buffer, bufPos, bufPos + length) == false)
-                    return false;
-            }
-            break;
-
-        case 0x00: /* indefinite length end tag -> ignore */
-            break;
-
-        default:
-            break; /* Ignore unknown tags */
         }
+        break;
 
-        bufPos += length;
+      case 0x00: /* indefinite length end tag -> ignore */
+        break;
+
+      default:
+        break; /* Ignore unknown tags */
     }
 
+    bufPos += length;
+  }
 
-    return true;
+
+  return true;
 }

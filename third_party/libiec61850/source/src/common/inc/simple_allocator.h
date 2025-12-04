@@ -24,19 +24,20 @@
 #ifndef SIMPLE_ALLOCATOR_H_
 #define SIMPLE_ALLOCATOR_H_
 
-typedef struct {
-    char* memoryBlock;
-    char* currentPtr;
-    int size;
+typedef struct
+{
+  char * memoryBlock;
+  char * currentPtr;
+  int size;
 } MemoryAllocator;
 
 LIB61850_INTERNAL void
-MemoryAllocator_init(MemoryAllocator* self, char* memoryBlock, int size);
+MemoryAllocator_init(MemoryAllocator* self, char * memoryBlock, int size);
 
 LIB61850_INTERNAL int
 MemoryAllocator_getAlignedSize(int size);
 
-LIB61850_INTERNAL char*
+LIB61850_INTERNAL char *
 MemoryAllocator_allocate(MemoryAllocator* self, int size);
 
 #endif /* SIMPLE_ALLOCATOR_H_ */

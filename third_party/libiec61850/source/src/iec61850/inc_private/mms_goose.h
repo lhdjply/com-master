@@ -30,25 +30,25 @@ MmsGooseControlBlock_create(void);
 LIB61850_INTERNAL void
 MmsGooseControlBlock_destroy(MmsGooseControlBlock self);
 
-LIB61850_INTERNAL MmsDomain*
+LIB61850_INTERNAL MmsDomain *
 MmsGooseControlBlock_getDomain(MmsGooseControlBlock self);
 
 LIB61850_INTERNAL void
 MmsGooseControlBlock_useGooseVlanTag(MmsGooseControlBlock self, bool useVlanTag);
 
 LIB61850_INTERNAL void
-MmsGooseControlBlock_setGooseInterfaceId(MmsGooseControlBlock self, const char* interfaceId);
+MmsGooseControlBlock_setGooseInterfaceId(MmsGooseControlBlock self, const char * interfaceId);
 
-LIB61850_INTERNAL char*
+LIB61850_INTERNAL char *
 MmsGooseControlBlock_getLogicalNodeName(MmsGooseControlBlock self);
 
-LIB61850_INTERNAL MmsValue*
-MmsGooseControlBlock_getGCBValue(MmsGooseControlBlock self, char* elementName);
+LIB61850_INTERNAL MmsValue *
+MmsGooseControlBlock_getGCBValue(MmsGooseControlBlock self, char * elementName);
 
-LIB61850_INTERNAL MmsValue*
+LIB61850_INTERNAL MmsValue *
 MmsGooseControlBlock_getMmsValues(MmsGooseControlBlock self);
 
-LIB61850_INTERNAL MmsVariableSpecification*
+LIB61850_INTERNAL MmsVariableSpecification *
 MmsGooseControlBlock_getVariableSpecification(MmsGooseControlBlock self);
 
 LIB61850_INTERNAL bool
@@ -72,8 +72,8 @@ MmsGooseControlBlock_disable(MmsGooseControlBlock self, MmsMapping* mmsMapping);
 LIB61850_INTERNAL void
 GOOSE_sendPendingEvents(MmsMapping* self);
 
-LIB61850_INTERNAL MmsVariableSpecification*
+LIB61850_INTERNAL MmsVariableSpecification *
 GOOSE_createGOOSEControlBlocks(MmsMapping* self, MmsDomain* domain,
-        LogicalNode* logicalNode, int gseCount);
+                               LogicalNode* logicalNode, int gseCount);
 
 #endif /* MMS_GOOSE_H_ */

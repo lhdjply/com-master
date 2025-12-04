@@ -26,53 +26,57 @@
 
 #include "libiec61850_platform_includes.h"
 
-typedef struct sBufferChain* BufferChain;
+typedef struct sBufferChain * BufferChain;
 
-struct sBufferChain {
-    int length;
-    int partLength;
-    int partMaxLength;
-    uint8_t* buffer;
-    BufferChain nextPart;
+struct sBufferChain
+{
+  int length;
+  int partLength;
+  int partMaxLength;
+  uint8_t * buffer;
+  BufferChain nextPart;
 };
 
 LIB61850_INTERNAL void
-BufferChain_init(BufferChain self, int length, int partLength, BufferChain nextPart, uint8_t* buffer);
+BufferChain_init(BufferChain self, int length, int partLength, BufferChain nextPart, uint8_t * buffer);
 
-typedef struct {
-    uint8_t* memory;
-    int currentPos;
-    int size;
+typedef struct
+{
+  uint8_t * memory;
+  int currentPos;
+  int size;
 } MemoryArea;
 
 LIB61850_INTERNAL void
-MemoryArea_initialize(MemoryArea* self, uint8_t* memory, int size);
+MemoryArea_initialize(MemoryArea* self, uint8_t * memory, int size);
 
-LIB61850_INTERNAL uint8_t*
+LIB61850_INTERNAL uint8_t *
 MemoryArea_getNextBlock(MemoryArea* self, int size);
 
 #if 0
 
-typedef struct sMemoryPool* MemoryPool;
+typedef struct sMemoryPool * MemoryPool;
 
 typedef struct sMemoryChunk MemoryChunk;
 
-struct sMemoryPool {
-    uint8_t* memory;
-    int size;
-    MemoryChunk firstChunk;
+struct sMemoryPool
+{
+  uint8_t * memory;
+  int size;
+  MemoryChunk firstChunk;
 };
 
-struct sMemoryChunk {
-    MemoryChunk previous;
-    MemoryChunk next;
-    uint8_t* data;
-    uint8_t free;
-    int size;
+struct sMemoryChunk
+{
+  MemoryChunk previous;
+  MemoryChunk next;
+  uint8_t * data;
+  uint8_t free;
+  int size;
 };
 
 MemoryPool
-MemoryPool_create(uint8_t* memoryAddress, int size);
+MemoryPool_create(uint8_t * memoryAddress, int size);
 
 void
 MemoryPool_destroy(MemoryPool self);

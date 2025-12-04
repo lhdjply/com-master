@@ -36,16 +36,17 @@ extern "C" {
 #ifndef GOOSE_SV_COMM_PARAMETERS
 #define GOOSE_SV_COMM_PARAMETERS
 
-typedef struct sCommParameters {
-    uint8_t vlanPriority;
-    uint16_t vlanId;
-    uint16_t appId;
-    uint8_t dstAddress[6];
+typedef struct sCommParameters
+{
+  uint8_t vlanPriority;
+  uint16_t vlanId;
+  uint16_t appId;
+  uint8_t dstAddress[6];
 } CommParameters;
 
 #endif
 
-typedef struct sGoosePublisher* GoosePublisher;
+typedef struct sGoosePublisher * GoosePublisher;
 
 /**
  * \brief Create a new GoosePublisher instance
@@ -54,11 +55,11 @@ typedef struct sGoosePublisher* GoosePublisher;
  *
  * \param parameters GOOSE communication parameters
  * \param interfaceId name of the Ethernet interface to use (e.g. "eth0")
- * 
+ *
  * \return the new GoosePublisher instance
  */
 LIB61850_API GoosePublisher
-GoosePublisher_create(CommParameters* parameters, const char* interfaceID);
+GoosePublisher_create(CommParameters* parameters, const char * interfaceID);
 
 /**
  * \brief Create a new GoosePublisher instance for Ethernet GOOSE
@@ -66,18 +67,18 @@ GoosePublisher_create(CommParameters* parameters, const char* interfaceID);
  * \param parameters GOOSE communication parameters
  * \param interfaceId name of the Ethernet interface to use (e.g. "eth0")
  * \param useVlanTag enable or disable the usage of VLAN tags in GOOSE messages
- * 
+ *
  * \return the new GoosePublisher instance
  */
 LIB61850_API GoosePublisher
-GoosePublisher_createEx(CommParameters* parameters, const char* interfaceID, bool useVlanTag);
+GoosePublisher_createEx(CommParameters* parameters, const char * interfaceID, bool useVlanTag);
 
 /**
  * \brief Create a new GoosePublisher instance for R-GOOSE
  *
  * \param session R-session protocol instance to use
  * \param appId the appID value to use
- * 
+ *
  * \return the new GoosePublisher instance
  */
 LIB61850_API GoosePublisher
@@ -112,7 +113,8 @@ GoosePublisher_publish(GoosePublisher self, LinkedList dataSet);
  * \param bufSize the size of the buffer to store the sent message
  */
 LIB61850_API int
-GoosePublisher_publishAndDump(GoosePublisher self, LinkedList dataSet, char* msgBuf, int32_t* msgLen, int32_t bufSize);
+GoosePublisher_publishAndDump(GoosePublisher self, LinkedList dataSet, char * msgBuf, int32_t * msgLen,
+                              int32_t bufSize);
 
 /**
  * \brief Sets the GoID used by the GoosePublisher instance
@@ -121,7 +123,7 @@ GoosePublisher_publishAndDump(GoosePublisher self, LinkedList dataSet, char* msg
  * \param goID the GoId string
  */
 LIB61850_API void
-GoosePublisher_setGoID(GoosePublisher self, char* goID);
+GoosePublisher_setGoID(GoosePublisher self, char * goID);
 
 /**
  * \brief Sets the GoCB reference used by the GoosePublisher instance
@@ -130,7 +132,7 @@ GoosePublisher_setGoID(GoosePublisher self, char* goID);
  * \param goCbRef the GoCB reference string
  */
 LIB61850_API void
-GoosePublisher_setGoCbRef(GoosePublisher self, char* goCbRef);
+GoosePublisher_setGoCbRef(GoosePublisher self, char * goCbRef);
 
 /**
  * \brief Sets the time allowed to live value of the GOOSE messages
@@ -148,7 +150,7 @@ GoosePublisher_setTimeAllowedToLive(GoosePublisher self, uint32_t timeAllowedToL
  * \param dataSetRef the data set reference string
  */
 LIB61850_API void
-GoosePublisher_setDataSetRef(GoosePublisher self, char* dataSetRef);
+GoosePublisher_setDataSetRef(GoosePublisher self, char * dataSetRef);
 
 /**
  * \brief Sets the configuration revision used by the GoosePublisher instance

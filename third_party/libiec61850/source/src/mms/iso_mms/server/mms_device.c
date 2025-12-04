@@ -26,111 +26,125 @@
 #include "mms_device_model.h"
 #include "stack_config.h"
 
-MmsDevice*
-MmsDevice_create(char* deviceName)
+MmsDevice *
+MmsDevice_create(char * deviceName)
 {
-    MmsDevice* self = (MmsDevice*) GLOBAL_CALLOC(1, sizeof(MmsDevice));
-    self->deviceName = deviceName;
+  MmsDevice* self = (MmsDevice *) GLOBAL_CALLOC(1, sizeof(MmsDevice));
+  self->deviceName = deviceName;
 
-    self->namedVariableLists = LinkedList_create();
+  self->namedVariableLists = LinkedList_create();
 
-    return self;
+  return self;
 }
 
 void
 MmsDevice_destroy(MmsDevice* self)
 {
 
-    int i;
-    for (i = 0; i < self->domainCount; i++) {
-        MmsDomain_destroy(self->domains[i]);
-    }
+  int i;
+  for(i = 0; i < self->domainCount; i++)
+  {
+    MmsDomain_destroy(self->domains[i]);
+  }
 
 #if (CONFIG_MMS_SUPPORT_VMD_SCOPE_NAMED_VARIABLES == 1)
-    if (self->namedVariables != NULL) {
-        for (i = 0; i < self->namedVariablesCount; i++) {
-            MmsVariableSpecification_destroy(self->namedVariables[i]);
-        }
-
-        GLOBAL_FREEMEM(self->namedVariables);
+  if(self->namedVariables != NULL)
+  {
+    for(i = 0; i < self->namedVariablesCount; i++)
+    {
+      MmsVariableSpecification_destroy(self->namedVariables[i]);
     }
+
+    GLOBAL_FREEMEM(self->namedVariables);
+  }
 #endif /* (CONFIG_MMS_SUPPORT_VMD_SCOPE_NAMED_VARIABLES == 1) */
 
-    LinkedList_destroyDeep(self->namedVariableLists, (LinkedListValueDeleteFunction) MmsNamedVariableList_destroy);
+  LinkedList_destroyDeep(self->namedVariableLists, (LinkedListValueDeleteFunction) MmsNamedVariableList_destroy);
 
-    GLOBAL_FREEMEM(self->domains);
-    GLOBAL_FREEMEM(self);
+  GLOBAL_FREEMEM(self->domains);
+  GLOBAL_FREEMEM(self);
 }
 
-MmsDomain*
-MmsDevice_getDomain(MmsDevice* self, const char* domainId)
+MmsDomain *
+MmsDevice_getDomain(MmsDevice* self, const char * domainId)
 {
-    int i;
+  int i;
 
-    for (i = 0; i < self->domainCount; i++) {
-        if (strcmp(self->domains[i]->domainName, domainId) == 0) {
-            return self->domains[i];
-        }
-
+  for(i = 0; i < self->domainCount; i++)
+  {
+    if(strcmp(self->domains[i]->domainName, domainId) == 0)
+    {
+      return self->domains[i];
     }
 
-    return NULL;
+  }
+
+  return NULL;
 }
 
 #if (CONFIG_MMS_SUPPORT_VMD_SCOPE_NAMED_VARIABLES == 1)
-MmsVariableSpecification*
-MmsDevice_getNamedVariable(MmsDevice* self, char* variableName)
+MmsVariableSpecification *
+MmsDevice_getNamedVariable(MmsDevice* self, char * variableName)
 {
-    if (self->namedVariables != NULL) {
-        char* separator = strchr(variableName, '$');
+  if(self->namedVariables != NULL)
+  {
+    char * separator = strchr(variableName, '$');
 
-        int i;
+    int i;
 
-        if (separator == NULL) {
+    if(separator == NULL)
+    {
 
-            for (i = 0; i < self->namedVariablesCount; i++) {
-                if (strcmp(self->namedVariables[i]->name, variableName) == 0) {
-                    return self->namedVariables[i];
-                }
-            }
-
-            return NULL;
+      for(i = 0; i < self->namedVariablesCount; i++)
+      {
+        if(strcmp(self->namedVariables[i]->name, variableName) == 0)
+        {
+          return self->namedVariables[i];
         }
-        else {
-            MmsVariableSpecification* namedVariable = NULL;
+      }
 
-            for (i = 0; i < self->namedVariablesCount; i++) {
-
-                if (strlen(self->namedVariables[i]->name) == (unsigned) (separator - variableName)) {
-
-                    if (strncmp(self->namedVariables[i]->name, variableName, separator - variableName) == 0) {
-                        namedVariable = self->namedVariables[i];
-                        break;
-                    }
-                }
-            }
-
-            if (namedVariable != NULL) {
-                namedVariable = MmsVariableSpecification_getNamedVariableRecursive(namedVariable, separator + 1);
-            }
-
-            return namedVariable;
-        }
+      return NULL;
     }
+    else
+    {
+      MmsVariableSpecification* namedVariable = NULL;
 
-    return NULL;
+      for(i = 0; i < self->namedVariablesCount; i++)
+      {
+
+        if(strlen(self->namedVariables[i]->name) == (unsigned)(separator - variableName))
+        {
+
+          if(strncmp(self->namedVariables[i]->name, variableName, separator - variableName) == 0)
+          {
+            namedVariable = self->namedVariables[i];
+            break;
+          }
+        }
+      }
+
+      if(namedVariable != NULL)
+      {
+        namedVariable = MmsVariableSpecification_getNamedVariableRecursive(namedVariable, separator + 1);
+      }
+
+      return namedVariable;
+    }
+  }
+
+  return NULL;
 }
 #endif /* (CONFIG_MMS_SUPPORT_VMD_SCOPE_NAMED_VARIABLES == 1) */
 
 LinkedList
 MmsDevice_getNamedVariableLists(MmsDevice* self)
 {
-    return self->namedVariableLists;
+  return self->namedVariableLists;
 }
 
 MmsNamedVariableList
-MmsDevice_getNamedVariableListWithName(MmsDevice* self, const char* variableListName)
+MmsDevice_getNamedVariableListWithName(MmsDevice* self, const char * variableListName)
 {
-    return mmsServer_getNamedVariableListWithName(self->namedVariableLists, variableListName);
+  return mmsServer_getNamedVariableListWithName(self->namedVariableLists, variableListName);
 }
 

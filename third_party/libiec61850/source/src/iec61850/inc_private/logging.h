@@ -25,60 +25,62 @@
 #ifndef LIBIEC61850_SRC_IEC61850_INC_PRIVATE_LOGGING_H_
 #define LIBIEC61850_SRC_IEC61850_INC_PRIVATE_LOGGING_H_
 
-typedef struct {
-    char* name;
-    LogicalNode* parentLN;
+typedef struct
+{
+  char * name;
+  LogicalNode * parentLN;
 
 #if (CONFIG_MMS_THREADLESS_STACK != 1)
-    Semaphore lock;
+  Semaphore lock;
 #endif
 
-    LogStorage logStorage;
+  LogStorage logStorage;
 
-    uint64_t newEntryId;
-    uint64_t newEntryTime;
+  uint64_t newEntryId;
+  uint64_t newEntryTime;
 
-    uint64_t oldEntryId;
-    uint64_t oldEntryTime;
+  uint64_t oldEntryId;
+  uint64_t oldEntryTime;
 
 } LogInstance;
 
-typedef struct {
-    char* name;
-    LogControlBlock* logControlBlock;
-    MmsMapping* mmsMapping;
+typedef struct
+{
+  char * name;
+  LogControlBlock * logControlBlock;
+  MmsMapping * mmsMapping;
 
-    char* logRef;
+  char * logRef;
 
-    DataSet* dataSet;
-    char* dataSetRef;
-    bool isDynamicDataSet;
+  DataSet * dataSet;
+  char * dataSetRef;
+  bool isDynamicDataSet;
 
-    LogicalNode* logicalNode;
-    MmsDomain* domain;
+  LogicalNode * logicalNode;
+  MmsDomain * domain;
 
-    MmsValue* mmsValue;
-    MmsVariableSpecification* mmsType;
+  MmsValue * mmsValue;
+  MmsVariableSpecification * mmsType;
 
-    MmsValue* oldEntr;
-    MmsValue* oldEntrTm;
-    MmsValue* newEntr;
-    MmsValue* newEntrTm;
+  MmsValue * oldEntr;
+  MmsValue * oldEntrTm;
+  MmsValue * newEntr;
+  MmsValue * newEntrTm;
 
-    LogInstance* logInstance;
+  LogInstance * logInstance;
 
-    bool enabled;
+  bool enabled;
 
-    uint64_t nextIntegrityScan;
+  uint64_t nextIntegrityScan;
 
-    int triggerOps;
-    uint32_t intgPd;
+  int triggerOps;
+  uint32_t intgPd;
 
 } LogControl;
 
 
-LIB61850_INTERNAL LogInstance*
-LogInstance_create(LogicalNode* parentLN, const char* name);
+LIB61850_INTERNAL LogInstance *
+LogInstance_create(LogicalNode* parentLN, const char * name);
 
 LIB61850_INTERNAL void
 LogInstance_setLogStorage(LogInstance* self, LogStorage logStorage);
@@ -87,13 +89,13 @@ LIB61850_INTERNAL void
 LogInstance_updateStatus(LogInstance* self);
 
 LIB61850_INTERNAL void
-LogInstance_logSingleData(LogInstance* self, const char* dataRef, MmsValue* value, uint8_t flag);
+LogInstance_logSingleData(LogInstance* self, const char * dataRef, MmsValue* value, uint8_t flag);
 
 LIB61850_INTERNAL uint64_t
 LogInstance_logEntryStart(LogInstance* self);
 
 LIB61850_INTERNAL void
-LogInstance_logEntryData(LogInstance* self, uint64_t entryID, const char* dataRef, MmsValue* value, uint8_t flag);
+LogInstance_logEntryData(LogInstance* self, uint64_t entryID, const char * dataRef, MmsValue* value, uint8_t flag);
 
 LIB61850_INTERNAL void
 LogInstance_logEntryFinished(LogInstance* self, uint64_t entryID);
@@ -101,7 +103,7 @@ LogInstance_logEntryFinished(LogInstance* self, uint64_t entryID);
 LIB61850_INTERNAL void
 LogInstance_destroy(LogInstance* self);
 
-LIB61850_INTERNAL LogControl*
+LIB61850_INTERNAL LogControl *
 LogControl_create(LogicalNode* parentLN, MmsMapping* mmsMapping);
 
 LIB61850_INTERNAL void
@@ -113,18 +115,19 @@ LogControl_destroy(LogControl* self);
 LIB61850_INTERNAL void
 LogControl_setLogStorage(LogControl* self, LogStorage logStorage);
 
-LIB61850_INTERNAL MmsVariableSpecification*
+LIB61850_INTERNAL MmsVariableSpecification *
 Logging_createLCBs(MmsMapping* self, MmsDomain* domain, LogicalNode* logicalNode,
-        int lcbCount);
+                   int lcbCount);
 
 LIB61850_INTERNAL void
 Logging_processIntegrityLogs(MmsMapping* self, uint64_t currentTimeInMs);
 
-LIB61850_INTERNAL MmsValue*
-LIBIEC61850_LOG_SVC_readAccessControlBlock(MmsMapping* self, MmsDomain* domain, char* variableIdOrig, MmsServerConnection connection);
+LIB61850_INTERNAL MmsValue *
+LIBIEC61850_LOG_SVC_readAccessControlBlock(MmsMapping* self, MmsDomain* domain, char * variableIdOrig,
+                                           MmsServerConnection connection);
 
 LIB61850_INTERNAL MmsDataAccessError
-LIBIEC61850_LOG_SVC_writeAccessLogControlBlock(MmsMapping* self, MmsDomain* domain, const char* variableIdOrig,
-        MmsValue* value, MmsServerConnection connection);
+LIBIEC61850_LOG_SVC_writeAccessLogControlBlock(MmsMapping* self, MmsDomain* domain, const char * variableIdOrig,
+                                               MmsValue* value, MmsServerConnection connection);
 
 #endif /* LIBIEC61850_SRC_IEC61850_INC_PRIVATE_LOGGING_H_ */
