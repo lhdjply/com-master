@@ -60,8 +60,8 @@ void PageMainWindow::addNewTab()
 {
   // 创建新标签页
   PageTabContent *newTab = new PageTabContent();
-  int tabIndex = tabWidget->addTab(newTab, tr("Window"));
-  tabWidget->setTabToolTip(tabIndex, tr("Window"));
+  int tabIndex = tabWidget->addTab(newTab, tr("Function selection"));
+  tabWidget->setTabToolTip(tabIndex, tr("Function selection"));
   tabWidget->setCurrentIndex(tabIndex); // 切换到新标签
   tabWidget->setTabIcon(tabIndex, QIcon(":/icons/window.png")); // 设置标签图标
 

@@ -255,7 +255,7 @@
     <message>
         <location filename="../page/pagemain.cpp" line="63"/>
         <location filename="../page/pagemain.cpp" line="64"/>
-        <source>Window</source>
+        <source>Function selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

@@ -255,8 +255,8 @@
     <message>
         <location filename="../page/pagemain.cpp" line="63"/>
         <location filename="../page/pagemain.cpp" line="64"/>
-        <source>Window</source>
-        <translation type="unfinished">窗口</translation>
+        <source>Function selection</source>
+        <translation type="unfinished">功能选择</translation>
     </message>
     <message>
         <location filename="../page/pagemain.cpp" line="110"/>
