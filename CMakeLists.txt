@@ -5,6 +5,8 @@ set(PROJECT_TARGET ly-serial-tool)
 
 project(${PROJECT_TARGET} VERSION 0.1 LANGUAGES CXX C)
 
+option (TRANSLATION_RESOURCE_EMBEDDING OFF)
+
 set(CMAKE_AUTOUIC OFF)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
@@ -62,9 +64,6 @@ include_directories(third_party/libiec61850/source/src/mms/inc_private)
 include_directories(third_party/libiec61850/source/src/mms/iso_mms/asn1c)
 include_directories(third_party/libiec61850/source/src/logging)
 
-# 定义TRANSLATIONS_DIR宏、KB_LAYOUT_DIR宏和COLORSCHEMES_DIR宏
-add_definitions(-DKB_LAYOUT_DIR="${CMAKE_SOURCE_DIR}/third_party/qtermwidget/kb-layouts")
-add_definitions(-DCOLORSCHEMES_DIR="${CMAKE_SOURCE_DIR}/third_party/qtermwidget/color-schemes")
 add_definitions(-DKONSOLE_DSHELL=1)
 add_definitions(-DHAVE_POSIX_OPENPT=1)
 
@@ -74,11 +73,6 @@ qt_add_executable(${PROJECT_TARGET}
     ${PROJECT_SOURCES}
     ${LY_QRC_FILES}
     ${WIN_RESOURCES}
-)
-
-# 使用变量添加翻译
-qt6_add_translations(${PROJECT_TARGET}
-    TS_FILE_DIR myresource/src/translations
 )
 
 # 使用变量链接库
@@ -93,17 +87,37 @@ set_target_properties(${PROJECT_TARGET} PROPERTIES
     WIN32_EXECUTABLE TRUE
 )
 
-# Windows特定设置
-if(WIN32)
-    # 设置Windows可执行文件图标
+set (COLORSCHEMES_DIR "${CMAKE_SOURCE_DIR}/third_party/qtermwidget/color-schemes/")
+set (KB_LAYOUT_DIR "${CMAKE_SOURCE_DIR}/third_party/qtermwidget/kb-layouts/")
+
+if (TRANSLATION_RESOURCE_EMBEDDING)
+    qt6_add_translations(${PROJECT_TARGET}
+        TS_FILE_DIR myresource/src/translations
+    )
+    target_compile_definitions(${PROJECT_TARGET}
+        PRIVATE TRANSLATION_RESOURCE_EMBEDDING
+    )
+
+    add_definitions(-DCOLORSCHEMES_DIR="${CMAKE_SOURCE_DIR}/third_party/qtermwidget/color-schemes")
+    add_definitions(-DKB_LAYOUT_DIR="${CMAKE_SOURCE_DIR}/third_party/qtermwidget/kb-layouts")
+elseif (WIN32)
     set_target_properties(${PROJECT_TARGET} PROPERTIES
         RC_ICONS "${CMAKE_SOURCE_DIR}/assets/icons/windows/ly-serial-tool.ico"
     )
-    
-elseif (APPLE)
-    
-elseif (UNIX)
 
+    qt6_add_translations(${PROJECT_TARGET}
+        TS_FILE_DIR myresource/src/translations
+        QM_FILES_OUTPUT_VARIABLE PROJECT_QM_FILES
+    )
+    target_sources(${PROJECT_TARGET} PRIVATE ${PROJECT_QM_FILES})
+    set (QM_FILE_INSTALL_DIR "${CMAKE_INSTALL_BINDIR}/translations")
+
+    set (QTERMWIDGET_INSTALL_DIR "${CMAKE_INSTALL_BINDIR}/qtermwidget")
+    add_definitions(-DCOLORSCHEMES_DIR="${QTERMWIDGET_INSTALL_DIR}/color-schemes")
+    add_definitions(-DKB_LAYOUT_DIR="${QTERMWIDGET_INSTALL_DIR}/kb-layouts")
+elseif (APPLE)
+
+elseif (UNIX)
     set(ICON16 assets/icons/linux/hicolor/16x16/apps/${PROJECT_TARGET}.png )
     set(ICON22 assets/icons/linux/hicolor/22x22/apps/${PROJECT_TARGET}.png )
     set(ICON32 assets/icons/linux/hicolor/32x32/apps/${PROJECT_TARGET}.png )
@@ -114,18 +128,34 @@ elseif (UNIX)
     set(ICON512 assets/icons/linux/hicolor/512x512/apps/${PROJECT_TARGET}.png )
     set(ICONsc assets/icons/linux/hicolor/scalable/apps/${PROJECT_TARGET}.svg )
 
-    install( FILES ${ICON16} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/16x16/apps)
-    install( FILES ${ICON22} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/22x22/apps)
-    install( FILES ${ICON32} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/32x32/apps)
-    install( FILES ${ICON48} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/48x48/apps)
-    install( FILES ${ICON64} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/64x64/apps)
-    install( FILES ${ICON128} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/128x128/apps)
-    install( FILES ${ICON256} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/256x256/apps)
-    install( FILES ${ICON512} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/512x512/apps)
-    install( FILES ${ICONsc} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/scalable/apps)
+    install( FILES ${ICON16} DESTINATION ${CMAKE_INSTALL_FULL_DATADIR}/icons/hicolor/16x16/apps)
+    install( FILES ${ICON22} DESTINATION ${CMAKE_INSTALL_FULL_DATADIR}/icons/hicolor/22x22/apps)
+    install( FILES ${ICON32} DESTINATION ${CMAKE_INSTALL_FULL_DATADIR}/icons/hicolor/32x32/apps)
+    install( FILES ${ICON48} DESTINATION ${CMAKE_INSTALL_FULL_DATADIR}/icons/hicolor/48x48/apps)
+    install( FILES ${ICON64} DESTINATION ${CMAKE_INSTALL_FULL_DATADIR}/icons/hicolor/64x64/apps)
+    install( FILES ${ICON128} DESTINATION ${CMAKE_INSTALL_FULL_DATADIR}/icons/hicolor/128x128/apps)
+    install( FILES ${ICON256} DESTINATION ${CMAKE_INSTALL_FULL_DATADIR}/icons/hicolor/256x256/apps)
+    install( FILES ${ICON512} DESTINATION ${CMAKE_INSTALL_FULL_DATADIR}/icons/hicolor/512x512/apps)
+    install( FILES ${ICONsc} DESTINATION ${CMAKE_INSTALL_FULL_DATADIR}/icons/hicolor/scalable/apps)
 
-    install(FILES ${CMAKE_SOURCE_DIR}/assets/desktop/ly-serial-tool.desktop DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications)
+    install(FILES ${CMAKE_SOURCE_DIR}/assets/desktop/ly-serial-tool.desktop DESTINATION ${CMAKE_INSTALL_FULL_DATADIR}/applications)
+
+    qt6_add_translations(${PROJECT_TARGET}
+        TS_FILE_DIR myresource/src/translations
+        QM_FILES_OUTPUT_VARIABLE PROJECT_QM_FILES
+    )
+    target_sources(${PROJECT_TARGET} PRIVATE ${PROJECT_QM_FILES})
+    set (QM_FILE_INSTALL_DIR "${CMAKE_INSTALL_FULL_DATADIR}/${PROJECT_TARGET}/translations")
+    target_compile_definitions(${PROJECT_TARGET} PRIVATE QM_FILE_INSTALL_ABSOLUTE_DIR=${QM_FILE_INSTALL_DIR})
+
+    set (QTERMWIDGET_INSTALL_DIR "${CMAKE_INSTALL_FULL_DATADIR}/${PROJECT_TARGET}/qtermwidget")
+    add_definitions(-DCOLORSCHEMES_DIR="${QTERMWIDGET_INSTALL_DIR}/color-schemes")
+    add_definitions(-DKB_LAYOUT_DIR="${QTERMWIDGET_INSTALL_DIR}/kb-layouts")
 endif()
+
+install( FILES ${PROJECT_QM_FILES} DESTINATION ${QM_FILE_INSTALL_DIR})
+install( DIRECTORY ${COLORSCHEMES_DIR} DESTINATION ${QTERMWIDGET_INSTALL_DIR}/color-schemes)
+install( DIRECTORY ${KB_LAYOUT_DIR} DESTINATION ${QTERMWIDGET_INSTALL_DIR}/kb-layouts)
 
 # 使用变量安装
 include(GNUInstallDirs)

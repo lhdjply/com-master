@@ -1,5 +1,7 @@
 #include "myresource.h"
 
+using namespace Qt::Literals::StringLiterals;
+
 int main(int argc, char * argv[])
 {
   QApplication app(argc, argv);
@@ -14,15 +16,16 @@ int main(int argc, char * argv[])
 
   // Translation setup
   QTranslator translator;
-  const QStringList uiLanguages = QLocale::system().uiLanguages();
-  for(const QString &locale : uiLanguages)
+#if defined(TRANSLATION_RESOURCE_EMBEDDING)
+  const QString qmDir = u":/i18n/"_s;
+#elif defined(QM_FILE_INSTALL_ABSOLUTE_DIR)
+  const QString qmDir = QT_STRINGIFY(QM_FILE_INSTALL_ABSOLUTE_DIR);
+#else
+  const QString qmDir = QDir(QCoreApplication::applicationDirPath()).absoluteFilePath("translations");
+#endif
+  if(translator.load(QLocale(), u"ly-serial-tool"_s, u"_"_s, qmDir))
   {
-    const QString baseName = "ly-serial-tool_" + QLocale(locale).name();
-    if(translator.load(":/i18n/" + baseName))
-    {
-      app.installTranslator(&translator);
-      break;
-    }
+    QCoreApplication::installTranslator(&translator);
   }
 
   // Create and show main window
