@@ -10,84 +10,63 @@ on:
   
 env:
   APP_NAME: "ly-serial-tool"
-  QT_VERSION: 6.8.0
 
 jobs:
   build-deb:
-    runs-on: ${{ matrix.config.os }}
+    runs-on: ubuntu-latest
     continue-on-error: true
     strategy:
-      fail-fast: false
       matrix:
-        config:
-          - os: ubuntu-latest
-            platform_tag: x86_64                 
-          - os: ubuntu-24.04-arm
-            platform_tag: aarch64
-
-    container:
-      image: ${{ matrix.config.platform_tag == 'aarch64' && 'linuxdeepin/deepin:crimson-arm64' || 'linuxdeepin/deepin:crimson' }}
-      options: --user root
-
+        include:
+          - platform: amd64
+            image: linuxdeepin/deepin:crimson
+          - platform: arm64
+            image: linuxdeepin/deepin:crimson-arm64
+          - platform: loong64
+            image: linuxdeepin/deepin:crimson-loong64
+          - platform: riscv64
+            image: linuxdeepin/deepin:crimson-riscv64
     steps:
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+      with:
+        platforms: ${{ matrix.platform }}
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
     - uses: actions/checkout@v5
-    - name: Update package lists and install basic tools
+
+    - name: Build ${{ matrix.platform }} package
       run: |
-        apt update
-        apt install -y build-essential devscripts dh-make equivs
-
-    - name: Determine source format and generate orig tarball if needed
-      run: |
-        set -e
-        # Check if quilt format requires orig tarball
-        if [ -f debian/source/format ]; then
-          SOURCE_FORMAT=$(head -1 debian/source/format)
-          case "$SOURCE_FORMAT" in
-            "3.0 (quilt)"*)
-              echo "::notice::Detected quilt format package, generating orig tarball"
-              
-              # Extract source name and version
-              SOURCE_NAME=$(dpkg-parsechangelog -S Source)
-              UPSTREAM_VERSION=$(dpkg-parsechangelog -S Version | sed 's/-[^-]*$//; s/^[0-9]\+://')
-
-              ORIG_TARBALL="${SOURCE_NAME}_${UPSTREAM_VERSION}.orig.tar.gz"
-              TEMP_DIR=$(mktemp -d)
-              cd ..
-              cp -r "${SOURCE_NAME}/." "${TEMP_DIR}/"
-              rm -rf "${TEMP_DIR}/debian"
-              tar -czf "${ORIG_TARBALL}" -C "${TEMP_DIR}" .
-              rm -rf "${TEMP_DIR}"
-              
-              echo "::notice::Orig tarball created: ../${SOURCE_NAME}_${UPSTREAM_VERSION}.orig.tar.gz"
-              ;;
-            *)
-              echo "::notice::Native package format detected, no orig tarball needed"
-              ;;
-          esac
-        else
-          echo "::warning::Missing debian/source/format, assuming native package format"
-        fi
-
-    - name: Install build dependencies
-      run: |
-        mk-build-deps -i -t "apt-get -y" "./debian/control"
-
-    - name: Create DEB package
-      run: debuild -us -uc
+        docker run --rm --platform linux/${{ matrix.platform }} -v ${{ github.workspace }}:/workspace \
+          ${{ matrix.image }} \
+          bash -c "
+          cd /workspace &&
+          apt update &&
+          apt install -y build-essential devscripts dh-make equivs &&
+          mk-build-deps -i -t 'apt-get -y' './debian/control' &&
+          debuild -us -uc &&
+          cp ../*.deb ./
+          "
 
     - name: Move deb to deb_package
       run: |
-        if ls ../*dbgsym*.deb 1> /dev/null 2>&1; then
-          rm ../*dbgsym*.deb
+        if ls ./*dbgsym*.deb 1> /dev/null 2>&1; then
+          rm ./*dbgsym*.deb
+        fi
+
+        if ls ./*build-deps*.deb 1> /dev/null 2>&1; then
+          rm ./*build-deps*.deb
         fi
         
         mkdir deb_package
-        cp ../*.deb deb_package
+        cp ./*.deb deb_package
 
     - name: 'Upload artifact: deb'
       uses: actions/upload-artifact@v4
       with:
-          name: ${{ env.APP_NAME }}-linux-deb-${{ matrix.config.platform_tag }}
+          name: ${{ env.APP_NAME }}-linux-deb-${{ matrix.platform }}
           path: deb_package/*.deb
 
   create-release:
