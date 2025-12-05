@@ -10,48 +10,12 @@ on:
   
 env:
   APP_NAME: "ly-serial-tool"
-  BUILD_TYPE: Release
-  QT_VERSION: 6.9.2
+  QT_VERSION: 6.8.0
 
 jobs:
-  setup:
-    runs-on: ubuntu-latest
-    outputs:
-      version: ${{ steps.read_version.outputs.version }}
-      short_hash: ${{ steps.read_version.outputs.short_hash }}
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-
-    - name: Read version from file
-      id: read_version
-      run: |
-        if [ "${{ github.ref_type }}" == "tag" ]; then
-          VERSION=${{ github.ref_name }}
-          SHORT_HASH=""
-        else 
-          MAJOR_MINOR=$(cut -d. -f1-2 VERSION)
-          VERSION="${MAJOR_MINOR}.99"
-          # Get the short hash of the current commit
-          COMMIT_HASH=$(echo ${{ github.sha }} | cut -c1-7)
-          SHORT_HASH="-$COMMIT_HASH"
-        fi
-        
-        echo "VERSION=$VERSION" >> $GITHUB_ENV
-        echo "version=$VERSION" >> $GITHUB_OUTPUT
-        
-        echo "SHORT_HASH=$SHORT_HASH" >> $GITHUB_ENV
-        echo "short_hash=$SHORT_HASH" >> $GITHUB_OUTPUT
-        
-    - name: Print version and hash
-      run: |
-        echo "ly-serial-tool version is ${{ env.VERSION }}"
-        echo "ly-serial-tool short hash is ${{ env.SHORT_HASH }}"
-      
-  build-linux-appimage:
+  build-deb:
     runs-on: ${{ matrix.config.os }}
     continue-on-error: true
-    needs: setup
     strategy:
       fail-fast: false
       matrix:
@@ -60,92 +24,79 @@ jobs:
             platform_tag: x86_64                 
           - os: ubuntu-24.04-arm
             platform_tag: aarch64
+
+    container:
+      image: ${{ matrix.config.platform_tag == 'aarch64' && 'linuxdeepin/deepin:crimson-arm64' || 'linuxdeepin/deepin:crimson' }}
+      options: --user root
+
     steps:
-    - uses: actions/checkout@v4
-      with:
-        submodules: recursive
-
-    - name: Set version environment variable
+    - uses: actions/checkout@v5
+    - name: Update package lists and install basic tools
       run: |
-        echo "VERSION=${{ needs.setup.outputs.version }}" >> $GITHUB_ENV
-        echo "SHORT_HASH=${{ needs.setup.outputs.short_hash }}" >> $GITHUB_ENV
+        apt update
+        apt install -y build-essential devscripts dh-make equivs
 
-    - name: Print version and hash
+    - name: Determine source format and generate orig tarball if needed
       run: |
-        echo "ly-serial-tool version is ${{ env.VERSION }}"
-        echo "ly-serial-tool short hash is ${{ env.SHORT_HASH }}"
+        set -e
+        # Check if quilt format requires orig tarball
+        if [ -f debian/source/format ]; then
+          SOURCE_FORMAT=$(head -1 debian/source/format)
+          case "$SOURCE_FORMAT" in
+            "3.0 (quilt)"*)
+              echo "::notice::Detected quilt format package, generating orig tarball"
+              
+              # Extract source name and version
+              SOURCE_NAME=$(dpkg-parsechangelog -S Source)
+              UPSTREAM_VERSION=$(dpkg-parsechangelog -S Version | sed 's/-[^-]*$//; s/^[0-9]\+://')
 
-    - name: Install Dependencies
+              ORIG_TARBALL="${SOURCE_NAME}_${UPSTREAM_VERSION}.orig.tar.gz"
+              TEMP_DIR=$(mktemp -d)
+              cd ..
+              cp -r "${SOURCE_NAME}/." "${TEMP_DIR}/"
+              rm -rf "${TEMP_DIR}/debian"
+              tar -czf "${ORIG_TARBALL}" -C "${TEMP_DIR}" .
+              rm -rf "${TEMP_DIR}"
+              
+              echo "::notice::Orig tarball created: ../${SOURCE_NAME}_${UPSTREAM_VERSION}.orig.tar.gz"
+              ;;
+            *)
+              echo "::notice::Native package format detected, no orig tarball needed"
+              ;;
+          esac
+        else
+          echo "::warning::Missing debian/source/format, assuming native package format"
+        fi
+
+    - name: Install build dependencies
       run: |
-          sudo apt-get update
-          sudo apt-get install -y gcc g++ cmake ninja-build
+        mk-build-deps -i -t "apt-get -y" "./debian/control"
 
-    - name: 'Install Qt6'
-      uses: jurplel/install-qt-action@v4
-      with:
-        version: ${{env.QT_VERSION}}
-        host: ${{ matrix.config.platform_tag == 'aarch64' && 'linux_arm64' || 'linux' }}
-        target: 'desktop'
-        cache: true
-        install-deps: 'true'
-        modules: 'qtserialport'
+    - name: Create DEB package
+      run: debuild -us -uc
 
-    - name: 'Configure CMake'
+    - name: Move deb to deb_package
       run: |
-          cmake -B ${{github.workspace}}/build -G 'Ninja' \
-                -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} \
-                -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/AppDir/usr
+        if ls ../*dbgsym*.deb 1> /dev/null 2>&1; then
+          rm ../*dbgsym*.deb
+        fi
+        
+        mkdir deb_package
+        cp ../*.deb deb_package
 
-    - name: 'Build'
-      # Build your program with the given configuration
-      run: |
-          cmake --build ${{github.workspace}}/build -j`nproc` --config ${{env.BUILD_TYPE}}
-          cmake --build ${{github.workspace}}/build --target install
-
-      
-    - name: 'Install linuxdeploy'
-      run: |
-          wget -q --tries=3 --wait=5 \
-                https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-${{ matrix.config.platform_tag }}.AppImage
-          wget -q --tries=3 --wait=5 \
-                https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-${{ matrix.config.platform_tag }}.AppImage
-          sudo apt-get install fuse libfuse2
-          chmod +x linuxdeploy-${{ matrix.config.platform_tag }}.AppImage
-          chmod +x linuxdeploy-plugin-qt-${{ matrix.config.platform_tag }}.AppImage
-    
-    - name: 'Create AppImage'
-      run: |
-          ./linuxdeploy-${{ matrix.config.platform_tag }}.AppImage --appdir ${{github.workspace}}/AppDir \
-                                        --desktop-file=${{github.workspace}}/AppDir/usr/share/applications/ly-serial-tool.desktop \
-                                        --icon-file=${{github.workspace}}/AppDir/usr/share/icons/hicolor/256x256/apps/ly-serial-tool.png \
-                                        --plugin=qt --output appimage
-          rm linuxdeploy-${{ matrix.config.platform_tag }}.AppImage
-          rm linuxdeploy-plugin-qt-${{ matrix.config.platform_tag }}.AppImage
-          mv *.AppImage ${{ env.APP_NAME }}-${{env.VERSION}}${{env.SHORT_HASH}}-linux-${{ matrix.config.platform_tag }}.AppImage
-
-    - name: 'Upload artifact: AppImage'
+    - name: 'Upload artifact: deb'
       uses: actions/upload-artifact@v4
       with:
-          name: ${{ env.APP_NAME }}-${{env.VERSION}}${{env.SHORT_HASH}}-linux-${{ matrix.config.platform_tag }}
-          path: ${{ env.APP_NAME }}-${{env.VERSION}}${{env.SHORT_HASH}}-linux-${{ matrix.config.platform_tag }}.AppImage
+          name: ${{ env.APP_NAME }}-linux-deb-${{ matrix.config.platform_tag }}
+          path: deb_package/*.deb
 
   create-release:
     runs-on: ubuntu-latest
     if: github.event_name != 'pull_request'
-    needs: [setup, build-linux-appimage]
+    needs: [build-deb]
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-
-    - name: Set version environment variable
-      run: |
-        echo "VERSION=${{ needs.setup.outputs.version }}" >> $GITHUB_ENV
-        echo "SHORT_HASH=${{ needs.setup.outputs.short_hash }}" >> $GITHUB_ENV
-
-    - name: Print version and hash
-      run: |
-        echo "ly-serial-tool version is ${{ env.VERSION }}"
-        echo "ly-serial-tool short hash is ${{ env.SHORT_HASH }}"
 
     - name: Download build artifacts
       uses: actions/download-artifact@v4
@@ -157,7 +108,7 @@ jobs:
       run: |
         cd ~/artifacts
         > hashes.sha256
-        for file in $(find . -type f \(-name "*.AppImage" \)); do
+        for file in $(find . -type f \(-name "*.deb" \)); do
           filename=$(basename "$file")
           sha256sum "$file" | awk -v fname="$filename" '{print $1 " *" fname}' >> hashes.sha256
         done
@@ -168,7 +119,7 @@ jobs:
       run: |
         if [ "${{github.ref_type}}" == "tag" ]; then
           echo "PRERELEASE=" >> $GITHUB_ENV
-          echo "RELEASE_NAME=ly-serial-tool ${{ github.ref_name }}" >> $GITHUB_ENV
+          echo "RELEASE_NAME=${{ env.APP_NAME }} ${{ github.ref_name }}" >> $GITHUB_ENV
           echo "TAG_NAME=${{ github.ref_name }}" >> $GITHUB_ENV
           echo "RELEASE_NOTES=--generate-notes" >> $GITHUB_ENV
         else
@@ -182,7 +133,7 @@ jobs:
       continue-on-error: false
       run: |
         # Find existing artifact files
-        appimage_files=$(find ~/artifacts -name "*.AppImage" -print0 | xargs -0 echo)
+        deb_files=$(find ~/artifacts -name "*.deb" -print0 | xargs -0 echo)
 
         # Check existing release and delete if it's exist
         if gh release view ${{ env.TAG_NAME }} --repo $GITHUB_REPOSITORY &> /dev/null; then
@@ -194,9 +145,9 @@ jobs:
           echo "${{ env.TAG_NAME }} deleted!"
         fi
         
-        if [ -n "$appimage_files" ]; then
+        if [ -n "$deb_files" ]; then
           gh release create ${{ env.TAG_NAME }} \
-                            $appimage_files \
+                            $deb_files \
                             ${{ env.PRERELEASE }} \
                             --repo $GITHUB_REPOSITORY \
                             --title "${{ env.RELEASE_NAME }}" \
