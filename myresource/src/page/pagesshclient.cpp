@@ -2,6 +2,18 @@
 
 PageSshClient::PageSshClient(QWidget *parent)
   : QWidget(parent)
+  , session(nullptr)
+  , channel(nullptr)
+  , isConnected(false)
+  , dataTimer(new QTimer(this))
+  , m_usernameInput(nullptr)
+  , m_passwordInput(nullptr)
+  , m_currentAuthState(nullptr)
+  , m_authStateInitialized(nullptr)
+  , contextMenu(nullptr)
+  , copyAction(nullptr)
+  , pasteAction(nullptr)
+  , clearAction(nullptr)
 {
   setupUi();
   setupConnections();

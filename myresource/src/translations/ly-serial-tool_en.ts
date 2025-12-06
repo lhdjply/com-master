@@ -567,151 +567,151 @@
 <context>
     <name>PageSshClient</name>
     <message>
-        <location filename="../page/pagesshclient.cpp" line="143"/>
+        <location filename="../page/pagesshclient.cpp" line="155"/>
         <source>SSH Connection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagesshclient.cpp" line="146"/>
+        <location filename="../page/pagesshclient.cpp" line="158"/>
         <source>Host:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagesshclient.cpp" line="147"/>
+        <location filename="../page/pagesshclient.cpp" line="159"/>
         <source>Port:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagesshclient.cpp" line="148"/>
+        <location filename="../page/pagesshclient.cpp" line="160"/>
         <source>Username:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagesshclient.cpp" line="149"/>
+        <location filename="../page/pagesshclient.cpp" line="161"/>
         <source>Password:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagesshclient.cpp" line="157"/>
-        <location filename="../page/pagesshclient.cpp" line="503"/>
+        <location filename="../page/pagesshclient.cpp" line="169"/>
+        <location filename="../page/pagesshclient.cpp" line="515"/>
         <source>Connect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagesshclient.cpp" line="578"/>
-        <location filename="../page/pagesshclient.cpp" line="722"/>
-        <location filename="../page/pagesshclient.cpp" line="778"/>
-        <location filename="../page/pagesshclient.cpp" line="829"/>
+        <location filename="../page/pagesshclient.cpp" line="590"/>
+        <location filename="../page/pagesshclient.cpp" line="734"/>
+        <location filename="../page/pagesshclient.cpp" line="790"/>
+        <location filename="../page/pagesshclient.cpp" line="841"/>
         <source>Disconnect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagesshclient.cpp" line="183"/>
+        <location filename="../page/pagesshclient.cpp" line="195"/>
         <source>SSH Terminal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagesshclient.cpp" line="212"/>
-        <location filename="../page/pagesshclient.cpp" line="516"/>
+        <location filename="../page/pagesshclient.cpp" line="224"/>
+        <location filename="../page/pagesshclient.cpp" line="528"/>
         <source>Disconnected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagesshclient.cpp" line="397"/>
+        <location filename="../page/pagesshclient.cpp" line="409"/>
         <source>Please fill in host</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagesshclient.cpp" line="405"/>
+        <location filename="../page/pagesshclient.cpp" line="417"/>
         <source>Failed to create SSH session</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagesshclient.cpp" line="423"/>
+        <location filename="../page/pagesshclient.cpp" line="435"/>
         <source>Connection failed: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagesshclient.cpp" line="591"/>
-        <location filename="../page/pagesshclient.cpp" line="735"/>
-        <location filename="../page/pagesshclient.cpp" line="791"/>
-        <location filename="../page/pagesshclient.cpp" line="842"/>
+        <location filename="../page/pagesshclient.cpp" line="603"/>
+        <location filename="../page/pagesshclient.cpp" line="747"/>
+        <location filename="../page/pagesshclient.cpp" line="803"/>
+        <location filename="../page/pagesshclient.cpp" line="854"/>
         <source>Connected to %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagesshclient.cpp" line="613"/>
-        <location filename="../page/pagesshclient.cpp" line="661"/>
+        <location filename="../page/pagesshclient.cpp" line="625"/>
+        <location filename="../page/pagesshclient.cpp" line="673"/>
         <source>Password authentication failed<byte value="xd"/>
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagesshclient.cpp" line="675"/>
+        <location filename="../page/pagesshclient.cpp" line="687"/>
         <source>Trying keyboard-interactive authentication...<byte value="xd"/>
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagesshclient.cpp" line="697"/>
+        <location filename="../page/pagesshclient.cpp" line="709"/>
         <source>Trying public key authentication...<byte value="xd"/>
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagesshclient.cpp" line="985"/>
+        <location filename="../page/pagesshclient.cpp" line="997"/>
         <source>Copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagesshclient.cpp" line="986"/>
+        <location filename="../page/pagesshclient.cpp" line="998"/>
         <source>Paste</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagesshclient.cpp" line="987"/>
+        <location filename="../page/pagesshclient.cpp" line="999"/>
         <source>Clear</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagesshclient.cpp" line="334"/>
-        <location filename="../page/pagesshclient.cpp" line="662"/>
-        <location filename="../page/pagesshclient.cpp" line="684"/>
-        <location filename="../page/pagesshclient.cpp" line="707"/>
-        <location filename="../page/pagesshclient.cpp" line="762"/>
-        <location filename="../page/pagesshclient.cpp" line="818"/>
-        <location filename="../page/pagesshclient.cpp" line="859"/>
+        <location filename="../page/pagesshclient.cpp" line="346"/>
+        <location filename="../page/pagesshclient.cpp" line="674"/>
+        <location filename="../page/pagesshclient.cpp" line="696"/>
+        <location filename="../page/pagesshclient.cpp" line="719"/>
+        <location filename="../page/pagesshclient.cpp" line="774"/>
+        <location filename="../page/pagesshclient.cpp" line="830"/>
+        <location filename="../page/pagesshclient.cpp" line="871"/>
         <source>Please enter password: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagesshclient.cpp" line="756"/>
-        <location filename="../page/pagesshclient.cpp" line="811"/>
+        <location filename="../page/pagesshclient.cpp" line="768"/>
+        <location filename="../page/pagesshclient.cpp" line="823"/>
         <source>Please enter username: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagesshclient.cpp" line="952"/>
+        <location filename="../page/pagesshclient.cpp" line="964"/>
         <source>Host key for server changed: it is now</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagesshclient.cpp" line="956"/>
+        <location filename="../page/pagesshclient.cpp" line="968"/>
         <source>The host key for this server was not found but an other type of key exists.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagesshclient.cpp" line="961"/>
+        <location filename="../page/pagesshclient.cpp" line="973"/>
         <source>The server is unknown. Do you trust the host key?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagesshclient.cpp" line="968"/>
+        <location filename="../page/pagesshclient.cpp" line="980"/>
         <source>Could not find known host file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagesshclient.cpp" line="972"/>
+        <location filename="../page/pagesshclient.cpp" line="984"/>
         <source>Error: %1</source>
         <translation type="unfinished"></translation>
     </message>
