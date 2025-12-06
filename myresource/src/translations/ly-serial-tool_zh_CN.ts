@@ -600,8 +600,6 @@
     <message>
         <location filename="../page/pagesshclient.cpp" line="590"/>
         <location filename="../page/pagesshclient.cpp" line="734"/>
-        <location filename="../page/pagesshclient.cpp" line="790"/>
-        <location filename="../page/pagesshclient.cpp" line="841"/>
         <source>Disconnect</source>
         <translation type="unfinished">断开连接</translation>
     </message>
@@ -634,8 +632,6 @@
     <message>
         <location filename="../page/pagesshclient.cpp" line="603"/>
         <location filename="../page/pagesshclient.cpp" line="747"/>
-        <location filename="../page/pagesshclient.cpp" line="803"/>
-        <location filename="../page/pagesshclient.cpp" line="854"/>
         <source>Connected to %1</source>
         <translation type="unfinished">已连接到 %1</translation>
     </message>
@@ -662,17 +658,17 @@
 </translation>
     </message>
     <message>
-        <location filename="../page/pagesshclient.cpp" line="997"/>
+        <location filename="../page/pagesshclient.cpp" line="901"/>
         <source>Copy</source>
         <translation type="unfinished">复制</translation>
     </message>
     <message>
-        <location filename="../page/pagesshclient.cpp" line="998"/>
+        <location filename="../page/pagesshclient.cpp" line="902"/>
         <source>Paste</source>
         <translation type="unfinished">粘贴</translation>
     </message>
     <message>
-        <location filename="../page/pagesshclient.cpp" line="999"/>
+        <location filename="../page/pagesshclient.cpp" line="903"/>
         <source>Clear</source>
         <translation type="unfinished">清空</translation>
     </message>
@@ -682,39 +678,36 @@
         <location filename="../page/pagesshclient.cpp" line="696"/>
         <location filename="../page/pagesshclient.cpp" line="719"/>
         <location filename="../page/pagesshclient.cpp" line="774"/>
-        <location filename="../page/pagesshclient.cpp" line="830"/>
-        <location filename="../page/pagesshclient.cpp" line="871"/>
         <source>Please enter password: </source>
         <translation type="unfinished">请输入密码: </translation>
     </message>
     <message>
-        <location filename="../page/pagesshclient.cpp" line="768"/>
-        <location filename="../page/pagesshclient.cpp" line="823"/>
+        <location filename="../page/pagesshclient.cpp" line="767"/>
         <source>Please enter username: </source>
         <translation type="unfinished">请输入用户名: </translation>
     </message>
     <message>
-        <location filename="../page/pagesshclient.cpp" line="964"/>
+        <location filename="../page/pagesshclient.cpp" line="868"/>
         <source>Host key for server changed: it is now</source>
         <translation type="unfinished">服务器主机密钥已更改：现在是</translation>
     </message>
     <message>
-        <location filename="../page/pagesshclient.cpp" line="968"/>
+        <location filename="../page/pagesshclient.cpp" line="872"/>
         <source>The host key for this server was not found but an other type of key exists.</source>
         <translation type="unfinished">未找到此服务器的主机密钥，但存在其他类型的密钥。</translation>
     </message>
     <message>
-        <location filename="../page/pagesshclient.cpp" line="973"/>
+        <location filename="../page/pagesshclient.cpp" line="877"/>
         <source>The server is unknown. Do you trust the host key?</source>
         <translation type="unfinished">服务器未知。您信任此主机密钥吗？</translation>
     </message>
     <message>
-        <location filename="../page/pagesshclient.cpp" line="980"/>
+        <location filename="../page/pagesshclient.cpp" line="884"/>
         <source>Could not find known host file.</source>
         <translation type="unfinished">找不到已知主机文件。</translation>
     </message>
     <message>
-        <location filename="../page/pagesshclient.cpp" line="984"/>
+        <location filename="../page/pagesshclient.cpp" line="888"/>
         <source>Error: %1</source>
         <translation type="unfinished">错误: %1</translation>
     </message>

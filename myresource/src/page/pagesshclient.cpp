@@ -724,62 +724,6 @@ void PageSshClient::authenticateWithTerminalCredentials(const QString &username,
   }
 }
 
-void PageSshClient::startShell()
-{
-  // 连接成功
-  isConnected = true;
-
-  // 更新UI状态
-  connectButton->setEnabled(true);
-  connectButton->setText(tr("Disconnect"));
-  connectButton->setStyleSheet(QString::fromUtf8(
-                                 "QPushButton {\n"
-                                 "    background-color: #e74c3c;\n"
-                                 "    padding: 10px;\n"
-                                 "}\n"
-                                 "QPushButton:hover {\n"
-                                 "    background-color: #c0392b;\n"
-                                 "}\n"
-                                 "QPushButton:pressed {\n"
-                                 "    background-color: #a93226;\n"
-                                 "}"
-                               ));
-  statusLabel->setText(tr("Connected to %1").arg(hostEdit->text()));
-
-  // 启动数据接收定时器
-  dataTimer->start(100); // 每100ms检查一次数据
-
-  // 重置认证状态
-  if(!m_currentAuthState)
-  {
-    m_currentAuthState = new int(WAITING_FOR_USERNAME);
-  }
-  if(!m_authStateInitialized)
-  {
-    m_authStateInitialized = new bool(false);
-  }
-  *m_currentAuthState = WAITING_FOR_USERNAME;
-  *m_authStateInitialized = false;
-
-  // 创建一个特殊的交互式终端，用于处理SSH认证
-  // 如果没有设置用户名，在终端中显示提示
-  if(usernameEdit->text().isEmpty())
-  {
-    writeToTerminal(tr("Please enter username: "));
-  }
-  else if(passwordEdit->text().isEmpty())
-  {
-    *m_currentAuthState = WAITING_FOR_PASSWORD;
-    *m_authStateInitialized = true;
-    writeToTerminal(tr("Please enter password: "));
-  }
-  else
-  {
-    // 如果已经提供了用户名和密码，尝试创建真正的SSH shell
-    createRealShell();
-  }
-}
-
 void PageSshClient::startInteractiveShell()
 {
   // 连接成功
@@ -829,46 +773,6 @@ void PageSshClient::startInteractiveShell()
     *m_authStateInitialized = true;
     writeToTerminal(tr("Please enter password: "));
   }
-}
-
-void PageSshClient::startInteractiveShellWithPasswordPrompt()
-{
-  // 连接成功
-  isConnected = true;
-
-  // 更新UI状态
-  connectButton->setEnabled(true);
-  connectButton->setText(tr("Disconnect"));
-  connectButton->setStyleSheet(QString::fromUtf8(
-                                 "QPushButton {\n"
-                                 "    background-color: #e74c3c;\n"
-                                 "    padding: 10px;\n"
-                                 "}\n"
-                                 "QPushButton:hover {\n"
-                                 "    background-color: #c0392b;\n"
-                                 "}\n"
-                                 "QPushButton:pressed {\n"
-                                 "    background-color: #a93226;\n"
-                                 "}"
-                               ));
-  statusLabel->setText(tr("Connected to %1").arg(hostEdit->text()));
-
-  // 启动数据接收定时器
-  dataTimer->start(100); // 每100ms检查一次数据
-
-  // 重置认证状态
-  if(!m_currentAuthState)
-  {
-    m_currentAuthState = new int(WAITING_FOR_USERNAME);
-  }
-  if(!m_authStateInitialized)
-  {
-    m_authStateInitialized = new bool(false);
-  }
-  *m_currentAuthState = WAITING_FOR_PASSWORD;
-  *m_authStateInitialized = true;
-
-  writeToTerminal(tr("Please enter password: "));
 }
 
 void PageSshClient::createRealShell()

@@ -25,9 +25,7 @@ class PageSshClient : public QWidget
     void authenticate();
     void authenticateWithCredentials();
     void authenticateWithTerminalCredentials(const QString &username, const QString &password);
-    void startShell();
     void startInteractiveShell();
-    void startInteractiveShellWithPasswordPrompt();
     void createRealShell();
     void writeToTerminal(const QString &text);
     void clearTerminal();
