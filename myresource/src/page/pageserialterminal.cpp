@@ -133,6 +133,11 @@ void PageSerialTerminal::setupUi()
                          "}\n"
                          "QLineEdit:focus {\n"
                          "    border-color: #3498db;\n"
+                         "}\n"
+                         "QTermWidget {\n"
+                         "    border: 1px solid #c0c6d0;\n"
+                         "    border-radius: 4px;\n"
+                         "    padding: 2px;\n"
                          "}"
                        );
   this->setStyleSheet(styleSheet);
@@ -141,44 +146,23 @@ void PageSerialTerminal::setupUi()
   centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
   this->setCentralWidget(centralwidget);
 
-  horizontalLayout = new QHBoxLayout(centralwidget);
-  horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
-  horizontalLayout->setStretch(0, 0);  // 左侧设置区域不拉伸
-  horizontalLayout->setStretch(1, 1);  // 右侧终端区域拉伸
+  // 主布局 - 水平分割
+  mainLayout = new QGridLayout(centralwidget);
 
-  groupBox = new QGroupBox(centralwidget);
-  groupBox->setObjectName(QString::fromUtf8("groupBox"));
-  groupBox->setMinimumSize(QSize(260, 0));
-  groupBox->setMaximumSize(QSize(260, 16777215));  // 限制最大宽度
-  groupBox->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
+  // 左侧连接配置组
+  configGroup = new QGroupBox(tr("Serial Port Settings"));
+  configLayout = new QGridLayout(configGroup);
 
-  verticalLayout = new QVBoxLayout(groupBox);
-  verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
+  label = new QLabel(tr("Port:"));
+  label_2 = new QLabel(tr("Baudrate:"));
+  label_3 = new QLabel(tr("Data bits:"));
+  label_4 = new QLabel(tr("Parity:"));
+  label_5 = new QLabel(tr("Stop bits:"));
 
-  horizontalLayout_1 = new QHBoxLayout();
-  horizontalLayout_1->setObjectName(QString::fromUtf8("horizontalLayout_1"));
-
-  label = new QLabel(groupBox);
-  label->setObjectName(QString::fromUtf8("label"));
-
-  horizontalLayout_1->addWidget(label);
-
-  portdroplist = new QComboBox(groupBox);
+  portdroplist = new QComboBox(configGroup);
   portdroplist->setObjectName(QString::fromUtf8("portdroplist"));
 
-  horizontalLayout_1->addWidget(portdroplist);
-
-  verticalLayout->addLayout(horizontalLayout_1);
-
-  horizontalLayout_2 = new QHBoxLayout();
-  horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
-
-  label_2 = new QLabel(groupBox);
-  label_2->setObjectName(QString::fromUtf8("label_2"));
-
-  horizontalLayout_2->addWidget(label_2);
-
-  baudratedroplist = new QComboBox(groupBox);
+  baudratedroplist = new QComboBox(configGroup);
   baudratedroplist->setObjectName(QString::fromUtf8("baudratedroplist"));
   baudratedroplist->addItem(QString::fromUtf8("2400"));
   baudratedroplist->addItem(QString::fromUtf8("4800"));
@@ -195,19 +179,7 @@ void PageSerialTerminal::setupUi()
   baudratedroplist->addItem(QString::fromUtf8("4500000"));
   baudratedroplist->setCurrentIndex(7);
 
-  horizontalLayout_2->addWidget(baudratedroplist);
-
-  verticalLayout->addLayout(horizontalLayout_2);
-
-  horizontalLayout_3 = new QHBoxLayout();
-  horizontalLayout_3->setObjectName(QString::fromUtf8("horizontalLayout_3"));
-
-  label_3 = new QLabel(groupBox);
-  label_3->setObjectName(QString::fromUtf8("label_3"));
-
-  horizontalLayout_3->addWidget(label_3);
-
-  databitsdroplist = new QComboBox(groupBox);
+  databitsdroplist = new QComboBox(configGroup);
   databitsdroplist->setObjectName(QString::fromUtf8("databitsdroplist"));
   databitsdroplist->addItem(QString::fromUtf8("5"));
   databitsdroplist->addItem(QString::fromUtf8("6"));
@@ -215,19 +187,7 @@ void PageSerialTerminal::setupUi()
   databitsdroplist->addItem(QString::fromUtf8("8"));
   databitsdroplist->setCurrentIndex(3);
 
-  horizontalLayout_3->addWidget(databitsdroplist);
-
-  verticalLayout->addLayout(horizontalLayout_3);
-
-  horizontalLayout_4 = new QHBoxLayout();
-  horizontalLayout_4->setObjectName(QString::fromUtf8("horizontalLayout_4"));
-
-  label_4 = new QLabel(groupBox);
-  label_4->setObjectName(QString::fromUtf8("label_4"));
-
-  horizontalLayout_4->addWidget(label_4);
-
-  paritydroplist = new QComboBox(groupBox);
+  paritydroplist = new QComboBox(configGroup);
   paritydroplist->setObjectName(QString::fromUtf8("paritydroplist"));
   paritydroplist->addItem(QCoreApplication::translate("PageSerialTerminal", "None", nullptr));
   paritydroplist->addItem(QCoreApplication::translate("PageSerialTerminal", "Odd", nullptr));
@@ -235,29 +195,13 @@ void PageSerialTerminal::setupUi()
   paritydroplist->addItem(QCoreApplication::translate("PageSerialTerminal", "Mark", nullptr));
   paritydroplist->addItem(QCoreApplication::translate("PageSerialTerminal", "Space", nullptr));
 
-  horizontalLayout_4->addWidget(paritydroplist);
-
-  verticalLayout->addLayout(horizontalLayout_4);
-
-  horizontalLayout_5 = new QHBoxLayout();
-  horizontalLayout_5->setObjectName(QString::fromUtf8("horizontalLayout_5"));
-
-  label_5 = new QLabel(groupBox);
-  label_5->setObjectName(QString::fromUtf8("label_5"));
-
-  horizontalLayout_5->addWidget(label_5);
-
-  stopbitsdroplist = new QComboBox(groupBox);
+  stopbitsdroplist = new QComboBox(configGroup);
   stopbitsdroplist->setObjectName(QString::fromUtf8("stopbitsdroplist"));
   stopbitsdroplist->addItem(QString::fromUtf8("1"));
   stopbitsdroplist->addItem(QString::fromUtf8("1.5"));
   stopbitsdroplist->addItem(QString::fromUtf8("2"));
 
-  horizontalLayout_5->addWidget(stopbitsdroplist);
-
-  verticalLayout->addLayout(horizontalLayout_5);
-
-  openbutton = new QPushButton(groupBox);
+  openbutton = new QPushButton(tr("Open"));
   openbutton->setObjectName(QString::fromUtf8("openbutton"));
   openbutton->setStyleSheet(QString::fromUtf8(
                               "QPushButton {\n"
@@ -272,10 +216,24 @@ void PageSerialTerminal::setupUi()
                               "}"
                             ));
 
-  verticalLayout->addWidget(openbutton);
+  // 配置布局 - 垂直排列
+  configLayout->addWidget(label, 0, 0);
+  configLayout->addWidget(portdroplist, 0, 1);
+  configLayout->addWidget(label_2, 1, 0);
+  configLayout->addWidget(baudratedroplist, 1, 1);
+  configLayout->addWidget(label_3, 2, 0);
+  configLayout->addWidget(databitsdroplist, 2, 1);
+  configLayout->addWidget(label_4, 3, 0);
+  configLayout->addWidget(paritydroplist, 3, 1);
+  configLayout->addWidget(label_5, 4, 0);
+  configLayout->addWidget(stopbitsdroplist, 4, 1);
+  configLayout->addWidget(openbutton, 5, 0, 1, 2);  // 跨两列
 
-  horizontalLayout->addWidget(groupBox);
+  // 右侧终端组
+  terminalGroup = new QGroupBox(tr("Serial Terminal"));
+  terminalLayout = new QVBoxLayout(terminalGroup);
 
+  // 创建终端部件
   terminal = new QTermWidget(0, centralwidget);
   terminal->setObjectName(QString::fromUtf8("terminal"));
   terminal->setTerminalFont(QFont("Consolas", 11));
@@ -288,9 +246,16 @@ void PageSerialTerminal::setupUi()
 
   // 设置终端的最小大小，避免左侧设置区域变大
   terminal->setMinimumWidth(600);
-  terminal->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-  horizontalLayout->addWidget(terminal);
+  terminalLayout->addWidget(terminal);
+
+  // 添加到主布局 - 左右分布
+  mainLayout->addWidget(configGroup, 0, 0);
+  mainLayout->addWidget(terminalGroup, 0, 1);
+
+  // 设置列比例 - 左侧较窄，右侧较宽
+  mainLayout->setColumnStretch(0, 1);
+  mainLayout->setColumnStretch(1, 3);
 
   // 初始化右键菜单
   setupContextMenu();
@@ -312,7 +277,8 @@ void PageSerialTerminal::setupUi()
 
 void PageSerialTerminal::retranslateUi()
 {
-  groupBox->setTitle(QString());
+  configGroup->setTitle(tr("Serial Port Settings"));
+  terminalGroup->setTitle(tr("Serial Terminal"));
   label->setText(QCoreApplication::translate("PageSerialTerminal", "Port", nullptr));
   label_2->setText(QCoreApplication::translate("PageSerialTerminal", "Baudrate", nullptr));
   label_3->setText(QCoreApplication::translate("PageSerialTerminal", "Data bits", nullptr));
@@ -381,6 +347,18 @@ void PageSerialTerminal::on_openbutton_clicked()
   {
     isSerial_Open = false;
     openbutton->setText(tr("Open"));
+    openbutton->setStyleSheet(QString::fromUtf8(
+                                "QPushButton {\n"
+                                "    background-color: #27ae60;\n"
+                                "    padding: 10px;\n"
+                                "}\n"
+                                "QPushButton:hover {\n"
+                                "    background-color: #219653;\n"
+                                "}\n"
+                                "QPushButton:pressed {\n"
+                                "    background-color: #1e874b;\n"
+                                "}"
+                              ));
     serialPort.close();
     qDebug() << "串口已关闭";
   }
@@ -390,6 +368,18 @@ void PageSerialTerminal::on_openbutton_clicked()
     {
       isSerial_Open = true;
       openbutton->setText(tr("Close"));
+      openbutton->setStyleSheet(QString::fromUtf8(
+                                  "QPushButton {\n"
+                                  "    background-color: #e74c3c;\n"
+                                  "    padding: 10px;\n"
+                                  "}\n"
+                                  "QPushButton:hover {\n"
+                                  "    background-color: #c0392b;\n"
+                                  "}\n"
+                                  "QPushButton:pressed {\n"
+                                  "    background-color: #a93226;\n"
+                                  "}"
+                                ));
       terminal->setFocus();
       qDebug() << "串口已打开";
     }

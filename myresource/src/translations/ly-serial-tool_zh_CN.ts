@@ -282,79 +282,117 @@
 <context>
     <name>PageSerialTerminal</name>
     <message>
-        <location filename="../page/pageserialterminal.cpp" line="316"/>
+        <location filename="../page/pageserialterminal.cpp" line="282"/>
         <source>Port</source>
         <translation type="unfinished">端口</translation>
     </message>
     <message>
-        <location filename="../page/pageserialterminal.cpp" line="317"/>
+        <location filename="../page/pageserialterminal.cpp" line="283"/>
         <source>Baudrate</source>
         <translation type="unfinished">波特率</translation>
     </message>
     <message>
-        <location filename="../page/pageserialterminal.cpp" line="318"/>
+        <location filename="../page/pageserialterminal.cpp" line="284"/>
         <source>Data bits</source>
         <translation type="unfinished">数据位</translation>
     </message>
     <message>
-        <location filename="../page/pageserialterminal.cpp" line="319"/>
+        <location filename="../page/pageserialterminal.cpp" line="285"/>
         <source>Parity</source>
         <translation type="unfinished">校验位</translation>
     </message>
     <message>
-        <location filename="../page/pageserialterminal.cpp" line="232"/>
+        <location filename="../page/pageserialterminal.cpp" line="192"/>
         <source>None</source>
         <translation type="unfinished">无</translation>
     </message>
     <message>
-        <location filename="../page/pageserialterminal.cpp" line="233"/>
+        <location filename="../page/pageserialterminal.cpp" line="153"/>
+        <location filename="../page/pageserialterminal.cpp" line="280"/>
+        <source>Serial Port Settings</source>
+        <translation type="unfinished">串口设置</translation>
+    </message>
+    <message>
+        <location filename="../page/pageserialterminal.cpp" line="156"/>
+        <source>Port:</source>
+        <translation type="unfinished">端口：</translation>
+    </message>
+    <message>
+        <location filename="../page/pageserialterminal.cpp" line="157"/>
+        <source>Baudrate:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../page/pageserialterminal.cpp" line="158"/>
+        <source>Data bits:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../page/pageserialterminal.cpp" line="159"/>
+        <source>Parity:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../page/pageserialterminal.cpp" line="160"/>
+        <source>Stop bits:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../page/pageserialterminal.cpp" line="193"/>
         <source>Odd</source>
         <translation type="unfinished">奇校验</translation>
     </message>
     <message>
-        <location filename="../page/pageserialterminal.cpp" line="234"/>
+        <location filename="../page/pageserialterminal.cpp" line="194"/>
         <source>Even</source>
         <translation type="unfinished">偶校验</translation>
     </message>
     <message>
-        <location filename="../page/pageserialterminal.cpp" line="235"/>
+        <location filename="../page/pageserialterminal.cpp" line="195"/>
         <source>Mark</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageserialterminal.cpp" line="236"/>
+        <location filename="../page/pageserialterminal.cpp" line="196"/>
         <source>Space</source>
         <translation type="unfinished">空格校验</translation>
     </message>
     <message>
-        <location filename="../page/pageserialterminal.cpp" line="320"/>
+        <location filename="../page/pageserialterminal.cpp" line="233"/>
+        <location filename="../page/pageserialterminal.cpp" line="281"/>
+        <source>Serial Terminal</source>
+        <translation type="unfinished">串口终端</translation>
+    </message>
+    <message>
+        <location filename="../page/pageserialterminal.cpp" line="286"/>
         <source>Stop bits</source>
         <translation type="unfinished">停止位</translation>
     </message>
     <message>
-        <location filename="../page/pageserialterminal.cpp" line="321"/>
-        <location filename="../page/pageserialterminal.cpp" line="383"/>
-        <location filename="../page/pageserialterminal.cpp" line="461"/>
+        <location filename="../page/pageserialterminal.cpp" line="204"/>
+        <location filename="../page/pageserialterminal.cpp" line="287"/>
+        <location filename="../page/pageserialterminal.cpp" line="349"/>
+        <location filename="../page/pageserialterminal.cpp" line="451"/>
         <source>Open</source>
         <translation type="unfinished">打开</translation>
     </message>
     <message>
-        <location filename="../page/pageserialterminal.cpp" line="392"/>
+        <location filename="../page/pageserialterminal.cpp" line="370"/>
         <source>Close</source>
         <translation type="unfinished">关闭</translation>
     </message>
     <message>
-        <location filename="../page/pageserialterminal.cpp" line="486"/>
+        <location filename="../page/pageserialterminal.cpp" line="476"/>
         <source>复制</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageserialterminal.cpp" line="487"/>
+        <location filename="../page/pageserialterminal.cpp" line="477"/>
         <source>粘贴</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageserialterminal.cpp" line="488"/>
+        <location filename="../page/pageserialterminal.cpp" line="478"/>
         <source>清空</source>
         <translation type="unfinished"></translation>
     </message>

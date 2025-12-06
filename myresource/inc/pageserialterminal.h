@@ -22,14 +22,11 @@ class PageSerialTerminal : public QMainWindow
     void setupContextMenu();
 
     QWidget * centralwidget;
-    QHBoxLayout * horizontalLayout;
-    QGroupBox * groupBox;
-    QVBoxLayout * verticalLayout;
-    QHBoxLayout * horizontalLayout_1;
-    QHBoxLayout * horizontalLayout_2;
-    QHBoxLayout * horizontalLayout_3;
-    QHBoxLayout * horizontalLayout_4;
-    QHBoxLayout * horizontalLayout_5;
+    QGridLayout * mainLayout;
+    QGroupBox * configGroup;
+    QGridLayout * configLayout;
+    QGroupBox * terminalGroup;
+    QVBoxLayout * terminalLayout;
     QLabel * label;
     QLabel * label_2;
     QLabel * label_3;
