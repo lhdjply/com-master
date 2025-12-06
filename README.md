@@ -1,4 +1,4 @@
-# LY Serial Tool
+# 通讯大师 (com-master) 
 
 一个基于Qt6的串口通信工具，集成了串口终端、串口收发器、IEC61850客户端和SSH客户端功能，专为电子设备测试和通信协议分析而设计。
 
@@ -53,8 +53,8 @@
 ### 从源码编译
 
 ```bash
-git clone https://github.com/lhdjply/ly-serial-tool.git
-cd ly-serial-tool
+git clone https://github.com/lhdjply/com-master.git
+cd com-master
 mkdir build && cd build
 cmake ..
 make -j$(nproc)
@@ -63,10 +63,10 @@ sudo make install
 
 ### 使用Debian包
 
-从[Releases](https://github.com/lhdjply/ly-serial-tool/releases)页面下载适合您架构的.deb包，然后安装：
+从[Releases](https://github.com/lhdjply/com-master/releases)页面下载适合您架构的.deb包，然后安装：
 
 ```bash
-sudo dpkg -i ly-serial-tool_*.deb
+sudo dpkg -i com-master_*.deb
 ```
 
 ## 使用说明
@@ -112,7 +112,7 @@ sudo dpkg -i ly-serial-tool_*.deb
 
 ### 项目结构
 ```
-ly-serial-tool/
+com-master/
 ├── src/                    # 主程序源码
 ├── myresource/            # 资源文件和UI代码
 │   ├── inc/               # 头文件

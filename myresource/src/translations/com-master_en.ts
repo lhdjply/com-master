@@ -244,7 +244,7 @@
     <name>PageMainWindow</name>
     <message>
         <location filename="../page/pagemain.cpp" line="12"/>
-        <source>ly Serial Tool</source>
+        <source>com-master</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

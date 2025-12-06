@@ -9,9 +9,9 @@ int main(int argc, char * argv[])
   // Fusion style
   app.setStyle(QStyleFactory::create("Fusion"));
 #ifdef Q_OS_WIN
-  app.setWindowIcon(QIcon(":/icons/windows/ly-serial-tool.ico"));
+  app.setWindowIcon(QIcon(":/icons/windows/com-master.ico"));
 #else
-  app.setWindowIcon(QIcon(":/icons/linux/hicolor/scalable/apps/ly-serial-tool.svg"));
+  app.setWindowIcon(QIcon(":/icons/linux/hicolor/scalable/apps/com-master.svg"));
 #endif
 
   // Translation setup
@@ -23,7 +23,7 @@ int main(int argc, char * argv[])
 #else
   const QString qmDir = QDir(QCoreApplication::applicationDirPath()).absoluteFilePath("translations");
 #endif
-  if(translator.load(QLocale(), u"ly-serial-tool"_s, u"_"_s, qmDir))
+  if(translator.load(QLocale(), u"com-master"_s, u"_"_s, qmDir))
   {
     QCoreApplication::installTranslator(&translator);
   }

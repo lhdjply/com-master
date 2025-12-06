@@ -1,7 +1,7 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: ly-serial-tool
-Upstream-Contact: https://github.com/lhdjply/ly-serial-tool/
-Source: https://github.com/lhdjply/ly-serial-tool/
+Upstream-Name: com-master
+Upstream-Contact: https://github.com/lhdjply/com-master/
+Source: https://github.com/lhdjply/com-master/
 
 Files: *
 Copyright: lhdjply <lhdjply@126.com>

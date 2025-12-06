@@ -9,7 +9,7 @@ PageMainWindow::PageMainWindow(QWidget *parent)
 void PageMainWindow::setupUi()
 {
   // 窗口属性
-  this->setWindowTitle(tr("ly Serial Tool"));
+  this->setWindowTitle(tr("com-master"));
   this->resize(1100, 700);
   this->setMinimumSize(1100, 700);
   this->setLayoutDirection(Qt::LeftToRight);

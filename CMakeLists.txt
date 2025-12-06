@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 
 # 使用变量定义项目名/目标名
-set(PROJECT_TARGET ly-serial-tool)
+set(PROJECT_TARGET com-master)
 
 project(${PROJECT_TARGET} VERSION 0.1 LANGUAGES CXX C)
 
@@ -26,7 +26,7 @@ find_package(Qt6 REQUIRED COMPONENTS Widgets SerialPort LinguistTools)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(SSH REQUIRED libssh)
 
-set (LY_QRC_FILES
+set (COM_MASTER_QRC_FILES
     assets/resources.qrc
 )
 
@@ -73,7 +73,7 @@ add_definitions(-DHAVE_POSIX_OPENPT=1)
 qt_add_executable(${PROJECT_TARGET}
     MANUAL_FINALIZATION
     ${PROJECT_SOURCES}
-    ${LY_QRC_FILES}
+    ${COM_MASTER_QRC_FILES}
     ${WIN_RESOURCES}
 )
 
@@ -106,7 +106,7 @@ if (TRANSLATION_RESOURCE_EMBEDDING)
     add_definitions(-DKB_LAYOUT_DIR="${CMAKE_SOURCE_DIR}/third_party/qtermwidget/kb-layouts")
 elseif (WIN32)
     set_target_properties(${PROJECT_TARGET} PROPERTIES
-        RC_ICONS "${CMAKE_SOURCE_DIR}/assets/icons/windows/ly-serial-tool.ico"
+        RC_ICONS "${CMAKE_SOURCE_DIR}/assets/icons/windows/com-master.ico"
     )
 
     qt6_add_translations(${PROJECT_TARGET}
@@ -142,7 +142,7 @@ elseif (UNIX)
     install( FILES ${ICON512} DESTINATION ${CMAKE_INSTALL_FULL_DATADIR}/icons/hicolor/512x512/apps)
     install( FILES ${ICONsc} DESTINATION ${CMAKE_INSTALL_FULL_DATADIR}/icons/hicolor/scalable/apps)
 
-    install(FILES ${CMAKE_SOURCE_DIR}/assets/desktop/ly-serial-tool.desktop DESTINATION ${CMAKE_INSTALL_FULL_DATADIR}/applications)
+    install(FILES ${CMAKE_SOURCE_DIR}/assets/desktop/com-master.desktop DESTINATION ${CMAKE_INSTALL_FULL_DATADIR}/applications)
 
     qt6_add_translations(${PROJECT_TARGET}
         TS_FILE_DIR myresource/src/translations

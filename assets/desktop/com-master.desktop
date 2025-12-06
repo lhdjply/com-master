@@ -1,9 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
-Name=ly serial tool
-Comment=ly serial tool
-Exec=ly-serial-tool
-Icon=ly-serial-tool
+Name=com-master
+Name[zh_CN]=通信大师
+Comment=专业通信工具
+Exec=com-master
+Icon=com-master
 Terminal=false
 Type=Application
 Categories=Education;Electronics

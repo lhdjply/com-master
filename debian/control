@@ -1,4 +1,4 @@
-Source: ly-serial-tool
+Source: com-master
 Section: electronics
 Priority: optional
 Maintainer: lhdjply <lhdjply@126.com>
@@ -14,11 +14,11 @@ Build-Depends: debhelper-compat (= 13),
                qt6-serialport-dev,
 Rules-Requires-Root: no
 Standards-Version: 4.6.0
-Homepage: https://github.com/lhdjply/ly-serial-tool/
-Vcs-Browser: https://github.com/lhdjply/ly-serial-tool
-Vcs-Git: https://github.com/lhdjply/ly-serial-tool.git
+Homepage: https://github.com/lhdjply/com-master/
+Vcs-Browser: https://github.com/lhdjply/com-master
+Vcs-Git: https://github.com/lhdjply/com-master.git
 
-Package: ly-serial-tool
+Package: com-master
 Section: electronics
 Priority: optional
 Architecture: any

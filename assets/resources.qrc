@@ -5,15 +5,15 @@
         <file>icons/serial_transceiver.png</file>
         <file>icons/ssh_terminal.png</file>
         <file>icons/window.png</file>
-        <file>icons/linux/hicolor/16x16/apps/ly-serial-tool.png</file>
-        <file>icons/linux/hicolor/22x22/apps/ly-serial-tool.png</file>
-        <file>icons/linux/hicolor/32x32/apps/ly-serial-tool.png</file>
-        <file>icons/linux/hicolor/48x48/apps/ly-serial-tool.png</file>
-        <file>icons/linux/hicolor/64x64/apps/ly-serial-tool.png</file>
-        <file>icons/linux/hicolor/128x128/apps/ly-serial-tool.png</file>
-        <file>icons/linux/hicolor/256x256/apps/ly-serial-tool.png</file>
-        <file>icons/linux/hicolor/512x512/apps/ly-serial-tool.png</file>
-        <file>icons/linux/hicolor/scalable/apps/ly-serial-tool.svg</file>
-        <file>icons/windows/ly-serial-tool.ico</file>
+        <file>icons/linux/hicolor/16x16/apps/com-master.png</file>
+        <file>icons/linux/hicolor/22x22/apps/com-master.png</file>
+        <file>icons/linux/hicolor/32x32/apps/com-master.png</file>
+        <file>icons/linux/hicolor/48x48/apps/com-master.png</file>
+        <file>icons/linux/hicolor/64x64/apps/com-master.png</file>
+        <file>icons/linux/hicolor/128x128/apps/com-master.png</file>
+        <file>icons/linux/hicolor/256x256/apps/com-master.png</file>
+        <file>icons/linux/hicolor/512x512/apps/com-master.png</file>
+        <file>icons/linux/hicolor/scalable/apps/com-master.svg</file>
+        <file>icons/windows/com-master.ico</file>
     </qresource>
 </RCC>

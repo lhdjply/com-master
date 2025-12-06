@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
   
 env:
-  APP_NAME: "ly-serial-tool"
+  APP_NAME: "com-master"
 
 jobs:
   build-deb:

@@ -244,8 +244,8 @@
     <name>PageMainWindow</name>
     <message>
         <location filename="../page/pagemain.cpp" line="12"/>
-        <source>ly Serial Tool</source>
-        <translation type="unfinished"></translation>
+        <source>com-master</source>
+        <translation type="unfinished">通讯大师</translation>
     </message>
     <message>
         <location filename="../page/pagemain.cpp" line="36"/>
