@@ -3,7 +3,9 @@ Section: electronics
 Priority: optional
 Maintainer: lhdjply <lhdjply@126.com>
 Build-Depends: debhelper-compat (= 13),
-               cmake, 
+               cmake,
+               libssh-dev,
+               pkgconf,
                qt6-base-dev,
                qt6-l10n-tools,
                qt6-tools-dev,
@@ -21,13 +23,8 @@ Section: electronics
 Priority: optional
 Architecture: any
 Depends: 
- libc6,
- libgcc-s1,
- libqt6core6,
- libqt6gui6,
- libqt6widgets6,
- libqt6serialport6,
- libstdc++6
+ ${shlibs:Depends},
+ ${misc:Depends}
 Description: Serial port tool and IEC61850 client
  A Qt6-based serial communication tool with terminal, transceiver,
  and IEC61850 client functionality for electronic device testing
