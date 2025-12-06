@@ -3,6 +3,7 @@
         <file>icons/iec61850_client.png</file>
         <file>icons/serial_terminal.png</file>
         <file>icons/serial_transceiver.png</file>
+        <file>icons/ssh_terminal.png</file>
         <file>icons/window.png</file>
         <file>icons/linux/hicolor/16x16/apps/ly-serial-tool.png</file>
         <file>icons/linux/hicolor/22x22/apps/ly-serial-tool.png</file>

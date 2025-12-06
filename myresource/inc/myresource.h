@@ -6,6 +6,7 @@
 #include "pagemain.h"
 #include "pageserialterminal.h"
 #include "pageserialtransceiver.h"
+#include "pagesshclient.h"
 #include "pagetabcontent.h"
 #include "pageverifiydialog.h"
 

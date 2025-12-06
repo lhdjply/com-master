@@ -23,6 +23,8 @@ if(WIN32)
 endif()
 
 find_package(Qt6 REQUIRED COMPONENTS Widgets SerialPort LinguistTools)
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(SSH REQUIRED libssh)
 
 set (LY_QRC_FILES
     assets/resources.qrc
@@ -76,7 +78,9 @@ qt_add_executable(${PROJECT_TARGET}
 )
 
 # 使用变量链接库
-target_link_libraries(${PROJECT_TARGET} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::SerialPort)
+target_link_libraries(${PROJECT_TARGET} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::SerialPort ${SSH_LIBRARIES})
+target_include_directories(${PROJECT_TARGET} PRIVATE ${SSH_INCLUDE_DIRS})
+target_compile_options(${PROJECT_TARGET} PRIVATE ${SSH_CFLAGS_OTHER})
 
 # 使用变量设置属性
 set_target_properties(${PROJECT_TARGET} PROPERTIES

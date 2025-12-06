@@ -110,20 +110,27 @@ void PageMainWindow::opentoolpage(const QString &buttonName)
   if(buttonName.compare(tr("Serial Transceiver")) == 0)
   {
     PageSerialTransceiver *newTab = new PageSerialTransceiver();
-    tabIcon = QIcon(":/icons/serial_transceiver.png"); // 收发器图标路径
+    tabIcon = QIcon(":/icons/serial_transceiver.png"); // 串口收发器图标路径
     tabWidget->insertTab(tabIndex, newTab, tabIcon, buttonName);
   }
   else if(buttonName.compare(tr("Serial Terminal")) == 0)
   {
     PageSerialTerminal *newTab = new PageSerialTerminal();
-    tabIcon = QIcon(":/icons/serial_terminal.png"); // 终端图标路径
+    tabIcon = QIcon(":/icons/serial_terminal.png"); // 串口终端图标路径
     tabWidget->insertTab(tabIndex, newTab, tabIcon, buttonName);
   }
   else if(buttonName.compare(tr("IEC61850 Client")) == 0)
   {
     PageIEC61850Client *newTab = new PageIEC61850Client();
     newTab->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    tabIcon = QIcon(":/icons/iec61850_client.png"); // 临时使用窗口图标
+    tabIcon = QIcon(":/icons/iec61850_client.png"); // 61850图标路径
+    tabWidget->insertTab(tabIndex, newTab, tabIcon, buttonName);
+  }
+  else if(buttonName.compare(tr("SSH Client")) == 0)
+  {
+    PageSshClient *newTab = new PageSshClient();
+    newTab->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    tabIcon = QIcon(":/icons/ssh_terminal.png"); // ssh终端图标路径
     tabWidget->insertTab(tabIndex, newTab, tabIcon, buttonName);
   }
   tabWidget->setTabToolTip(tabIndex, buttonName);

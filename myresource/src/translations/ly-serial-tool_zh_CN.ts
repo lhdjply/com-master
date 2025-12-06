@@ -273,6 +273,11 @@
         <source>IEC61850 Client</source>
         <translation type="unfinished">IEC61850 客户端</translation>
     </message>
+    <message>
+        <location filename="../page/pagemain.cpp" line="129"/>
+        <source>SSH Client</source>
+        <translation type="unfinished">SSH 客户端</translation>
+    </message>
 </context>
 <context>
     <name>PageSerialTerminal</name>
@@ -522,6 +527,161 @@
     </message>
 </context>
 <context>
+    <name>PageSshClient</name>
+    <message>
+        <location filename="../page/pagesshclient.cpp" line="143"/>
+        <source>SSH Connection</source>
+        <translation type="unfinished">SSH 连接</translation>
+    </message>
+    <message>
+        <location filename="../page/pagesshclient.cpp" line="146"/>
+        <source>Host:</source>
+        <translation type="unfinished">主机：</translation>
+    </message>
+    <message>
+        <location filename="../page/pagesshclient.cpp" line="147"/>
+        <source>Port:</source>
+        <translation type="unfinished">端口：</translation>
+    </message>
+    <message>
+        <location filename="../page/pagesshclient.cpp" line="148"/>
+        <source>Username:</source>
+        <translation type="unfinished">用户名：</translation>
+    </message>
+    <message>
+        <location filename="../page/pagesshclient.cpp" line="149"/>
+        <source>Password:</source>
+        <translation type="unfinished">密码：</translation>
+    </message>
+    <message>
+        <location filename="../page/pagesshclient.cpp" line="157"/>
+        <location filename="../page/pagesshclient.cpp" line="503"/>
+        <source>Connect</source>
+        <translation type="unfinished">连接</translation>
+    </message>
+    <message>
+        <location filename="../page/pagesshclient.cpp" line="578"/>
+        <location filename="../page/pagesshclient.cpp" line="722"/>
+        <location filename="../page/pagesshclient.cpp" line="778"/>
+        <location filename="../page/pagesshclient.cpp" line="829"/>
+        <source>Disconnect</source>
+        <translation type="unfinished">断开连接</translation>
+    </message>
+    <message>
+        <location filename="../page/pagesshclient.cpp" line="183"/>
+        <source>SSH Terminal</source>
+        <translation type="unfinished">SSH 终端</translation>
+    </message>
+    <message>
+        <location filename="../page/pagesshclient.cpp" line="212"/>
+        <location filename="../page/pagesshclient.cpp" line="516"/>
+        <source>Disconnected</source>
+        <translation type="unfinished">已断开连接</translation>
+    </message>
+    <message>
+        <location filename="../page/pagesshclient.cpp" line="397"/>
+        <source>Please fill in host</source>
+        <translation type="unfinished">请填写主机地址</translation>
+    </message>
+    <message>
+        <location filename="../page/pagesshclient.cpp" line="405"/>
+        <source>Failed to create SSH session</source>
+        <translation type="unfinished">创建SSH会话失败</translation>
+    </message>
+    <message>
+        <location filename="../page/pagesshclient.cpp" line="423"/>
+        <source>Connection failed: %1</source>
+        <translation type="unfinished">连接失败: %1</translation>
+    </message>
+    <message>
+        <location filename="../page/pagesshclient.cpp" line="591"/>
+        <location filename="../page/pagesshclient.cpp" line="735"/>
+        <location filename="../page/pagesshclient.cpp" line="791"/>
+        <location filename="../page/pagesshclient.cpp" line="842"/>
+        <source>Connected to %1</source>
+        <translation type="unfinished">已连接到 %1</translation>
+    </message>
+    <message>
+        <location filename="../page/pagesshclient.cpp" line="613"/>
+        <location filename="../page/pagesshclient.cpp" line="661"/>
+        <source>Password authentication failed<byte value="xd"/>
+</source>
+        <translation type="unfinished">密码验证失败<byte value="xd"/>
+</translation>
+    </message>
+    <message>
+        <location filename="../page/pagesshclient.cpp" line="675"/>
+        <source>Trying keyboard-interactive authentication...<byte value="xd"/>
+</source>
+        <translation type="unfinished">尝试键盘交互式身份验证...<byte value="xd"/>
+</translation>
+    </message>
+    <message>
+        <location filename="../page/pagesshclient.cpp" line="697"/>
+        <source>Trying public key authentication...<byte value="xd"/>
+</source>
+        <translation type="unfinished">尝试公钥身份验证...<byte value="xd"/>
+</translation>
+    </message>
+    <message>
+        <location filename="../page/pagesshclient.cpp" line="985"/>
+        <source>Copy</source>
+        <translation type="unfinished">复制</translation>
+    </message>
+    <message>
+        <location filename="../page/pagesshclient.cpp" line="986"/>
+        <source>Paste</source>
+        <translation type="unfinished">粘贴</translation>
+    </message>
+    <message>
+        <location filename="../page/pagesshclient.cpp" line="987"/>
+        <source>Clear</source>
+        <translation type="unfinished">清空</translation>
+    </message>
+    <message>
+        <location filename="../page/pagesshclient.cpp" line="334"/>
+        <location filename="../page/pagesshclient.cpp" line="662"/>
+        <location filename="../page/pagesshclient.cpp" line="684"/>
+        <location filename="../page/pagesshclient.cpp" line="707"/>
+        <location filename="../page/pagesshclient.cpp" line="762"/>
+        <location filename="../page/pagesshclient.cpp" line="818"/>
+        <location filename="../page/pagesshclient.cpp" line="859"/>
+        <source>Please enter password: </source>
+        <translation type="unfinished">请输入密码: </translation>
+    </message>
+    <message>
+        <location filename="../page/pagesshclient.cpp" line="756"/>
+        <location filename="../page/pagesshclient.cpp" line="811"/>
+        <source>Please enter username: </source>
+        <translation type="unfinished">请输入用户名: </translation>
+    </message>
+    <message>
+        <location filename="../page/pagesshclient.cpp" line="952"/>
+        <source>Host key for server changed: it is now</source>
+        <translation type="unfinished">服务器主机密钥已更改：现在是</translation>
+    </message>
+    <message>
+        <location filename="../page/pagesshclient.cpp" line="956"/>
+        <source>The host key for this server was not found but an other type of key exists.</source>
+        <translation type="unfinished">未找到此服务器的主机密钥，但存在其他类型的密钥。</translation>
+    </message>
+    <message>
+        <location filename="../page/pagesshclient.cpp" line="961"/>
+        <source>The server is unknown. Do you trust the host key?</source>
+        <translation type="unfinished">服务器未知。您信任此主机密钥吗？</translation>
+    </message>
+    <message>
+        <location filename="../page/pagesshclient.cpp" line="968"/>
+        <source>Could not find known host file.</source>
+        <translation type="unfinished">找不到已知主机文件。</translation>
+    </message>
+    <message>
+        <location filename="../page/pagesshclient.cpp" line="972"/>
+        <source>Error: %1</source>
+        <translation type="unfinished">错误: %1</translation>
+    </message>
+</context>
+<context>
     <name>PageTabContent</name>
     <message>
         <location filename="../page/pagetabcontent.cpp" line="24"/>
@@ -537,6 +697,11 @@
         <location filename="../page/pagetabcontent.cpp" line="38"/>
         <source>IEC61850 Client</source>
         <translation type="unfinished">IEC61850 客户端</translation>
+    </message>
+    <message>
+        <location filename="../page/pagetabcontent.cpp" line="45"/>
+        <source>SSH Client</source>
+        <translation type="unfinished">SSH 客户端</translation>
     </message>
 </context>
 <context>

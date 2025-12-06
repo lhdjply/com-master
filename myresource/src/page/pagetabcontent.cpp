@@ -38,17 +38,27 @@ void PageTabContent::setupUi()
   iec61850Button->setText(tr("IEC61850 Client"));
   iec61850Button->setToolButtonStyle(Qt::ToolButtonTextUnderIcon); // 字在图标下面
 
+  // 创建SSH客户端按钮
+  QToolButton *sshClientButton = new QToolButton();
+  sshClientButton->setIcon(QIcon(":/icons/ssh_terminal.png")); // 设置图标
+  sshClientButton->setIconSize(QSize(150, 150)); // 设置图标大小
+  sshClientButton->setText(tr("SSH Client"));
+  sshClientButton->setToolButtonStyle(Qt::ToolButtonTextUnderIcon); // 字在图标下面
+
   QString transparentStyle = "QToolButton { background: transparent; border: none; }";
   transceiverButton->setStyleSheet(transparentStyle);
   terminalButton->setStyleSheet(transparentStyle);
   iec61850Button->setStyleSheet(transparentStyle);
+  sshClientButton->setStyleSheet(transparentStyle);
 
   // 添加按钮到布局
   buttonLayout->addWidget(transceiverButton);
-  buttonLayout->addSpacing(50); // 按钮间距
+  buttonLayout->addSpacing(30); // 按钮间距
   buttonLayout->addWidget(terminalButton);
-  buttonLayout->addSpacing(50); // 按钮间距
+  buttonLayout->addSpacing(30); // 按钮间距
   buttonLayout->addWidget(iec61850Button);
+  buttonLayout->addSpacing(30); // 按钮间距
+  buttonLayout->addWidget(sshClientButton);
   buttonLayout->setAlignment(Qt::AlignCenter);
 
   // 将按钮布局添加到主布局
@@ -74,5 +84,10 @@ void PageTabContent::setupUi()
   connect(iec61850Button, &QPushButton::clicked, [this]()
   {
     emit buttonClicked(iec61850Button->text());
+  });
+
+  connect(sshClientButton, &QPushButton::clicked, [ = ]()
+  {
+    emit buttonClicked(sshClientButton->text());
   });
 }
