@@ -616,6 +616,14 @@ bool PageIEC61850Client::writeValue(const QString& objectReference, const QVaria
 
   IedClientError error;
   FunctionalConstraint fc = FunctionalConstraint_fromString(functionalConstraint.toStdString().c_str());
+
+  // Check if FC conversion was successful
+  if(fc == IEC61850_FC_NONE)
+  {
+    MmsValue_delete(mmsValue);
+    return false;
+  }
+
   IedConnection_writeObject(m_connection, &error,
                             objectReference.toStdString().c_str(),
                             fc,
@@ -693,6 +701,33 @@ QVariant PageIEC61850Client::mmsValueToQVariant(MmsValue* mmsValue)
 
 MmsValue * PageIEC61850Client::qVariantToMmsValue(const QVariant& value, const QString& dataType)
 {
+  // Use dataType to determine the correct conversion
+  if(dataType == "FLOAT")
+  {
+    return MmsValue_newFloat(value.toFloat());
+  }
+  else if(dataType == "INT")
+  {
+    return MmsValue_newInteger(value.toInt());
+  }
+  else if(dataType == "BOOLEAN")
+  {
+    return MmsValue_newBoolean(value.toBool());
+  }
+  else if(dataType == "STRING")
+  {
+    return MmsValue_newVisibleString(value.toString().toStdString().c_str());
+  }
+  else if(dataType == "OCTET_STRING")
+  {
+    QByteArray data = value.toByteArray();
+    MmsValue* octetString = MmsValue_newOctetString(data.size(), data.size());
+    uint8_t * buffer = MmsValue_getOctetStringBuffer(octetString);
+    memcpy(buffer, data.data(), data.size());
+    return octetString;
+  }
+
+  // Fallback: try to infer from QVariant type
   switch(value.metaType().id())
   {
     case QMetaType::Bool:
@@ -759,9 +794,7 @@ QString PageIEC61850Client::getFunctionalConstraint(const QString& objectReferen
 
 QString PageIEC61850Client::getDataType(const QString& objectReference)
 {
-  // This is a simplified implementation
-  // In a real application, you would query the data model to get the actual data type
-
+  // First try to determine type from object reference pattern
   if(objectReference.contains(".AnIn"))
   {
     return "FLOAT";
@@ -773,6 +806,76 @@ QString PageIEC61850Client::getDataType(const QString& objectReference)
   else if(objectReference.contains(".NamPlt"))
   {
     return "STRING";
+  }
+  else if(objectReference.contains(".setMag"))
+  {
+    // setMag.f indicates float, setMag.i indicates integer
+    if(objectReference.endsWith(".f"))
+    {
+      return "FLOAT";
+    }
+    else if(objectReference.endsWith(".i"))
+    {
+      return "INT";
+    }
+    else if(objectReference.endsWith(".b"))
+    {
+      return "BOOLEAN";
+    }
+    return "FLOAT";
+  }
+  else if(objectReference.contains(".mag"))
+  {
+    if(objectReference.endsWith(".f"))
+    {
+      return "FLOAT";
+    }
+    else if(objectReference.endsWith(".i"))
+    {
+      return "INT";
+    }
+    return "FLOAT";
+  }
+  else if(objectReference.contains(".stVal"))
+  {
+    return "BOOLEAN";
+  }
+
+  // If pattern matching fails, try to read the value to determine type
+  if(m_isConnected && m_connection)
+  {
+    // Try to read with different FCs to determine the actual type
+    for(int i = IEC61850_FC_SP; i <= IEC61850_FC_CO; i++)
+    {
+      IedClientError error;
+      MmsValue* testValue = IedConnection_readObject(m_connection, &error,
+                                                     objectReference.toStdString().c_str(),
+                                                     static_cast<FunctionalConstraint>(i));
+
+      if(error == IED_ERROR_OK && testValue != nullptr)
+      {
+        MmsType type = MmsValue_getType(testValue);
+        MmsValue_delete(testValue);
+
+        switch(type)
+        {
+          case MMS_BOOLEAN:
+            return "BOOLEAN";
+          case MMS_INTEGER:
+          case MMS_UNSIGNED:
+            return "INT";
+          case MMS_FLOAT:
+            return "FLOAT";
+          case MMS_VISIBLE_STRING:
+          case MMS_STRING:
+            return "STRING";
+          case MMS_OCTET_STRING:
+            return "OCTET_STRING";
+          default:
+            break;
+        }
+      }
+    }
   }
 
   return "UNKNOWN";
@@ -1438,11 +1541,32 @@ void PageIEC61850Client::writeValue()
     value = valueStr;
   }
 
-  if(PageIEC61850Client::writeValue(m_currentObjectReference, value))
+  // Get the correct functional constraint for this object
+  QString fc = getFunctionalConstraint(m_currentObjectReference);
+
+  if(PageIEC61850Client::writeValue(m_currentObjectReference, value, fc))
   {
     m_writeValueEdit->clear();
     // Read back the value to confirm
     readValue();
+  }
+  else
+  {
+    QMessageBox::warning(this,
+                         tr("Write Failed"),
+                         tr("Failed to write value to %1\n\n"
+                            "Object Reference: %2\n"
+                            "Functional Constraint: %3\n"
+                            "Data Type: %4\n\n"
+                            "Possible reasons:\n"
+                            "• The object may not support write operations\n"
+                            "• Wrong functional constraint (e.g., using MX instead of SP/CO)\n"
+                            "• Device may be in a state that prevents writing\n"
+                            "• Access control restrictions")
+                         .arg(m_currentObjectReference)
+                         .arg(m_currentObjectReference)
+                         .arg(fc)
+                         .arg(dataType));
   }
 }
 

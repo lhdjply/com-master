@@ -105,142 +105,162 @@
 <context>
     <name>PageIEC61850Client</name>
     <message>
-        <location filename="../page/pageiec61850client.cpp" line="31"/>
+        <location filename="../page/pageiec61850client.cpp" line="30"/>
         <source>IEC61850 Client</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageiec61850client.cpp" line="201"/>
+        <location filename="../page/pageiec61850client.cpp" line="200"/>
         <source>Data Model</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageiec61850client.cpp" line="233"/>
+        <location filename="../page/pageiec61850client.cpp" line="232"/>
         <source>Connect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageiec61850client.cpp" line="234"/>
+        <location filename="../page/pageiec61850client.cpp" line="233"/>
         <source>Connect to IEC61850 device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageiec61850client.cpp" line="236"/>
+        <location filename="../page/pageiec61850client.cpp" line="235"/>
         <source>Disconnect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageiec61850client.cpp" line="237"/>
+        <location filename="../page/pageiec61850client.cpp" line="236"/>
         <source>Disconnect from device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageiec61850client.cpp" line="240"/>
-        <location filename="../page/pageiec61850client.cpp" line="970"/>
+        <location filename="../page/pageiec61850client.cpp" line="239"/>
+        <location filename="../page/pageiec61850client.cpp" line="1072"/>
         <source>Refresh</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageiec61850client.cpp" line="241"/>
+        <location filename="../page/pageiec61850client.cpp" line="240"/>
         <source>Refresh data model</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageiec61850client.cpp" line="265"/>
-        <location filename="../page/pageiec61850client.cpp" line="1495"/>
+        <location filename="../page/pageiec61850client.cpp" line="264"/>
+        <location filename="../page/pageiec61850client.cpp" line="1666"/>
         <source>Disconnected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageiec61850client.cpp" line="941"/>
-        <location filename="../page/pageiec61850client.cpp" line="1105"/>
+        <location filename="../page/pageiec61850client.cpp" line="1043"/>
+        <location filename="../page/pageiec61850client.cpp" line="1251"/>
         <source>IEC61850 Device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageiec61850client.cpp" line="958"/>
-        <location filename="../page/pageiec61850client.cpp" line="1274"/>
+        <location filename="../page/pageiec61850client.cpp" line="1060"/>
+        <location filename="../page/pageiec61850client.cpp" line="1424"/>
         <source>Read Value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageiec61850client.cpp" line="960"/>
-        <location filename="../page/pageiec61850client.cpp" line="1267"/>
+        <location filename="../page/pageiec61850client.cpp" line="1062"/>
+        <location filename="../page/pageiec61850client.cpp" line="1417"/>
         <source>Write Value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageiec61850client.cpp" line="962"/>
+        <location filename="../page/pageiec61850client.cpp" line="1064"/>
         <source>Control Object</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageiec61850client.cpp" line="966"/>
+        <location filename="../page/pageiec61850client.cpp" line="1068"/>
         <source>Create Data Set</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageiec61850client.cpp" line="1235"/>
+        <location filename="../page/pageiec61850client.cpp" line="1385"/>
         <source>Object Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageiec61850client.cpp" line="1242"/>
+        <location filename="../page/pageiec61850client.cpp" line="1392"/>
         <source>Object Reference:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageiec61850client.cpp" line="1246"/>
+        <location filename="../page/pageiec61850client.cpp" line="1396"/>
         <source>Data Type:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageiec61850client.cpp" line="1250"/>
+        <location filename="../page/pageiec61850client.cpp" line="1400"/>
         <source>Current Value:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageiec61850client.cpp" line="1255"/>
+        <location filename="../page/pageiec61850client.cpp" line="1405"/>
         <source>Operations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageiec61850client.cpp" line="1264"/>
+        <location filename="../page/pageiec61850client.cpp" line="1414"/>
         <source>Enter value to write...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageiec61850client.cpp" line="1283"/>
+        <location filename="../page/pageiec61850client.cpp" line="1433"/>
         <source>Timestamp</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageiec61850client.cpp" line="1283"/>
+        <location filename="../page/pageiec61850client.cpp" line="1433"/>
         <source>Value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageiec61850client.cpp" line="1283"/>
+        <location filename="../page/pageiec61850client.cpp" line="1433"/>
         <source>Quality</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageiec61850client.cpp" line="1352"/>
+        <location filename="../page/pageiec61850client.cpp" line="1502"/>
         <source>Good</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageiec61850client.cpp" line="1360"/>
+        <location filename="../page/pageiec61850client.cpp" line="1510"/>
         <source>Read Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageiec61850client.cpp" line="1423"/>
+        <location filename="../page/pageiec61850client.cpp" line="1556"/>
+        <source>Write Failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../page/pageiec61850client.cpp" line="1557"/>
+        <source>Failed to write value to %1
+
+Object Reference: %2
+Functional Constraint: %3
+Data Type: %4
+
+Possible reasons:
+• The object may not support write operations
+• Wrong functional constraint (e.g., using MX instead of SP/CO)
+• Device may be in a state that prevents writing
+• Access control restrictions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../page/pageiec61850client.cpp" line="1594"/>
         <source>Connection Failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageiec61850client.cpp" line="1424"/>
+        <location filename="../page/pageiec61850client.cpp" line="1595"/>
         <source>Failed to connect to %1:%2
 
 Error: Connection Rejected
@@ -259,7 +279,7 @@ Troubleshooting steps:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pageiec61850client.cpp" line="1490"/>
+        <location filename="../page/pageiec61850client.cpp" line="1661"/>
         <source>Connected</source>
         <translation type="unfinished"></translation>
     </message>
@@ -356,6 +376,21 @@ Troubleshooting steps:
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../page/pageserialterminal.cpp" line="476"/>
+        <source>Copy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../page/pageserialterminal.cpp" line="477"/>
+        <source>Paste</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../page/pageserialterminal.cpp" line="478"/>
+        <source>Clear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../page/pageserialterminal.cpp" line="204"/>
         <location filename="../page/pageserialterminal.cpp" line="287"/>
         <location filename="../page/pageserialterminal.cpp" line="349"/>
@@ -403,21 +438,6 @@ Troubleshooting steps:
     <message>
         <location filename="../page/pageserialterminal.cpp" line="370"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../page/pageserialterminal.cpp" line="476"/>
-        <source>复制</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../page/pageserialterminal.cpp" line="477"/>
-        <source>粘贴</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../page/pageserialterminal.cpp" line="478"/>
-        <source>清空</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

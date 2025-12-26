@@ -473,9 +473,9 @@ void PageSerialTerminal::setupContextMenu()
 {
   contextMenu = new QMenu(this);
 
-  copyAction = new QAction(tr("复制"), this);
-  pasteAction = new QAction(tr("粘贴"), this);
-  clearAction = new QAction(tr("清空"), this);
+  copyAction = new QAction(tr("Copy"), this);
+  pasteAction = new QAction(tr("Paste"), this);
+  clearAction = new QAction(tr("Clear"), this);
 
   // 设置图标
   copyAction->setIcon(QIcon::fromTheme("edit-copy", style()->standardIcon(QStyle::SP_FileIcon)));
