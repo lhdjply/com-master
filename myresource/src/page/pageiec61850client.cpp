@@ -1,5 +1,4 @@
 #include "myresource.h"
-#include <QMessageBox>
 
 PageIEC61850Client::PageIEC61850Client(QWidget *parent)
   : QMainWindow(parent)
@@ -983,6 +982,10 @@ void PageIEC61850Client::buildDataModel()
 
   // Get logical devices
   QStringList logicalDevices = getLogicalDeviceList();
+
+  // Sort logical devices alphabetically
+  logicalDevices.sort();
+
   onDataModelLoadProgress(5, QString("找到 %1 个逻辑设备").arg(logicalDevices.size()));
 
   // Calculate total nodes across all devices for better progress calculation
@@ -991,6 +994,10 @@ void PageIEC61850Client::buildDataModel()
   for(const QString& device : logicalDevices)
   {
     QStringList logicalNodes = getLogicalNodeList(device);
+
+    // Sort logical nodes alphabetically
+    logicalNodes.sort();
+
     allDeviceNodes.append(logicalNodes);
     totalNodes += logicalNodes.size();
   }
@@ -1041,19 +1048,55 @@ void PageIEC61850Client::buildDataModel()
         dataObjects = getAllDataDirectories(nodeReference);
       }
 
-      // Sort data objects numerically
+      // Sort data objects numerically (remove FC prefix for comparison)
       QStringList sortedDataObjects = dataObjects;
+
       std::sort(sortedDataObjects.begin(), sortedDataObjects.end(), [](const QString & a, const QString & b)
       {
-        // Extract numeric parts for comparison
-        QRegularExpression re("(\\d+)");
-        QRegularExpressionMatch matchA = re.match(a);
-        QRegularExpressionMatch matchB = re.match(b);
+        // Remove FC prefix ($MX, $ST, etc.) for comparison
+        QString nameA = a.section("$", 0, 0);
+        QString nameB = b.section("$", 0, 0);
 
-        if(matchA.hasMatch() && matchB.hasMatch())
+        // Extract all numeric parts for comparison
+        QRegularExpression re("(\\d+)");
+        QRegularExpressionMatchIterator matchAIt = re.globalMatch(nameA);
+        QRegularExpressionMatchIterator matchBIt = re.globalMatch(nameB);
+
+        // Compare prefix before first number
+        int posA = 0, posB = 0;
+        if(matchAIt.hasNext())
         {
-          int numA = matchA.captured(1).toInt();
-          int numB = matchB.captured(1).toInt();
+          posA = matchAIt.peekNext().capturedStart();
+        }
+        if(matchBIt.hasNext())
+        {
+          posB = matchBIt.peekNext().capturedStart();
+        }
+
+        QString prefixA = nameA.left(posA);
+        QString prefixB = nameB.left(posB);
+
+        // If one has prefix and the other doesn't, use full string comparison
+        if(prefixA.isEmpty() && !prefixB.isEmpty())
+        {
+          return nameA < nameB;
+        }
+        if(!prefixA.isEmpty() && prefixB.isEmpty())
+        {
+          return nameA < nameB;
+        }
+
+        if(prefixA != prefixB)
+        {
+          return prefixA < prefixB;
+        }
+
+        // Compare numbers one by one
+        while(matchAIt.hasNext() && matchBIt.hasNext())
+        {
+          int numA = matchAIt.next().captured(1).toInt();
+          int numB = matchBIt.next().captured(1).toInt();
+
           if(numA != numB)
           {
             return numA < numB;
@@ -1061,7 +1104,7 @@ void PageIEC61850Client::buildDataModel()
         }
 
         // Fallback to string comparison if no numbers or numbers are equal
-        return a < b;
+        return nameA < nameB;
       });
 
       int objectCount = sortedDataObjects.size();
@@ -1153,14 +1196,18 @@ QTreeWidgetItem * PageIEC61850Client::addDataObject(QTreeWidgetItem* parentItem,
       subObjects = getAllDataDirectories(objectReference);
     }
 
-    // Sort sub-objects numerically
+    // Sort sub-objects numerically (remove FC prefix for comparison)
     QStringList sortedSubObjects = subObjects;
     std::sort(sortedSubObjects.begin(), sortedSubObjects.end(), [](const QString & a, const QString & b)
     {
+      // Remove FC prefix ($MX, $ST, etc.) for comparison
+      QString nameA = a.section("$", 0, 0);
+      QString nameB = b.section("$", 0, 0);
+
       // Extract numeric parts for comparison
       QRegularExpression re("(\\d+)");
-      QRegularExpressionMatch matchA = re.match(a);
-      QRegularExpressionMatch matchB = re.match(b);
+      QRegularExpressionMatch matchA = re.match(nameA);
+      QRegularExpressionMatch matchB = re.match(nameB);
 
       if(matchA.hasMatch() && matchB.hasMatch())
       {
@@ -1173,7 +1220,7 @@ QTreeWidgetItem * PageIEC61850Client::addDataObject(QTreeWidgetItem* parentItem,
       }
 
       // Fallback to string comparison if no numbers or numbers are equal
-      return a < b;
+      return nameA < nameB;
     });
 
     for(const QString& subObject : sortedSubObjects)
