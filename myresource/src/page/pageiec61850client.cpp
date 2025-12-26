@@ -1,4 +1,5 @@
 #include "myresource.h"
+#include <QMessageBox>
 
 PageIEC61850Client::PageIEC61850Client(QWidget *parent)
   : QMainWindow(parent)
@@ -329,8 +330,8 @@ bool PageIEC61850Client::connect(const QString& hostname, int port)
   // Pre-load logical nodes for better UX
   for(const QString& device : m_logicalDevices)
   {
-    LinkedList nodes = IedConnection_getLogicalNodeDirectory(m_connection, &error, device.toStdString().c_str(),
-                                                             ACSI_CLASS_DATA_OBJECT);
+    // Use getLogicalDeviceDirectory to get all logical nodes in the device
+    LinkedList nodes = IedConnection_getLogicalDeviceDirectory(m_connection, &error, device.toStdString().c_str());
     if(error == IED_ERROR_OK)
     {
       QStringList nodeList;
@@ -344,6 +345,11 @@ bool PageIEC61850Client::connect(const QString& hostname, int port)
       LinkedList_destroy(nodes);
     }
   }
+
+  // Release the mutex before calling onConnectionStateChanged to avoid deadlock
+  // since onConnectionStateChanged will call refreshDataModel() which calls isConnected()
+  // that also tries to lock the mutex
+  locker.unlock();
 
   onConnectionStateChanged(true);
 
@@ -1396,6 +1402,7 @@ void PageIEC61850Client::writeValue()
 void PageIEC61850Client::showConnectionDialog()
 {
   PageConnectionDialog dialog(this);
+
   if(dialog.exec() == QDialog::Accepted)
   {
     QString hostname = dialog.getHostname();
@@ -1409,6 +1416,24 @@ void PageIEC61850Client::performConnection(const QString& hostname, int port)
   if(connect(hostname, port))
   {
     onConnectionStateChanged(true);
+  }
+  else
+  {
+    QMessageBox::critical(this,
+                         tr("Connection Failed"),
+                         tr("Failed to connect to %1:%2\n\n"
+                            "Error: Connection Rejected\n\n"
+                            "Possible reasons:\n"
+                            "• No IEC61850 server is running on this port\n"
+                            "• The port is being used by another application\n"
+                            "• Firewall is blocking the connection\n\n"
+                            "Troubleshooting steps:\n"
+                            "1. Check if an IEC61850 server is running on the target device\n"
+                            "2. Verify the port number (default is 102 for MMS)\n"
+                            "3. Check network connectivity: ping %1\n"
+                            "4. Check firewall settings\n"
+                            "5. Try using a different port if the server is configured differently")
+                         .arg(hostname).arg(port));
   }
 }
 

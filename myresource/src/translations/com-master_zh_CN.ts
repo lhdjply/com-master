@@ -105,137 +105,175 @@
 <context>
     <name>PageIEC61850Client</name>
     <message>
-        <location filename="../page/pageiec61850client.cpp" line="30"/>
+        <location filename="../page/pageiec61850client.cpp" line="31"/>
         <source>IEC61850 Client</source>
         <translation type="unfinished">IEC61850 客户端</translation>
     </message>
     <message>
-        <location filename="../page/pageiec61850client.cpp" line="200"/>
+        <location filename="../page/pageiec61850client.cpp" line="201"/>
         <source>Data Model</source>
         <translation type="unfinished">数据模型</translation>
     </message>
     <message>
-        <location filename="../page/pageiec61850client.cpp" line="232"/>
+        <location filename="../page/pageiec61850client.cpp" line="233"/>
         <source>Connect</source>
         <translation type="unfinished">连接</translation>
     </message>
     <message>
-        <location filename="../page/pageiec61850client.cpp" line="233"/>
+        <location filename="../page/pageiec61850client.cpp" line="234"/>
         <source>Connect to IEC61850 device</source>
         <translation type="unfinished">连接到IEC61850设备</translation>
     </message>
     <message>
-        <location filename="../page/pageiec61850client.cpp" line="235"/>
+        <location filename="../page/pageiec61850client.cpp" line="236"/>
         <source>Disconnect</source>
         <translation type="unfinished">断开连接</translation>
     </message>
     <message>
-        <location filename="../page/pageiec61850client.cpp" line="236"/>
+        <location filename="../page/pageiec61850client.cpp" line="237"/>
         <source>Disconnect from device</source>
         <translation type="unfinished">从设备断开连接</translation>
     </message>
     <message>
-        <location filename="../page/pageiec61850client.cpp" line="239"/>
-        <location filename="../page/pageiec61850client.cpp" line="964"/>
+        <location filename="../page/pageiec61850client.cpp" line="240"/>
+        <location filename="../page/pageiec61850client.cpp" line="970"/>
         <source>Refresh</source>
         <translation type="unfinished">刷新</translation>
     </message>
     <message>
-        <location filename="../page/pageiec61850client.cpp" line="240"/>
+        <location filename="../page/pageiec61850client.cpp" line="241"/>
         <source>Refresh data model</source>
         <translation type="unfinished">刷新数据模型</translation>
     </message>
     <message>
-        <location filename="../page/pageiec61850client.cpp" line="264"/>
-        <location filename="../page/pageiec61850client.cpp" line="1470"/>
+        <location filename="../page/pageiec61850client.cpp" line="265"/>
+        <location filename="../page/pageiec61850client.cpp" line="1495"/>
         <source>Disconnected</source>
         <translation type="unfinished">已断开连接</translation>
     </message>
     <message>
-        <location filename="../page/pageiec61850client.cpp" line="935"/>
-        <location filename="../page/pageiec61850client.cpp" line="1099"/>
+        <location filename="../page/pageiec61850client.cpp" line="941"/>
+        <location filename="../page/pageiec61850client.cpp" line="1105"/>
         <source>IEC61850 Device</source>
         <translation type="unfinished">IEC61850设备</translation>
     </message>
     <message>
-        <location filename="../page/pageiec61850client.cpp" line="952"/>
-        <location filename="../page/pageiec61850client.cpp" line="1268"/>
+        <location filename="../page/pageiec61850client.cpp" line="958"/>
+        <location filename="../page/pageiec61850client.cpp" line="1274"/>
         <source>Read Value</source>
         <translation type="unfinished">读取值</translation>
     </message>
     <message>
-        <location filename="../page/pageiec61850client.cpp" line="954"/>
-        <location filename="../page/pageiec61850client.cpp" line="1261"/>
+        <location filename="../page/pageiec61850client.cpp" line="960"/>
+        <location filename="../page/pageiec61850client.cpp" line="1267"/>
         <source>Write Value</source>
         <translation type="unfinished">写入值</translation>
     </message>
     <message>
-        <location filename="../page/pageiec61850client.cpp" line="956"/>
+        <location filename="../page/pageiec61850client.cpp" line="962"/>
         <source>Control Object</source>
         <translation type="unfinished">控制对象</translation>
     </message>
     <message>
-        <location filename="../page/pageiec61850client.cpp" line="960"/>
+        <location filename="../page/pageiec61850client.cpp" line="966"/>
         <source>Create Data Set</source>
         <translation type="unfinished">创建数据集</translation>
     </message>
     <message>
-        <location filename="../page/pageiec61850client.cpp" line="1229"/>
+        <location filename="../page/pageiec61850client.cpp" line="1235"/>
         <source>Object Information</source>
         <translation type="unfinished">对象信息</translation>
     </message>
     <message>
-        <location filename="../page/pageiec61850client.cpp" line="1236"/>
+        <location filename="../page/pageiec61850client.cpp" line="1242"/>
         <source>Object Reference:</source>
         <translation type="unfinished">对象引用：</translation>
     </message>
     <message>
-        <location filename="../page/pageiec61850client.cpp" line="1240"/>
+        <location filename="../page/pageiec61850client.cpp" line="1246"/>
         <source>Data Type:</source>
         <translation type="unfinished">数据类型：</translation>
     </message>
     <message>
-        <location filename="../page/pageiec61850client.cpp" line="1244"/>
+        <location filename="../page/pageiec61850client.cpp" line="1250"/>
         <source>Current Value:</source>
         <translation type="unfinished">当前值：</translation>
     </message>
     <message>
-        <location filename="../page/pageiec61850client.cpp" line="1249"/>
+        <location filename="../page/pageiec61850client.cpp" line="1255"/>
         <source>Operations</source>
         <translation type="unfinished">操作</translation>
     </message>
     <message>
-        <location filename="../page/pageiec61850client.cpp" line="1258"/>
+        <location filename="../page/pageiec61850client.cpp" line="1264"/>
         <source>Enter value to write...</source>
         <translation type="unfinished">输入要写入的值...</translation>
     </message>
     <message>
-        <location filename="../page/pageiec61850client.cpp" line="1277"/>
+        <location filename="../page/pageiec61850client.cpp" line="1283"/>
         <source>Timestamp</source>
         <translation type="unfinished">时间戳</translation>
     </message>
     <message>
-        <location filename="../page/pageiec61850client.cpp" line="1277"/>
+        <location filename="../page/pageiec61850client.cpp" line="1283"/>
         <source>Value</source>
         <translation type="unfinished">值</translation>
     </message>
     <message>
-        <location filename="../page/pageiec61850client.cpp" line="1277"/>
+        <location filename="../page/pageiec61850client.cpp" line="1283"/>
         <source>Quality</source>
         <translation type="unfinished">质量</translation>
     </message>
     <message>
-        <location filename="../page/pageiec61850client.cpp" line="1346"/>
+        <location filename="../page/pageiec61850client.cpp" line="1352"/>
         <source>Good</source>
         <translation type="unfinished">良好</translation>
     </message>
     <message>
-        <location filename="../page/pageiec61850client.cpp" line="1354"/>
+        <location filename="../page/pageiec61850client.cpp" line="1360"/>
         <source>Read Error</source>
         <translation type="unfinished">读取错误</translation>
     </message>
     <message>
-        <location filename="../page/pageiec61850client.cpp" line="1465"/>
+        <location filename="../page/pageiec61850client.cpp" line="1423"/>
+        <source>Connection Failed</source>
+        <translation type="unfinished">连接失败</translation>
+    </message>
+    <message>
+        <location filename="../page/pageiec61850client.cpp" line="1424"/>
+        <source>Failed to connect to %1:%2
+
+Error: Connection Rejected
+
+Possible reasons:
+• No IEC61850 server is running on this port
+• The port is being used by another application
+• Firewall is blocking the connection
+
+Troubleshooting steps:
+1. Check if an IEC61850 server is running on the target device
+2. Verify the port number (default is 102 for MMS)
+3. Check network connectivity: ping %1
+4. Check firewall settings
+5. Try using a different port if the server is configured differently</source>
+        <translation type="unfinished">无法连接到 %1:%2
+
+错误：连接被拒绝
+
+可能的原因：
+• 此端口上没有运行 IEC61850 服务器
+• 该端口正被其他应用程序使用
+• 防火墙阻止了连接
+
+故障排除步骤：
+1. 检查目标设备上是否运行了 IEC61850 服务器
+2. 验证端口号（MMS 默认为 102）
+3. 检查网络连接：ping %1
+4. 检查防火墙设置
+5. 如果服务器配置不同，请尝试使用其他端口</translation>
+    </message>
+    <message>
+        <location filename="../page/pageiec61850client.cpp" line="1490"/>
         <source>Connected</source>
         <translation type="unfinished">已连接</translation>
     </message>
