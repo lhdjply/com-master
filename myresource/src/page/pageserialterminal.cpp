@@ -449,6 +449,18 @@ void PageSerialTerminal::handleTimeout()
       {
         isSerial_Open = false;
         openbutton->setText(tr("Open"));
+        openbutton->setStyleSheet(QString::fromUtf8(
+          "QPushButton {\n"
+          "    background-color: #27ae60;\n"
+          "    padding: 10px;\n"
+          "}\n"
+          "QPushButton:hover {\n"
+          "    background-color: #219653;\n"
+          "}\n"
+          "QPushButton:pressed {\n"
+          "    background-color: #1e874b;\n"
+          "}"
+        ));
         serialPort.close();
         qDebug() << "串口被拔除，已自动关闭";
       }
