@@ -678,6 +678,12 @@ void PageSshClient::authenticateWithTerminalCredentials(const QString &username,
 {
   int rc;
 
+  // 设置用户名到SSH会话选项
+  if(!username.isEmpty())
+  {
+    ssh_options_set(session, SSH_OPTIONS_USER, username.toUtf8().constData());
+  }
+
   // 首先尝试"none"认证，查看服务器支持哪些认证方法
   rc = ssh_userauth_none(session, nullptr);
 
