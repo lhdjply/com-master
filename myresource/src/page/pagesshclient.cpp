@@ -360,18 +360,25 @@ void PageSshClient::onTerminalDataReceived(const QByteArray &data)
         // 认证失败后状态会保持在 WAITING_FOR_PASSWORD，允许重新输入密码
       }
     }
-    else if(input == "\x7f" || input == "\b")
+    else if(input == "\x7f" || input == "\b" || input == "\x1b[3~")
     {
-      // 退格键
+      // 退格键或Delete键
       if(*m_currentAuthState == WAITING_FOR_USERNAME)
       {
-        m_usernameInput->chop(1);
+        if(!m_usernameInput->isEmpty())
+        {
+          m_usernameInput->chop(1);
+          writeToTerminal("\b \b");
+        }
       }
       else if(*m_currentAuthState == WAITING_FOR_PASSWORD)
       {
-        m_passwordInput->chop(1);
+        if(!m_passwordInput->isEmpty())
+        {
+          m_passwordInput->chop(1);
+          writeToTerminal("\b \b");
+        }
       }
-      writeToTerminal("\b \b");
     }
     else
     {
