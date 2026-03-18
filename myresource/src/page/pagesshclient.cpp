@@ -382,6 +382,24 @@ void PageSshClient::onTerminalDataReceived(const QByteArray &data)
     }
     else
     {
+      // 过滤掉特殊键：空输入、转义序列、控制字符
+      // 只接受可打印字符（ASCII 32-126 或 Unicode > 127 的字符如中文）
+      if(input.isEmpty() || input.startsWith('\x1b'))
+      {
+        return;
+      }
+
+      // 检查每个字符是否可打印
+      for(int i = 0; i < input.length(); ++i)
+      {
+        ushort unicode = input[i].unicode();
+        if(unicode < 32 || (unicode >= 127 && unicode < 160))
+        {
+          // 控制字符或不可打印字符，忽略整个输入
+          return;
+        }
+      }
+
       // 普通字符输入
       if(*m_currentAuthState == WAITING_FOR_USERNAME)
       {
