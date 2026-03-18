@@ -67,6 +67,14 @@ void PageTabContent::setupUi()
   // 添加底部弹簧
   mainLayout->addStretch(1);
 
+  // 添加版本号标签（页面底部居中）
+  QLabel *versionLabel = new QLabel(QString("v%1").arg(PROJECT_VERSION));
+  versionLabel->setAlignment(Qt::AlignCenter);
+  versionLabel->setStyleSheet("QLabel { color: #7f8c8d; font-size: 14px; }");
+  mainLayout->addSpacing(10);
+  mainLayout->addWidget(versionLabel);
+  mainLayout->addSpacing(10);
+
   // 设置整体布局
   setLayout(mainLayout);
 
