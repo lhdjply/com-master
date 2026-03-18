@@ -1,10 +1,10 @@
 <RCC>
     <qresource prefix="/">
-        <file>icons/iec61850_client.png</file>
-        <file>icons/serial_terminal.png</file>
-        <file>icons/serial_transceiver.png</file>
-        <file>icons/ssh_terminal.png</file>
-        <file>icons/window.png</file>
+        <file>icons/iec61850_client.svg</file>
+        <file>icons/serial_terminal.svg</file>
+        <file>icons/serial_transceiver.svg</file>
+        <file>icons/ssh_terminal.svg</file>
+        <file>icons/window.svg</file>
         <file>icons/linux/hicolor/16x16/apps/com-master.png</file>
         <file>icons/linux/hicolor/22x22/apps/com-master.png</file>
         <file>icons/linux/hicolor/32x32/apps/com-master.png</file>

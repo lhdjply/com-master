@@ -63,7 +63,7 @@ void PageMainWindow::addNewTab()
   int tabIndex = tabWidget->addTab(newTab, tr("Function selection"));
   tabWidget->setTabToolTip(tabIndex, tr("Function selection"));
   tabWidget->setCurrentIndex(tabIndex); // 切换到新标签
-  tabWidget->setTabIcon(tabIndex, QIcon(":/icons/window.png")); // 设置标签图标
+  tabWidget->setTabIcon(tabIndex, QIcon(":/icons/window.svg")); // 设置标签图标
 
   // 当标签页数量大于1时显示关闭按钮，否则隐藏
   tabWidget->setTabsClosable(tabWidget->count() > 1);
@@ -110,27 +110,27 @@ void PageMainWindow::opentoolpage(const QString &buttonName)
   if(buttonName.compare(tr("Serial Transceiver")) == 0)
   {
     PageSerialTransceiver *newTab = new PageSerialTransceiver();
-    tabIcon = QIcon(":/icons/serial_transceiver.png"); // 串口收发器图标路径
+    tabIcon = QIcon(":/icons/serial_transceiver.svg"); // 串口收发器图标路径
     tabWidget->insertTab(tabIndex, newTab, tabIcon, buttonName);
   }
   else if(buttonName.compare(tr("Serial Terminal")) == 0)
   {
     PageSerialTerminal *newTab = new PageSerialTerminal();
-    tabIcon = QIcon(":/icons/serial_terminal.png"); // 串口终端图标路径
+    tabIcon = QIcon(":/icons/serial_terminal.svg"); // 串口终端图标路径
     tabWidget->insertTab(tabIndex, newTab, tabIcon, buttonName);
   }
   else if(buttonName.compare(tr("IEC61850 Client")) == 0)
   {
     PageIEC61850Client *newTab = new PageIEC61850Client();
     newTab->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    tabIcon = QIcon(":/icons/iec61850_client.png"); // 61850图标路径
+    tabIcon = QIcon(":/icons/iec61850_client.svg"); // 61850图标路径
     tabWidget->insertTab(tabIndex, newTab, tabIcon, buttonName);
   }
   else if(buttonName.compare(tr("SSH Client")) == 0)
   {
     PageSshClient *newTab = new PageSshClient();
     newTab->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    tabIcon = QIcon(":/icons/ssh_terminal.png"); // ssh终端图标路径
+    tabIcon = QIcon(":/icons/ssh_terminal.svg"); // ssh终端图标路径
     tabWidget->insertTab(tabIndex, newTab, tabIcon, buttonName);
   }
   tabWidget->setTabToolTip(tabIndex, buttonName);

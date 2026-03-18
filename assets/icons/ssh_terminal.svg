@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   version="1.1"
+   id="svg1"
+   width="200"
+   height="200"
+   viewBox="0 0 200 200"
+   sodipodi:docname="ssh_terminal.svg"
+   inkscape:version="1.4 (e7c3feb100, 2024-10-09)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1">
+    <inkscape:path-effect
+       effect="fill_between_many"
+       method="originald"
+       linkedpaths="#path3,0,1|#path4,0,1|#rect1,0,1|#rect1-1,0,1|"
+       id="path-effect4" />
+  </defs>
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="5.6568543"
+     inkscape:cx="82.643105"
+     inkscape:cy="27.311999"
+     inkscape:window-width="2560"
+     inkscape:window-height="1320"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg1" />
+  <path
+     id="rect1-1"
+     style="display:inline;fill:#5a5a5a;fill-opacity:1;stroke-width:0.574891"
+     inkscape:highlight-color="#353535"
+     inkscape:label="rect1"
+     d="M 100.45036,0.36217324 V 199.84068 H 28.819501 c -15.512,0 -28.00000071,-12.488 -28.00000071,-28 V 28.362173 c 0,-15.512 12.48800071,-27.99999976 28.00000071,-27.99999976 z"
+     transform="matrix(1.0063965,0,0,1,-0.68891116,0)" />
+  <path
+     id="rect1"
+     style="display:inline;fill:#383837;fill-opacity:0.996078;stroke-width:0.574891"
+     inkscape:highlight-color="#353535"
+     inkscape:label="rect1"
+     d="M 100.4082,0.35351562 V 199.83203 h 71.63086 c 15.512,0 28,-12.488 28,-28 V 28.353516 c 0,-15.512 -12.488,-28.00000038 -28,-28.00000038 z"
+     transform="matrix(0.99896061,0,0,1,0.10436105,0.02209708)" />
+  <path
+     id="path3"
+     style="display:inline;fill:#f77844;fill-opacity:1;stroke-width:0.574891"
+     inkscape:highlight-color="#353535"
+     inkscape:label="rect1"
+     d="M 28.820312,0.36132812 C 13.693078,0.36132813 1.4754216,12.247395 0.87695312,27.222656 H 100.45117 V 0.36132812 Z"
+     transform="matrix(1.0062767,0,0,1,-0.67769229,8.4512e-4)" />
+  <path
+     id="path4"
+     style="display:inline;fill:#d6572a;fill-opacity:1;stroke-width:0.574891"
+     inkscape:highlight-color="#353535"
+     inkscape:label="rect1"
+     d="M 100.4082,0.35351562 V 27.222656 h 99.57422 C 199.38832,12.243328 187.1692,0.35351562 172.03906,0.35351562 Z"
+     transform="translate(-2.228998e-6,8.4512e-4)" />
+  <text
+     xml:space="preserve"
+     style="font-size:73.3393px;line-height:0;font-family:'DejaVu Serif';-inkscape-font-specification:'DejaVu Serif';text-align:start;letter-spacing:0px;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#f77844;fill-opacity:1;stroke-width:2.07892"
+     x="49.958195"
+     y="79.151733"
+     id="text6"
+     transform="scale(0.75939589,1.3168362)"><tspan
+       sodipodi:role="line"
+       id="tspan6"
+       x="49.958195"
+       y="79.151733"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:'DejaVu Serif';-inkscape-font-specification:'DejaVu Serif Bold';fill:#ffffff;fill-opacity:1;stroke-width:2.07892">&gt;</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:127.314px;line-height:0;font-family:'DejaVu Serif';-inkscape-font-specification:'DejaVu Serif Bold';text-align:start;letter-spacing:0px;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke-width:3.60892"
+     x="77.849159"
+     y="134.85808"
+     id="text7"
+     transform="scale(1.0556354,0.94729678)"><tspan
+       sodipodi:role="line"
+       id="tspan7"
+       x="77.849159"
+       y="134.85808"
+       style="stroke-width:3.60892">-</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:54.8382px;line-height:0;font-family:'DejaVu Serif';-inkscape-font-specification:'DejaVu Serif Bold';text-align:start;letter-spacing:0px;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke-width:1.55448"
+     x="44.567608"
+     y="165.6178"
+     id="text8"
+     transform="scale(0.95748039,1.0444078)"><tspan
+       sodipodi:role="line"
+       id="tspan8"
+       x="44.567608"
+       y="165.6178"
+       style="stroke-width:1.55448">SSH</tspan></text>
+</svg>

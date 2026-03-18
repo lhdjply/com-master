@@ -19,28 +19,28 @@ void PageTabContent::setupUi()
 
   // 创建收发器按钮
   transceiverButton = new QToolButton();
-  transceiverButton->setIcon(QIcon(":/icons/serial_transceiver.png")); // 设置图标
+  transceiverButton->setIcon(QIcon(":/icons/serial_transceiver.svg")); // 设置图标
   transceiverButton->setIconSize(QSize(150, 150)); // 设置图标大小
   transceiverButton->setText(tr("Serial Transceiver"));
   transceiverButton->setToolButtonStyle(Qt::ToolButtonTextUnderIcon); // 字在图标下面
 
   // 创建终端按钮
   terminalButton = new QToolButton();
-  terminalButton->setIcon(QIcon(":/icons/serial_terminal.png")); // 设置图标
+  terminalButton->setIcon(QIcon(":/icons/serial_terminal.svg")); // 设置图标
   terminalButton->setIconSize(QSize(150, 150)); // 设置图标大小
   terminalButton->setText(tr("Serial Terminal"));
   terminalButton->setToolButtonStyle(Qt::ToolButtonTextUnderIcon); // 字在图标下面
 
   // 创建IEC61850按钮
   iec61850Button = new QToolButton();
-  iec61850Button->setIcon(QIcon(":/icons/iec61850_client.png")); // 设置图标
+  iec61850Button->setIcon(QIcon(":/icons/iec61850_client.svg")); // 设置图标
   iec61850Button->setIconSize(QSize(150, 150)); // 设置图标大小
   iec61850Button->setText(tr("IEC61850 Client"));
   iec61850Button->setToolButtonStyle(Qt::ToolButtonTextUnderIcon); // 字在图标下面
 
   // 创建SSH客户端按钮
   QToolButton *sshClientButton = new QToolButton();
-  sshClientButton->setIcon(QIcon(":/icons/ssh_terminal.png")); // 设置图标
+  sshClientButton->setIcon(QIcon(":/icons/ssh_terminal.svg")); // 设置图标
   sshClientButton->setIconSize(QSize(150, 150)); // 设置图标大小
   sshClientButton->setText(tr("SSH Client"));
   sshClientButton->setToolButtonStyle(Qt::ToolButtonTextUnderIcon); // 字在图标下面
