@@ -1,3 +1,16 @@
+com-master (1.0.1) unstable; urgency=medium
+
+  * 修复61850无法连接问题.
+  * 修复61850排序.
+  * 修复61850写入问题.
+  * 当检测到串口被意外拔除时，现在会同时更新按钮颜色变回绿色.
+  * 修复ssh请输入用户名可以被删除问题.
+  * 修复请输入密码 特殊按键也会被记录.
+  * 修复终端输出密码错误问题.
+  * 增加版本号显示.
+
+ -- lhdjply <lhdjply@126.com>  Mon, 5 Jan 2026 11:05:04 +0800
+
 com-master (1.0.0) unstable; urgency=medium
 
   * New release.
