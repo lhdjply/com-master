@@ -10,8 +10,8 @@ void PageMainWindow::setupUi()
 {
   // 窗口属性
   this->setWindowTitle(tr("com-master"));
-  this->resize(1100, 700);
-  this->setMinimumSize(1100, 700);
+  this->resize(1200, 700);
+  this->setMinimumSize(1200, 700);
   this->setLayoutDirection(Qt::LeftToRight);
 
   // 创建中心部件和主布局
@@ -131,6 +131,13 @@ void PageMainWindow::opentoolpage(const QString &buttonName)
     PageSshClient *newTab = new PageSshClient();
     newTab->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     tabIcon = QIcon(":/icons/ssh_terminal.svg"); // ssh终端图标路径
+    tabWidget->insertTab(tabIndex, newTab, tabIcon, buttonName);
+  }
+  else if(buttonName.compare(tr("Network Tool")) == 0)
+  {
+    PageNetworkTool *newTab = new PageNetworkTool();
+    newTab->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    tabIcon = QIcon(":/icons/network_tool.svg"); // 使用网络工具图标
     tabWidget->insertTab(tabIndex, newTab, tabIcon, buttonName);
   }
   tabWidget->setTabToolTip(tabIndex, buttonName);

@@ -45,11 +45,19 @@ void PageTabContent::setupUi()
   sshClientButton->setText(tr("SSH Client"));
   sshClientButton->setToolButtonStyle(Qt::ToolButtonTextUnderIcon); // 字在图标下面
 
+  // 创建网络工具按钮
+  QToolButton *networkToolButton = new QToolButton();
+  networkToolButton->setIcon(QIcon(":/icons/network_tool.svg")); // 使用网络工具图标
+  networkToolButton->setIconSize(QSize(150, 150)); // 设置图标大小
+  networkToolButton->setText(tr("Network Tool"));
+  networkToolButton->setToolButtonStyle(Qt::ToolButtonTextUnderIcon); // 字在图标下面
+
   QString transparentStyle = "QToolButton { background: transparent; border: none; }";
   transceiverButton->setStyleSheet(transparentStyle);
   terminalButton->setStyleSheet(transparentStyle);
   iec61850Button->setStyleSheet(transparentStyle);
   sshClientButton->setStyleSheet(transparentStyle);
+  networkToolButton->setStyleSheet(transparentStyle);
 
   // 添加按钮到布局
   buttonLayout->addWidget(transceiverButton);
@@ -59,6 +67,8 @@ void PageTabContent::setupUi()
   buttonLayout->addWidget(iec61850Button);
   buttonLayout->addSpacing(30); // 按钮间距
   buttonLayout->addWidget(sshClientButton);
+  buttonLayout->addSpacing(30); // 按钮间距
+  buttonLayout->addWidget(networkToolButton);
   buttonLayout->setAlignment(Qt::AlignCenter);
 
   // 将按钮布局添加到主布局
@@ -97,5 +107,10 @@ void PageTabContent::setupUi()
   connect(sshClientButton, &QPushButton::clicked, [ = ]()
   {
     emit buttonClicked(sshClientButton->text());
+  });
+
+  connect(networkToolButton, &QPushButton::clicked, [ = ]()
+  {
+    emit buttonClicked(networkToolButton->text());
   });
 }

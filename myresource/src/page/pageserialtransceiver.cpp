@@ -482,6 +482,7 @@ void PageSerialTransceiver::setupUi()
   clearreceive->setObjectName(QString::fromUtf8("clearreceive"));
 
   horizontalLayout->addWidget(clearreceive);
+  horizontalLayout->addStretch();
 
   verticalLayout_5->addLayout(horizontalLayout);
 
@@ -561,6 +562,7 @@ void PageSerialTransceiver::setupUi()
   horizontalLayout_8->addWidget(label_7);
 
   horizontalLayout_9->addWidget(frame_3);
+  horizontalLayout_9->addStretch();
 
   verticalLayout_6->addLayout(horizontalLayout_9);
 
