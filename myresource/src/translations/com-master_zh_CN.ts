@@ -237,7 +237,7 @@
     <message>
         <location filename="../page/pageiec61850client.cpp" line="1556"/>
         <source>Write Failed</source>
-        <translation>写入失败</translation>
+        <translation type="unfinished">写入失败</translation>
     </message>
     <message>
         <location filename="../page/pageiec61850client.cpp" line="1557"/>
@@ -346,6 +346,346 @@ Troubleshooting steps:
         <source>SSH Client</source>
         <translation type="unfinished">SSH 客户端</translation>
     </message>
+    <message>
+        <location filename="../page/pagemain.cpp" line="136"/>
+        <source>Network Tool</source>
+        <translation type="unfinished">网络工具</translation>
+    </message>
+</context>
+<context>
+    <name>PageNetworkTool</name>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="167"/>
+        <source>TCP Server</source>
+        <translation type="unfinished">TCP 服务器</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="168"/>
+        <source>TCP Client</source>
+        <translation type="unfinished">TCP 客户端</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="169"/>
+        <source>UDP</source>
+        <translation type="unfinished">UDP</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="172"/>
+        <source>Protocol:</source>
+        <translation type="unfinished">协议：</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="179"/>
+        <source>TCP Server Configuration</source>
+        <translation type="unfinished">TCP 服务器配置</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="183"/>
+        <location filename="../page/pagenetworktool.cpp" line="229"/>
+        <location filename="../page/pagenetworktool.cpp" line="298"/>
+        <source>Port:</source>
+        <translation type="unfinished">端口：</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="187"/>
+        <location filename="../page/pagenetworktool.cpp" line="271"/>
+        <source>Start</source>
+        <translation type="unfinished">启动</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="190"/>
+        <location filename="../page/pagenetworktool.cpp" line="274"/>
+        <source>Stop</source>
+        <translation type="unfinished">停止</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="194"/>
+        <location filename="../page/pagenetworktool.cpp" line="278"/>
+        <location filename="../page/pagenetworktool.cpp" line="697"/>
+        <location filename="../page/pagenetworktool.cpp" line="962"/>
+        <source>Status: Stopped</source>
+        <translation type="unfinished">状态：已停止</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="217"/>
+        <source>Clients:</source>
+        <translation type="unfinished">客户端：</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="221"/>
+        <source>TCP Client Configuration</source>
+        <translation type="unfinished">TCP 客户端配置</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="225"/>
+        <source>Server IP:</source>
+        <translation type="unfinished">服务器 IP：</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="233"/>
+        <source>Connect</source>
+        <translation type="unfinished">连接</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="235"/>
+        <source>Disconnect</source>
+        <translation type="unfinished">断开连接</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="238"/>
+        <location filename="../page/pagenetworktool.cpp" line="1144"/>
+        <source>Status: Disconnected</source>
+        <translation type="unfinished">状态：已断开</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="262"/>
+        <source>UDP Configuration</source>
+        <translation type="unfinished">UDP 配置</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="267"/>
+        <source>Local Port:</source>
+        <translation type="unfinished">本地端口：</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="294"/>
+        <source>Remote IP:</source>
+        <translation type="unfinished">远程 IP：</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="319"/>
+        <source>Recent Endpoints:</source>
+        <translation type="unfinished">最近端点：</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="328"/>
+        <source>Log</source>
+        <translation type="unfinished">日志</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="338"/>
+        <source>Clear</source>
+        <translation type="unfinished">清空</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="340"/>
+        <source>Save</source>
+        <translation type="unfinished">保存</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="356"/>
+        <source>Send Data</source>
+        <translation type="unfinished">发送区</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="361"/>
+        <location filename="../page/pagenetworktool.cpp" line="448"/>
+        <source>Hex</source>
+        <translation type="unfinished">16进制</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="371"/>
+        <source>Broadcast</source>
+        <translation type="unfinished">广播</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="373"/>
+        <source>Send to Selected</source>
+        <translation type="unfinished">发送到选中</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="376"/>
+        <location filename="../page/pagenetworktool.cpp" line="379"/>
+        <source>Send</source>
+        <translation type="unfinished">发送</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="383"/>
+        <location filename="../page/pagenetworktool.cpp" line="404"/>
+        <location filename="../page/pagenetworktool.cpp" line="407"/>
+        <source>Auto Send</source>
+        <translation type="unfinished">自动发送</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="392"/>
+        <source>Send duty:</source>
+        <translation type="unfinished">发送周期：</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="410"/>
+        <source>Verification</source>
+        <translation type="unfinished">校验</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="426"/>
+        <source>Clear Send</source>
+        <translation type="unfinished">清除发送区</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="435"/>
+        <source>Received Data</source>
+        <translation type="unfinished">接收区</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="449"/>
+        <source>Display send</source>
+        <translation type="unfinished">显示发送</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="450"/>
+        <source>Display time</source>
+        <translation type="unfinished">显示时间</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="451"/>
+        <source>Frame line break</source>
+        <translation type="unfinished">帧换行</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="452"/>
+        <source>Clear Receive</source>
+        <translation type="unfinished">清空接收区</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="665"/>
+        <source>Status: Running on port %1</source>
+        <translation type="unfinished">状态：运行在端口 %1</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="666"/>
+        <source>TCP Server started on port %1</source>
+        <translation type="unfinished">TCP 服务器已在端口 %1 启动</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="670"/>
+        <source>Failed to start server: %1</source>
+        <translation type="unfinished">启动服务器失败：%1</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="698"/>
+        <source>TCP Server stopped</source>
+        <translation type="unfinished">TCP 服务器已停止</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="711"/>
+        <source>New TCP client connected: %1:%2</source>
+        <translation type="unfinished">新的 TCP 客户端已连接：%1:%2</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="728"/>
+        <source>TCP client disconnected: %1:%2</source>
+        <translation type="unfinished">TCP 客户端已断开：%1:%2</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="779"/>
+        <source>TCP Broadcast sent to %1 clients</source>
+        <translation type="unfinished">TCP 广播已发送到 %1 个客户端</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="804"/>
+        <source>TCP Data sent to %1 selected clients</source>
+        <translation type="unfinished">TCP 数据已发送到 %1 个选中的客户端</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="823"/>
+        <source>Connecting to TCP server %1:%2...</source>
+        <translation type="unfinished">正在连接到 TCP 服务器 %1:%2...</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="838"/>
+        <source>Connected to TCP server</source>
+        <translation type="unfinished">已连接到 TCP 服务器</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="854"/>
+        <source>Disconnected from TCP server</source>
+        <translation type="unfinished">已从 TCP 服务器断开</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="886"/>
+        <source>TCP Socket error: %1</source>
+        <translation type="unfinished">TCP Socket 错误：%1</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="907"/>
+        <source>TCP Sent %1 bytes</source>
+        <translation type="unfinished">TCP 已发送 %1 字节</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="909"/>
+        <source>Failed to send TCP data</source>
+        <translation type="unfinished">发送 TCP 数据失败</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="927"/>
+        <source>Status: Listening on port %1</source>
+        <translation type="unfinished">状态：正在监听端口 %1</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="928"/>
+        <source>UDP started on port %1</source>
+        <translation type="unfinished">UDP 已在端口 %1 启动</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="941"/>
+        <source>Failed to start UDP: %1</source>
+        <translation type="unfinished">启动 UDP 失败：%1</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="963"/>
+        <source>UDP stopped</source>
+        <translation type="unfinished">UDP 已停止</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="1015"/>
+        <source>Please start UDP first</source>
+        <translation type="unfinished">请先启动 UDP</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="1032"/>
+        <source>UDP Sent %1 bytes to %2:%3</source>
+        <translation type="unfinished">UDP 已发送 %1 字节到 %2:%3</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="1034"/>
+        <source>Failed to send UDP data</source>
+        <translation type="unfinished">发送 UDP 数据失败</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="1051"/>
+        <source>Save Log</source>
+        <translation type="unfinished">保存日志</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="1051"/>
+        <source>Text Files (*.txt)</source>
+        <translation type="unfinished">文本文件 (*.txt)</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="1057"/>
+        <source>Log saved to %1</source>
+        <translation type="unfinished">日志已保存到 %1</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="1103"/>
+        <source>%1:%2</source>
+        <translation type="unfinished">%1:%2</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="1113"/>
+        <source>%1:%2 (Last: %3)</source>
+        <translation type="unfinished">%1:%2 (上次: %3)</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="1135"/>
+        <source>Status: Connected to %1:%2</source>
+        <translation type="unfinished">状态：已连接到 %1:%2</translation>
+    </message>
+    <message>
+        <location filename="../page/pagenetworktool.cpp" line="1163"/>
+        <source>Invalid hex data: %1</source>
+        <translation type="unfinished">无效的十六进制数据：%1</translation>
+    </message>
 </context>
 <context>
     <name>PageSerialTerminal</name>
@@ -388,22 +728,22 @@ Troubleshooting steps:
     <message>
         <location filename="../page/pageserialterminal.cpp" line="157"/>
         <source>Baudrate:</source>
-        <translation>波特率：</translation>
+        <translation type="unfinished">波特率：</translation>
     </message>
     <message>
         <location filename="../page/pageserialterminal.cpp" line="158"/>
         <source>Data bits:</source>
-        <translation>数据位：</translation>
+        <translation type="unfinished">数据位：</translation>
     </message>
     <message>
         <location filename="../page/pageserialterminal.cpp" line="159"/>
         <source>Parity:</source>
-        <translation>校验位：</translation>
+        <translation type="unfinished">校验位：</translation>
     </message>
     <message>
         <location filename="../page/pageserialterminal.cpp" line="160"/>
         <source>Stop bits:</source>
-        <translation>停止位：</translation>
+        <translation type="unfinished">停止位：</translation>
     </message>
     <message>
         <location filename="../page/pageserialterminal.cpp" line="193"/>
@@ -418,7 +758,7 @@ Troubleshooting steps:
     <message>
         <location filename="../page/pageserialterminal.cpp" line="195"/>
         <source>Mark</source>
-        <translation>标记校验</translation>
+        <translation type="unfinished">标记校验</translation>
     </message>
     <message>
         <location filename="../page/pageserialterminal.cpp" line="196"/>
@@ -437,17 +777,17 @@ Troubleshooting steps:
         <translation type="unfinished">停止位</translation>
     </message>
     <message>
-        <location filename="../page/pageserialterminal.cpp" line="476"/>
+        <location filename="../page/pageserialterminal.cpp" line="488"/>
         <source>Copy</source>
         <translation type="unfinished">复制</translation>
     </message>
     <message>
-        <location filename="../page/pageserialterminal.cpp" line="477"/>
+        <location filename="../page/pageserialterminal.cpp" line="489"/>
         <source>Paste</source>
         <translation type="unfinished">粘贴</translation>
     </message>
     <message>
-        <location filename="../page/pageserialterminal.cpp" line="478"/>
+        <location filename="../page/pageserialterminal.cpp" line="490"/>
         <source>Clear</source>
         <translation type="unfinished">清空</translation>
     </message>
@@ -485,7 +825,7 @@ Troubleshooting steps:
     <message>
         <location filename="../page/pageserialtransceiver.cpp" line="307"/>
         <source>Mark</source>
-        <translation>标记校验</translation>
+        <translation type="unfinished">标记校验</translation>
     </message>
     <message>
         <location filename="../page/pageserialtransceiver.cpp" line="308"/>
@@ -493,141 +833,141 @@ Troubleshooting steps:
         <translation type="unfinished">空格校验</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="576"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="578"/>
         <source>Serial Port Settings</source>
         <translation type="unfinished">串口设置</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="577"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="579"/>
         <source>Port</source>
         <translation type="unfinished">端口</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="578"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="580"/>
         <source>Baudrate</source>
         <translation type="unfinished">波特率</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="579"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="581"/>
         <source>Data bits</source>
         <translation type="unfinished">数据位</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="580"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="582"/>
         <source>Parity</source>
         <translation type="unfinished">校验位</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="581"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="583"/>
         <source>Stop bits</source>
         <translation type="unfinished">停止位</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="582"/>
-        <location filename="../page/pageserialtransceiver.cpp" line="664"/>
-        <location filename="../page/pageserialtransceiver.cpp" line="833"/>
-        <location filename="../page/pageserialtransceiver.cpp" line="834"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="584"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="666"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="835"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="836"/>
         <source>Open</source>
         <translation type="unfinished">打开</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="583"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="585"/>
         <source>Statistics</source>
         <translation type="unfinished">统计数据</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="584"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="586"/>
         <source>Received frames</source>
         <translation type="unfinished">接收帧数</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="585"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="587"/>
         <source>Received bytes</source>
         <translation type="unfinished">接收字节数</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="586"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="588"/>
         <source>Send frames</source>
         <translation type="unfinished">发送帧数</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="587"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="589"/>
         <source>Send bytes</source>
         <translation type="unfinished">发送字节数</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="588"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="590"/>
         <source>Clear count</source>
         <translation type="unfinished">清空计数</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="589"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="591"/>
         <source>Received Data</source>
         <translation type="unfinished">接收区</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="590"/>
-        <location filename="../page/pageserialtransceiver.cpp" line="599"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="592"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="601"/>
         <source>Hex</source>
         <translation type="unfinished">16进制</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="591"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="593"/>
         <source>Display send</source>
         <translation type="unfinished">显示发送</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="592"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="594"/>
         <source>Display time</source>
         <translation type="unfinished">显示时间</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="593"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="595"/>
         <source>Frame line break</source>
         <translation type="unfinished">帧换行</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="594"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="596"/>
         <source>Clear Receive</source>
         <translation type="unfinished">清空接收区</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="595"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="597"/>
         <source>Send Data</source>
         <translation type="unfinished">发送区</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="596"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="598"/>
         <source>Send</source>
         <translation type="unfinished">发送</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="597"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="599"/>
         <source>Verification</source>
         <translation type="unfinished">校验</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="598"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="600"/>
         <source>Clear Send</source>
         <translation type="unfinished">清除发送区</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="600"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="602"/>
         <source>Auto send</source>
         <translation type="unfinished">自动发送</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="601"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="603"/>
         <source>Send duty</source>
         <translation type="unfinished">发送周期</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="602"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="604"/>
         <source>ms</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">毫秒</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="686"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="688"/>
         <source>Close</source>
         <translation type="unfinished">关闭</translation>
     </message>
@@ -661,13 +1001,13 @@ Troubleshooting steps:
     </message>
     <message>
         <location filename="../page/pagesshclient.cpp" line="169"/>
-        <location filename="../page/pagesshclient.cpp" line="515"/>
+        <location filename="../page/pagesshclient.cpp" line="540"/>
         <source>Connect</source>
         <translation type="unfinished">连接</translation>
     </message>
     <message>
-        <location filename="../page/pagesshclient.cpp" line="590"/>
-        <location filename="../page/pagesshclient.cpp" line="734"/>
+        <location filename="../page/pagesshclient.cpp" line="615"/>
+        <location filename="../page/pagesshclient.cpp" line="765"/>
         <source>Disconnect</source>
         <translation type="unfinished">断开连接</translation>
     </message>
@@ -678,104 +1018,104 @@ Troubleshooting steps:
     </message>
     <message>
         <location filename="../page/pagesshclient.cpp" line="224"/>
-        <location filename="../page/pagesshclient.cpp" line="528"/>
+        <location filename="../page/pagesshclient.cpp" line="553"/>
         <source>Disconnected</source>
         <translation type="unfinished">已断开连接</translation>
     </message>
     <message>
-        <location filename="../page/pagesshclient.cpp" line="409"/>
+        <location filename="../page/pagesshclient.cpp" line="434"/>
         <source>Please fill in host</source>
         <translation type="unfinished">请填写主机地址</translation>
     </message>
     <message>
-        <location filename="../page/pagesshclient.cpp" line="417"/>
+        <location filename="../page/pagesshclient.cpp" line="442"/>
         <source>Failed to create SSH session</source>
         <translation type="unfinished">创建SSH会话失败</translation>
     </message>
     <message>
-        <location filename="../page/pagesshclient.cpp" line="435"/>
+        <location filename="../page/pagesshclient.cpp" line="460"/>
         <source>Connection failed: %1</source>
         <translation type="unfinished">连接失败: %1</translation>
     </message>
     <message>
-        <location filename="../page/pagesshclient.cpp" line="603"/>
-        <location filename="../page/pagesshclient.cpp" line="747"/>
+        <location filename="../page/pagesshclient.cpp" line="628"/>
+        <location filename="../page/pagesshclient.cpp" line="778"/>
         <source>Connected to %1</source>
         <translation type="unfinished">已连接到 %1</translation>
     </message>
     <message>
-        <location filename="../page/pagesshclient.cpp" line="625"/>
-        <location filename="../page/pagesshclient.cpp" line="673"/>
+        <location filename="../page/pagesshclient.cpp" line="650"/>
+        <location filename="../page/pagesshclient.cpp" line="704"/>
         <source>Password authentication failed<byte value="xd"/>
 </source>
         <translation type="unfinished">密码验证失败<byte value="xd"/>
 </translation>
     </message>
     <message>
-        <location filename="../page/pagesshclient.cpp" line="687"/>
+        <location filename="../page/pagesshclient.cpp" line="718"/>
         <source>Trying keyboard-interactive authentication...<byte value="xd"/>
 </source>
         <translation type="unfinished">尝试键盘交互式身份验证...<byte value="xd"/>
 </translation>
     </message>
     <message>
-        <location filename="../page/pagesshclient.cpp" line="709"/>
+        <location filename="../page/pagesshclient.cpp" line="740"/>
         <source>Trying public key authentication...<byte value="xd"/>
 </source>
         <translation type="unfinished">尝试公钥身份验证...<byte value="xd"/>
 </translation>
     </message>
     <message>
-        <location filename="../page/pagesshclient.cpp" line="901"/>
+        <location filename="../page/pagesshclient.cpp" line="932"/>
         <source>Copy</source>
         <translation type="unfinished">复制</translation>
     </message>
     <message>
-        <location filename="../page/pagesshclient.cpp" line="902"/>
+        <location filename="../page/pagesshclient.cpp" line="933"/>
         <source>Paste</source>
         <translation type="unfinished">粘贴</translation>
     </message>
     <message>
-        <location filename="../page/pagesshclient.cpp" line="903"/>
+        <location filename="../page/pagesshclient.cpp" line="934"/>
         <source>Clear</source>
         <translation type="unfinished">清空</translation>
     </message>
     <message>
         <location filename="../page/pagesshclient.cpp" line="346"/>
-        <location filename="../page/pagesshclient.cpp" line="674"/>
-        <location filename="../page/pagesshclient.cpp" line="696"/>
-        <location filename="../page/pagesshclient.cpp" line="719"/>
-        <location filename="../page/pagesshclient.cpp" line="774"/>
+        <location filename="../page/pagesshclient.cpp" line="705"/>
+        <location filename="../page/pagesshclient.cpp" line="727"/>
+        <location filename="../page/pagesshclient.cpp" line="750"/>
+        <location filename="../page/pagesshclient.cpp" line="805"/>
         <source>Please enter password: </source>
         <translation type="unfinished">请输入密码: </translation>
     </message>
     <message>
-        <location filename="../page/pagesshclient.cpp" line="767"/>
+        <location filename="../page/pagesshclient.cpp" line="798"/>
         <source>Please enter username: </source>
         <translation type="unfinished">请输入用户名: </translation>
     </message>
     <message>
-        <location filename="../page/pagesshclient.cpp" line="868"/>
+        <location filename="../page/pagesshclient.cpp" line="899"/>
         <source>Host key for server changed: it is now</source>
         <translation type="unfinished">服务器主机密钥已更改：现在是</translation>
     </message>
     <message>
-        <location filename="../page/pagesshclient.cpp" line="872"/>
+        <location filename="../page/pagesshclient.cpp" line="903"/>
         <source>The host key for this server was not found but an other type of key exists.</source>
         <translation type="unfinished">未找到此服务器的主机密钥，但存在其他类型的密钥。</translation>
     </message>
     <message>
-        <location filename="../page/pagesshclient.cpp" line="877"/>
+        <location filename="../page/pagesshclient.cpp" line="908"/>
         <source>The server is unknown. Do you trust the host key?</source>
         <translation type="unfinished">服务器未知。您信任此主机密钥吗？</translation>
     </message>
     <message>
-        <location filename="../page/pagesshclient.cpp" line="884"/>
+        <location filename="../page/pagesshclient.cpp" line="915"/>
         <source>Could not find known host file.</source>
         <translation type="unfinished">找不到已知主机文件。</translation>
     </message>
     <message>
-        <location filename="../page/pagesshclient.cpp" line="888"/>
+        <location filename="../page/pagesshclient.cpp" line="919"/>
         <source>Error: %1</source>
         <translation type="unfinished">错误: %1</translation>
     </message>
@@ -802,13 +1142,18 @@ Troubleshooting steps:
         <source>SSH Client</source>
         <translation type="unfinished">SSH 客户端</translation>
     </message>
+    <message>
+        <location filename="../page/pagetabcontent.cpp" line="52"/>
+        <source>Network Tool</source>
+        <translation type="unfinished">网络工具</translation>
+    </message>
 </context>
 <context>
     <name>PageVerifiyDialog</name>
     <message>
         <location filename="../page/pageverifiydialog.cpp" line="176"/>
         <source>CRC8</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">CRC8</translation>
     </message>
     <message>
         <location filename="../page/pageverifiydialog.cpp" line="9"/>

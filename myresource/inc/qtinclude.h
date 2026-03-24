@@ -55,6 +55,7 @@
 #include <QVariant>
 #include <QVBoxLayout>
 #include <QWidget>
+#include <QListWidget>
 #include <algorithm>
 #include <cstring>
 #include "qtermwidget.h"
