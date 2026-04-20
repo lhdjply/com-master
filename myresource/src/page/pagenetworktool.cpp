@@ -1,6 +1,7 @@
 #include "myresource.h"
 #include "pagenetworktool.h"
 #include "pageverifiydialog.h"
+#include "appcolors.h"
 
 PageNetworkTool::PageNetworkTool(QWidget *parent)
   : QWidget(parent)
@@ -29,121 +30,7 @@ PageNetworkTool::PageNetworkTool(QWidget *parent)
 void PageNetworkTool::setupUi()
 {
   // Apply styles similar to serial transceiver
-  QString styleSheet = QString::fromUtf8(
-                         "QGroupBox {\n"
-                         "    font-weight: bold;\n"
-                         "    border: 1px solid #c0c6d0;\n"
-                         "    border-radius: 6px;\n"
-                         "    margin-top: 12px;\n"
-                         "    padding-top: 12px;\n"
-                         "    background-color: white;\n"
-                         "}\n"
-                         "QGroupBox::title {\n"
-                         "    subcontrol-origin: margin;\n"
-                         "    subcontrol-position: top center;\n"
-                         "    padding: 0 8px;\n"
-                         "    background-color: white;\n"
-                         "    color: #2c3e50;\n"
-                         "}\n"
-                         "QPushButton {\n"
-                         "    background-color: #3498db;\n"
-                         "    color: white;\n"
-                         "    border: none;\n"
-                         "    border-radius: 4px;\n"
-                         "    padding: 8px 16px;\n"
-                         "    font-weight: bold;\n"
-                         "}\n"
-                         "QPushButton:hover {\n"
-                         "    background-color: #2980b9;\n"
-                         "}\n"
-                         "QPushButton:pressed {\n"
-                         "    background-color: #21618c;\n"
-                         "}\n"
-                         "QPushButton:disabled {\n"
-                         "    background-color: #bdc3c7;\n"
-                         "    color: #7f8c8d;\n"
-                         "}\n"
-                         "QComboBox {\n"
-                         "    border: 1px solid #c0c6d0;\n"
-                         "    border-radius: 4px;\n"
-                         "    padding: 6px 8px;\n"
-                         "    background-color: white;\n"
-                         "    selection-background-color: #3498db;\n"
-                         "    selection-color: white;\n"
-                         "    min-width: 80px;\n"
-                         "    color: black;\n"
-                         "}\n"
-                         "QComboBox::drop-down {\n"
-                         "    subcontrol-origin: padding;\n"
-                         "    subcontrol-position: top right;\n"
-                         "    width: 15px;\n"
-                         "    border-left-width: 1px;\n"
-                         "    border-left-color: #c0c6d0;\n"
-                         "    border-left-style: solid;\n"
-                         "    border-top-right-radius: 4px;\n"
-                         "    border-bottom-right-radius: 4px;\n"
-                         "}\n"
-                         "QComboBox::down-arrow {\n"
-                         "    image: none;\n"
-                         "    border-left: 4px solid transparent;\n"
-                         "    border-right: 4px solid transparent;\n"
-                         "    border-top: 4px solid #7f8c8d;\n"
-                         "    width: 0;\n"
-                         "    height: 0;\n"
-                         "}\n"
-                         "QTextEdit {\n"
-                         "    border: 1px solid #c0c6d0;\n"
-                         "    border-radius: 4px;\n"
-                         "    padding: 8px;\n"
-                         "    background-color: white;\n"
-                         "    font-family: 'Consolas', 'Monaco', monospace;\n"
-                         "}\n"
-                         "QCheckBox {\n"
-                         "    spacing: 6px;\n"
-                         "}\n"
-                         "QCheckBox::indicator {\n"
-                         "    width: 16px;\n"
-                         "    height: 16px;\n"
-                         "}\n"
-                         "QCheckBox::indicator:unchecked {\n"
-                         "    border: 1px solid #c0c6d0;\n"
-                         "    border-radius: 2px;\n"
-                         "    background-color: white;\n"
-                         "}\n"
-                         "QCheckBox::indicator:checked {\n"
-                         "    border: 1px solid #3498db;\n"
-                         "    border-radius: 2px;\n"
-                         "    background-color: #3498db;\n"
-                         "}\n"
-                         "QLabel {\n"
-                         "    color: #2c3e50;\n"
-                         "    font-weight: 500;\n"
-                         "}\n"
-                         "QLineEdit {\n"
-                         "    border: 1px solid #c0c6d0;\n"
-                         "    border-radius: 4px;\n"
-                         "    padding: 6px 8px;\n"
-                         "    background-color: white;\n"
-                         "}\n"
-                         "QLineEdit:focus {\n"
-                         "    border-color: #3498db;\n"
-                         "}"
-                         "QListWidget {\n"
-                         "    border: 1px solid #c0c6d0;\n"
-                         "    border-radius: 4px;\n"
-                         "    background-color: white;\n"
-                         "    padding: 4px;\n"
-                         "}\n"
-                         "QListWidget::item {\n"
-                         "    padding: 4px;\n"
-                         "    border-radius: 2px;\n"
-                         "}\n"
-                         "QListWidget::item:selected {\n"
-                         "    background-color: #3498db;\n"
-                         "    color: white;\n"
-                         "}"
-                       );
-  this->setStyleSheet(styleSheet);
+  this->setStyleSheet(AppColors::getStyleSheet());
 
   mainLayout = new QGridLayout(this);
   mainLayout->setSpacing(15);
@@ -187,10 +74,10 @@ void PageNetworkTool::setupUi()
   tcpServerPortEdit->setMinimumSize(QSize(146, 0));
   tcpStartButton = new QPushButton(tr("Start"));
   tcpStartButton->setMinimumSize(QSize(70, 36));
-  tcpStartButton->setStyleSheet("QPushButton { background-color: #4CAF50; color: white; } QPushButton:disabled { background-color: #CCCCCC; color: #666666; }");
+  tcpStartButton->setStyleSheet(AppColors::getStartButtonStyle());
   tcpStopButton = new QPushButton(tr("Stop"));
   tcpStopButton->setMinimumSize(QSize(70, 36));
-  tcpStopButton->setStyleSheet("QPushButton { background-color: #F44336; color: white; } QPushButton:disabled { background-color: #CCCCCC; color: #666666; }");
+  tcpStopButton->setStyleSheet(AppColors::getStopButtonStyle());
   tcpStopButton->setEnabled(false);
   tcpStatusLabel = new QLabel(tr("Status: Stopped"));
 
@@ -233,8 +120,10 @@ void PageNetworkTool::setupUi()
   tcpClientPortEdit->setMinimumSize(QSize(146, 0));
   tcpConnectButton = new QPushButton(tr("Connect"));
   tcpConnectButton->setMinimumSize(QSize(70, 36));
+  tcpConnectButton->setStyleSheet(AppColors::getStartButtonStyle());
   tcpDisconnectButton = new QPushButton(tr("Disconnect"));
   tcpDisconnectButton->setMinimumSize(QSize(70, 36));
+  tcpDisconnectButton->setStyleSheet(AppColors::getStopButtonStyle());
   tcpDisconnectButton->setEnabled(false);
   tcpClientStatusLabel = new QLabel(tr("Status: Disconnected"));
 
@@ -271,10 +160,10 @@ void PageNetworkTool::setupUi()
   udpServerPortEdit->setMinimumSize(QSize(146, 0));
   udpStartButton = new QPushButton(tr("Start"));
   udpStartButton->setMinimumSize(QSize(70, 36));
-  udpStartButton->setStyleSheet("QPushButton { background-color: #4CAF50; color: white; } QPushButton:disabled { background-color: #CCCCCC; color: #666666; }");
+  udpStartButton->setStyleSheet(AppColors::getStartButtonStyle());
   udpStopButton = new QPushButton(tr("Stop"));
   udpStopButton->setMinimumSize(QSize(70, 36));
-  udpStopButton->setStyleSheet("QPushButton { background-color: #F44336; color: white; } QPushButton:disabled { background-color: #CCCCCC; color: #666666; }");
+  udpStopButton->setStyleSheet(AppColors::getStopButtonStyle());
   udpStopButton->setEnabled(false);
   udpStatusLabel = new QLabel(tr("Status: Stopped"));
 

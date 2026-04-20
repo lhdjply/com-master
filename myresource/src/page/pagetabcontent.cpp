@@ -1,4 +1,5 @@
 #include "myresource.h"
+#include "appcolors.h"
 
 PageTabContent::PageTabContent(QWidget *parent)
   : QWidget(parent)
@@ -80,7 +81,7 @@ void PageTabContent::setupUi()
   // 添加版本号标签（页面底部居中）
   QLabel *versionLabel = new QLabel(QString("v%1").arg(PROJECT_VERSION));
   versionLabel->setAlignment(Qt::AlignCenter);
-  versionLabel->setStyleSheet("QLabel { color: #7f8c8d; font-size: 14px; }");
+  versionLabel->setStyleSheet(AppColors::getVersionLabelStyle());
   mainLayout->addSpacing(10);
   mainLayout->addWidget(versionLabel);
   mainLayout->addSpacing(10);

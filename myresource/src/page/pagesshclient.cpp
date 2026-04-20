@@ -1,4 +1,5 @@
 #include "myresource.h"
+#include "appcolors.h"
 
 PageSshClient::PageSshClient(QWidget *parent)
   : QWidget(parent)
@@ -48,105 +49,7 @@ PageSshClient::~PageSshClient()
 
 void PageSshClient::setupUi()
 {
-  // 设置样式表，与串口收发器保持一致
-  QString styleSheet = QString(
-                         "QGroupBox {\n"
-                         "    font-weight: bold;\n"
-                         "    border: 1px solid #c0c6d0;\n"
-                         "    border-radius: 6px;\n"
-                         "    margin-top: 12px;\n"
-                         "    padding-top: 12px;\n"
-                         "    background-color: white;\n"
-                         "}\n"
-                         "QGroupBox::title {\n"
-                         "    subcontrol-origin: margin;\n"
-                         "    subcontrol-position: top center;\n"
-                         "    padding: 0 8px;\n"
-                         "    background-color: white;\n"
-                         "    color: #2c3e50;\n"
-                         "}\n"
-                         "QPushButton {\n"
-                         "    background-color: #3498db;\n"
-                         "    border: none;\n"
-                         "    border-radius: 4px;\n"
-                         "    color: white;\n"
-                         "    padding: 8px 16px;\n"
-                         "    font-weight: bold;\n"
-                         "    min-height: 20px;\n"
-                         "}\n"
-                         "QPushButton:hover {\n"
-                         "    background-color: #2980b9;\n"
-                         "}\n"
-                         "QPushButton:pressed {\n"
-                         "    background-color: #21618c;\n"
-                         "}\n"
-                         "QPushButton:disabled {\n"
-                         "    background-color: #bdc3c7;\n"
-                         "    color: #7f8c8d;\n"
-                         "}\n"
-                         "QComboBox {\n"
-                         "    border: 1px solid #c0c6d0;\n"
-                         "    border-radius: 4px;\n"
-                         "    padding: 6px 12px;\n"
-                         "    background-color: white;\n"
-                         "    selection-background-color: #3498db;\n"
-                         "    selection-color: white;\n"
-                         "    min-width: 120px;\n"
-                         "    color: black;\n"
-                         "}\n"
-                         "QComboBox::drop-down {\n"
-                         "    subcontrol-origin: padding;\n"
-                         "    subcontrol-position: top right;\n"
-                         "    width: 20px;\n"
-                         "    border-left: 1px solid #c0c6d0;\n"
-                         "}\n"
-                         "QComboBox::down-arrow {\n"
-                         "    image: none;\n"
-                         "    border-left: 4px solid transparent;\n"
-                         "    border-right: 4px solid transparent;\n"
-                         "    border-top: 4px solid #7f8c8d;\n"
-                         "    width: 0;\n"
-                         "    height: 0;\n"
-                         "}\n"
-                         "QTextEdit {\n"
-                         "    border: 1px solid #c0c6d0;\n"
-                         "    border-radius: 4px;\n"
-                         "    padding: 8px;\n"
-                         "    background-color: white;\n"
-                         "    font-family: 'Consolas', 'Monaco', monospace;\n"
-                         "}\n"
-                         "QCheckBox {\n"
-                         "    spacing: 6px;\n"
-                         "}\n"
-                         "QCheckBox::indicator {\n"
-                         "    width: 16px;\n"
-                         "    height: 16px;\n"
-                         "}\n"
-                         "QCheckBox::indicator:unchecked {\n"
-                         "    border: 1px solid #c0c6d0;\n"
-                         "    border-radius: 2px;\n"
-                         "    background-color: white;\n"
-                         "}\n"
-                         "QCheckBox::indicator:checked {\n"
-                         "    border: 1px solid #3498db;\n"
-                         "    border-radius: 2px;\n"
-                         "    background-color: #3498db;\n"
-                         "}\n"
-                         "QLabel {\n"
-                         "    color: #2c3e50;\n"
-                         "    font-weight: 500;\n"
-                         "}\n"
-                         "QLineEdit {\n"
-                         "    border: 1px solid #c0c6d0;\n"
-                         "    border-radius: 4px;\n"
-                         "    padding: 6px 8px;\n"
-                         "    background-color: white;\n"
-                         "}\n"
-                         "QLineEdit:focus {\n"
-                         "    border-color: #3498db;\n"
-                         "}"
-                       );
-  this->setStyleSheet(styleSheet);
+  this->setStyleSheet(AppColors::getStyleSheet());
 
   // 主布局 - 水平分割
   mainLayout = new QGridLayout(this);
@@ -167,18 +70,7 @@ void PageSshClient::setupUi()
   passwordEdit->setEchoMode(QLineEdit::Password);
 
   connectButton = new QPushButton(tr("Connect"));
-  connectButton->setStyleSheet(QString::fromUtf8(
-                                 "QPushButton {\n"
-                                 "    background-color: #27ae60;\n"
-                                 "    padding: 10px;\n"
-                                 "}\n"
-                                 "QPushButton:hover {\n"
-                                 "    background-color: #219653;\n"
-                                 "}\n"
-                                 "QPushButton:pressed {\n"
-                                 "    background-color: #1e874b;\n"
-                                 "}"
-                               ));
+  connectButton->setStyleSheet(AppColors::getSuccessButtonStyle());
 
   // 连接配置布局 - 垂直排列
   connectionLayout->addWidget(hostLabel, 0, 0);
@@ -538,18 +430,7 @@ void PageSshClient::disconnectFromHost()
   // 更新UI状态
   connectButton->setEnabled(true);
   connectButton->setText(tr("Connect"));
-  connectButton->setStyleSheet(QString::fromUtf8(
-                                 "QPushButton {\n"
-                                 "    background-color: #27ae60;\n"
-                                 "    padding: 10px;\n"
-                                 "}\n"
-                                 "QPushButton:hover {\n"
-                                 "    background-color: #219653;\n"
-                                 "}\n"
-                                 "QPushButton:pressed {\n"
-                                 "    background-color: #1e874b;\n"
-                                 "}"
-                               ));
+  connectButton->setStyleSheet(AppColors::getSuccessButtonStyle());
   statusLabel->setText(tr("Disconnected"));
 
   clearTerminal();
@@ -613,18 +494,7 @@ void PageSshClient::authenticateWithCredentials()
   // 更新UI状态
   connectButton->setEnabled(true);
   connectButton->setText(tr("Disconnect"));
-  connectButton->setStyleSheet(QString::fromUtf8(
-                                 "QPushButton {\n"
-                                 "    background-color: #e74c3c;\n"
-                                 "    padding: 10px;\n"
-                                 "}\n"
-                                 "QPushButton:hover {\n"
-                                 "    background-color: #c0392b;\n"
-                                 "}\n"
-                                 "QPushButton:pressed {\n"
-                                 "    background-color: #a93226;\n"
-                                 "}"
-                               ));
+  connectButton->setStyleSheet(AppColors::getDangerButtonStyle());
   statusLabel->setText(tr("Connected to %1").arg(hostEdit->text()));
 
   // 启动数据接收定时器
@@ -763,18 +633,7 @@ void PageSshClient::startInteractiveShell()
   // 更新UI状态
   connectButton->setEnabled(true);
   connectButton->setText(tr("Disconnect"));
-  connectButton->setStyleSheet(QString::fromUtf8(
-                                 "QPushButton {\n"
-                                 "    background-color: #e74c3c;\n"
-                                 "    padding: 10px;\n"
-                                 "}\n"
-                                 "QPushButton:hover {\n"
-                                 "    background-color: #c0392b;\n"
-                                 "}\n"
-                                 "QPushButton:pressed {\n"
-                                 "    background-color: #a93226;\n"
-                                 "}"
-                               ));
+  connectButton->setStyleSheet(AppColors::getDangerButtonStyle());
   statusLabel->setText(tr("Connected to %1").arg(hostEdit->text()));
 
   // 启动数据接收定时器

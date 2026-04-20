@@ -1,4 +1,5 @@
 #include "myresource.h"
+#include "appcolors.h"
 
 PageSerialTerminal::PageSerialTerminal(QWidget *parent)
   : QMainWindow(parent)
@@ -33,114 +34,7 @@ void PageSerialTerminal::setupUi()
     this->setObjectName(QString::fromUtf8("PageSerialTerminal"));
   this->resize(1123, 700);
 
-  QString styleSheet = QString::fromUtf8(
-                         "QMainWindow {\n"
-                         "    background-color: #f5f7fa;\n"
-                         "    color: #333333;\n"
-                         "    font-family: 'Segoe UI', Arial, sans-serif;\n"
-                         "}\n"
-                         "QGroupBox {\n"
-                         "    font-weight: bold;\n"
-                         "    border: 1px solid #c0c6d0;\n"
-                         "    border-radius: 6px;\n"
-                         "    margin-top: 12px;\n"
-                         "    padding-top: 12px;\n"
-                         "    background-color: white;\n"
-                         "}\n"
-                         "QGroupBox::title {\n"
-                         "    subcontrol-origin: margin;\n"
-                         "    subcontrol-position: top center;\n"
-                         "    padding: 0 8px;\n"
-                         "    background-color: white;\n"
-                         "    color: #2c3e50;\n"
-                         "}\n"
-                         "QPushButton {\n"
-                         "    background-color: #3498db;\n"
-                         "    border: none;\n"
-                         "    border-radius: 4px;\n"
-                         "    color: white;\n"
-                         "    padding: 8px 16px;\n"
-                         "    font-weight: bold;\n"
-                         "    min-height: 20px;\n"
-                         "}\n"
-                         "QPushButton:hover {\n"
-                         "    background-color: #2980b9;\n"
-                         "}\n"
-                         "QPushButton:pressed {\n"
-                         "    background-color: #21618c;\n"
-                         "}\n"
-                         "QPushButton:disabled {\n"
-                         "    background-color: #bdc3c7;\n"
-                         "    color: #7f8c8d;\n"
-                         "}\n"
-                         "QComboBox {\n"
-                         "    border: 1px solid #c0c6d0;\n"
-                         "    border-radius: 4px;\n"
-                         "    padding: 6px 12px;\n"
-                         "    background-color: white;\n"
-                         "    selection-background-color: #3498db;\n"
-                         "    selection-color: white;\n"
-                         "    min-width: 120px;\n"
-                         "    color: black;\n"
-                         "}\n"
-                         "QComboBox::drop-down {\n"
-                         "    subcontrol-origin: padding;\n"
-                         "    subcontrol-position: top right;\n"
-                         "    width: 20px;\n"
-                         "    border-left: 1px solid #c0c6d0;\n"
-                         "}\n"
-                         "QComboBox::down-arrow {\n"
-                         "    image: none;\n"
-                         "    border-left: 4px solid transparent;\n"
-                         "    border-right: 4px solid transparent;\n"
-                         "    border-top: 4px solid #7f8c8d;\n"
-                         "    width: 0;\n"
-                         "    height: 0;\n"
-                         "}\n"
-                         "QTextEdit {\n"
-                         "    border: 1px solid #c0c6d0;\n"
-                         "    border-radius: 4px;\n"
-                         "    padding: 8px;\n"
-                         "    background-color: white;\n"
-                         "    font-family: 'Consolas', 'Monaco', monospace;\n"
-                         "}\n"
-                         "QCheckBox {\n"
-                         "    spacing: 6px;\n"
-                         "}\n"
-                         "QCheckBox::indicator {\n"
-                         "    width: 16px;\n"
-                         "    height: 16px;\n"
-                         "}\n"
-                         "QCheckBox::indicator:unchecked {\n"
-                         "    border: 1px solid #c0c6d0;\n"
-                         "    border-radius: 2px;\n"
-                         "    background-color: white;\n"
-                         "}\n"
-                         "QCheckBox::indicator:checked {\n"
-                         "    border: 1px solid #3498db;\n"
-                         "    border-radius: 2px;\n"
-                         "    background-color: #3498db;\n"
-                         "}\n"
-                         "QLabel {\n"
-                         "    color: #2c3e50;\n"
-                         "    font-weight: 500;\n"
-                         "}\n"
-                         "QLineEdit {\n"
-                         "    border: 1px solid #c0c6d0;\n"
-                         "    border-radius: 4px;\n"
-                         "    padding: 6px 8px;\n"
-                         "    background-color: white;\n"
-                         "}\n"
-                         "QLineEdit:focus {\n"
-                         "    border-color: #3498db;\n"
-                         "}\n"
-                         "QTermWidget {\n"
-                         "    border: 1px solid #c0c6d0;\n"
-                         "    border-radius: 4px;\n"
-                         "    padding: 2px;\n"
-                         "}"
-                       );
-  this->setStyleSheet(styleSheet);
+  this->setStyleSheet(AppColors::getStyleSheet());
 
   centralwidget = new QWidget(this);
   centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
@@ -203,18 +97,7 @@ void PageSerialTerminal::setupUi()
 
   openbutton = new QPushButton(tr("Open"));
   openbutton->setObjectName(QString::fromUtf8("openbutton"));
-  openbutton->setStyleSheet(QString::fromUtf8(
-                              "QPushButton {\n"
-                              "    background-color: #27ae60;\n"
-                              "    padding: 10px;\n"
-                              "}\n"
-                              "QPushButton:hover {\n"
-                              "    background-color: #219653;\n"
-                              "}\n"
-                              "QPushButton:pressed {\n"
-                              "    background-color: #1e874b;\n"
-                              "}"
-                            ));
+  openbutton->setStyleSheet(AppColors::getSuccessButtonStyle());
 
   // 配置布局 - 垂直排列
   configLayout->addWidget(label, 0, 0);
@@ -368,18 +251,7 @@ void PageSerialTerminal::on_openbutton_clicked()
     {
       isSerial_Open = true;
       openbutton->setText(tr("Close"));
-      openbutton->setStyleSheet(QString::fromUtf8(
-                                  "QPushButton {\n"
-                                  "    background-color: #e74c3c;\n"
-                                  "    padding: 10px;\n"
-                                  "}\n"
-                                  "QPushButton:hover {\n"
-                                  "    background-color: #c0392b;\n"
-                                  "}\n"
-                                  "QPushButton:pressed {\n"
-                                  "    background-color: #a93226;\n"
-                                  "}"
-                                ));
+      openbutton->setStyleSheet(AppColors::getDangerButtonStyle());
       terminal->setFocus();
       qDebug() << "串口已打开";
     }
@@ -450,17 +322,17 @@ void PageSerialTerminal::handleTimeout()
         isSerial_Open = false;
         openbutton->setText(tr("Open"));
         openbutton->setStyleSheet(QString::fromUtf8(
-          "QPushButton {\n"
-          "    background-color: #27ae60;\n"
-          "    padding: 10px;\n"
-          "}\n"
-          "QPushButton:hover {\n"
-          "    background-color: #219653;\n"
-          "}\n"
-          "QPushButton:pressed {\n"
-          "    background-color: #1e874b;\n"
-          "}"
-        ));
+                                    "QPushButton {\n"
+                                    "    background-color: #27ae60;\n"
+                                    "    padding: 10px;\n"
+                                    "}\n"
+                                    "QPushButton:hover {\n"
+                                    "    background-color: #219653;\n"
+                                    "}\n"
+                                    "QPushButton:pressed {\n"
+                                    "    background-color: #1e874b;\n"
+                                    "}"
+                                  ));
         serialPort.close();
         qDebug() << "串口被拔除，已自动关闭";
       }

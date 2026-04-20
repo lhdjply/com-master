@@ -1,4 +1,5 @@
 #include "myresource.h"
+#include "appcolors.h"
 
 PageIEC61850Client::PageIEC61850Client(QWidget *parent)
   : QMainWindow(parent)
@@ -31,150 +32,7 @@ void PageIEC61850Client::setupUi()
   setMinimumSize(800, 600);
   resize(1000, 700);
 
-  // Apply the same style sheet as PageSerialTransceiver
-  QString styleSheet = QString::fromUtf8(
-                         "QMainWindow {\n"
-                         "    background-color: #f5f7fa;\n"
-                         "    color: #333333;\n"
-                         "    font-family: 'Segoe UI', Arial, sans-serif;\n"
-                         "}\n"
-                         "QGroupBox {\n"
-                         "    font-weight: bold;\n"
-                         "    border: 1px solid #c0c6d0;\n"
-                         "    border-radius: 6px;\n"
-                         "    margin-top: 12px;\n"
-                         "    padding-top: 12px;\n"
-                         "    background-color: white;\n"
-                         "}\n"
-                         "QGroupBox::title {\n"
-                         "    subcontrol-origin: margin;\n"
-                         "    subcontrol-position: top center;\n"
-                         "    padding: 0 8px;\n"
-                         "    background-color: white;\n"
-                         "    color: #2c3e50;\n"
-                         "}\n"
-                         "QPushButton {\n"
-                         "    background-color: #3498db;\n"
-                         "    border: none;\n"
-                         "    border-radius: 4px;\n"
-                         "    color: white;\n"
-                         "    padding: 8px 16px;\n"
-                         "    font-weight: bold;\n"
-                         "    min-height: 20px;\n"
-                         "}\n"
-                         "QPushButton:hover {\n"
-                         "    background-color: #2980b9;\n"
-                         "}\n"
-                         "QPushButton:pressed {\n"
-                         "    background-color: #21618c;\n"
-                         "}\n"
-                         "QPushButton:disabled {\n"
-                         "    background-color: #bdc3c7;\n"
-                         "    color: #7f8c8d;\n"
-                         "}\n"
-                         "QComboBox {\n"
-                         "    border: 1px solid #c0c6d0;\n"
-                         "    border-radius: 4px;\n"
-                         "    padding: 6px 12px;\n"
-                         "    background-color: white;\n"
-                         "    selection-background-color: #3498db;\n"
-                         "    selection-color: white;\n"
-                         "    min-width: 120px;\n"
-                         "    color: black;\n"
-                         "}\n"
-                         "QComboBox::drop-down {\n"
-                         "    subcontrol-origin: padding;\n"
-                         "    subcontrol-position: top right;\n"
-                         "    width: 20px;\n"
-                         "    border-left: 1px solid #c0c6d0;\n"
-                         "}\n"
-                         "QComboBox::down-arrow {\n"
-                         "    image: none;\n"
-                         "    border-left: 4px solid transparent;\n"
-                         "    border-right: 4px solid transparent;\n"
-                         "    border-top: 4px solid #7f8c8d;\n"
-                         "    width: 0;\n"
-                         "    height: 0;\n"
-                         "}\n"
-                         "QTreeWidget {\n"
-                         "    border: 1px solid #c0c6d0;\n"
-                         "    border-radius: 4px;\n"
-                         "    padding: 8px;\n"
-                         "    background-color: white;\n"
-                         "    font-family: 'Consolas', 'Monaco', monospace;\n"
-                         "}\n"
-                         "QTableWidget {\n"
-                         "    border: 1px solid #c0c6d0;\n"
-                         "    border-radius: 4px;\n"
-                         "    padding: 8px;\n"
-                         "    background-color: white;\n"
-                         "    font-family: 'Consolas', 'Monaco', monospace;\n"
-                         "    gridline-color: #ecf0f1;\n"
-                         "    alternate-background-color: #f8fafc;\n"
-                         "}\n"
-                         "QHeaderView::section {\n"
-                         "    background-color: #ecf0f1;\n"
-                         "    color: #2c3e50;\n"
-                         "    padding: 6px;\n"
-                         "    border: 1px solid #c0c6d0;\n"
-                         "    font-weight: bold;\n"
-                         "}\n"
-                         "QCheckBox {\n"
-                         "    spacing: 6px;\n"
-                         "}\n"
-                         "QCheckBox::indicator {\n"
-                         "    width: 16px;\n"
-                         "    height: 16px;\n"
-                         "}\n"
-                         "QCheckBox::indicator:unchecked {\n"
-                         "    border: 1px solid #c0c6d0;\n"
-                         "    border-radius: 2px;\n"
-                         "    background-color: white;\n"
-                         "}\n"
-                         "QCheckBox::indicator:checked {\n"
-                         "    border: 1px solid #3498db;\n"
-                         "    border-radius: 2px;\n"
-                         "    background-color: #3498db;\n"
-                         "}\n"
-                         "QLabel {\n"
-                         "    color: #2c3e50;\n"
-                         "    font-weight: 500;\n"
-                         "}\n"
-                         "QLineEdit {\n"
-                         "    border: 1px solid #c0c6d0;\n"
-                         "    border-radius: 4px;\n"
-                         "    padding: 6px 8px;\n"
-                         "    background-color: white;\n"
-                         "}\n"
-                         "QLineEdit:focus {\n"
-                         "    border-color: #3498db;\n"
-                         "}"
-                         "QToolBar {\n"
-                         "    background-color: #f5f7fa;\n"
-                         "    border: none;\n"
-                         "    border-bottom: 1px solid #c0c6d0;\n"
-                         "    spacing: 3px;\n"
-                         "    padding: 4px;\n"
-                         "}\n"
-                         "QStatusBar {\n"
-                         "    background-color: #f5f7fa;\n"
-                         "    color: #2c3e50;\n"
-                         "    border: none;\n"
-                         "    border-top: 1px solid #c0c6d0;\n"
-                         "}\n"
-                         "QProgressBar {\n"
-                         "    border: 1px solid #c0c6d0;\n"
-                         "    border-radius: 4px;\n"
-                         "    text-align: center;\n"
-                         "    background-color: #ecf0f1;\n"
-                         "    color: #2c3e50;\n"
-                         "}\n"
-                         "QProgressBar::chunk {\n"
-                         "    background-color: #3498db;\n"
-                         "    border-radius: 3px;\n"
-                         "}"
-                       );
-  this->setStyleSheet(styleSheet);
+  this->setStyleSheet(AppColors::getStyleSheet());
 
   // Create central widget
   QWidget* centralWidget = new QWidget(this);
@@ -1388,15 +1246,15 @@ void PageIEC61850Client::setupDataValueWidgetUI()
   m_infoLayout->setContentsMargins(10, 10, 10, 10);
 
   m_objectReferenceLabel = new QLabel("N/A", m_dataValueWidget);
-  m_objectReferenceLabel->setStyleSheet("font-weight: bold; color: #2c3e50;");
+  m_objectReferenceLabel->setStyleSheet(AppColors::getInfoLabelStyle());
   m_infoLayout->addRow(tr("Object Reference:"), m_objectReferenceLabel);
 
   m_dataTypeLabel = new QLabel("N/A", m_dataValueWidget);
-  m_dataTypeLabel->setStyleSheet("font-weight: bold; color: #2c3e50;");
+  m_dataTypeLabel->setStyleSheet(AppColors::getInfoLabelStyle());
   m_infoLayout->addRow(tr("Data Type:"), m_dataTypeLabel);
 
   m_valueLabel = new QLabel("N/A", m_dataValueWidget);
-  m_valueLabel->setStyleSheet("font-weight: bold; color: #2c3e50;");
+  m_valueLabel->setStyleSheet(AppColors::getInfoLabelStyle());
   m_infoLayout->addRow(tr("Current Value:"), m_valueLabel);
 
   m_mainLayout->addWidget(m_objectInfoGroup);
@@ -1591,20 +1449,20 @@ void PageIEC61850Client::performConnection(const QString& hostname, int port)
   else
   {
     QMessageBox::critical(this,
-                         tr("Connection Failed"),
-                         tr("Failed to connect to %1:%2\n\n"
-                            "Error: Connection Rejected\n\n"
-                            "Possible reasons:\n"
-                            "• No IEC61850 server is running on this port\n"
-                            "• The port is being used by another application\n"
-                            "• Firewall is blocking the connection\n\n"
-                            "Troubleshooting steps:\n"
-                            "1. Check if an IEC61850 server is running on the target device\n"
-                            "2. Verify the port number (default is 102 for MMS)\n"
-                            "3. Check network connectivity: ping %1\n"
-                            "4. Check firewall settings\n"
-                            "5. Try using a different port if the server is configured differently")
-                         .arg(hostname).arg(port));
+                          tr("Connection Failed"),
+                          tr("Failed to connect to %1:%2\n\n"
+                             "Error: Connection Rejected\n\n"
+                             "Possible reasons:\n"
+                             "• No IEC61850 server is running on this port\n"
+                             "• The port is being used by another application\n"
+                             "• Firewall is blocking the connection\n\n"
+                             "Troubleshooting steps:\n"
+                             "1. Check if an IEC61850 server is running on the target device\n"
+                             "2. Verify the port number (default is 102 for MMS)\n"
+                             "3. Check network connectivity: ping %1\n"
+                             "4. Check firewall settings\n"
+                             "5. Try using a different port if the server is configured differently")
+                          .arg(hostname).arg(port));
   }
 }
 
@@ -1659,12 +1517,12 @@ void PageIEC61850Client::updateConnectionStatus(bool connected)
   if(connected)
   {
     m_connectionStatusLabel->setText(tr("Connected"));
-    m_connectionStatusLabel->setStyleSheet("font-weight: bold; color: #27ae60;");
+    m_connectionStatusLabel->setStyleSheet(AppColors::getConnectionConnectedStyle());
   }
   else
   {
     m_connectionStatusLabel->setText(tr("Disconnected"));
-    m_connectionStatusLabel->setStyleSheet("font-weight: bold; color: #e74c3c;");
+    m_connectionStatusLabel->setStyleSheet(AppColors::getConnectionDisconnectedStyle());
   }
 }
 
