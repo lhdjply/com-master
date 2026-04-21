@@ -53,12 +53,20 @@ void PageTabContent::setupUi()
   networkToolButton->setText(tr("Network Tool"));
   networkToolButton->setToolButtonStyle(Qt::ToolButtonTextUnderIcon); // 字在图标下面
 
+  // 创建FTP客户端按钮
+  QToolButton *ftpClientButton = new QToolButton();
+  ftpClientButton->setIcon(QIcon(":/icons/ftp_client.svg")); // 使用FTP客户端图标
+  ftpClientButton->setIconSize(QSize(150, 150)); // 设置图标大小
+  ftpClientButton->setText(tr("FTP Client"));
+  ftpClientButton->setToolButtonStyle(Qt::ToolButtonTextUnderIcon); // 字在图标下面
+
   QString transparentStyle = "QToolButton { background: transparent; border: none; }";
   transceiverButton->setStyleSheet(transparentStyle);
   terminalButton->setStyleSheet(transparentStyle);
   iec61850Button->setStyleSheet(transparentStyle);
   sshClientButton->setStyleSheet(transparentStyle);
   networkToolButton->setStyleSheet(transparentStyle);
+  ftpClientButton->setStyleSheet(transparentStyle);
 
   // 添加按钮到布局
   buttonLayout->addWidget(transceiverButton);
@@ -70,6 +78,8 @@ void PageTabContent::setupUi()
   buttonLayout->addWidget(sshClientButton);
   buttonLayout->addSpacing(30); // 按钮间距
   buttonLayout->addWidget(networkToolButton);
+  buttonLayout->addSpacing(30); // 按钮间距
+  buttonLayout->addWidget(ftpClientButton);
   buttonLayout->setAlignment(Qt::AlignCenter);
 
   // 将按钮布局添加到主布局
@@ -113,5 +123,10 @@ void PageTabContent::setupUi()
   connect(networkToolButton, &QPushButton::clicked, [ = ]()
   {
     emit buttonClicked(networkToolButton->text());
+  });
+
+  connect(ftpClientButton, &QPushButton::clicked, [ = ]()
+  {
+    emit buttonClicked(ftpClientButton->text());
   });
 }

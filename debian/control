@@ -27,5 +27,5 @@ Depends:
  ${misc:Depends}
 Description: Serial port tool and IEC61850 client
  A Qt6-based serial communication tool with terminal, transceiver,
- and IEC61850 client functionality for electronic device testing
- and communication protocol analysis.
+ network tool, SSH client, FTP client, and IEC61850 client functionality 
+ for electronic device testing and communication protocol analysis.

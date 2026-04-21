@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   version="1.1"
+   width="145.33511"
+   height="146.98305"
+   viewBox="0 0 22.359248 22.612776"
+   id="svg24"
+   sodipodi:docname="archive.svg"
+   inkscape:version="1.4 (e7c3feb100, 2024-10-09)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="3.94433"
+     inkscape:cx="15.718766"
+     inkscape:cy="88.861733"
+     inkscape:window-width="2560"
+     inkscape:window-height="1318"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg24" />
+  <defs
+     id="defs7">
+    <linearGradient
+       id="archiveGradient"
+       x1="2.3647633"
+       y1="3.7001591"
+       x2="20.336964"
+       y2="21.672359"
+       gradientTransform="matrix(1.2437114,0,0,1.1261174,-2.9375745,-1.7893112)"
+       gradientUnits="userSpaceOnUse">
+      <stop
+         offset="0%"
+         style="stop-color:#ce93d8"
+         id="stop1" />
+      <stop
+         offset="100%"
+         style="stop-color:#9c27b0"
+         id="stop2" />
+    </linearGradient>
+  </defs>
+  <rect
+     x="0.59172499"
+     y="2.9727612"
+     width="21.175798"
+     height="19.04829"
+     rx="2.3528664"
+     fill="url(#archiveGradient)"
+     stroke="#6a1b9a"
+     stroke-width="1.18345"
+     id="rect7"
+     style="fill:url(#archiveGradient)" />
+  <rect
+     x="6.4738913"
+     y="0.59172499"
+     width="9.4114656"
+     height="4.7620726"
+     rx="1.1764332"
+     fill="#ab47bc"
+     stroke="#6a1b9a"
+     stroke-width="1.18345"
+     id="rect8" />
+  <rect
+     x="8.8267574"
+     y="7.7348342"
+     width="4.7057328"
+     height="9.5241451"
+     fill="#e1bee7"
+     stroke="#6a1b9a"
+     stroke-width="0.591727"
+     id="rect9" />
+  <path
+     d="M 8.8267575,7.7348337 11.179624,4.1632794 13.53249,7.7348337"
+     fill="none"
+     stroke="#6a1b9a"
+     stroke-width="0.591727"
+     id="path10" />
+</svg>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="147"
+   height="132"
+   viewBox="0 0 147 132"
+   version="1.1"
+   id="svg3"
+   sodipodi:docname="folder.svg"
+   inkscape:version="1.4 (e7c3feb100, 2024-10-09)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview3"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="5.7891892"
+     inkscape:cx="73.412698"
+     inkscape:cy="58.471055"
+     inkscape:window-width="2560"
+     inkscape:window-height="1318"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg3" />
+  <defs
+     id="defs2">
+    <linearGradient
+       id="folderGrad"
+       x1="0"
+       y1="0"
+       x2="1"
+       y2="1">
+      <stop
+         offset="0%"
+         style="stop-color:#ffd54f;stop-opacity:1"
+         id="stop1" />
+      <stop
+         offset="100%"
+         style="stop-color:#ff9800;stop-opacity:1"
+         id="stop2" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#folderGrad"
+       id="linearGradient3"
+       x1="16.210142"
+       y1="69.154236"
+       x2="141.62545"
+       y2="194.56955"
+       gradientTransform="matrix(1.1721057,0,0,0.85316537,-19,-34)"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#folderGrad"
+       id="linearGradient4"
+       x1="9.5322582"
+       y1="67.769881"
+       x2="83.281834"
+       y2="141.51946"
+       gradientTransform="matrix(1.9932318,0,0,0.5016978,-19,-34)"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <path
+     d="M 1,26 V 131 H 146 V 36 H 81 L 66,26 Z"
+     fill="url(#folderGrad)"
+     stroke="#000000"
+     stroke-width="2"
+     id="path2"
+     style="fill:url(#linearGradient3)" />
+  <path
+     d="m 1,1 h 65 l 15,15 h 65 V 36 H 81 L 66,26 H 1 Z"
+     fill="url(#folderGrad)"
+     stroke="#000000"
+     stroke-width="2"
+     id="path3"
+     style="fill:url(#linearGradient4)" />
+</svg>

@@ -140,6 +140,13 @@ void PageMainWindow::opentoolpage(const QString &buttonName)
     tabIcon = QIcon(":/icons/network_tool.svg"); // 使用网络工具图标
     tabWidget->insertTab(tabIndex, newTab, tabIcon, buttonName);
   }
+  else if(buttonName.compare(tr("FTP Client")) == 0)
+  {
+    PageFtpClient *newTab = new PageFtpClient();
+    newTab->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    tabIcon = QIcon(":/icons/ftp_client.svg"); // 使用FTP图标
+    tabWidget->insertTab(tabIndex, newTab, tabIcon, buttonName);
+  }
   tabWidget->setTabToolTip(tabIndex, buttonName);
   tabWidget->setCurrentIndex(tabIndex); // 切换到新标签
 

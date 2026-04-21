@@ -12,6 +12,8 @@
 #include <QDialogButtonBox>
 #include <QDir>
 #include <QEvent>
+#include <QFile>
+#include <QFileDialog>
 #include <QFormLayout>
 #include <QFrame>
 #include <QGridLayout>
@@ -28,6 +30,9 @@
 #include <QMessageBox>
 #include <QMetaType>
 #include <QMutex>
+#include <QNetworkProxy>
+#include <QPainter>
+#include <QPixmap>
 #include <QProgressBar>
 #include <QPushButton>
 #include <QRadioButton>
@@ -43,6 +48,7 @@
 #include <QStyleFactory>
 #include <QTabWidget>
 #include <QTableWidget>
+#include <QTcpSocket>
 #include <QTextBlock>
 #include <QTextCursor>
 #include <QTextEdit>
@@ -52,6 +58,7 @@
 #include <QTranslator>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
+#include <QUrl>
 #include <QVariant>
 #include <QVBoxLayout>
 #include <QWidget>
