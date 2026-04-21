@@ -22,8 +22,6 @@ class PageFtpClient : public QWidget
     void onSocketDisconnected();
     void onSocketError(QAbstractSocket::SocketError error);
     void processItem(QTreeWidgetItem *item, int column);
-
-  private slots:
     void onDataSocketConnected();
     void onDataSocketDisconnected();
     void onDataSocketReadyRead();

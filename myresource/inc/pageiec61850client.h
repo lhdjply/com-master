@@ -116,6 +116,9 @@ class PageIEC61850Client : public QMainWindow
     void onDataModelItemDoubleClicked(const QString& objectReference);
     void onDataModelLoadProgress(int value, const QString& message);
 
+  protected:
+    void showEvent(QShowEvent *event) override;
+
   private:
     // IEC61850 Client private methods
     QVariant mmsValueToQVariant(MmsValue* mmsValue);
@@ -133,10 +136,6 @@ class PageIEC61850Client : public QMainWindow
     // DataValueWidget private methods
     void setupDataValueWidgetUI();
 
-  protected:
-    void showEvent(QShowEvent *event) override;
-
-  private:
     // PageTabContent private methods
     void setupUi();
     void setupToolBar();
