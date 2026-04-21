@@ -1,3 +1,12 @@
+com-master (1.0.2) unstable; urgency=medium
+
+  * 图标改svg.
+  * 增加网络调试助手.
+  * 颜色统一管理.
+  * 增加ftp客户端功能.
+
+ -- lhdjply <lhdjply@126.com>  Tue, 21 Apr 2026 13:04:55 +0800
+
 com-master (1.0.1) unstable; urgency=medium
 
   * 修复61850无法连接问题.
