@@ -328,7 +328,6 @@ void PageNetworkTool::setupUi()
   receiveLayout->setSpacing(10);
 
   receiveDataEdit = new CustomTextEdit();
-  receiveDataEdit->setReadOnly(true);
   receiveDataEdit->setStyleSheet("font-family: 'Consolas', 'Monaco', monospace; font-size: 12px;");
 
   // Receive options similar to serial transceiver - all in one layout
