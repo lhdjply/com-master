@@ -1268,7 +1268,7 @@ void PageIEC61850Client::setupDataValueWidgetUI()
   // Write value input
   QHBoxLayout* writeLayout = new QHBoxLayout();
   writeLayout->setSpacing(10);
-  m_writeValueEdit = new QLineEdit(m_dataValueWidget);
+  m_writeValueEdit = new CustomLineEdit(m_dataValueWidget);
   m_writeValueEdit->setPlaceholderText(tr("Enter value to write..."));
   writeLayout->addWidget(m_writeValueEdit);
 

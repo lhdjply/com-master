@@ -39,10 +39,10 @@ class PageSshClient : public QWidget
     QLabel * portLabel;
     QLabel * usernameLabel;
     QLabel * passwordLabel;
-    QLineEdit * hostEdit;
-    QLineEdit * portEdit;
-    QLineEdit * usernameEdit;
-    QLineEdit * passwordEdit;
+    CustomLineEdit * hostEdit;
+    CustomLineEdit * portEdit;
+    CustomLineEdit * usernameEdit;
+    CustomLineEdit * passwordEdit;
     QPushButton * connectButton;
 
     QGroupBox * terminalGroup;

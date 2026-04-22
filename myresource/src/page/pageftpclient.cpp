@@ -114,22 +114,22 @@ void PageFtpClient::setupUi()
 
   QLabel *serverLabel = new QLabel(tr("Server:"));
   serverLabel->setMinimumSize(QSize(60, 0));
-  serverEdit = new QLineEdit("localhost");
+  serverEdit = new CustomLineEdit("localhost");
   serverEdit->setMinimumSize(QSize(146, 0));
 
   QLabel *portLabel = new QLabel(tr("Port:"));
   portLabel->setMinimumSize(QSize(60, 0));
-  portEdit = new QLineEdit("21");
+  portEdit = new CustomLineEdit("21");
   portEdit->setMinimumSize(QSize(146, 0));
 
   QLabel *userLabel = new QLabel(tr("User:"));
   userLabel->setMinimumSize(QSize(60, 0));
-  userEdit = new QLineEdit("");
+  userEdit = new CustomLineEdit();
   userEdit->setMinimumSize(QSize(146, 0));
 
   QLabel *passLabel = new QLabel(tr("Password:"));
   passLabel->setMinimumSize(QSize(60, 0));
-  passwordEdit = new QLineEdit("");
+  passwordEdit = new CustomLineEdit();
   passwordEdit->setEchoMode(QLineEdit::Password);
   passwordEdit->setMinimumSize(QSize(146, 0));
 
@@ -178,7 +178,7 @@ void PageFtpClient::setupUi()
   QVBoxLayout *logLayout = new QVBoxLayout(logGroup);
   logLayout->setSpacing(5);
 
-  logText = new QTextEdit();
+  logText = new CustomTextEdit();
   logText->setReadOnly(true);
   logText->setStyleSheet("font-family: 'Consolas', 'Monaco', monospace; font-size: 12px;");
 

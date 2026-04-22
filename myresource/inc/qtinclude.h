@@ -70,4 +70,38 @@
 #include "iec61850_client.h"
 #include "mms_value.h"
 
+class CustomTextEdit : public QTextEdit
+{
+    Q_OBJECT
+
+  public:
+    explicit CustomTextEdit(QWidget *parent = nullptr);
+
+  protected:
+    void contextMenuEvent(QContextMenuEvent *event) override;
+};
+
+class CustomLineEdit : public QLineEdit
+{
+    Q_OBJECT
+
+  public:
+    explicit CustomLineEdit(QWidget *parent = nullptr);
+    explicit CustomLineEdit(const QString &text, QWidget *parent = nullptr);
+
+  protected:
+    void contextMenuEvent(QContextMenuEvent *event) override;
+};
+
+class CustomSpinBox : public QSpinBox
+{
+    Q_OBJECT
+
+  public:
+    explicit CustomSpinBox(QWidget *parent = nullptr);
+
+  protected:
+    void contextMenuEvent(QContextMenuEvent *event) override;
+};
+
 #endif

@@ -23,15 +23,15 @@ void PageConnectionDialog::setupUi()
   QGroupBox *connectionGroup = new QGroupBox(tr("Connection Settings"), this);
   QFormLayout *connectionLayout = new QFormLayout(connectionGroup);
 
-  m_hostnameEdit = new QLineEdit("192.168.1.100", this);
+  m_hostnameEdit = new CustomLineEdit("192.168.1.100", this);
   connectionLayout->addRow(tr("Hostname:"), m_hostnameEdit);
 
-  m_portSpinBox = new QSpinBox(this);
+  m_portSpinBox = new CustomSpinBox(this);
   m_portSpinBox->setRange(1, 65535);
   m_portSpinBox->setValue(102);
   connectionLayout->addRow(tr("Port:"), m_portSpinBox);
 
-  m_timeoutSpinBox = new QSpinBox(this);
+  m_timeoutSpinBox = new CustomSpinBox(this);
   m_timeoutSpinBox->setRange(1000, 60000);
   m_timeoutSpinBox->setValue(5000);
   m_timeoutSpinBox->setSuffix(" ms");
@@ -46,11 +46,11 @@ void PageConnectionDialog::setupUi()
   m_authCheckBox = new QCheckBox(tr("Use Authentication"), this);
   authLayout->addRow(m_authCheckBox);
 
-  m_usernameEdit = new QLineEdit(this);
+  m_usernameEdit = new CustomLineEdit(this);
   m_usernameEdit->setEnabled(false);
   authLayout->addRow(tr("Username:"), m_usernameEdit);
 
-  m_passwordEdit = new QLineEdit(this);
+  m_passwordEdit = new CustomLineEdit(this);
   m_passwordEdit->setEchoMode(QLineEdit::Password);
   m_passwordEdit->setEnabled(false);
   authLayout->addRow(tr("Password:"), m_passwordEdit);

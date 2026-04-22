@@ -3,17 +3,6 @@
 
 #include "qtinclude.h"
 
-class CustomTextEdit : public QTextEdit
-{
-    Q_OBJECT
-
-  public:
-    explicit CustomTextEdit(QWidget *parent = nullptr);
-
-  protected:
-    void contextMenuEvent(QContextMenuEvent *event) override;
-};
-
 class PageSerialTransceiver : public QMainWindow
 {
     Q_OBJECT
@@ -110,7 +99,7 @@ class PageSerialTransceiver : public QMainWindow
     QFrame * frame_3;
     QHBoxLayout * horizontalLayout_8;
     QLabel * label_6;
-    QLineEdit * senddutyedit;
+    CustomLineEdit * senddutyedit;
     QLabel * label_7;
 
     QByteArray getFrameDelimiter(); // Get the current frame delimiter based on settings

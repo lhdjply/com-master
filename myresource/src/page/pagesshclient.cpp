@@ -63,10 +63,10 @@ void PageSshClient::setupUi()
   usernameLabel = new QLabel(tr("Username:"));
   passwordLabel = new QLabel(tr("Password:"));
 
-  hostEdit = new QLineEdit("localhost");
-  portEdit = new QLineEdit("22");
-  usernameEdit = new QLineEdit();
-  passwordEdit = new QLineEdit();
+  hostEdit = new CustomLineEdit("localhost");
+  portEdit = new CustomLineEdit("22");
+  usernameEdit = new CustomLineEdit();
+  passwordEdit = new CustomLineEdit();
   passwordEdit->setEchoMode(QLineEdit::Password);
 
   connectButton = new QPushButton(tr("Connect"));

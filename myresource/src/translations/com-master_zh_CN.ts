@@ -2,39 +2,115 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="zh_CN">
 <context>
-    <name>CustomTextEdit</name>
+    <name>CustomLineEdit</name>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="19"/>
+        <location filename="../customwidgets/customlineedit.cpp" line="23"/>
         <source>Undo</source>
         <translation type="unfinished">撤销</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="23"/>
+        <location filename="../customwidgets/customlineedit.cpp" line="27"/>
         <source>Redo</source>
         <translation type="unfinished">重做</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="27"/>
+        <location filename="../customwidgets/customlineedit.cpp" line="31"/>
         <source>Cut</source>
         <translation type="unfinished">剪切</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="31"/>
+        <location filename="../customwidgets/customlineedit.cpp" line="35"/>
         <source>Copy</source>
         <translation type="unfinished">复制</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="35"/>
+        <location filename="../customwidgets/customlineedit.cpp" line="39"/>
         <source>Paste</source>
         <translation type="unfinished">粘贴</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="39"/>
+        <location filename="../customwidgets/customlineedit.cpp" line="43"/>
         <source>Delete</source>
         <translation type="unfinished">删除</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="43"/>
+        <location filename="../customwidgets/customlineedit.cpp" line="47"/>
+        <source>Select All</source>
+        <translation type="unfinished">全选</translation>
+    </message>
+</context>
+<context>
+    <name>CustomSpinBox</name>
+    <message>
+        <location filename="../customwidgets/customspinbox.cpp" line="12"/>
+        <source>Undo</source>
+        <translation type="unfinished">撤销</translation>
+    </message>
+    <message>
+        <location filename="../customwidgets/customspinbox.cpp" line="13"/>
+        <source>Redo</source>
+        <translation type="unfinished">重做</translation>
+    </message>
+    <message>
+        <location filename="../customwidgets/customspinbox.cpp" line="15"/>
+        <source>Cut</source>
+        <translation type="unfinished">剪切</translation>
+    </message>
+    <message>
+        <location filename="../customwidgets/customspinbox.cpp" line="16"/>
+        <source>Copy</source>
+        <translation type="unfinished">复制</translation>
+    </message>
+    <message>
+        <location filename="../customwidgets/customspinbox.cpp" line="17"/>
+        <source>Paste</source>
+        <translation type="unfinished">粘贴</translation>
+    </message>
+    <message>
+        <location filename="../customwidgets/customspinbox.cpp" line="18"/>
+        <source>Delete</source>
+        <translation type="unfinished">删除</translation>
+    </message>
+    <message>
+        <location filename="../customwidgets/customspinbox.cpp" line="20"/>
+        <source>Select All</source>
+        <translation type="unfinished">全选</translation>
+    </message>
+</context>
+<context>
+    <name>CustomTextEdit</name>
+    <message>
+        <location filename="../customwidgets/customtextedit.cpp" line="17"/>
+        <source>Undo</source>
+        <translation type="unfinished">撤销</translation>
+    </message>
+    <message>
+        <location filename="../customwidgets/customtextedit.cpp" line="22"/>
+        <source>Redo</source>
+        <translation type="unfinished">重做</translation>
+    </message>
+    <message>
+        <location filename="../customwidgets/customtextedit.cpp" line="27"/>
+        <source>Cut</source>
+        <translation type="unfinished">剪切</translation>
+    </message>
+    <message>
+        <location filename="../customwidgets/customtextedit.cpp" line="32"/>
+        <source>Copy</source>
+        <translation type="unfinished">复制</translation>
+    </message>
+    <message>
+        <location filename="../customwidgets/customtextedit.cpp" line="37"/>
+        <source>Paste</source>
+        <translation type="unfinished">粘贴</translation>
+    </message>
+    <message>
+        <location filename="../customwidgets/customtextedit.cpp" line="42"/>
+        <source>Delete</source>
+        <translation type="unfinished">删除</translation>
+    </message>
+    <message>
+        <location filename="../customwidgets/customtextedit.cpp" line="47"/>
         <source>Select All</source>
         <translation type="unfinished">全选</translation>
     </message>
@@ -1059,166 +1135,166 @@ Troubleshooting steps:
 <context>
     <name>PageSerialTransceiver</name>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="203"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="156"/>
         <source>None</source>
         <translation type="unfinished">无</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="204"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="157"/>
         <source>Odd</source>
         <translation type="unfinished">奇校验</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="205"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="158"/>
         <source>Even</source>
         <translation type="unfinished">偶校验</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="206"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="159"/>
         <source>Mark</source>
         <translation type="unfinished">标记校验</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="207"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="160"/>
         <source>Space</source>
         <translation type="unfinished">空格校验</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="466"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="419"/>
         <source>Serial Port Settings</source>
         <translation type="unfinished">串口设置</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="467"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="420"/>
         <source>Port</source>
         <translation type="unfinished">端口</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="468"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="421"/>
         <source>Baudrate</source>
         <translation type="unfinished">波特率</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="469"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="422"/>
         <source>Data bits</source>
         <translation type="unfinished">数据位</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="470"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="423"/>
         <source>Parity</source>
         <translation type="unfinished">校验位</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="471"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="424"/>
         <source>Stop bits</source>
         <translation type="unfinished">停止位</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="472"/>
-        <location filename="../page/pageserialtransceiver.cpp" line="554"/>
-        <location filename="../page/pageserialtransceiver.cpp" line="723"/>
-        <location filename="../page/pageserialtransceiver.cpp" line="724"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="425"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="507"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="676"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="677"/>
         <source>Open</source>
         <translation type="unfinished">打开</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="473"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="426"/>
         <source>Statistics</source>
         <translation type="unfinished">统计数据</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="474"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="427"/>
         <source>Received frames</source>
         <translation type="unfinished">接收帧数</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="475"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="428"/>
         <source>Received bytes</source>
         <translation type="unfinished">接收字节数</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="476"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="429"/>
         <source>Send frames</source>
         <translation type="unfinished">发送帧数</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="477"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="430"/>
         <source>Send bytes</source>
         <translation type="unfinished">发送字节数</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="478"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="431"/>
         <source>Clear count</source>
         <translation type="unfinished">清空计数</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="479"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="432"/>
         <source>Received Data</source>
         <translation type="unfinished">接收区</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="480"/>
-        <location filename="../page/pageserialtransceiver.cpp" line="489"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="433"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="442"/>
         <source>Hex</source>
         <translation type="unfinished">16进制</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="481"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="434"/>
         <source>Display send</source>
         <translation type="unfinished">显示发送</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="482"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="435"/>
         <source>Display time</source>
         <translation type="unfinished">显示时间</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="483"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="436"/>
         <source>Frame line break</source>
         <translation type="unfinished">帧换行</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="484"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="437"/>
         <source>Clear Receive</source>
         <translation type="unfinished">清空接收区</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="485"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="438"/>
         <source>Send Data</source>
         <translation type="unfinished">发送区</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="486"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="439"/>
         <source>Send</source>
         <translation type="unfinished">发送</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="487"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="440"/>
         <source>Verification</source>
         <translation type="unfinished">校验</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="488"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="441"/>
         <source>Clear Send</source>
         <translation type="unfinished">清除发送区</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="490"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="443"/>
         <source>Auto send</source>
         <translation type="unfinished">自动发送</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="491"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="444"/>
         <source>Send duty</source>
         <translation type="unfinished">发送周期</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="492"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="445"/>
         <source>ms</source>
         <translation type="unfinished">毫秒</translation>
     </message>
     <message>
-        <location filename="../page/pageserialtransceiver.cpp" line="576"/>
+        <location filename="../page/pageserialtransceiver.cpp" line="529"/>
         <source>Close</source>
         <translation type="unfinished">关闭</translation>
     </message>

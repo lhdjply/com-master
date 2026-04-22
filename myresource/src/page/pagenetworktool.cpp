@@ -70,7 +70,7 @@ void PageNetworkTool::setupUi()
 
   tcpServerPortLabel = new QLabel(tr("Port:"));
   tcpServerPortLabel->setMinimumSize(QSize(60, 0));
-  tcpServerPortEdit = new QLineEdit("8080");
+  tcpServerPortEdit = new CustomLineEdit("8080");
   tcpServerPortEdit->setMinimumSize(QSize(146, 0));
   tcpStartButton = new QPushButton(tr("Start"));
   tcpStartButton->setMinimumSize(QSize(70, 36));
@@ -112,11 +112,11 @@ void PageNetworkTool::setupUi()
 
   tcpClientIpLabel = new QLabel(tr("Server IP:"));
   tcpClientIpLabel->setMinimumSize(QSize(60, 0));
-  tcpClientIpEdit = new QLineEdit("127.0.0.1");
+  tcpClientIpEdit = new CustomLineEdit("127.0.0.1");
   tcpClientIpEdit->setMinimumSize(QSize(146, 0));
   tcpClientPortLabel = new QLabel(tr("Port:"));
   tcpClientPortLabel->setMinimumSize(QSize(60, 0));
-  tcpClientPortEdit = new QLineEdit("8080");
+  tcpClientPortEdit = new CustomLineEdit("8080");
   tcpClientPortEdit->setMinimumSize(QSize(146, 0));
   tcpConnectButton = new QPushButton(tr("Connect"));
   tcpConnectButton->setMinimumSize(QSize(70, 36));
@@ -156,7 +156,7 @@ void PageNetworkTool::setupUi()
   // UDP Local settings
   udpServerPortLabel = new QLabel(tr("Local Port:"));
   udpServerPortLabel->setMinimumSize(QSize(60, 0));
-  udpServerPortEdit = new QLineEdit("8080");
+  udpServerPortEdit = new CustomLineEdit("8080");
   udpServerPortEdit->setMinimumSize(QSize(146, 0));
   udpStartButton = new QPushButton(tr("Start"));
   udpStartButton->setMinimumSize(QSize(70, 36));
@@ -183,11 +183,11 @@ void PageNetworkTool::setupUi()
   // UDP Remote settings
   udpTargetIpLabel = new QLabel(tr("Remote IP:"));
   udpTargetIpLabel->setMinimumSize(QSize(60, 0));
-  udpTargetIpEdit = new QLineEdit("127.0.0.1");
+  udpTargetIpEdit = new CustomLineEdit("127.0.0.1");
   udpTargetIpEdit->setMinimumSize(QSize(146, 0));
   udpTargetPortLabel = new QLabel(tr("Port:"));
   udpTargetPortLabel->setMinimumSize(QSize(60, 0));
-  udpTargetPortEdit = new QLineEdit("8080");
+  udpTargetPortEdit = new CustomLineEdit("8080");
   udpTargetPortEdit->setMinimumSize(QSize(146, 0));
 
   QHBoxLayout *udpTargetIpLayout = new QHBoxLayout();
@@ -219,7 +219,7 @@ void PageNetworkTool::setupUi()
   QVBoxLayout *logLayout = new QVBoxLayout(logGroup);
   logLayout->setSpacing(5);
 
-  receiveEdit = new QTextEdit();
+  receiveEdit = new CustomTextEdit();
   receiveEdit->setReadOnly(true);
   receiveEdit->setStyleSheet("font-family: 'Consolas', 'Monaco', monospace; font-size: 12px;");
 
@@ -250,7 +250,7 @@ void PageNetworkTool::setupUi()
   // Initialize hex checkbox (similar to serial transceiver)
   sendHexCheckbox = new QCheckBox(tr("Hex"));
 
-  sendEdit = new QTextEdit();
+  sendEdit = new CustomTextEdit();
   sendEdit->setStyleSheet("font-family: 'Consolas', 'Monaco', monospace; font-size: 12px;");
 
   // Create send buttons layout
@@ -280,7 +280,7 @@ void PageNetworkTool::setupUi()
   autoSendFrameLayout->setContentsMargins(0, 0, 0, 0);
 
   autoSendLabel = new QLabel(tr("Send duty:"));
-  autoSendIntervalEdit = new QLineEdit("1000");
+  autoSendIntervalEdit = new CustomLineEdit("1000");
   autoSendIntervalEdit->setMaximumSize(QSize(60, 16777215));
   autoSendIntervalEdit->setAlignment(Qt::AlignCenter);
   autoSendIntervalEdit->setEnabled(false);
@@ -327,7 +327,7 @@ void PageNetworkTool::setupUi()
   receiveLayout = new QVBoxLayout(receiveGroup);
   receiveLayout->setSpacing(10);
 
-  receiveDataEdit = new QTextEdit();
+  receiveDataEdit = new CustomTextEdit();
   receiveDataEdit->setReadOnly(true);
   receiveDataEdit->setStyleSheet("font-family: 'Consolas', 'Monaco', monospace; font-size: 12px;");
 

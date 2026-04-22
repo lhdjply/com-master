@@ -179,7 +179,7 @@ class PageIEC61850Client : public QMainWindow
     QPushButton * m_readButton;
     QPushButton * m_writeButton;
 
-    QLineEdit * m_writeValueEdit;
+    CustomLineEdit * m_writeValueEdit;
 
     QTableWidget * m_valueTable;
 

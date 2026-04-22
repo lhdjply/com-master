@@ -41,15 +41,15 @@ class PageFtpClient : public QWidget
 
     QVBoxLayout * mainLayout;
     QHBoxLayout * connectionLayout;
-    QLineEdit * serverEdit;
-    QLineEdit * portEdit;
-    QLineEdit * userEdit;
-    QLineEdit * passwordEdit;
+    CustomLineEdit * serverEdit;
+    CustomLineEdit * portEdit;
+    CustomLineEdit * userEdit;
+    CustomLineEdit * passwordEdit;
     QPushButton * connectButton;
     QPushButton * disconnectButton;
 
     QTreeWidget * fileList;
-    QTextEdit * logText;
+    CustomTextEdit * logText;
     QLabel * currentPathLabel;
 
     QHBoxLayout * fileOperationLayout;

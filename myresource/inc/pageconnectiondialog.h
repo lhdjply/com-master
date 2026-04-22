@@ -28,12 +28,12 @@ class PageConnectionDialog : public QDialog
     void connectSignals();
 
     // Connection parameters
-    QLineEdit * m_hostnameEdit;
-    QSpinBox * m_portSpinBox;
+    CustomLineEdit * m_hostnameEdit;
+    CustomSpinBox * m_portSpinBox;
     QCheckBox * m_authCheckBox;
-    QLineEdit * m_usernameEdit;
-    QLineEdit * m_passwordEdit;
-    QSpinBox * m_timeoutSpinBox;
+    CustomLineEdit * m_usernameEdit;
+    CustomLineEdit * m_passwordEdit;
+    CustomSpinBox * m_timeoutSpinBox;
 
     // Buttons
     QPushButton * m_connectButton;
