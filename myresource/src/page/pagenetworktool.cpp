@@ -219,9 +219,9 @@ void PageNetworkTool::setupUi()
   QVBoxLayout *logLayout = new QVBoxLayout(logGroup);
   logLayout->setSpacing(5);
 
-  receiveEdit = new CustomTextEdit();
-  receiveEdit->setReadOnly(true);
-  receiveEdit->setStyleSheet("font-family: 'Consolas', 'Monaco', monospace; font-size: 12px;");
+  logText = new CustomTextEdit();
+  logText->setReadOnly(true);
+  logText->setStyleSheet("font-family: 'Consolas', 'Monaco', monospace; font-size: 12px;");
 
   QHBoxLayout *logButtonLayout = new QHBoxLayout();
   logButtonLayout->setSpacing(10);
@@ -233,7 +233,7 @@ void PageNetworkTool::setupUi()
   logButtonLayout->addWidget(saveButton);
   logButtonLayout->addStretch();
 
-  logLayout->addWidget(receiveEdit);
+  logLayout->addWidget(logText);
   logLayout->addLayout(logButtonLayout);
 
   leftPanelLayout->addWidget(logGroup);
@@ -1017,7 +1017,7 @@ void PageNetworkTool::udpSendData()
 // Common methods
 void PageNetworkTool::clearLog()
 {
-  receiveEdit->clear();
+  logText->clear();
 }
 
 void PageNetworkTool::clearReceiveData()
@@ -1034,7 +1034,7 @@ void PageNetworkTool::saveLog()
     if(file.open(QIODevice::WriteOnly | QIODevice::Text))
     {
       QTextStream out(&file);
-      out << receiveEdit->toPlainText();
+      out << logText->toPlainText();
       logMessage(tr("Log saved to %1").arg(fileName));
     }
   }
@@ -1043,12 +1043,12 @@ void PageNetworkTool::saveLog()
 void PageNetworkTool::logMessage(const QString &message)
 {
   QString timestamp = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz");
-  receiveEdit->append(QString("[%1] %2").arg(timestamp).arg(message));
+  logText->append(QString("[%1] %2").arg(timestamp).arg(message));
 
   // Auto-scroll to bottom
-  QTextCursor cursor = receiveEdit->textCursor();
+  QTextCursor cursor = logText->textCursor();
   cursor.movePosition(QTextCursor::End);
-  receiveEdit->setTextCursor(cursor);
+  logText->setTextCursor(cursor);
 }
 
 void PageNetworkTool::appendReceiveData(const QString &message)

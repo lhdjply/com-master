@@ -138,7 +138,7 @@ class PageNetworkTool : public QWidget
 
     QGroupBox * receiveGroup;
     QVBoxLayout * receiveLayout;
-    CustomTextEdit * receiveEdit;
+    CustomTextEdit * logText;
     CustomTextEdit * receiveDataEdit;
     QCheckBox * receiveHexCheckbox;
     QCheckBox * displaySendCheckbox;
