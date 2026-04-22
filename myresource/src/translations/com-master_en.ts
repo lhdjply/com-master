@@ -72,7 +72,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../customwidgets/customspinbox.cpp" line="20"/>
+        <location filename="../customwidgets/customspinbox.cpp" line="21"/>
         <source>Select All</source>
         <translation type="unfinished"></translation>
     </message>
@@ -704,8 +704,8 @@ Troubleshooting steps:
     <message>
         <location filename="../page/pagenetworktool.cpp" line="82"/>
         <location filename="../page/pagenetworktool.cpp" line="168"/>
-        <location filename="../page/pagenetworktool.cpp" line="632"/>
-        <location filename="../page/pagenetworktool.cpp" line="929"/>
+        <location filename="../page/pagenetworktool.cpp" line="631"/>
+        <location filename="../page/pagenetworktool.cpp" line="928"/>
         <source>Status: Stopped</source>
         <translation type="unfinished"></translation>
     </message>
@@ -736,7 +736,7 @@ Troubleshooting steps:
     </message>
     <message>
         <location filename="../page/pagenetworktool.cpp" line="128"/>
-        <location filename="../page/pagenetworktool.cpp" line="1133"/>
+        <location filename="../page/pagenetworktool.cpp" line="1132"/>
         <source>Status: Disconnected</source>
         <translation type="unfinished"></translation>
     </message>
@@ -782,7 +782,7 @@ Troubleshooting steps:
     </message>
     <message>
         <location filename="../page/pagenetworktool.cpp" line="251"/>
-        <location filename="../page/pagenetworktool.cpp" line="338"/>
+        <location filename="../page/pagenetworktool.cpp" line="337"/>
         <source>Hex</source>
         <translation type="unfinished"></translation>
     </message>
@@ -830,162 +830,162 @@ Troubleshooting steps:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagenetworktool.cpp" line="339"/>
+        <location filename="../page/pagenetworktool.cpp" line="338"/>
         <source>Display send</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagenetworktool.cpp" line="340"/>
+        <location filename="../page/pagenetworktool.cpp" line="339"/>
         <source>Display time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagenetworktool.cpp" line="341"/>
+        <location filename="../page/pagenetworktool.cpp" line="340"/>
         <source>Frame line break</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagenetworktool.cpp" line="342"/>
+        <location filename="../page/pagenetworktool.cpp" line="341"/>
         <source>Clear Receive</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagenetworktool.cpp" line="596"/>
+        <location filename="../page/pagenetworktool.cpp" line="595"/>
         <source>Status: Running on port %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagenetworktool.cpp" line="597"/>
+        <location filename="../page/pagenetworktool.cpp" line="596"/>
         <source>TCP Server started on port %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagenetworktool.cpp" line="603"/>
+        <location filename="../page/pagenetworktool.cpp" line="602"/>
         <source>Failed to start server: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagenetworktool.cpp" line="633"/>
+        <location filename="../page/pagenetworktool.cpp" line="632"/>
         <source>TCP Server stopped</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagenetworktool.cpp" line="647"/>
+        <location filename="../page/pagenetworktool.cpp" line="646"/>
         <source>New TCP client connected: %1:%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagenetworktool.cpp" line="667"/>
+        <location filename="../page/pagenetworktool.cpp" line="666"/>
         <source>TCP client disconnected: %1:%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagenetworktool.cpp" line="726"/>
+        <location filename="../page/pagenetworktool.cpp" line="725"/>
         <source>TCP Broadcast sent to %1 clients</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagenetworktool.cpp" line="754"/>
+        <location filename="../page/pagenetworktool.cpp" line="753"/>
         <source>TCP Data sent to %1 selected clients</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagenetworktool.cpp" line="773"/>
+        <location filename="../page/pagenetworktool.cpp" line="772"/>
         <source>Connecting to TCP server %1:%2...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagenetworktool.cpp" line="788"/>
+        <location filename="../page/pagenetworktool.cpp" line="787"/>
         <source>Connected to TCP server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagenetworktool.cpp" line="806"/>
+        <location filename="../page/pagenetworktool.cpp" line="805"/>
         <source>Disconnected from TCP server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagenetworktool.cpp" line="843"/>
+        <location filename="../page/pagenetworktool.cpp" line="842"/>
         <source>TCP Socket error: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagenetworktool.cpp" line="866"/>
+        <location filename="../page/pagenetworktool.cpp" line="865"/>
         <source>TCP Sent %1 bytes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagenetworktool.cpp" line="870"/>
+        <location filename="../page/pagenetworktool.cpp" line="869"/>
         <source>Failed to send TCP data</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagenetworktool.cpp" line="889"/>
+        <location filename="../page/pagenetworktool.cpp" line="888"/>
         <source>Status: Listening on port %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagenetworktool.cpp" line="890"/>
+        <location filename="../page/pagenetworktool.cpp" line="889"/>
         <source>UDP started on port %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagenetworktool.cpp" line="907"/>
+        <location filename="../page/pagenetworktool.cpp" line="906"/>
         <source>Failed to start UDP: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagenetworktool.cpp" line="930"/>
+        <location filename="../page/pagenetworktool.cpp" line="929"/>
         <source>UDP stopped</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagenetworktool.cpp" line="991"/>
+        <location filename="../page/pagenetworktool.cpp" line="990"/>
         <source>Please start UDP first</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagenetworktool.cpp" line="1009"/>
+        <location filename="../page/pagenetworktool.cpp" line="1008"/>
         <source>UDP Sent %1 bytes to %2:%3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagenetworktool.cpp" line="1013"/>
+        <location filename="../page/pagenetworktool.cpp" line="1012"/>
         <source>Failed to send UDP data</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagenetworktool.cpp" line="1030"/>
+        <location filename="../page/pagenetworktool.cpp" line="1029"/>
         <source>Save Log</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagenetworktool.cpp" line="1030"/>
+        <location filename="../page/pagenetworktool.cpp" line="1029"/>
         <source>Text Files (*.txt)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagenetworktool.cpp" line="1038"/>
+        <location filename="../page/pagenetworktool.cpp" line="1037"/>
         <source>Log saved to %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagenetworktool.cpp" line="1087"/>
+        <location filename="../page/pagenetworktool.cpp" line="1086"/>
         <source>%1:%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagenetworktool.cpp" line="1098"/>
+        <location filename="../page/pagenetworktool.cpp" line="1097"/>
         <source>%1:%2 (Last: %3)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagenetworktool.cpp" line="1122"/>
+        <location filename="../page/pagenetworktool.cpp" line="1121"/>
         <source>Status: Connected to %1:%2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../page/pagenetworktool.cpp" line="1155"/>
+        <location filename="../page/pagenetworktool.cpp" line="1154"/>
         <source>Invalid hex data: %1</source>
         <translation type="unfinished"></translation>
     </message>
