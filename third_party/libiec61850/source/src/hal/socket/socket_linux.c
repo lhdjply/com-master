@@ -6,6 +6,7 @@
  *  This file is part of Platform Abstraction Layer (libpal)
  *  for libiec61850, libmms, and lib60870.
  */
+#ifdef __linux__
 
 #include "hal_socket.h"
 #include <arpa/inet.h>
@@ -1033,3 +1034,5 @@ UdpSocket_receiveFrom(UdpSocket self, char * address, int maxAddrSize, uint8_t *
 
   return result;
 }
+
+#endif

@@ -6,6 +6,7 @@
  *  This file is part of Platform Abstraction Layer (libpal)
  *  for libiec61850, libmms, and lib60870.
  */
+#ifdef __linux__
 
 #include "lib_memory.h"
 
@@ -280,3 +281,5 @@ SerialPort_write(SerialPort self, uint8_t * buffer, int startPos, int bufSize)
 
   return result;
 }
+
+#endif

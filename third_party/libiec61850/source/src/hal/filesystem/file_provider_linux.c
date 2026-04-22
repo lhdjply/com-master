@@ -21,6 +21,8 @@
  *  See COPYING file for the complete license text.
  */
 
+#ifdef __linux__
+
 #include <string.h>
 #include <dirent.h>
 #include <stdbool.h>
@@ -156,4 +158,6 @@ FileSystem_closeDirectory(DirectoryHandle directory)
   closedir(directory->handle);
   GLOBAL_FREEMEM(directory);
 }
+
+#endif /* __linux__ */
 

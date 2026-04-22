@@ -21,6 +21,8 @@
  *  See COPYING file for the complete license text.
  */
 
+#ifdef __linux__
+
 #include <sys/socket.h>
 #include <sys/ioctl.h>
 #include <poll.h>
@@ -365,3 +367,5 @@ Ethernet_isSupported()
 {
   return true;
 }
+
+#endif

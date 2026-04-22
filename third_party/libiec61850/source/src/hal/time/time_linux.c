@@ -7,6 +7,8 @@
  *  for libiec61850, libmms, and lib60870.
  */
 
+#ifdef __linux__
+
 #include "hal_time.h"
 #include <time.h>
 
@@ -96,3 +98,4 @@ Hal_getMonotonicTimeInNs()
 
 #endif
 
+#endif

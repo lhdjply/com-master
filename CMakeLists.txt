@@ -89,6 +89,12 @@ qt_add_executable(${PROJECT_TARGET}
 
 # 使用变量链接库
 target_link_libraries(${PROJECT_TARGET} PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::SerialPort Qt${QT_VERSION_MAJOR}::Network ${SSH_LIBRARIES})
+
+if(WIN32)
+    target_link_libraries(${PROJECT_TARGET} PRIVATE iphlpapi.lib libpcap.lib)
+    target_include_directories(${PROJECT_TARGET} PRIVATE ${WINPCAP_SDK_DIR}/include)
+endif()
+
 target_include_directories(${PROJECT_TARGET} PRIVATE ${SSH_INCLUDE_DIRS})
 target_compile_options(${PROJECT_TARGET} PRIVATE ${SSH_CFLAGS_OTHER})
 

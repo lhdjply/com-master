@@ -7,6 +7,8 @@
  *  for libiec61850, libmms, and lib60870.
  */
 
+#ifdef __linux__
+
 #include <pthread.h>
 #include <semaphore.h>
 #include <unistd.h>
@@ -111,3 +113,4 @@ Thread_sleep(int millies)
   usleep(millies * 1000);
 }
 
+#endif
