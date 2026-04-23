@@ -2,7 +2,7 @@
 #include "appcolors.h"
 
 PageIEC61850Client::PageIEC61850Client(QWidget *parent)
-  : QMainWindow(parent)
+  : QWidget(parent)
 {
   // Set size policy to expand
   setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -27,111 +27,99 @@ PageIEC61850Client::~PageIEC61850Client()
 
 void PageIEC61850Client::setupUi()
 {
-  // Set window properties
-  setWindowTitle(tr("IEC61850 Client"));
-  setMinimumSize(800, 600);
-  resize(1000, 700);
-
   this->setStyleSheet(AppColors::getStyleSheet());
 
-  // Create central widget
-  QWidget* centralWidget = new QWidget(this);
-  setCentralWidget(centralWidget);
-
   // Create main layout
-  QHBoxLayout* mainLayout = new QHBoxLayout(centralWidget);
+  QGridLayout* mainLayout = new QGridLayout(this);
   mainLayout->setSpacing(15);
   mainLayout->setContentsMargins(10, 10, 10, 10);
 
-  // Create main splitter
-  m_mainSplitter = new QSplitter(Qt::Horizontal, this);
-  mainLayout->addWidget(m_mainSplitter);
-
-  // Create left panel (Data Model)
-  QWidget* leftPanel = new QWidget(this);
-  leftPanel->setMinimumWidth(300);
+  // Create left panel
+  QWidget* leftPanel = new QWidget();
   QVBoxLayout* leftLayout = new QVBoxLayout(leftPanel);
-  leftLayout->setSpacing(10);
+  leftLayout->setSpacing(15);
   leftLayout->setContentsMargins(5, 5, 5, 5);
 
-  // Create a group box for the data model tree
-  QGroupBox* dataModelGroup = new QGroupBox(tr("Data Model"), leftPanel);
+  // Connection settings group
+  QGroupBox* connectionGroup = new QGroupBox(tr("Connection Settings"));
+  QFormLayout* connectionLayout = new QFormLayout(connectionGroup);
+  connectionLayout->setSpacing(10);
+  connectionLayout->setContentsMargins(10, 10, 10, 10);
+
+  m_hostnameEdit = new CustomLineEdit("192.168.1.100");
+  connectionLayout->addRow(tr("Hostname:"), m_hostnameEdit);
+
+  m_portEdit = new CustomLineEdit("102");
+  connectionLayout->addRow(tr("Port:"), m_portEdit);
+
+  // Data Model group
+  QGroupBox* dataModelGroup = new QGroupBox(tr("Data Model"));
   QVBoxLayout* dataModelLayout = new QVBoxLayout(dataModelGroup);
   dataModelLayout->setSpacing(5);
   dataModelLayout->setContentsMargins(5, 5, 5, 5);
   dataModelLayout->addWidget(m_dataModelTree);
 
-  leftLayout->addWidget(dataModelGroup);
-
-  m_mainSplitter->addWidget(leftPanel);
-
-  // Create right panel
-  m_rightSplitter = new QSplitter(Qt::Vertical, this);
-  m_mainSplitter->addWidget(m_rightSplitter);
-
-  // Create data value widget
-  m_rightSplitter->addWidget(m_dataValueWidget);
-
-  // Set splitter sizes and stretch factors
-  m_mainSplitter->setSizes({400, 800});
-  m_mainSplitter->setStretchFactor(0, 1);
-  m_mainSplitter->setStretchFactor(1, 2);
-  m_rightSplitter->setSizes({400, 200});
-  m_rightSplitter->setStretchFactor(0, 2);
-  m_rightSplitter->setStretchFactor(1, 1);
-
-  setupToolBar();
-  setupStatusBar();
-}
-
-void PageIEC61850Client::setupToolBar()
-{
-  // Create actions
-  m_connectAction = new QAction(tr("Connect"), this);
-  m_connectAction->setToolTip(tr("Connect to IEC61850 device"));
-
-  m_disconnectAction = new QAction(tr("Disconnect"), this);
-  m_disconnectAction->setToolTip(tr("Disconnect from device"));
-  m_disconnectAction->setEnabled(false);
-
-  m_refreshAction = new QAction(tr("Refresh"), this);
-  m_refreshAction->setToolTip(tr("Refresh data model"));
-  m_refreshAction->setEnabled(false);
-
-  // Create toolbar
-  m_toolBar = addToolBar("Main");
-  m_toolBar->setToolButtonStyle(Qt::ToolButtonTextOnly);
-  m_toolBar->setIconSize(QSize(24, 24));
-
-  // Add actions to toolbar
-  m_toolBar->addAction(m_connectAction);
-  m_toolBar->addAction(m_disconnectAction);
-  m_toolBar->addSeparator();
-  m_toolBar->addAction(m_refreshAction);
-
-  // Connect signals
-  QObject::connect(m_connectAction, &QAction::triggered, this, &PageIEC61850Client::showConnectionDialog);
-  QObject::connect(m_disconnectAction, &QAction::triggered, this, &PageIEC61850Client::disconnectFromDevice);
-  QObject::connect(m_refreshAction, &QAction::triggered, this, &PageIEC61850Client::refreshDataModel);
-}
-
-void PageIEC61850Client::setupStatusBar()
-{
-  m_statusBar = statusBar();
-
-  m_connectionStatusLabel = new QLabel(tr("Disconnected"), this);
-  m_statusBar->addPermanentWidget(m_connectionStatusLabel);
+  // Connection status
+  QHBoxLayout* statusLayout = new QHBoxLayout();
+  m_connectionStatusLabel = new QLabel(tr("Disconnected"));
+  m_connectionStatusLabel->setStyleSheet(AppColors::getConnectionDisconnectedStyle());
+  statusLayout->addWidget(new QLabel(tr("Status:")));
+  statusLayout->addWidget(m_connectionStatusLabel);
+  statusLayout->addStretch();
+  connectionLayout->addRow(statusLayout);
 
   // Progress bar for data model loading
-  m_progressBar = new QProgressBar(this);
+  QHBoxLayout* progressLayout = new QHBoxLayout();
+  m_progressBar = new QProgressBar();
   m_progressBar->setRange(0, 100);
   m_progressBar->setVisible(false);
   m_progressBar->setMaximumWidth(200);
-  m_statusBar->addPermanentWidget(m_progressBar);
-
-  m_progressLabel = new QLabel("", this);
+  m_progressLabel = new QLabel("");
   m_progressLabel->setVisible(false);
-  m_statusBar->addPermanentWidget(m_progressLabel);
+  progressLayout->addWidget(new QLabel(tr("Progress:")));
+  progressLayout->addWidget(m_progressBar);
+  progressLayout->addWidget(m_progressLabel);
+  progressLayout->addStretch();
+  connectionLayout->addRow(progressLayout);
+
+  // Connection controls
+  QHBoxLayout* controlLayout = new QHBoxLayout();
+  m_connectAction = new QPushButton(tr("Connect"));
+  m_connectAction->setToolTip(tr("Connect to IEC61850 device"));
+  m_connectAction->setMinimumSize(100, 36);
+  m_connectAction->setStyleSheet(AppColors::getSuccessButtonStyle());
+
+  m_refreshAction = new QPushButton(tr("Refresh"));
+  m_refreshAction->setToolTip(tr("Refresh data model"));
+  m_refreshAction->setMinimumSize(100, 36);
+  m_refreshAction->setStyleSheet(AppColors::getStartButtonStyle());
+  m_refreshAction->setEnabled(false);
+
+  controlLayout->addWidget(m_connectAction);
+  controlLayout->addWidget(m_refreshAction);
+  // 设置按钮宽度铺满
+  m_connectAction->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+  m_refreshAction->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+
+  // Add controls to connection group
+  connectionLayout->addRow(controlLayout);
+
+  // Add groups to left panel
+  leftLayout->addWidget(connectionGroup);
+  leftLayout->addWidget(dataModelGroup, 1); // 给数据模型区域更多空间
+
+
+  // Add to main layout
+  mainLayout->addWidget(leftPanel, 0, 0);
+  mainLayout->addWidget(m_dataValueWidget, 0, 1);
+
+  // Set column stretch factors
+  mainLayout->setColumnStretch(0, 1);
+  mainLayout->setColumnStretch(1, 2);
+
+  // Connect signals
+  QObject::connect(m_connectAction, &QPushButton::clicked, this, &PageIEC61850Client::performConnection);
+  QObject::connect(m_refreshAction, &QPushButton::clicked, this, &PageIEC61850Client::refreshDataModel);
 }
 
 bool PageIEC61850Client::connect(const QString& hostname, int port)
@@ -927,7 +915,7 @@ void PageIEC61850Client::setupDataModelTreeContextMenu()
 
   m_contextMenu->addSeparator();
 
-  m_refreshAction = m_contextMenu->addAction(tr("Refresh"));
+  m_refreshContextAction = m_contextMenu->addAction(tr("Refresh"));
 }
 
 void PageIEC61850Client::buildDataModel()
@@ -1428,20 +1416,11 @@ void PageIEC61850Client::writeValue()
   }
 }
 
-void PageIEC61850Client::showConnectionDialog()
+void PageIEC61850Client::performConnection()
 {
-  PageConnectionDialog dialog(this);
+  QString hostname = m_hostnameEdit->text();
+  int port = m_portEdit->text().toInt();
 
-  if(dialog.exec() == QDialog::Accepted)
-  {
-    QString hostname = dialog.getHostname();
-    int port = dialog.getPort();
-    performConnection(hostname, port);
-  }
-}
-
-void PageIEC61850Client::performConnection(const QString& hostname, int port)
-{
   if(connect(hostname, port))
   {
     onConnectionStateChanged(true);
@@ -1528,7 +1507,22 @@ void PageIEC61850Client::updateConnectionStatus(bool connected)
 
 void PageIEC61850Client::enableConnectionDependentUI(bool enabled)
 {
-  m_disconnectAction->setEnabled(enabled);
+  if(enabled)
+  {
+    m_connectAction->setText(tr("Disconnect"));
+    m_connectAction->setToolTip(tr("Disconnect from device"));
+    m_connectAction->setStyleSheet(AppColors::getDangerButtonStyle());
+    QObject::disconnect(m_connectAction, &QPushButton::clicked, this, &PageIEC61850Client::performConnection);
+    QObject::connect(m_connectAction, &QPushButton::clicked, this, &PageIEC61850Client::disconnectFromDevice);
+  }
+  else
+  {
+    m_connectAction->setText(tr("Connect"));
+    m_connectAction->setToolTip(tr("Connect to IEC61850 device"));
+    m_connectAction->setStyleSheet(AppColors::getSuccessButtonStyle());
+    QObject::disconnect(m_connectAction, &QPushButton::clicked, this, &PageIEC61850Client::disconnectFromDevice);
+    QObject::connect(m_connectAction, &QPushButton::clicked, this, &PageIEC61850Client::performConnection);
+  }
   m_refreshAction->setEnabled(enabled);
   m_dataModelTree->setEnabled(enabled);
   m_dataValueWidget->setEnabled(enabled);
@@ -1551,26 +1545,5 @@ void PageIEC61850Client::onDataModelLoadProgress(int value, const QString& messa
     {
       m_progressBar->setVisible(false);
     }
-  }
-}
-
-void PageIEC61850Client::showEvent(QShowEvent *event)
-{
-  QWidget::showEvent(event);
-
-  // Force the widget to expand
-  if(parentWidget())
-  {
-    resize(parentWidget()->size());
-  }
-
-  // Ensure splitters have proper sizes
-  if(m_mainSplitter)
-  {
-    m_mainSplitter->setSizes({400, 800});
-  }
-  if(m_rightSplitter)
-  {
-    m_rightSplitter->setSizes({400, 200});
   }
 }

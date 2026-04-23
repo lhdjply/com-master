@@ -121,10 +121,6 @@ void PageNetworkTool::setupUi()
   tcpConnectButton = new QPushButton(tr("Connect"));
   tcpConnectButton->setMinimumSize(QSize(70, 36));
   tcpConnectButton->setStyleSheet(AppColors::getStartButtonStyle());
-  tcpDisconnectButton = new QPushButton(tr("Disconnect"));
-  tcpDisconnectButton->setMinimumSize(QSize(70, 36));
-  tcpDisconnectButton->setStyleSheet(AppColors::getStopButtonStyle());
-  tcpDisconnectButton->setEnabled(false);
   tcpClientStatusLabel = new QLabel(tr("Status: Disconnected"));
 
   QHBoxLayout *tcpClientIpLayout = new QHBoxLayout();
@@ -139,11 +135,16 @@ void PageNetworkTool::setupUi()
 
   QHBoxLayout *tcpClientButtonLayout = new QHBoxLayout();
   tcpClientButtonLayout->addWidget(tcpConnectButton);
-  tcpClientButtonLayout->addWidget(tcpDisconnectButton);
-  tcpClientButtonLayout->addStretch();
+  // 设置按钮宽度铺满
+  tcpConnectButton->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
   tcpClientLayout->addLayout(tcpClientButtonLayout);
 
-  tcpClientLayout->addWidget(tcpClientStatusLabel);
+  // Status label with separate "Status:" text
+  QHBoxLayout* statusLayout = new QHBoxLayout();
+  statusLayout->addWidget(new QLabel(tr("Status:")));
+  statusLayout->addWidget(tcpClientStatusLabel);
+  statusLayout->addStretch();
+  tcpClientLayout->addLayout(statusLayout);
 
   // Declare TCP client send button
   tcpClientSendButton = nullptr;
@@ -388,7 +389,6 @@ void PageNetworkTool::setupUi()
 
   // TCP Client
   connect(tcpConnectButton, &QPushButton::clicked, this, &PageNetworkTool::connectTcpClient);
-  connect(tcpDisconnectButton, &QPushButton::clicked, this, &PageNetworkTool::disconnectTcpClient);
   connect(tcpClientSendButton, &QPushButton::clicked, this, &PageNetworkTool::tcpClientSendData);
   connect(verifyButton, &QPushButton::clicked, this, &PageNetworkTool::verifySendData);
   connect(tcpAutoSendCheck, &QCheckBox::toggled, [this](bool checked)
@@ -1118,20 +1118,24 @@ void PageNetworkTool::updateConnectionStatus()
 {
   if(tcpClientConnected)
   {
-    tcpClientStatusLabel->setText(tr("Status: Connected to %1:%2")
+    tcpClientStatusLabel->setText(tr("Connected to %1:%2")
                                   .arg(formatAddress(tcpSocket->peerAddress()))
                                   .arg(tcpSocket->peerPort()));
-    tcpConnectButton->setEnabled(false);
-    tcpDisconnectButton->setEnabled(true);
+    tcpConnectButton->setText(tr("Disconnect"));
+    tcpConnectButton->setStyleSheet(AppColors::getStopButtonStyle());
+    QObject::disconnect(tcpConnectButton, &QPushButton::clicked, this, &PageNetworkTool::connectTcpClient);
+    QObject::connect(tcpConnectButton, &QPushButton::clicked, this, &PageNetworkTool::disconnectTcpClient);
     tcpClientSendButton->setEnabled(true);
     tcpClientIpEdit->setEnabled(false);
     tcpClientPortEdit->setEnabled(false);
   }
   else
   {
-    tcpClientStatusLabel->setText(tr("Status: Disconnected"));
-    tcpConnectButton->setEnabled(true);
-    tcpDisconnectButton->setEnabled(false);
+    tcpClientStatusLabel->setText(tr("Disconnected"));
+    tcpConnectButton->setText(tr("Connect"));
+    tcpConnectButton->setStyleSheet(AppColors::getStartButtonStyle());
+    QObject::disconnect(tcpConnectButton, &QPushButton::clicked, this, &PageNetworkTool::disconnectTcpClient);
+    QObject::connect(tcpConnectButton, &QPushButton::clicked, this, &PageNetworkTool::connectTcpClient);
     tcpClientSendButton->setEnabled(false);
     tcpClientIpEdit->setEnabled(true);
     tcpClientPortEdit->setEnabled(true);

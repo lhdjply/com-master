@@ -71,6 +71,13 @@ void PageSshClient::setupUi()
 
   connectButton = new QPushButton(tr("Connect"));
   connectButton->setStyleSheet(AppColors::getSuccessButtonStyle());
+  connectButton->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+
+  // 连接状态标签
+  QLabel* statusTitleLabel = new QLabel(tr("Status:"));
+  statusLabel = new QLabel(tr("Disconnected"));
+  statusLabel->setMinimumHeight(20);
+  statusLabel->setMaximumHeight(20);
 
   // 连接配置布局 - 垂直排列
   connectionLayout->addWidget(hostLabel, 0, 0);
@@ -82,6 +89,10 @@ void PageSshClient::setupUi()
   connectionLayout->addWidget(passwordLabel, 3, 0);
   connectionLayout->addWidget(passwordEdit, 3, 1);
   connectionLayout->addWidget(connectButton, 4, 0, 1, 2);  // 跨两列
+  connectionLayout->addWidget(statusTitleLabel, 5, 0);
+  connectionLayout->addWidget(statusLabel, 5, 1);
+  // 设置行高
+  connectionLayout->setRowStretch(5, 0);
 
   // 右侧终端组
   terminalGroup = new QGroupBox(tr("SSH Terminal"));
@@ -111,15 +122,9 @@ void PageSshClient::setupUi()
   // 初始化右键菜单
   setupContextMenu();
 
-  // 状态栏
-  statusBar = new QStatusBar();
-  statusLabel = new QLabel(tr("Disconnected"));
-  statusBar->addWidget(statusLabel);
-
   // 添加到主布局 - 左右分布
   mainLayout->addWidget(connectionGroup, 0, 0);
   mainLayout->addWidget(terminalGroup, 0, 1);
-  mainLayout->addWidget(statusBar, 1, 0, 1, 2);
 
   // 设置列比例 - 左侧较窄，右侧较宽
   mainLayout->setColumnStretch(0, 1);

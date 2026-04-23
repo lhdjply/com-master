@@ -91,7 +91,6 @@ class PageNetworkTool : public QWidget
     QLabel * tcpClientPortLabel;
     CustomLineEdit * tcpClientPortEdit;
     QPushButton * tcpConnectButton;
-    QPushButton * tcpDisconnectButton;
     QLabel * tcpClientStatusLabel;
     QPushButton * tcpClientSendButton;
     QCheckBox * tcpAutoSendCheck;

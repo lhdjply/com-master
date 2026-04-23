@@ -1,7 +1,6 @@
 #ifndef __MYRESOURCE_H
 #define __MYRESOURCE_H
 
-#include "pageconnectiondialog.h"
 #include "pageftpclient.h"
 #include "pageiec61850client.h"
 #include "pagemain.h"

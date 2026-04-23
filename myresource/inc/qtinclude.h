@@ -69,9 +69,7 @@
 #include "TerminalDisplay.h"
 #include "iec61850_client.h"
 #include "mms_value.h"
-#include "customwidgets/customspinbox.h"
 #include "customwidgets/customlineedit.h"
 #include "customwidgets/customtextedit.h"
-
 
 #endif

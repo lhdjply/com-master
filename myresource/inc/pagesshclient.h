@@ -49,7 +49,6 @@ class PageSshClient : public QWidget
     QVBoxLayout * terminalLayout;
     QTermWidget * terminalWidget;
 
-    QStatusBar * statusBar;
     QLabel * statusLabel;
 
     // SSH session

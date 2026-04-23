@@ -46,7 +46,6 @@ class PageFtpClient : public QWidget
     CustomLineEdit * userEdit;
     CustomLineEdit * passwordEdit;
     QPushButton * connectButton;
-    QPushButton * disconnectButton;
 
     QTreeWidget * fileList;
     CustomTextEdit * logText;

@@ -136,11 +136,7 @@ void PageFtpClient::setupUi()
   connectButton = new QPushButton(tr("Connect"));
   connectButton->setMinimumSize(QSize(70, 36));
   connectButton->setStyleSheet(AppColors::getStartButtonStyle());
-  disconnectButton = new QPushButton(tr("Disconnect"));
-  disconnectButton->setMinimumSize(QSize(70, 36));
-  disconnectButton->setStyleSheet(AppColors::getStopButtonStyle());
-  disconnectButton->setEnabled(false);
-  QLabel *statusLabel = new QLabel(tr("Status: Disconnected"));
+  QLabel *statusLabel = new QLabel(tr("Disconnected"));
 
   QHBoxLayout *serverLayout = new QHBoxLayout();
   serverLayout->addWidget(serverLabel);
@@ -164,11 +160,16 @@ void PageFtpClient::setupUi()
 
   QHBoxLayout *buttonLayout = new QHBoxLayout();
   buttonLayout->addWidget(connectButton);
-  buttonLayout->addWidget(disconnectButton);
-  buttonLayout->addStretch();
+  // 设置按钮宽度铺满
+  connectButton->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
   ftpConfigLayout->addLayout(buttonLayout);
 
-  ftpConfigLayout->addWidget(statusLabel);
+  // Status label with separate "Status:" text
+  QHBoxLayout* statusLayout = new QHBoxLayout();
+  statusLayout->addWidget(new QLabel(tr("Status:")));
+  statusLayout->addWidget(statusLabel);
+  statusLayout->addStretch();
+  ftpConfigLayout->addLayout(statusLayout);
 
   // 添加配置组到左侧面板
   leftPanelLayout->addWidget(ftpConfigGroup);
@@ -267,7 +268,6 @@ void PageFtpClient::setupUi()
 
   // 连接信号和槽
   connect(connectButton, &QPushButton::clicked, this, &PageFtpClient::connectToFtp);
-  connect(disconnectButton, &QPushButton::clicked, this, &PageFtpClient::disconnectFromFtp);
   connect(downloadButton, &QPushButton::clicked, this, &PageFtpClient::downloadFile);
   connect(uploadButton, &QPushButton::clicked, this, &PageFtpClient::uploadFile);
   connect(listButton, &QPushButton::clicked, this, &PageFtpClient::listDirectory);
@@ -446,8 +446,10 @@ void PageFtpClient::onSocketDisconnected()
 void PageFtpClient::resetConnectionState()
 {
   isConnected = false;
-  connectButton->setEnabled(true);
-  disconnectButton->setEnabled(false);
+  connectButton->setText(tr("Connect"));
+  connectButton->setStyleSheet(AppColors::getStartButtonStyle());
+  QObject::disconnect(connectButton, &QPushButton::clicked, this, &PageFtpClient::disconnectFromFtp);
+  QObject::connect(connectButton, &QPushButton::clicked, this, &PageFtpClient::connectToFtp);
   downloadButton->setEnabled(false);
   uploadButton->setEnabled(false);
   listButton->setEnabled(false);
@@ -514,8 +516,10 @@ void PageFtpClient::handleFtpResponse(const QString &response)
             logText->append(tr("Login successful"));
             // 启用按钮
             isConnected = true;
-            connectButton->setEnabled(false);
-            disconnectButton->setEnabled(true);
+            connectButton->setText(tr("Disconnect"));
+            connectButton->setStyleSheet(AppColors::getStopButtonStyle());
+            QObject::disconnect(connectButton, &QPushButton::clicked, this, &PageFtpClient::connectToFtp);
+            QObject::connect(connectButton, &QPushButton::clicked, this, &PageFtpClient::disconnectFromFtp);
             downloadButton->setEnabled(true);
             uploadButton->setEnabled(true);
             listButton->setEnabled(true);
@@ -678,7 +682,7 @@ void PageFtpClient::parseFtpList(const QByteArray &data)
     QString monthStr = parts[5];
     QString dayStr = parts[6];
     QString timeOrYearStr = parts[7];
-    
+
     // 月份映射
     QMap<QString, QString> monthMap;
     monthMap["Jan"] = "01";
@@ -693,27 +697,31 @@ void PageFtpClient::parseFtpList(const QByteArray &data)
     monthMap["Oct"] = "10";
     monthMap["Nov"] = "11";
     monthMap["Dec"] = "12";
-    
+
     QString month = monthMap.value(monthStr, "01");
     QString day = dayStr.rightJustified(2, '0');
-    
+
     QString year, time;
-    if(timeOrYearStr.contains(":")) {
-        // 格式为 Month Day Time (最近文件)
-        time = timeOrYearStr;
-        // 使用当前年份
-        year = QString::number(QDate::currentDate().year());
-    } else {
-        // 格式为 Month Day Year (旧文件)
-        year = timeOrYearStr;
-        time = "00:00:00";
+    if(timeOrYearStr.contains(":"))
+    {
+      // 格式为 Month Day Time (最近文件)
+      time = timeOrYearStr;
+      // 使用当前年份
+      year = QString::number(QDate::currentDate().year());
     }
-    
+    else
+    {
+      // 格式为 Month Day Year (旧文件)
+      year = timeOrYearStr;
+      time = "00:00:00";
+    }
+
     // 确保时间格式包含秒
-    if(time.split(":").size() == 2) {
-        time += ":00";
+    if(time.split(":").size() == 2)
+    {
+      time += ":00";
     }
-    
+
     QString date = year + "-" + month + "-" + day + " " + time;
 
     QTreeWidgetItem *item = new QTreeWidgetItem();

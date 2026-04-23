@@ -42,7 +42,7 @@ QT_END_NAMESPACE
 
 class ConnectionDialog;
 
-class PageIEC61850Client : public QMainWindow
+class PageIEC61850Client : public QWidget
 {
     Q_OBJECT
 
@@ -108,16 +108,12 @@ class PageIEC61850Client : public QMainWindow
     void writeValue();
 
     // MainWindow slots
-    void performConnection(const QString& hostname, int port);
+    void performConnection();
     void disconnectFromDevice();
-    void showConnectionDialog();
     void refreshDataModel();
     void onConnectionStateChanged(bool connected);
     void onDataModelItemDoubleClicked(const QString& objectReference);
     void onDataModelLoadProgress(int value, const QString& message);
-
-  protected:
-    void showEvent(QShowEvent *event) override;
 
   private:
     // IEC61850 Client private methods
@@ -138,7 +134,6 @@ class PageIEC61850Client : public QMainWindow
 
     // PageTabContent private methods
     void setupUi();
-    void setupToolBar();
     void setupStatusBar();
     void updateConnectionStatus(bool connected);
     void enableConnectionDependentUI(bool enabled);
@@ -161,6 +156,11 @@ class PageIEC61850Client : public QMainWindow
     QAction * m_writeValueAction;
     QAction * m_controlAction;
     QAction * m_createDataSetAction;
+    QAction * m_refreshContextAction;
+
+    // Connection settings
+    CustomLineEdit * m_hostnameEdit;
+    CustomLineEdit * m_portEdit;
 
     QMap<QString, QTreeWidgetItem *> m_deviceItems;
     QMap<QString, QTreeWidgetItem *> m_nodeItems;
@@ -185,20 +185,11 @@ class PageIEC61850Client : public QMainWindow
 
     QString m_currentObjectReference;
 
-    // UI Components
-    QSplitter * m_mainSplitter;
-    QSplitter * m_rightSplitter;
+    // Connection buttons
+    QPushButton * m_connectAction;
+    QPushButton * m_refreshAction;
 
-    // Toolbar
-    QToolBar * m_toolBar;
-
-    // Actions
-    QAction * m_connectAction;
-    QAction * m_disconnectAction;
-    QAction * m_refreshAction;
-
-    // Status bar
-    QStatusBar * m_statusBar;
+    // Status and progress
     QLabel * m_connectionStatusLabel;
     QProgressBar * m_progressBar;
     QLabel * m_progressLabel;
