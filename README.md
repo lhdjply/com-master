@@ -69,21 +69,47 @@
 
 ## 系统要求
 
-- **操作系统**: Linux (支持多架构: amd64, arm64, loong64, riscv64)
+- **操作系统**:
+  - Windows 10/11 (支持多架构: x86_64, arm64)
+  - Linux (支持多架构: amd64, arm64, loong64, riscv64)
 - **Qt版本**: Qt 6.x
-- **编译器**: 支持C++17标准的编译器
+- **编译器**:
+  - Windows: Visual Studio 2019或更高版本
+  - Linux: 支持C++17标准的编译器
 - **依赖库**:
-  - qt6-base-dev
-  - qt6-l10n-tools
-  - qt6-tools-dev
-  - qt6-tools-dev-tools
-  - qt6-svg-dev
-  - qt6-serialport-dev
-  - libssh-dev
+  - Windows:
+    - Qt 6.x (包含SerialPort模块)
+    - libssh (Windows版本)
+  - Linux:
+    - qt6-base-dev
+    - qt6-l10n-tools
+    - qt6-tools-dev
+    - qt6-tools-dev-tools
+    - qt6-svg-dev
+    - qt6-serialport-dev
+    - libssh-dev
 
 ## 安装方法
 
 ### 从源码编译
+
+#### Windows
+
+1. 安装Qt 6.x (包含SerialPort模块)和Visual Studio 2019或更高版本
+2. 克隆仓库：
+   ```cmd
+   git clone https://github.com/lhdjply/com-master.git
+   cd com-master
+   ```
+3. 使用Qt Creator打开项目或使用命令行编译：
+   ```cmd
+   mkdir build
+   cd build
+   cmake .. -G "Visual Studio 16 2019" -A x64
+   cmake --build . --config Release
+   ```
+
+#### Linux
 
 ```bash
 git clone https://github.com/lhdjply/com-master.git
@@ -94,7 +120,13 @@ make -j$(nproc)
 sudo make install
 ```
 
-### 使用Debian包
+### 使用预编译包
+
+#### Windows
+
+从[Releases](https://github.com/lhdjply/com-master/releases)页面下载Windows版本的可执行文件，解压后直接运行。
+
+#### Linux
 
 从[Releases](https://github.com/lhdjply/com-master/releases)页面下载适合您架构的.deb包，然后安装：
 
