@@ -674,7 +674,47 @@ void PageFtpClient::parseFtpList(const QByteArray &data)
     }
 
     QString size = (isDir || isSymlink) ? "-" : parts[4];
-    QString date = parts[5] + " " + parts[6] + " " + parts[7];
+    // 解析并格式化日期时间
+    QString monthStr = parts[5];
+    QString dayStr = parts[6];
+    QString timeOrYearStr = parts[7];
+    
+    // 月份映射
+    QMap<QString, QString> monthMap;
+    monthMap["Jan"] = "01";
+    monthMap["Feb"] = "02";
+    monthMap["Mar"] = "03";
+    monthMap["Apr"] = "04";
+    monthMap["May"] = "05";
+    monthMap["Jun"] = "06";
+    monthMap["Jul"] = "07";
+    monthMap["Aug"] = "08";
+    monthMap["Sep"] = "09";
+    monthMap["Oct"] = "10";
+    monthMap["Nov"] = "11";
+    monthMap["Dec"] = "12";
+    
+    QString month = monthMap.value(monthStr, "01");
+    QString day = dayStr.rightJustified(2, '0');
+    
+    QString year, time;
+    if(timeOrYearStr.contains(":")) {
+        // 格式为 Month Day Time (最近文件)
+        time = timeOrYearStr;
+        // 使用当前年份
+        year = QString::number(QDate::currentDate().year());
+    } else {
+        // 格式为 Month Day Year (旧文件)
+        year = timeOrYearStr;
+        time = "00:00:00";
+    }
+    
+    // 确保时间格式包含秒
+    if(time.split(":").size() == 2) {
+        time += ":00";
+    }
+    
+    QString date = year + "-" + month + "-" + day + " " + time;
 
     QTreeWidgetItem *item = new QTreeWidgetItem();
     item->setText(0, name);
