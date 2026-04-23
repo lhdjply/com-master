@@ -34,6 +34,8 @@
 
 #include <QSocketNotifier>
 
+#ifndef Q_OS_WIN
+
 #include <unistd.h>
 #include <cerrno>
 #include <csignal>
@@ -439,3 +441,5 @@ qint64 KPtyDevice::writeData(const char * data, qint64 len)
   d->writeNotifier->setEnabled(true);
   return len;
 }
+
+#endif

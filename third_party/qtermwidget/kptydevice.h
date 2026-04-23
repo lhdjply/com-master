@@ -33,6 +33,8 @@
 
 #include <QIODevice>
 
+#ifndef Q_OS_WIN
+
 #define KMAXINT ((int)(~0U >> 1))
 
 class KPtyDevicePrivate;
@@ -366,3 +368,4 @@ class KPtyDevicePrivate : public KPtyPrivate
 
 #endif
 
+#endif

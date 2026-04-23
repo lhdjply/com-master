@@ -241,7 +241,7 @@ class QTERMWIDGET_EXPORT RegExpFilter : public Filter
 class FilterObject;
 
 /** A filter which matches URLs in blocks of text */
-class QTERMWIDGET_EXPORT UrlFilter : public RegExpFilter
+class QTERMWIDGET_NO_EXPORT UrlFilter : public RegExpFilter
 {
     Q_OBJECT
   public:

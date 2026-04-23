@@ -31,11 +31,14 @@
 //#include <ktemporaryfile.h>
 
 // Konsole
-#include "BlockArray.h"
 #include "Character.h"
+#ifndef Q_OS_WIN
+  #include "BlockArray.h"
 
-// map
-#include <sys/mman.h>
+  // map
+  #include <sys/mman.h>
+#endif
+
 
 namespace Konsole
 {
@@ -51,9 +54,9 @@ class HistoryFile
     HistoryFile();
     virtual ~HistoryFile();
 
-    virtual void add(const unsigned char * bytes, int len);
-    virtual void get(unsigned char * bytes, int len, int loc);
-    virtual int  len() const;
+    virtual void add(const char * bytes, qint64 len);
+    virtual void get(char * bytes, int len, int loc);
+    virtual qint64 len() const;
 
     //mmaps the file in read-only mode
     void map();
@@ -64,12 +67,11 @@ class HistoryFile
 
 
   private:
-    int  ion;
-    int  length;
+    qint64 length;
     QTemporaryFile tmpFile;
 
     //pointer to start of mmap'ed file data, or 0 if the file is not mmap'ed
-    char * fileMap;
+    uchar * fileMap;
 
     //incremented whenever 'add' is called and decremented whenever
     //'get' is called.
@@ -247,6 +249,8 @@ class HistoryScrollNone : public HistoryScroll
     void addLine(bool previousWrapped = false) override;
 };
 
+#ifndef Q_OS_WIN
+
 //////////////////////////////////////////////////////////////////////
 // BlockArray-based history
 //////////////////////////////////////////////////////////////////////
@@ -268,6 +272,8 @@ class HistoryScrollBlockArray : public HistoryScroll
     mutable BlockArray m_blockArray;
     QHash<int, size_t> m_lineLengths;
 };
+
+#endif
 
 //////////////////////////////////////////////////////////////////////
 // History using compact storage
@@ -300,6 +306,8 @@ class CharacterFormat
     quint16 startPos;
     quint8 rendition;
 };
+
+#ifndef Q_OS_WIN
 
 class CompactHistoryBlock
 {
@@ -429,6 +437,8 @@ class CompactHistoryScroll : public HistoryScroll
     unsigned int _maxLineCount;
 };
 
+#endif
+
 //////////////////////////////////////////////////////////////////////
 // History type
 //////////////////////////////////////////////////////////////////////
@@ -471,6 +481,8 @@ class HistoryTypeNone : public HistoryType
     HistoryScroll * scroll(HistoryScroll *) const override;
 };
 
+#ifndef Q_OS_WIN
+
 class HistoryTypeBlockArray : public HistoryType
 {
   public:
@@ -484,8 +496,8 @@ class HistoryTypeBlockArray : public HistoryType
   protected:
     size_t m_size;
 };
+#endif
 
-#if 1
 class HistoryTypeFile : public HistoryType
 {
   public:
@@ -517,6 +529,8 @@ class HistoryTypeBuffer : public HistoryType
   protected:
     unsigned int m_nbLines;
 };
+
+#ifndef Q_OS_WIN
 
 class CompactHistoryType : public HistoryType
 {

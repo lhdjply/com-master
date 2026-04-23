@@ -78,6 +78,7 @@ include_directories(third_party/libiec61850/source/src/logging)
 
 add_definitions(-DKONSOLE_DSHELL=1)
 add_definitions(-DHAVE_POSIX_OPENPT=1)
+add_definitions(-DQTERMWIDGET_LIBRARY=1)
 
 # 使用变量创建目标
 qt_add_executable(${PROJECT_TARGET}
@@ -133,8 +134,8 @@ elseif (WIN32)
     set (QM_FILE_INSTALL_DIR "${CMAKE_INSTALL_BINDIR}/translations")
 
     set (QTERMWIDGET_INSTALL_DIR "${CMAKE_INSTALL_BINDIR}/qtermwidget")
-    add_definitions(-DCOLORSCHEMES_DIR="${QTERMWIDGET_INSTALL_DIR}/color-schemes")
-    add_definitions(-DKB_LAYOUT_DIR="${QTERMWIDGET_INSTALL_DIR}/kb-layouts")
+    add_definitions(-DCOLORSCHEMES_DIR="./qtermwidget/color-schemes")
+    add_definitions(-DKB_LAYOUT_DIR="./qtermwidget/kb-layouts")
 elseif (APPLE)
 
 elseif (UNIX)

@@ -26,6 +26,7 @@
 
 #include <QtDebug>
 
+#ifndef Q_OS_WIN
 
 #if defined(__FreeBSD__) || defined(__DragonFly__)
   #define HAVE_LOGIN
@@ -773,3 +774,5 @@ int KPty::slaveFd() const
 
   return d->slaveFd;
 }
+
+#endif

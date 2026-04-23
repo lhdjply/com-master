@@ -32,6 +32,8 @@
 #include "kprocess.h"
 #include "kptydevice.h"
 
+#ifndef Q_OS_WIN
+
 #include <cstdlib>
 #include <unistd.h>
 #include <csignal>
@@ -138,3 +140,5 @@ KPtyDevice * KPtyProcess::pty() const
 }
 
 //#include "kptyprocess.moc"
+
+#endif

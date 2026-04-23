@@ -23,6 +23,8 @@
 
 #include <QtDebug>
 
+#ifndef Q_OS_WIN
+
 // Own
 #include "BlockArray.h"
 
@@ -429,3 +431,4 @@ void BlockArray::increaseBuffer()
 
 }
 
+#endif

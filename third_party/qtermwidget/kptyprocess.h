@@ -33,6 +33,8 @@
 #include "kprocess.h"
 #include "kptydevice.h"
 
+#ifndef Q_OS_WIN
+
 #include <csignal>
 #include <memory>
 
@@ -166,5 +168,7 @@ class KPtyProcessPrivate
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KPtyProcess::PtyChannels)
+
+#endif
 
 #endif
