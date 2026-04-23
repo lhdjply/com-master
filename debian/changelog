@@ -1,3 +1,12 @@
+com-master (1.0.3) unstable; urgency=medium
+
+  * 网络接收区域也可编辑.
+  * 右键菜单Windows不翻译修复.
+  * ftp时间格式改为2000-01-01 00:00:00.
+  * 调整界面布局.
+
+ -- lhdjply <lhdjply@126.com>  Thu, 23 Apr 2026 15:46:54 +0800
+
 com-master (1.0.2) unstable; urgency=medium
 
   * 图标改svg.
