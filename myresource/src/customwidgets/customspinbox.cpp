@@ -9,16 +9,22 @@ void CustomSpinBox::contextMenuEvent(QContextMenuEvent *event)
 {
   QMenu *menu = new QMenu(this);
 
-  QAction *undoAction = menu->addAction(QIcon::fromTheme("edit-undo", QIcon(":/icons/undo.png")), tr("Undo"));
-  QAction *redoAction = menu->addAction(QIcon::fromTheme("edit-redo", QIcon(":/icons/redo.png")), tr("Redo"));
+  QAction *undoAction = menu->addAction(QIcon::fromTheme("edit-undo", QIcon(":/icons/undo.png")),
+                                        tr("Undo") + "\t Ctrl+Z");
+  QAction *redoAction = menu->addAction(QIcon::fromTheme("edit-redo", QIcon(":/icons/redo.png")),
+                                        tr("Redo") + "\t Ctrl+Y");
   menu->addSeparator();
-  QAction *cutAction = menu->addAction(QIcon::fromTheme("edit-cut", QIcon(":/icons/cut.png")), tr("Cut"));
-  QAction *copyAction = menu->addAction(QIcon::fromTheme("edit-copy", QIcon(":/icons/copy.png")), tr("Copy"));
-  QAction *pasteAction = menu->addAction(QIcon::fromTheme("edit-paste", QIcon(":/icons/paste.png")), tr("Paste"));
+  QAction *cutAction = menu->addAction(QIcon::fromTheme("edit-cut", QIcon(":/icons/cut.png")), tr("Cut") + "\t Ctrl+X");
+  QAction *copyAction = menu->addAction(QIcon::fromTheme("edit-copy", QIcon(":/icons/copy.png")),
+                                        tr("Copy") + "\t Ctrl+C");
+  QAction *pasteAction = menu->addAction(QIcon::fromTheme("edit-paste", QIcon(":/icons/paste.png")),
+                                         tr("Paste") + "\t Ctrl+V");
   QAction *deleteAction = menu->addAction(QIcon::fromTheme("edit-delete", QIcon(":/icons/delete.png")), tr("Delete"));
   menu->addSeparator();
   QAction *selectAllAction = menu->addAction(QIcon::fromTheme("edit-select-all", QIcon(":/icons/selectall.png")),
-                                             tr("Select All"));
+                                             tr("Select All") + "\t Ctrl+A");
+
+
 
   QLineEdit *lineEdit = this->lineEdit();
   bool hasSelectedText = lineEdit->hasSelectedText();

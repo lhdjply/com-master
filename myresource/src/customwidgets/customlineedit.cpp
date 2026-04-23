@@ -14,37 +14,43 @@ void CustomLineEdit::contextMenuEvent(QContextMenuEvent *event)
 {
   QMenu *menu = createStandardContextMenu();
 
-  // 获取标准菜单项并重新设置中文文本
   QList<QAction *> actions = menu->actions();
   for(QAction *action : actions)
   {
-    if(action->text() == "&Undo")
+    QString text = action->text();
+    int tabPos = text.indexOf('\t');
+    if(tabPos != -1)
     {
-      action->setText(tr("Undo"));
+      text = text.left(tabPos);
     }
-    else if(action->text() == "&Redo")
+
+    if(text == "&Undo")
     {
-      action->setText(tr("Redo"));
+      action->setText(tr("Undo") + "\t Ctrl+Z");
     }
-    else if(action->text() == "Cu&t")
+    else if(text == "&Redo")
     {
-      action->setText(tr("Cut"));
+      action->setText(tr("Redo") + "\t Ctrl+Y");
     }
-    else if(action->text() == "&Copy")
+    else if(text == "Cu&t")
     {
-      action->setText(tr("Copy"));
+      action->setText(tr("Cut") + "\t Ctrl+X");
     }
-    else if(action->text() == "&Paste")
+    else if(text == "&Copy")
     {
-      action->setText(tr("Paste"));
+      action->setText(tr("Copy") + "\t Ctrl+C");
     }
-    else if(action->text() == "Delete")
+    else if(text == "&Paste")
+    {
+      action->setText(tr("Paste") + "\t Ctrl+V");
+    }
+    else if(text == "Delete")
     {
       action->setText(tr("Delete"));
     }
-    else if(action->text() == "Select All")
+    else if(text == "Select All")
     {
-      action->setText(tr("Select All"));
+      action->setText(tr("Select All") + "\t Ctrl+A");
     }
   }
 
