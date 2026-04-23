@@ -12,18 +12,19 @@ class PageSerialTransceiver : public QMainWindow
     ~PageSerialTransceiver();
 
   private slots:
-    void on_openbutton_clicked();
-    void on_sendbutton_clicked();
-    void on_verifybutton_clicked();
-    void on_clearcount_clicked();
-    void on_clearreceive_clicked();
-    void on_clearsend_clicked();
-    void on_senddutyedit_textChanged(const QString &arg1);
+    void on_openButton_clicked();
+    void on_sendButton_clicked();
+    void on_verifyButton_clicked();
+    void on_clearcountButton_clicked();
+    void on_clearReceiveButton_clicked();
+    void on_clearSendButton_clicked();
+    void on_sendDutyEdit_textChanged(const QString &arg1);
 
   private:
     void setupUi();
     void retranslateUi();
 
+    // 核心数据成员
     QTimer * AutosendTimer;
     uint32_t last_serial_num;
     uint32_t receive_frame_count;
@@ -40,67 +41,80 @@ class PageSerialTransceiver : public QMainWindow
     QByteArray frameBuffer;  // Buffer to accumulate received data
     QTimer * frameProcessingTimer;  // Timer to periodically process incomplete frames
 
+    // 主窗口和布局
     QWidget * centralwidget;
-    QHBoxLayout * horizontalLayout_10;
-    QFrame * frame;
-    QVBoxLayout * verticalLayout_7;
-    QGroupBox * groupBox;
-    QVBoxLayout * verticalLayout;
-    QHBoxLayout * horizontalLayout_1;
-    QHBoxLayout * horizontalLayout_2;
-    QHBoxLayout * horizontalLayout_3;
-    QHBoxLayout * horizontalLayout_4;
-    QHBoxLayout * horizontalLayout_5;
-    QLabel * label;
-    QLabel * label_2;
-    QLabel * label_3;
-    QLabel * label_4;
-    QLabel * label_5;
+    QHBoxLayout * mainLayout;
+
+    // 配置区域
+    QFrame * configFrame;
+    QVBoxLayout * configFrameLayout;
+    
+    // 串口设置组
+    QGroupBox * configGroupBox;
+    QVBoxLayout * configLayout;
+    QHBoxLayout * portLayout;
+    QHBoxLayout * baudrateLayout;
+    QHBoxLayout * databitsLayout;
+    QHBoxLayout * parityLayout;
+    QHBoxLayout * stopbitsLayout;
+    QLabel * portLabel;
+    QLabel * baudrateLabel;
+    QLabel * databitsLabel;
+    QLabel * parityLabel;
+    QLabel * stopbitsLabel;
     QComboBox * portdroplist;
     QComboBox * baudratedroplist;
     QComboBox * databitsdroplist;
     QComboBox * paritydroplist;
     QComboBox * stopbitsdroplist;
-    QPushButton * openbutton;
-    QGroupBox * verticalGroupBox;
-    QVBoxLayout * verticalLayout_4;
-    QHBoxLayout * horizontalLayout_11;
-    QHBoxLayout * horizontalLayout_12;
-    QHBoxLayout * horizontalLayout_13;
-    QHBoxLayout * horizontalLayout_14;
-    QLabel * receive_frames;
-    QLabel * receive_frames_count;
-    QLabel * receive_bytes;
-    QLabel * receive_bytes_count;
-    QLabel * send_frames;
-    QLabel * send_frames_count;
-    QLabel * send_bytes;
-    QLabel * send_bytes_count;
-    QPushButton * clearcount;
-    QVBoxLayout * verticalLayout_3;
-    QGroupBox * receivegroup;
-    QVBoxLayout * verticalLayout_5;
-    CustomTextEdit * receiveedit;
-    QHBoxLayout * horizontalLayout;
-    QCheckBox * receivehexcheckbox;
-    QCheckBox * displaysendcheckbox;
-    QCheckBox * displaytimecheckbox;
-    QCheckBox * linebreakcheckbox;
-    QPushButton * clearreceive;
-    QGroupBox * sendgroup;
-    QVBoxLayout * verticalLayout_6;
-    CustomTextEdit * sendedit;
-    QHBoxLayout * horizontalLayout_9;
-    QPushButton * sendbutton;
-    QPushButton * verifybutton;
-    QPushButton * clearsend;
-    QCheckBox * sendhexcheckbox;
-    QCheckBox * autosendcheckbox;
-    QFrame * frame_3;
-    QHBoxLayout * horizontalLayout_8;
-    QLabel * label_6;
-    CustomLineEdit * senddutyedit;
-    QLabel * label_7;
+    QPushButton * openButton;
+    
+    // 统计信息组
+    QGroupBox * statsGroupBox;
+    QVBoxLayout * statsLayout;
+    QHBoxLayout * receiveFramesLayout;
+    QHBoxLayout * receiveBytesLayout;
+    QHBoxLayout * sendFramesLayout;
+    QHBoxLayout * sendBytesLayout;
+    QLabel * receiveFramesLabel;
+    QLabel * receiveFramesCountLabel;
+    QLabel * receiveBytesLabel;
+    QLabel * receiveBytesCountLabel;
+    QLabel * sendFramesLabel;
+    QLabel * sendFramesCountLabel;
+    QLabel * sendBytesLabel;
+    QLabel * sendBytesCountLabel;
+    QPushButton * clearcountButton;
+
+    // 数据区域
+    QVBoxLayout * dataLayout;
+    
+    // 接收区域
+    QGroupBox * receiveGroupBox;
+    QVBoxLayout * receiveLayout;
+    CustomTextEdit * receiveEdit;
+    QHBoxLayout * receiveOptionsLayout;
+    QCheckBox * receiveHexCheckbox;
+    QCheckBox * displaySendCheckbox;
+    QCheckBox * displayTimeCheckbox;
+    QCheckBox * lineBreakCheckbox;
+    QPushButton * clearReceiveButton;
+    
+    // 发送区域
+    QGroupBox * sendGroupBox;
+    QVBoxLayout * sendLayout;
+    CustomTextEdit * sendEdit;
+    QHBoxLayout * sendOptionsLayout;
+    QPushButton * sendButton;
+    QPushButton * verifyButton;
+    QPushButton * clearSendButton;
+    QCheckBox * sendHexCheckbox;
+    QCheckBox * autoSendCheckbox;
+    QFrame * sendDutyFrame;
+    QHBoxLayout * sendDutyLayout;
+    QLabel * sendDutyLabel;
+    CustomLineEdit * sendDutyEdit;
+    QLabel * sendDutyUnitLabel;
 
     QByteArray getFrameDelimiter(); // Get the current frame delimiter based on settings
     void handleTimeout();

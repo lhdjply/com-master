@@ -47,11 +47,11 @@ void PageSerialTerminal::setupUi()
   configGroup = new QGroupBox(tr("Serial Port Settings"));
   configLayout = new QGridLayout(configGroup);
 
-  label = new QLabel(tr("Port:"));
-  label_2 = new QLabel(tr("Baudrate:"));
-  label_3 = new QLabel(tr("Data bits:"));
-  label_4 = new QLabel(tr("Parity:"));
-  label_5 = new QLabel(tr("Stop bits:"));
+  portLabel = new QLabel(tr("Port:"));
+  baudrateLabel = new QLabel(tr("Baudrate:"));
+  databitsLabel = new QLabel(tr("Data bits:"));
+  parityLabel = new QLabel(tr("Parity:"));
+  stopbitsLabel = new QLabel(tr("Stop bits:"));
 
   portdroplist = new QComboBox(configGroup);
   portdroplist->setObjectName(QString::fromUtf8("portdroplist"));
@@ -100,15 +100,15 @@ void PageSerialTerminal::setupUi()
   openbutton->setStyleSheet(AppColors::getSuccessButtonStyle());
 
   // 配置布局 - 垂直排列
-  configLayout->addWidget(label, 0, 0);
+  configLayout->addWidget(portLabel, 0, 0);
   configLayout->addWidget(portdroplist, 0, 1);
-  configLayout->addWidget(label_2, 1, 0);
+  configLayout->addWidget(baudrateLabel, 1, 0);
   configLayout->addWidget(baudratedroplist, 1, 1);
-  configLayout->addWidget(label_3, 2, 0);
+  configLayout->addWidget(databitsLabel, 2, 0);
   configLayout->addWidget(databitsdroplist, 2, 1);
-  configLayout->addWidget(label_4, 3, 0);
+  configLayout->addWidget(parityLabel, 3, 0);
   configLayout->addWidget(paritydroplist, 3, 1);
-  configLayout->addWidget(label_5, 4, 0);
+  configLayout->addWidget(stopbitsLabel, 4, 0);
   configLayout->addWidget(stopbitsdroplist, 4, 1);
   configLayout->addWidget(openbutton, 5, 0, 1, 2);  // 跨两列
 
@@ -162,11 +162,11 @@ void PageSerialTerminal::retranslateUi()
 {
   configGroup->setTitle(tr("Serial Port Settings"));
   terminalGroup->setTitle(tr("Serial Terminal"));
-  label->setText(QCoreApplication::translate("PageSerialTerminal", "Port", nullptr));
-  label_2->setText(QCoreApplication::translate("PageSerialTerminal", "Baudrate", nullptr));
-  label_3->setText(QCoreApplication::translate("PageSerialTerminal", "Data bits", nullptr));
-  label_4->setText(QCoreApplication::translate("PageSerialTerminal", "Parity", nullptr));
-  label_5->setText(QCoreApplication::translate("PageSerialTerminal", "Stop bits", nullptr));
+  portLabel->setText(QCoreApplication::translate("PageSerialTerminal", "Port", nullptr));
+  baudrateLabel->setText(QCoreApplication::translate("PageSerialTerminal", "Baudrate", nullptr));
+  databitsLabel->setText(QCoreApplication::translate("PageSerialTerminal", "Data bits", nullptr));
+  parityLabel->setText(QCoreApplication::translate("PageSerialTerminal", "Parity", nullptr));
+  stopbitsLabel->setText(QCoreApplication::translate("PageSerialTerminal", "Stop bits", nullptr));
   openbutton->setText(QCoreApplication::translate("PageSerialTerminal", "Open", nullptr));
 }
 

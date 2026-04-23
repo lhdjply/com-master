@@ -11,10 +11,10 @@ PageSerialTransceiver::PageSerialTransceiver(QWidget *parent)
   receive_byte_count = 0;
   send_frame_count = 0;
   send_byte_count = 0;
-  receive_frames_count->setText(QString::number(receive_frame_count));
-  receive_bytes_count->setText(QString::number(receive_byte_count));
-  send_frames_count->setText(QString::number(send_frame_count));
-  send_bytes_count->setText(QString::number(send_byte_count));
+  receiveFramesCountLabel->setText(QString::number(receive_frame_count));
+  receiveBytesCountLabel->setText(QString::number(receive_byte_count));
+  sendFramesCountLabel->setText(QString::number(send_frame_count));
+  sendBytesCountLabel->setText(QString::number(send_byte_count));
 
   last_serial_num = 0;
   isSerial_Open = false;
@@ -50,54 +50,54 @@ void PageSerialTransceiver::setupUi()
   centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
   this->setCentralWidget(centralwidget);
 
-  horizontalLayout_10 = new QHBoxLayout(centralwidget);
-  horizontalLayout_10->setObjectName(QString::fromUtf8("horizontalLayout_10"));
-  horizontalLayout_10->setStretch(0, 0);
-  horizontalLayout_10->setStretch(1, 0);
+  mainLayout = new QHBoxLayout(centralwidget);
+  mainLayout->setObjectName(QString::fromUtf8("mainLayout"));
+  mainLayout->setStretch(0, 0);
+  mainLayout->setStretch(1, 0);
 
-  frame = new QFrame(centralwidget);
-  frame->setObjectName(QString::fromUtf8("frame"));
-  frame->setMinimumSize(QSize(280, 0));
-  frame->setMaximumSize(QSize(280, 16777215));
+  configFrame = new QFrame(centralwidget);
+  configFrame->setObjectName(QString::fromUtf8("configFrame"));
+  configFrame->setMinimumSize(QSize(280, 0));
+  configFrame->setMaximumSize(QSize(280, 16777215));
 
-  verticalLayout_7 = new QVBoxLayout(frame);
-  verticalLayout_7->setObjectName(QString::fromUtf8("verticalLayout_7"));
-  verticalLayout_7->setSpacing(15);
+  configFrameLayout = new QVBoxLayout(configFrame);
+  configFrameLayout->setObjectName(QString::fromUtf8("configFrameLayout"));
+  configFrameLayout->setSpacing(15);
 
-  groupBox = new QGroupBox(frame);
-  groupBox->setObjectName(QString::fromUtf8("groupBox"));
+  configGroupBox = new QGroupBox(configFrame);
+  configGroupBox->setObjectName(QString::fromUtf8("configGroupBox"));
 
-  verticalLayout = new QVBoxLayout(groupBox);
-  verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
-  verticalLayout->setSpacing(12);
+  configLayout = new QVBoxLayout(configGroupBox);
+  configLayout->setObjectName(QString::fromUtf8("configLayout"));
+  configLayout->setSpacing(12);
 
-  horizontalLayout_1 = new QHBoxLayout();
-  horizontalLayout_1->setObjectName(QString::fromUtf8("horizontalLayout_1"));
+  portLayout = new QHBoxLayout();
+  portLayout->setObjectName(QString::fromUtf8("portLayout"));
 
-  label = new QLabel(groupBox);
-  label->setObjectName(QString::fromUtf8("label"));
-  label->setMinimumSize(QSize(80, 0));
+  portLabel = new QLabel(configGroupBox);
+  portLabel->setObjectName(QString::fromUtf8("portLabel"));
+  portLabel->setMinimumSize(QSize(80, 0));
 
-  horizontalLayout_1->addWidget(label);
+  portLayout->addWidget(portLabel);
 
-  portdroplist = new QComboBox(groupBox);
+  portdroplist = new QComboBox(configGroupBox);
   portdroplist->setObjectName(QString::fromUtf8("portdroplist"));
   portdroplist->setMinimumSize(QSize(146, 0));
 
-  horizontalLayout_1->addWidget(portdroplist);
+  portLayout->addWidget(portdroplist);
 
-  verticalLayout->addLayout(horizontalLayout_1);
+  configLayout->addLayout(portLayout);
 
-  horizontalLayout_2 = new QHBoxLayout();
-  horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
+  baudrateLayout = new QHBoxLayout();
+  baudrateLayout->setObjectName(QString::fromUtf8("baudrateLayout"));
 
-  label_2 = new QLabel(groupBox);
-  label_2->setObjectName(QString::fromUtf8("label_2"));
-  label_2->setMinimumSize(QSize(80, 0));
+  baudrateLabel = new QLabel(configGroupBox);
+  baudrateLabel->setObjectName(QString::fromUtf8("baudrateLabel"));
+  baudrateLabel->setMinimumSize(QSize(80, 0));
 
-  horizontalLayout_2->addWidget(label_2);
+  baudrateLayout->addWidget(baudrateLabel);
 
-  baudratedroplist = new QComboBox(groupBox);
+  baudratedroplist = new QComboBox(configGroupBox);
   baudratedroplist->setObjectName(QString::fromUtf8("baudratedroplist"));
   baudratedroplist->setMinimumSize(QSize(146, 0));
   baudratedroplist->addItem(QString::fromUtf8("2400"));
@@ -115,20 +115,20 @@ void PageSerialTransceiver::setupUi()
   baudratedroplist->addItem(QString::fromUtf8("4500000"));
   baudratedroplist->setCurrentIndex(2);
 
-  horizontalLayout_2->addWidget(baudratedroplist);
+  baudrateLayout->addWidget(baudratedroplist);
 
-  verticalLayout->addLayout(horizontalLayout_2);
+  configLayout->addLayout(baudrateLayout);
 
-  horizontalLayout_3 = new QHBoxLayout();
-  horizontalLayout_3->setObjectName(QString::fromUtf8("horizontalLayout_3"));
+  databitsLayout = new QHBoxLayout();
+  databitsLayout->setObjectName(QString::fromUtf8("databitsLayout"));
 
-  label_3 = new QLabel(groupBox);
-  label_3->setObjectName(QString::fromUtf8("label_3"));
-  label_3->setMinimumSize(QSize(80, 0));
+  databitsLabel = new QLabel(configGroupBox);
+  databitsLabel->setObjectName(QString::fromUtf8("databitsLabel"));
+  databitsLabel->setMinimumSize(QSize(80, 0));
 
-  horizontalLayout_3->addWidget(label_3);
+  databitsLayout->addWidget(databitsLabel);
 
-  databitsdroplist = new QComboBox(groupBox);
+  databitsdroplist = new QComboBox(configGroupBox);
   databitsdroplist->setObjectName(QString::fromUtf8("databitsdroplist"));
   databitsdroplist->setMinimumSize(QSize(146, 0));
   databitsdroplist->addItem(QString::fromUtf8("5"));
@@ -137,20 +137,20 @@ void PageSerialTransceiver::setupUi()
   databitsdroplist->addItem(QString::fromUtf8("8"));
   databitsdroplist->setCurrentIndex(3);
 
-  horizontalLayout_3->addWidget(databitsdroplist);
+  databitsLayout->addWidget(databitsdroplist);
 
-  verticalLayout->addLayout(horizontalLayout_3);
+  configLayout->addLayout(databitsLayout);
 
-  horizontalLayout_4 = new QHBoxLayout();
-  horizontalLayout_4->setObjectName(QString::fromUtf8("horizontalLayout_4"));
+  parityLayout = new QHBoxLayout();
+  parityLayout->setObjectName(QString::fromUtf8("parityLayout"));
 
-  label_4 = new QLabel(groupBox);
-  label_4->setObjectName(QString::fromUtf8("label_4"));
-  label_4->setMinimumSize(QSize(80, 0));
+  parityLabel = new QLabel(configGroupBox);
+  parityLabel->setObjectName(QString::fromUtf8("parityLabel"));
+  parityLabel->setMinimumSize(QSize(80, 0));
 
-  horizontalLayout_4->addWidget(label_4);
+  parityLayout->addWidget(parityLabel);
 
-  paritydroplist = new QComboBox(groupBox);
+  paritydroplist = new QComboBox(configGroupBox);
   paritydroplist->setObjectName(QString::fromUtf8("paritydroplist"));
   paritydroplist->setMinimumSize(QSize(146, 0));
   paritydroplist->addItem(QCoreApplication::translate("PageSerialTransceiver", "None", nullptr));
@@ -159,293 +159,293 @@ void PageSerialTransceiver::setupUi()
   paritydroplist->addItem(QCoreApplication::translate("PageSerialTransceiver", "Mark", nullptr));
   paritydroplist->addItem(QCoreApplication::translate("PageSerialTransceiver", "Space", nullptr));
 
-  horizontalLayout_4->addWidget(paritydroplist);
+  parityLayout->addWidget(paritydroplist);
 
-  verticalLayout->addLayout(horizontalLayout_4);
+  configLayout->addLayout(parityLayout);
 
-  horizontalLayout_5 = new QHBoxLayout();
-  horizontalLayout_5->setObjectName(QString::fromUtf8("horizontalLayout_5"));
+  stopbitsLayout = new QHBoxLayout();
+  stopbitsLayout->setObjectName(QString::fromUtf8("stopbitsLayout"));
 
-  label_5 = new QLabel(groupBox);
-  label_5->setObjectName(QString::fromUtf8("label_5"));
-  label_5->setMinimumSize(QSize(80, 0));
+  stopbitsLabel = new QLabel(configGroupBox);
+  stopbitsLabel->setObjectName(QString::fromUtf8("stopbitsLabel"));
+  stopbitsLabel->setMinimumSize(QSize(80, 0));
 
-  horizontalLayout_5->addWidget(label_5);
+  stopbitsLayout->addWidget(stopbitsLabel);
 
-  stopbitsdroplist = new QComboBox(groupBox);
+  stopbitsdroplist = new QComboBox(configGroupBox);
   stopbitsdroplist->setObjectName(QString::fromUtf8("stopbitsdroplist"));
   stopbitsdroplist->setMinimumSize(QSize(146, 0));
   stopbitsdroplist->addItem(QString::fromUtf8("1"));
   stopbitsdroplist->addItem(QString::fromUtf8("1.5"));
   stopbitsdroplist->addItem(QString::fromUtf8("2"));
 
-  horizontalLayout_5->addWidget(stopbitsdroplist);
+  stopbitsLayout->addWidget(stopbitsdroplist);
 
-  verticalLayout->addLayout(horizontalLayout_5);
+  configLayout->addLayout(stopbitsLayout);
 
-  openbutton = new QPushButton(groupBox);
-  openbutton->setObjectName(QString::fromUtf8("openbutton"));
-  openbutton->setStyleSheet(AppColors::getSuccessButtonStyle());
+  openButton = new QPushButton(configGroupBox);
+  openButton->setObjectName(QString::fromUtf8("openButton"));
+  openButton->setStyleSheet(AppColors::getSuccessButtonStyle());
 
-  verticalLayout->addWidget(openbutton);
+  configLayout->addWidget(openButton);
 
-  verticalLayout_7->addWidget(groupBox);
+  configFrameLayout->addWidget(configGroupBox);
 
-  verticalGroupBox = new QGroupBox(frame);
-  verticalGroupBox->setObjectName(QString::fromUtf8("verticalGroupBox"));
+  statsGroupBox = new QGroupBox(configFrame);
+  statsGroupBox->setObjectName(QString::fromUtf8("statsGroupBox"));
 
-  verticalLayout_4 = new QVBoxLayout(verticalGroupBox);
-  verticalLayout_4->setObjectName(QString::fromUtf8("verticalLayout_4"));
-  verticalLayout_4->setSpacing(10);
+  statsLayout = new QVBoxLayout(statsGroupBox);
+  statsLayout->setObjectName(QString::fromUtf8("statsLayout"));
+  statsLayout->setSpacing(10);
 
-  horizontalLayout_11 = new QHBoxLayout();
-  horizontalLayout_11->setObjectName(QString::fromUtf8("horizontalLayout_11"));
+  receiveFramesLayout = new QHBoxLayout();
+  receiveFramesLayout->setObjectName(QString::fromUtf8("receiveFramesLayout"));
 
-  receive_frames = new QLabel(verticalGroupBox);
-  receive_frames->setObjectName(QString::fromUtf8("receive_frames"));
+  receiveFramesLabel = new QLabel(statsGroupBox);
+  receiveFramesLabel->setObjectName(QString::fromUtf8("receiveFramesLabel"));
 
-  horizontalLayout_11->addWidget(receive_frames);
+  receiveFramesLayout->addWidget(receiveFramesLabel);
 
-  receive_frames_count = new QLabel(verticalGroupBox);
-  receive_frames_count->setObjectName(QString::fromUtf8("receive_frames_count"));
-  receive_frames_count->setStyleSheet(AppColors::getReceiveLabelStyle());
-  receive_frames_count->setText(QString::fromUtf8("0"));
+  receiveFramesCountLabel = new QLabel(statsGroupBox);
+  receiveFramesCountLabel->setObjectName(QString::fromUtf8("receiveFramesCountLabel"));
+  receiveFramesCountLabel->setStyleSheet(AppColors::getReceiveLabelStyle());
+  receiveFramesCountLabel->setText(QString::fromUtf8("0"));
 
-  horizontalLayout_11->addWidget(receive_frames_count);
+  receiveFramesLayout->addWidget(receiveFramesCountLabel);
 
-  verticalLayout_4->addLayout(horizontalLayout_11);
+  statsLayout->addLayout(receiveFramesLayout);
 
-  horizontalLayout_12 = new QHBoxLayout();
-  horizontalLayout_12->setObjectName(QString::fromUtf8("horizontalLayout_12"));
+  receiveBytesLayout = new QHBoxLayout();
+  receiveBytesLayout->setObjectName(QString::fromUtf8("receiveBytesLayout"));
 
-  receive_bytes = new QLabel(verticalGroupBox);
-  receive_bytes->setObjectName(QString::fromUtf8("receive_bytes"));
+  receiveBytesLabel = new QLabel(statsGroupBox);
+  receiveBytesLabel->setObjectName(QString::fromUtf8("receiveBytesLabel"));
 
-  horizontalLayout_12->addWidget(receive_bytes);
+  receiveBytesLayout->addWidget(receiveBytesLabel);
 
-  receive_bytes_count = new QLabel(verticalGroupBox);
-  receive_bytes_count->setObjectName(QString::fromUtf8("receive_bytes_count"));
-  receive_bytes_count->setStyleSheet(AppColors::getReceiveLabelStyle());
-  receive_bytes_count->setText(QString::fromUtf8("0"));
+  receiveBytesCountLabel = new QLabel(statsGroupBox);
+  receiveBytesCountLabel->setObjectName(QString::fromUtf8("receiveBytesCountLabel"));
+  receiveBytesCountLabel->setStyleSheet(AppColors::getReceiveLabelStyle());
+  receiveBytesCountLabel->setText(QString::fromUtf8("0"));
 
-  horizontalLayout_12->addWidget(receive_bytes_count);
+  receiveBytesLayout->addWidget(receiveBytesCountLabel);
 
-  verticalLayout_4->addLayout(horizontalLayout_12);
+  statsLayout->addLayout(receiveBytesLayout);
 
-  horizontalLayout_13 = new QHBoxLayout();
-  horizontalLayout_13->setObjectName(QString::fromUtf8("horizontalLayout_13"));
+  sendFramesLayout = new QHBoxLayout();
+  sendFramesLayout->setObjectName(QString::fromUtf8("sendFramesLayout"));
 
-  send_frames = new QLabel(verticalGroupBox);
-  send_frames->setObjectName(QString::fromUtf8("send_frames"));
+  sendFramesLabel = new QLabel(statsGroupBox);
+  sendFramesLabel->setObjectName(QString::fromUtf8("sendFramesLabel"));
 
-  horizontalLayout_13->addWidget(send_frames);
+  sendFramesLayout->addWidget(sendFramesLabel);
 
-  send_frames_count = new QLabel(verticalGroupBox);
-  send_frames_count->setObjectName(QString::fromUtf8("send_frames_count"));
-  send_frames_count->setStyleSheet(AppColors::getSendLabelStyle());
-  send_frames_count->setText(QString::fromUtf8("0"));
+  sendFramesCountLabel = new QLabel(statsGroupBox);
+  sendFramesCountLabel->setObjectName(QString::fromUtf8("sendFramesCountLabel"));
+  sendFramesCountLabel->setStyleSheet(AppColors::getSendLabelStyle());
+  sendFramesCountLabel->setText(QString::fromUtf8("0"));
 
-  horizontalLayout_13->addWidget(send_frames_count);
+  sendFramesLayout->addWidget(sendFramesCountLabel);
 
-  verticalLayout_4->addLayout(horizontalLayout_13);
+  statsLayout->addLayout(sendFramesLayout);
 
-  horizontalLayout_14 = new QHBoxLayout();
-  horizontalLayout_14->setObjectName(QString::fromUtf8("horizontalLayout_14"));
+  sendBytesLayout = new QHBoxLayout();
+  sendBytesLayout->setObjectName(QString::fromUtf8("sendBytesLayout"));
 
-  send_bytes = new QLabel(verticalGroupBox);
-  send_bytes->setObjectName(QString::fromUtf8("send_bytes"));
+  sendBytesLabel = new QLabel(statsGroupBox);
+  sendBytesLabel->setObjectName(QString::fromUtf8("sendBytesLabel"));
 
-  horizontalLayout_14->addWidget(send_bytes);
+  sendBytesLayout->addWidget(sendBytesLabel);
 
-  send_bytes_count = new QLabel(verticalGroupBox);
-  send_bytes_count->setObjectName(QString::fromUtf8("send_bytes_count"));
-  send_bytes_count->setStyleSheet(AppColors::getSendLabelStyle());
-  send_bytes_count->setText(QString::fromUtf8("0"));
+  sendBytesCountLabel = new QLabel(statsGroupBox);
+  sendBytesCountLabel->setObjectName(QString::fromUtf8("sendBytesCountLabel"));
+  sendBytesCountLabel->setStyleSheet(AppColors::getSendLabelStyle());
+  sendBytesCountLabel->setText(QString::fromUtf8("0"));
 
-  horizontalLayout_14->addWidget(send_bytes_count);
+  sendBytesLayout->addWidget(sendBytesCountLabel);
 
-  verticalLayout_4->addLayout(horizontalLayout_14);
+  statsLayout->addLayout(sendBytesLayout);
 
-  clearcount = new QPushButton(verticalGroupBox);
-  clearcount->setObjectName(QString::fromUtf8("clearcount"));
+  clearcountButton = new QPushButton(statsGroupBox);
+  clearcountButton->setObjectName(QString::fromUtf8("clearcountButton"));
 
-  verticalLayout_4->addWidget(clearcount);
+  statsLayout->addWidget(clearcountButton);
 
-  verticalLayout_7->addWidget(verticalGroupBox);
+  configFrameLayout->addWidget(statsGroupBox);
 
-  horizontalLayout_10->addWidget(frame);
+  mainLayout->addWidget(configFrame);
 
-  verticalLayout_3 = new QVBoxLayout();
-  verticalLayout_3->setObjectName(QString::fromUtf8("verticalLayout_3"));
-  verticalLayout_3->setStretch(0, 1);
-  verticalLayout_3->setStretch(1, 0);
-  verticalLayout_3->setSpacing(15);
+  dataLayout = new QVBoxLayout();
+  dataLayout->setObjectName(QString::fromUtf8("dataLayout"));
+  dataLayout->setStretch(0, 1);
+  dataLayout->setStretch(1, 0);
+  dataLayout->setSpacing(15);
 
-  receivegroup = new QGroupBox();
-  receivegroup->setObjectName(QString::fromUtf8("receivegroup"));
-  receivegroup->setMinimumSize(QSize(0, 320));
+  receiveGroupBox = new QGroupBox();
+  receiveGroupBox->setObjectName(QString::fromUtf8("receiveGroupBox"));
+  receiveGroupBox->setMinimumSize(QSize(0, 320));
 
-  verticalLayout_5 = new QVBoxLayout(receivegroup);
-  verticalLayout_5->setObjectName(QString::fromUtf8("verticalLayout_5"));
-  verticalLayout_5->setSpacing(10);
+  receiveLayout = new QVBoxLayout(receiveGroupBox);
+  receiveLayout->setObjectName(QString::fromUtf8("receiveLayout"));
+  receiveLayout->setSpacing(10);
 
-  receiveedit = new CustomTextEdit(receivegroup);
-  receiveedit->setObjectName(QString::fromUtf8("receiveedit"));
-  receiveedit->setStyleSheet(QString::fromUtf8("font-family: 'Consolas', 'Monaco', monospace; font-size: 12px;"));
+  receiveEdit = new CustomTextEdit(receiveGroupBox);
+  receiveEdit->setObjectName(QString::fromUtf8("receiveEdit"));
+  receiveEdit->setStyleSheet(QString::fromUtf8("font-family: 'Consolas', 'Monaco', monospace; font-size: 12px;"));
 
-  verticalLayout_5->addWidget(receiveedit);
+  receiveLayout->addWidget(receiveEdit);
 
-  horizontalLayout = new QHBoxLayout();
-  horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
-  horizontalLayout->setSpacing(15);
+  receiveOptionsLayout = new QHBoxLayout();
+  receiveOptionsLayout->setObjectName(QString::fromUtf8("receiveOptionsLayout"));
+  receiveOptionsLayout->setSpacing(15);
 
-  receivehexcheckbox = new QCheckBox(receivegroup);
-  receivehexcheckbox->setObjectName(QString::fromUtf8("receivehexcheckbox"));
+  receiveHexCheckbox = new QCheckBox(receiveGroupBox);
+  receiveHexCheckbox->setObjectName(QString::fromUtf8("receiveHexCheckbox"));
 
-  horizontalLayout->addWidget(receivehexcheckbox);
+  receiveOptionsLayout->addWidget(receiveHexCheckbox);
 
-  displaysendcheckbox = new QCheckBox(receivegroup);
-  displaysendcheckbox->setObjectName(QString::fromUtf8("displaysendcheckbox"));
+  displaySendCheckbox = new QCheckBox(receiveGroupBox);
+  displaySendCheckbox->setObjectName(QString::fromUtf8("displaySendCheckbox"));
 
-  horizontalLayout->addWidget(displaysendcheckbox);
+  receiveOptionsLayout->addWidget(displaySendCheckbox);
 
-  displaytimecheckbox = new QCheckBox(receivegroup);
-  displaytimecheckbox->setObjectName(QString::fromUtf8("displaytimecheckbox"));
+  displayTimeCheckbox = new QCheckBox(receiveGroupBox);
+  displayTimeCheckbox->setObjectName(QString::fromUtf8("displayTimeCheckbox"));
 
-  horizontalLayout->addWidget(displaytimecheckbox);
+  receiveOptionsLayout->addWidget(displayTimeCheckbox);
 
-  linebreakcheckbox = new QCheckBox(receivegroup);
-  linebreakcheckbox->setObjectName(QString::fromUtf8("linebreakcheckbox"));
+  lineBreakCheckbox = new QCheckBox(receiveGroupBox);
+  lineBreakCheckbox->setObjectName(QString::fromUtf8("lineBreakCheckbox"));
 
-  horizontalLayout->addWidget(linebreakcheckbox);
+  receiveOptionsLayout->addWidget(lineBreakCheckbox);
 
-  clearreceive = new QPushButton(receivegroup);
-  clearreceive->setObjectName(QString::fromUtf8("clearreceive"));
+  clearReceiveButton = new QPushButton(receiveGroupBox);
+  clearReceiveButton->setObjectName(QString::fromUtf8("clearReceiveButton"));
 
-  horizontalLayout->addWidget(clearreceive);
-  horizontalLayout->addStretch();
+  receiveOptionsLayout->addWidget(clearReceiveButton);
+  receiveOptionsLayout->addStretch();
 
-  verticalLayout_5->addLayout(horizontalLayout);
+  receiveLayout->addLayout(receiveOptionsLayout);
 
-  verticalLayout_3->addWidget(receivegroup);
+  dataLayout->addWidget(receiveGroupBox);
 
-  sendgroup = new QGroupBox();
-  sendgroup->setObjectName(QString::fromUtf8("sendgroup"));
-  sendgroup->setMaximumSize(QSize(16777215, 230));
+  sendGroupBox = new QGroupBox();
+  sendGroupBox->setObjectName(QString::fromUtf8("sendGroupBox"));
+  sendGroupBox->setMaximumSize(QSize(16777215, 230));
 
-  verticalLayout_6 = new QVBoxLayout(sendgroup);
-  verticalLayout_6->setObjectName(QString::fromUtf8("verticalLayout_6"));
-  verticalLayout_6->setSpacing(10);
+  sendLayout = new QVBoxLayout(sendGroupBox);
+  sendLayout->setObjectName(QString::fromUtf8("sendLayout"));
+  sendLayout->setSpacing(10);
 
-  sendedit = new CustomTextEdit(sendgroup);
-  sendedit->setObjectName(QString::fromUtf8("sendedit"));
-  sendedit->setStyleSheet(QString::fromUtf8("font-family: 'Consolas', 'Monaco', monospace; font-size: 12px;"));
+  sendEdit = new CustomTextEdit(sendGroupBox);
+  sendEdit->setObjectName(QString::fromUtf8("sendEdit"));
+  sendEdit->setStyleSheet(QString::fromUtf8("font-family: 'Consolas', 'Monaco', monospace; font-size: 12px;"));
 
-  verticalLayout_6->addWidget(sendedit);
+  sendLayout->addWidget(sendEdit);
 
-  horizontalLayout_9 = new QHBoxLayout();
-  horizontalLayout_9->setObjectName(QString::fromUtf8("horizontalLayout_9"));
-  horizontalLayout_9->setSpacing(10);
+  sendOptionsLayout = new QHBoxLayout();
+  sendOptionsLayout->setObjectName(QString::fromUtf8("sendOptionsLayout"));
+  sendOptionsLayout->setSpacing(10);
 
-  sendbutton = new QPushButton(sendgroup);
-  sendbutton->setObjectName(QString::fromUtf8("sendbutton"));
-  sendbutton->setMinimumSize(QSize(130, 36));
+  sendButton = new QPushButton(sendGroupBox);
+  sendButton->setObjectName(QString::fromUtf8("sendButton"));
+  sendButton->setMinimumSize(QSize(130, 36));
 
-  horizontalLayout_9->addWidget(sendbutton);
+  sendOptionsLayout->addWidget(sendButton);
 
-  verifybutton = new QPushButton(sendgroup);
-  verifybutton->setObjectName(QString::fromUtf8("verifybutton"));
-  verifybutton->setMinimumSize(QSize(130, 36));
+  verifyButton = new QPushButton(sendGroupBox);
+  verifyButton->setObjectName(QString::fromUtf8("verifyButton"));
+  verifyButton->setMinimumSize(QSize(130, 36));
 
-  horizontalLayout_9->addWidget(verifybutton);
+  sendOptionsLayout->addWidget(verifyButton);
 
-  clearsend = new QPushButton(sendgroup);
-  clearsend->setObjectName(QString::fromUtf8("clearsend"));
-  clearsend->setMinimumSize(QSize(130, 36));
+  clearSendButton = new QPushButton(sendGroupBox);
+  clearSendButton->setObjectName(QString::fromUtf8("clearSendButton"));
+  clearSendButton->setMinimumSize(QSize(130, 36));
 
-  horizontalLayout_9->addWidget(clearsend);
+  sendOptionsLayout->addWidget(clearSendButton);
 
-  sendhexcheckbox = new QCheckBox(sendgroup);
-  sendhexcheckbox->setObjectName(QString::fromUtf8("sendhexcheckbox"));
+  sendHexCheckbox = new QCheckBox(sendGroupBox);
+  sendHexCheckbox->setObjectName(QString::fromUtf8("sendHexCheckbox"));
 
-  horizontalLayout_9->addWidget(sendhexcheckbox);
+  sendOptionsLayout->addWidget(sendHexCheckbox);
 
-  autosendcheckbox = new QCheckBox(sendgroup);
-  autosendcheckbox->setObjectName(QString::fromUtf8("autosendcheckbox"));
+  autoSendCheckbox = new QCheckBox(sendGroupBox);
+  autoSendCheckbox->setObjectName(QString::fromUtf8("autoSendCheckbox"));
 
-  horizontalLayout_9->addWidget(autosendcheckbox);
+  sendOptionsLayout->addWidget(autoSendCheckbox);
 
-  frame_3 = new QFrame(sendgroup);
-  frame_3->setObjectName(QString::fromUtf8("frame_3"));
-  frame_3->setMaximumSize(QSize(200, 50));
+  sendDutyFrame = new QFrame(sendGroupBox);
+  sendDutyFrame->setObjectName(QString::fromUtf8("sendDutyFrame"));
+  sendDutyFrame->setMaximumSize(QSize(200, 50));
 
-  horizontalLayout_8 = new QHBoxLayout(frame_3);
-  horizontalLayout_8->setSpacing(5);
-  horizontalLayout_8->setObjectName(QString::fromUtf8("horizontalLayout_8"));
-  horizontalLayout_8->setContentsMargins(0, 0, 0, 0);
+  sendDutyLayout = new QHBoxLayout(sendDutyFrame);
+  sendDutyLayout->setSpacing(5);
+  sendDutyLayout->setObjectName(QString::fromUtf8("sendDutyLayout"));
+  sendDutyLayout->setContentsMargins(0, 0, 0, 0);
 
-  label_6 = new QLabel(frame_3);
-  label_6->setObjectName(QString::fromUtf8("label_6"));
+  sendDutyLabel = new QLabel(sendDutyFrame);
+  sendDutyLabel->setObjectName(QString::fromUtf8("sendDutyLabel"));
 
-  horizontalLayout_8->addWidget(label_6);
+  sendDutyLayout->addWidget(sendDutyLabel);
 
-  senddutyedit = new CustomLineEdit(frame_3);
-  senddutyedit->setObjectName(QString::fromUtf8("senddutyedit"));
-  senddutyedit->setMaximumSize(QSize(60, 16777215));
-  senddutyedit->setText(QString::fromUtf8("1000"));
-  senddutyedit->setAlignment(Qt::AlignCenter);
+  sendDutyEdit = new CustomLineEdit(sendDutyFrame);
+  sendDutyEdit->setObjectName(QString::fromUtf8("sendDutyEdit"));
+  sendDutyEdit->setMaximumSize(QSize(60, 16777215));
+  sendDutyEdit->setText(QString::fromUtf8("1000"));
+  sendDutyEdit->setAlignment(Qt::AlignCenter);
 
-  horizontalLayout_8->addWidget(senddutyedit);
+  sendDutyLayout->addWidget(sendDutyEdit);
 
-  label_7 = new QLabel(frame_3);
-  label_7->setObjectName(QString::fromUtf8("label_7"));
+  sendDutyUnitLabel = new QLabel(sendDutyFrame);
+  sendDutyUnitLabel->setObjectName(QString::fromUtf8("sendDutyUnitLabel"));
 
-  horizontalLayout_8->addWidget(label_7);
+  sendDutyLayout->addWidget(sendDutyUnitLabel);
 
-  horizontalLayout_9->addWidget(frame_3);
-  horizontalLayout_9->addStretch();
+  sendOptionsLayout->addWidget(sendDutyFrame);
+  sendOptionsLayout->addStretch();
 
-  verticalLayout_6->addLayout(horizontalLayout_9);
+  sendLayout->addLayout(sendOptionsLayout);
 
-  verticalLayout_3->addWidget(sendgroup);
+  dataLayout->addWidget(sendGroupBox);
 
-  horizontalLayout_10->addLayout(verticalLayout_3);
+  mainLayout->addLayout(dataLayout);
 
   QMetaObject::connectSlotsByName(this);
 }
 
 void PageSerialTransceiver::retranslateUi()
 {
-  groupBox->setTitle(QCoreApplication::translate("PageSerialTransceiver", "Serial Port Settings", nullptr));
-  label->setText(QCoreApplication::translate("PageSerialTransceiver", "Port", nullptr));
-  label_2->setText(QCoreApplication::translate("PageSerialTransceiver", "Baudrate", nullptr));
-  label_3->setText(QCoreApplication::translate("PageSerialTransceiver", "Data bits", nullptr));
-  label_4->setText(QCoreApplication::translate("PageSerialTransceiver", "Parity", nullptr));
-  label_5->setText(QCoreApplication::translate("PageSerialTransceiver", "Stop bits", nullptr));
-  openbutton->setText(QCoreApplication::translate("PageSerialTransceiver", "Open", nullptr));
-  verticalGroupBox->setTitle(QCoreApplication::translate("PageSerialTransceiver", "Statistics", nullptr));
-  receive_frames->setText(QCoreApplication::translate("PageSerialTransceiver", "Received frames", nullptr));
-  receive_bytes->setText(QCoreApplication::translate("PageSerialTransceiver", "Received bytes", nullptr));
-  send_frames->setText(QCoreApplication::translate("PageSerialTransceiver", "Send frames", nullptr));
-  send_bytes->setText(QCoreApplication::translate("PageSerialTransceiver", "Send bytes", nullptr));
-  clearcount->setText(QCoreApplication::translate("PageSerialTransceiver", "Clear count", nullptr));
-  receivegroup->setTitle(QCoreApplication::translate("PageSerialTransceiver", "Received Data", nullptr));
-  receivehexcheckbox->setText(QCoreApplication::translate("PageSerialTransceiver", "Hex", nullptr));
-  displaysendcheckbox->setText(QCoreApplication::translate("PageSerialTransceiver", "Display send", nullptr));
-  displaytimecheckbox->setText(QCoreApplication::translate("PageSerialTransceiver", "Display time", nullptr));
-  linebreakcheckbox->setText(QCoreApplication::translate("PageSerialTransceiver", "Frame line break", nullptr));
-  clearreceive->setText(QCoreApplication::translate("PageSerialTransceiver", "Clear Receive", nullptr));
-  sendgroup->setTitle(QCoreApplication::translate("PageSerialTransceiver", "Send Data", nullptr));
-  sendbutton->setText(QCoreApplication::translate("PageSerialTransceiver", "Send", nullptr));
-  verifybutton->setText(QCoreApplication::translate("PageSerialTransceiver", "Verification", nullptr));
-  clearsend->setText(QCoreApplication::translate("PageSerialTransceiver", "Clear Send", nullptr));
-  sendhexcheckbox->setText(QCoreApplication::translate("PageSerialTransceiver", "Hex", nullptr));
-  autosendcheckbox->setText(QCoreApplication::translate("PageSerialTransceiver", "Auto send", nullptr));
-  label_6->setText(QCoreApplication::translate("PageSerialTransceiver", "Send duty", nullptr));
-  label_7->setText(QCoreApplication::translate("PageSerialTransceiver", "ms", nullptr));
+  configGroupBox->setTitle(QCoreApplication::translate("PageSerialTransceiver", "Serial Port Settings", nullptr));
+  portLabel->setText(QCoreApplication::translate("PageSerialTransceiver", "Port", nullptr));
+  baudrateLabel->setText(QCoreApplication::translate("PageSerialTransceiver", "Baudrate", nullptr));
+  databitsLabel->setText(QCoreApplication::translate("PageSerialTransceiver", "Data bits", nullptr));
+  parityLabel->setText(QCoreApplication::translate("PageSerialTransceiver", "Parity", nullptr));
+  stopbitsLabel->setText(QCoreApplication::translate("PageSerialTransceiver", "Stop bits", nullptr));
+  openButton->setText(QCoreApplication::translate("PageSerialTransceiver", "Open", nullptr));
+  statsGroupBox->setTitle(QCoreApplication::translate("PageSerialTransceiver", "Statistics", nullptr));
+  receiveFramesLabel->setText(QCoreApplication::translate("PageSerialTransceiver", "Received frames", nullptr));
+  receiveBytesLabel->setText(QCoreApplication::translate("PageSerialTransceiver", "Received bytes", nullptr));
+  sendFramesLabel->setText(QCoreApplication::translate("PageSerialTransceiver", "Send frames", nullptr));
+  sendBytesLabel->setText(QCoreApplication::translate("PageSerialTransceiver", "Send bytes", nullptr));
+  clearcountButton->setText(QCoreApplication::translate("PageSerialTransceiver", "Clear count", nullptr));
+  receiveGroupBox->setTitle(QCoreApplication::translate("PageSerialTransceiver", "Received Data", nullptr));
+  receiveHexCheckbox->setText(QCoreApplication::translate("PageSerialTransceiver", "Hex", nullptr));
+  displaySendCheckbox->setText(QCoreApplication::translate("PageSerialTransceiver", "Display send", nullptr));
+  displayTimeCheckbox->setText(QCoreApplication::translate("PageSerialTransceiver", "Display time", nullptr));
+  lineBreakCheckbox->setText(QCoreApplication::translate("PageSerialTransceiver", "Frame line break", nullptr));
+  clearReceiveButton->setText(QCoreApplication::translate("PageSerialTransceiver", "Clear Receive", nullptr));
+  sendGroupBox->setTitle(QCoreApplication::translate("PageSerialTransceiver", "Send Data", nullptr));
+  sendButton->setText(QCoreApplication::translate("PageSerialTransceiver", "Send", nullptr));
+  verifyButton->setText(QCoreApplication::translate("PageSerialTransceiver", "Verification", nullptr));
+  clearSendButton->setText(QCoreApplication::translate("PageSerialTransceiver", "Clear Send", nullptr));
+  sendHexCheckbox->setText(QCoreApplication::translate("PageSerialTransceiver", "Hex", nullptr));
+  autoSendCheckbox->setText(QCoreApplication::translate("PageSerialTransceiver", "Auto send", nullptr));
+  sendDutyLabel->setText(QCoreApplication::translate("PageSerialTransceiver", "Send duty", nullptr));
+  sendDutyUnitLabel->setText(QCoreApplication::translate("PageSerialTransceiver", "ms", nullptr));
 }
 
-void PageSerialTransceiver::on_openbutton_clicked()
+void PageSerialTransceiver::on_openButton_clicked()
 {
   const auto serialPortInfos = QSerialPortInfo::availablePorts();
 
@@ -504,8 +504,8 @@ void PageSerialTransceiver::on_openbutton_clicked()
   if(isSerial_Open)
   {
     isSerial_Open = false;
-    openbutton->setText(tr("Open"));
-    openbutton->setStyleSheet(
+    openButton->setText(tr("Open"));
+    openButton->setStyleSheet(
       "QPushButton {"
       "  background-color: #27ae60;"
       "  padding: 10px;"
@@ -526,8 +526,8 @@ void PageSerialTransceiver::on_openbutton_clicked()
     if(serialPort.open(QIODevice::ReadWrite))
     {
       isSerial_Open = true;
-      openbutton->setText(tr("Close"));
-      openbutton->setStyleSheet(
+      openButton->setText(tr("Close"));
+      openButton->setStyleSheet(
         "QPushButton {"
         "  background-color: #e74c3c;"
         "  padding: 10px;"
@@ -550,14 +550,14 @@ void PageSerialTransceiver::on_openbutton_clicked()
   }
 }
 
-void PageSerialTransceiver::on_sendbutton_clicked()
+void PageSerialTransceiver::on_sendButton_clicked()
 {
   sendData();
 }
 
-void PageSerialTransceiver::on_verifybutton_clicked()
+void PageSerialTransceiver::on_verifyButton_clicked()
 {
-  if(sendhexcheckbox->isChecked())
+  if(sendHexCheckbox->isChecked())
   {
     PageVerifiyDialog pageVerifiyDialog;
     connect(&pageVerifiyDialog, &PageVerifiyDialog::selectedIndexChanged, this, &PageSerialTransceiver::verifysend);
@@ -581,31 +581,31 @@ void PageSerialTransceiver::on_verifybutton_clicked()
   }
 }
 
-void PageSerialTransceiver::on_clearcount_clicked()
+void PageSerialTransceiver::on_clearcountButton_clicked()
 {
   receive_frame_count = 0;
   receive_byte_count = 0;
   send_frame_count = 0;
   send_byte_count = 0;
-  receive_frames_count->setText(QString::number(receive_frame_count));
-  receive_bytes_count->setText(QString::number(receive_byte_count));
-  send_frames_count->setText(QString::number(send_frame_count));
-  send_bytes_count->setText(QString::number(send_byte_count));
+  receiveFramesCountLabel->setText(QString::number(receive_frame_count));
+  receiveBytesCountLabel->setText(QString::number(receive_byte_count));
+  sendFramesCountLabel->setText(QString::number(send_frame_count));
+  sendBytesCountLabel->setText(QString::number(send_byte_count));
 }
 
-void PageSerialTransceiver::on_clearreceive_clicked()
+void PageSerialTransceiver::on_clearReceiveButton_clicked()
 {
-  receiveedit->clear();
+  receiveEdit->clear();
   frameBuffer.clear(); // Also clear the frame buffer
   frameProcessingTimer->stop(); // Stop the timer too
 }
 
-void PageSerialTransceiver::on_clearsend_clicked()
+void PageSerialTransceiver::on_clearSendButton_clicked()
 {
-  sendedit->clear();
+  sendEdit->clear();
 }
 
-void PageSerialTransceiver::on_senddutyedit_textChanged(const QString &arg1)
+void PageSerialTransceiver::on_sendDutyEdit_textChanged(const QString &arg1)
 {
   int interval = arg1.toInt();
   if(interval < 10)
@@ -673,9 +673,9 @@ void PageSerialTransceiver::handleTimeout()
       if(!portFound)
       {
         isSerial_Open = false;
-        openbutton->setText(tr("Open"));
-        openbutton->setText(tr("Open"));
-        openbutton->setStyleSheet(
+        openButton->setText(tr("Open"));
+        openButton->setText(tr("Open"));
+        openButton->setStyleSheet(
           "QPushButton {"
           "  background-color: #27ae60;"
           "  padding: 10px;"
@@ -696,7 +696,7 @@ void PageSerialTransceiver::handleTimeout()
 
 void PageSerialTransceiver::autosend()
 {
-  if(autosendcheckbox->isChecked())
+  if(autoSendCheckbox->isChecked())
   {
     sendData();
   }
@@ -710,13 +710,13 @@ void PageSerialTransceiver::sendData()
     qDebug() << "请先打开串口";
     return;
   }
-  QString dataToSend = sendedit->toPlainText();
+  QString dataToSend = sendEdit->toPlainText();
   if(dataToSend.isEmpty())
   {
     qDebug() << "发送内容为空";
     return;
   }
-  if(sendhexcheckbox->isChecked())
+  if(sendHexCheckbox->isChecked())
   {
     // 十六进制发送
     QString hexInput = dataToSend.trimmed();
@@ -764,10 +764,10 @@ void PageSerialTransceiver::sendData()
   }
   else
   {
-    if(displaysendcheckbox->isChecked())
+    if(displaySendCheckbox->isChecked())
     {
-      receiveedit->moveCursor(QTextCursor::End);  // 移动光标至末尾
-      if(receivehexcheckbox->isChecked())
+      receiveEdit->moveCursor(QTextCursor::End);  // 移动光标至末尾
+      if(receiveHexCheckbox->isChecked())
       {
         // 十六进制显示
         QString hexString;
@@ -778,29 +778,29 @@ void PageSerialTransceiver::sendData()
         dataToSend = hexString.trimmed(); // 去除末尾空格
       }
       dataToSend = dataToSend + "  ";
-      if(linebreakcheckbox->isChecked())
+      if(lineBreakCheckbox->isChecked())
       {
         dataToSend = dataToSend + "\n"; // 插入换行符
       }
       dataToSend = "[发送]" + dataToSend;
-      if(displaytimecheckbox->isChecked())
+      if(displayTimeCheckbox->isChecked())
       {
         QString currentTime = QDateTime::currentDateTime().toString("[yyyy-MM-dd HH:mm:ss]");
         dataToSend = currentTime + dataToSend;  // 插入当前时间
       }
       //插入绿色字体
-      receiveedit->setTextColor(QColor(0, 128, 0)); // 设置为绿色
-      receiveedit->insertPlainText(dataToSend);  // 插入文本
+      receiveEdit->setTextColor(QColor(0, 128, 0)); // 设置为绿色
+      receiveEdit->insertPlainText(dataToSend);  // 插入文本
     }
     qDebug() << "数据已成功写入, 字节数:" << bytesWritten;
     send_frame_count++;
     send_byte_count = send_byte_count + bytesWritten;
-    send_frames_count->setText(QString::number(send_frame_count));
-    send_bytes_count->setText(QString::number(send_byte_count));
+    sendFramesCountLabel->setText(QString::number(send_frame_count));
+    sendBytesCountLabel->setText(QString::number(send_byte_count));
   }
 }
 
-// Helper method to get the current frame delimiter based on settings
+// Helper method to get the current configFrame delimiter based on settings
 QByteArray PageSerialTransceiver::getFrameDelimiter()
 {
   // For now, return commonly used delimiters
@@ -815,46 +815,46 @@ void PageSerialTransceiver::receiveData()
     return;
 
   int oldSize = frameBuffer.size();
-  // Add received data to the frame buffer
+  // Add received data to the configFrame buffer
   frameBuffer.append(data);
 
-  // Process complete frames in the buffer based on delimiter
+  // Process complete configFrames in the buffer based on delimiter
   bool hasProcessedFrame = true;
   while(hasProcessedFrame)
   {
     hasProcessedFrame = false;
-    int frameEnd = -1;
+    int configFrameEnd = -1;
 
-    // Look for common frame delimiters in order of preference
+    // Look for common configFrame delimiters in order of preference
     // First check for CRLF (carriage return + line feed)
-    frameEnd = frameBuffer.indexOf("\r\n");
-    if(frameEnd == -1)
+    configFrameEnd = frameBuffer.indexOf("\r\n");
+    if(configFrameEnd == -1)
     {
       // Then check for just LF (line feed)
-      frameEnd = frameBuffer.indexOf('\n');
+      configFrameEnd = frameBuffer.indexOf('\n');
     }
-    if(frameEnd == -1)
+    if(configFrameEnd == -1)
     {
       // Then check for just CR (carriage return)
-      frameEnd = frameBuffer.indexOf('\r');
+      configFrameEnd = frameBuffer.indexOf('\r');
     }
 
     // If we found a delimiter
-    if(frameEnd != -1)
+    if(configFrameEnd != -1)
     {
       // Handle CRLF case specifically
       int delimiterLength = 1;
-      if(frameEnd + 1 < frameBuffer.size() && frameBuffer.at(frameEnd + 1) == '\n')
+      if(configFrameEnd + 1 < frameBuffer.size() && frameBuffer.at(configFrameEnd + 1) == '\n')
       {
         delimiterLength = 2; // CRLF case
       }
 
-      // Extract the complete frame (including the delimiter)
-      QByteArray completeFrame = frameBuffer.left(frameEnd + delimiterLength);
-      // Remove the processed frame from the buffer
-      frameBuffer = frameBuffer.mid(frameEnd + delimiterLength);
+      // Extract the complete configFrame (including the delimiter)
+      QByteArray completeFrame = frameBuffer.left(configFrameEnd + delimiterLength);
+      // Remove the processed configFrame from the buffer
+      frameBuffer = frameBuffer.mid(configFrameEnd + delimiterLength);
 
-      // Process the complete frame
+      // Process the complete configFrame
       processCompleteFrame(completeFrame);
       hasProcessedFrame = true; // Continue processing if more delimiters exist
     }
@@ -874,34 +874,34 @@ void PageSerialTransceiver::receiveData()
     frameProcessingTimer->stop();
   }
 
-  // Optional: Handle case where buffer becomes too large (possible missing frame delimiter)
+  // Optional: Handle case where buffer becomes too large (possible missing configFrame delimiter)
   if(frameBuffer.size() > 10240)    // 10KB threshold
   {
-    // Process whatever we have as a frame if it gets too large
+    // Process whatever we have as a configFrame if it gets too large
     processCompleteFrame(frameBuffer);
     frameBuffer.clear();
     frameProcessingTimer->stop(); // Stop timer since buffer is now empty
   }
 }
 
-void PageSerialTransceiver::processCompleteFrame(const QByteArray &frame)
+void PageSerialTransceiver::processCompleteFrame(const QByteArray &configFrame)
 {
-  if(frame.isEmpty())
+  if(configFrame.isEmpty())
     return;
 
-  qDebug() << "完整帧已接收, 字节数:" << frame.size();
+  qDebug() << "完整帧已接收, 字节数:" << configFrame.size();
   receive_frame_count++;
-  receive_byte_count += frame.size();
-  receive_frames_count->setText(QString::number(receive_frame_count));
-  receive_bytes_count->setText(QString::number(receive_byte_count));
+  receive_byte_count += configFrame.size();
+  receiveFramesCountLabel->setText(QString::number(receive_frame_count));
+  receiveBytesCountLabel->setText(QString::number(receive_byte_count));
 
-  receiveedit->moveCursor(QTextCursor::End);  // 移动光标至末尾
+  receiveEdit->moveCursor(QTextCursor::End);  // 移动光标至末尾
   QString dataToDisplay;
-  if(receivehexcheckbox->isChecked())
+  if(receiveHexCheckbox->isChecked())
   {
     // 十六进制显示
     QString hexString;
-    for(char byte : frame)
+    for(char byte : configFrame)
     {
       hexString += QString("%1 ").arg(static_cast<unsigned char>(byte), 2, 16, QChar('0')).toUpper();
     }
@@ -909,27 +909,27 @@ void PageSerialTransceiver::processCompleteFrame(const QByteArray &frame)
   }
   else
   {
-    dataToDisplay = QString::fromUtf8(frame);
+    dataToDisplay = QString::fromUtf8(configFrame);
   }
   dataToDisplay = dataToDisplay + "  ";
-  if(linebreakcheckbox->isChecked())
+  if(lineBreakCheckbox->isChecked())
   {
     dataToDisplay = dataToDisplay + "\n"; // 插入换行符
   }
   dataToDisplay = "[接收]" + dataToDisplay;
-  if(displaytimecheckbox->isChecked())
+  if(displayTimeCheckbox->isChecked())
   {
     QString currentTime = QDateTime::currentDateTime().toString("[yyyy-MM-dd HH:mm:ss]");
     dataToDisplay = currentTime + dataToDisplay;  // 插入当前时间
   }
   //插入蓝色字体
-  receiveedit->setTextColor(QColor(0, 0, 255)); // 设置为蓝色
-  receiveedit->insertPlainText(dataToDisplay);  // 插入文本
+  receiveEdit->setTextColor(QColor(0, 0, 255)); // 设置为蓝色
+  receiveEdit->insertPlainText(dataToDisplay);  // 插入文本
 }
 
 void PageSerialTransceiver::onFrameProcessingTimeout()
 {
-  // Process the remaining data in the buffer as a frame
+  // Process the remaining data in the buffer as a configFrame
   if(!frameBuffer.isEmpty())
   {
     processCompleteFrame(frameBuffer);
@@ -939,7 +939,7 @@ void PageSerialTransceiver::onFrameProcessingTimeout()
 
 void PageSerialTransceiver::processFrameBuffer()
 {
-  // Process all data in the buffer as a single frame
+  // Process all data in the buffer as a single configFrame
   if(!frameBuffer.isEmpty())
   {
     processCompleteFrame(frameBuffer);
@@ -950,13 +950,13 @@ void PageSerialTransceiver::processFrameBuffer()
 void PageSerialTransceiver::verifysend(int selectedIndex)
 {
   PageVerifiyDialog::VERIFIY_TYPE type = (PageVerifiyDialog::VERIFIY_TYPE)selectedIndex;
-  QString dataToSend = sendedit->toPlainText();
+  QString dataToSend = sendEdit->toPlainText();
   if(dataToSend.isEmpty())
   {
     qDebug() << "发送内容为空";
     return;
   }
-  if(!sendhexcheckbox->isChecked())
+  if(!sendHexCheckbox->isChecked())
   {
     qDebug() << "字符无法校验";
     return;
@@ -1014,7 +1014,7 @@ void PageSerialTransceiver::verifysend(int selectedIndex)
         QString crcStr = QString("%1 %2")
                          .arg(crc & 0xFF, 2, 16, QChar('0'))
                          .arg((crc >> 8) & 0xFF, 2, 16, QChar('0')).toUpper();
-        sendedit->setPlainText(dataToSend + " " + crcStr);
+        sendEdit->setPlainText(dataToSend + " " + crcStr);
         qDebug() << "CRC16_LOW 校验码:" << crcStr;
         break;
       }
@@ -1037,7 +1037,7 @@ void PageSerialTransceiver::verifysend(int selectedIndex)
         QString crcStr = QString("%1 %2")
                          .arg((crc >> 8) & 0xFF, 2, 16, QChar('0'))
                          .arg(crc & 0xFF, 2, 16, QChar('0')).toUpper();
-        sendedit->setPlainText(dataToSend + " " + crcStr);
+        sendEdit->setPlainText(dataToSend + " " + crcStr);
         qDebug() << "CRC16_HIGH 校验码:" << crcStr;
         break;
       }
@@ -1057,7 +1057,7 @@ void PageSerialTransceiver::verifysend(int selectedIndex)
           }
         }
         QString crcStr = QString("%1").arg(crc, 2, 16, QChar('0')).toUpper();
-        sendedit->setPlainText(dataToSend + " " + crcStr);
+        sendEdit->setPlainText(dataToSend + " " + crcStr);
         qDebug() << "CRC8 校验码:" << crcStr;
         break;
       }
@@ -1071,7 +1071,7 @@ void PageSerialTransceiver::verifysend(int selectedIndex)
         }
         sum &= 0xFF;
         QString sumStr = QString("%1").arg(sum, 2, 16, QChar('0')).toUpper();
-        sendedit->setPlainText(dataToSend + " " + sumStr);
+        sendEdit->setPlainText(dataToSend + " " + sumStr);
         qDebug() << "TOTAL_SUM 校验码:" << sumStr;
         break;
       }
@@ -1084,7 +1084,7 @@ void PageSerialTransceiver::verifysend(int selectedIndex)
           xorSum ^= static_cast<quint8>(b);
         }
         QString xorStr = QString("%1").arg(xorSum, 2, 16, QChar('0')).toUpper();
-        sendedit->setPlainText(dataToSend + " " + xorStr);
+        sendEdit->setPlainText(dataToSend + " " + xorStr);
         qDebug() << "SUM_XOR 校验码:" << xorStr;
         break;
       }
@@ -1110,7 +1110,7 @@ void PageSerialTransceiver::verifysend(int selectedIndex)
                          .arg((crc >> 8) & 0xFF, 2, 16, QChar('0'))
                          .arg((crc >> 16) & 0xFF, 2, 16, QChar('0'))
                          .arg((crc >> 24) & 0xFF, 2, 16, QChar('0')).toUpper();
-        sendedit->setPlainText(dataToSend + " " + crcStr);
+        sendEdit->setPlainText(dataToSend + " " + crcStr);
         qDebug() << "CRC32_LOW 校验码:" << crcStr;
         break;
       }
@@ -1135,7 +1135,7 @@ void PageSerialTransceiver::verifysend(int selectedIndex)
                          .arg((crc >> 16) & 0xFF, 2, 16, QChar('0'))
                          .arg((crc >> 8) & 0xFF, 2, 16, QChar('0'))
                          .arg((crc >> 0) & 0xFF, 2, 16, QChar('0')).toUpper();
-        sendedit->setPlainText(dataToSend + " " + crcStr);
+        sendEdit->setPlainText(dataToSend + " " + crcStr);
         qDebug() << "CRC32_HIGH 校验码:" << crcStr;
         break;
       }

@@ -27,11 +27,11 @@ class PageSerialTerminal : public QMainWindow
     QGridLayout * configLayout;
     QGroupBox * terminalGroup;
     QVBoxLayout * terminalLayout;
-    QLabel * label;
-    QLabel * label_2;
-    QLabel * label_3;
-    QLabel * label_4;
-    QLabel * label_5;
+    QLabel * portLabel;
+    QLabel * baudrateLabel;
+    QLabel * databitsLabel;
+    QLabel * parityLabel;
+    QLabel * stopbitsLabel;
     QComboBox * portdroplist;
     QComboBox * baudratedroplist;
     QComboBox * databitsdroplist;
