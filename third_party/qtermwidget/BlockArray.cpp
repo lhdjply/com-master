@@ -270,7 +270,7 @@ bool BlockArray::setHistorySize(size_t newsize)
 
 void moveBlock(FILE * fion, int cursor, int newpos, char * buffer2)
 {
-  int res = fseek(fion, cursor * blocksize, SEEK_SET);
+  int res = fseek(fion, static_cast<long>(cursor) * blocksize, SEEK_SET);
   if(res)
   {
     perror("fseek");
@@ -281,7 +281,7 @@ void moveBlock(FILE * fion, int cursor, int newpos, char * buffer2)
     perror("fread");
   }
 
-  res = fseek(fion, newpos * blocksize, SEEK_SET);
+  res = fseek(fion, static_cast<long>(newpos) * blocksize, SEEK_SET);
   if(res)
   {
     perror("fseek");
