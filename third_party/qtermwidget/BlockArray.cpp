@@ -393,7 +393,7 @@ void BlockArray::increaseBuffer()
   {
     // free one block in chain
     int firstblock = (offset + i) % size;
-    res = fseek(fion, firstblock * blocksize, SEEK_SET);
+    res = fseek(fion, static_cast<long>(firstblock) * blocksize, SEEK_SET);
     if(res)
     {
       perror("fseek");
@@ -410,7 +410,7 @@ void BlockArray::increaseBuffer()
       newpos = (cursor - offset + size) % size;
       moveBlock(fion, cursor, newpos, buffer2);
     }
-    res = fseek(fion, i * blocksize, SEEK_SET);
+    res = fseek(fion, static_cast<long>(i) * blocksize, SEEK_SET);
     if(res)
     {
       perror("fseek");
